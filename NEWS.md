@@ -1,0 +1,3 @@
+# semfindr 0.0.1
+
+- Setting up ... 
