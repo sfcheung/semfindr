@@ -19,4 +19,8 @@ Suggests:
     testthat,
     parallel
 Imports: 
-    lavaan
+    lavaan,
+    ggplot2,
+    ggrepel,
+    rlang,
+    stats

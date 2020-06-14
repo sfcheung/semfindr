@@ -2,6 +2,9 @@
 
 export(est_change)
 export(fit_measures_change)
+export(gcd_plot)
+export(influence_stat)
 export(lavaan_rerun)
 export(mahalanobis_rerun)
+importFrom(rlang,.data)
 importMethodsFrom(lavaan,vcov)

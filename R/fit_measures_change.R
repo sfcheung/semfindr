@@ -40,7 +40,7 @@ fit_measures_change <- function(rerun_out,
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }
-  case_ids <- names(rerun_out)
+  case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
   fitm0  <- lavaan::fitMeasures(fit0, fit.measures = fit_measures,
