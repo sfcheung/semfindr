@@ -35,9 +35,12 @@
 #'# To be prepared.
 #'
 #'@seealso [influence_stat()].
-#'@export
-#'
+#'@name influence_plot
+NULL
+
 #'@importFrom rlang .data
+#'@rdname influence_plot
+#'@export
 
 gcd_plot <- function(
                        influence_out,
@@ -73,7 +76,9 @@ gcd_plot <- function(
   p       
 }
 
-#' @rdname gcd_plot
+#'@importFrom rlang .data
+#'@rdname influence_plot
+#'@export
 
 md_plot <- function(
                        influence_out,
@@ -115,7 +120,9 @@ md_plot <- function(
   p       
 }
 
-#' @rdname gcd_plot
+#'@importFrom rlang .data
+#'@rdname influence_plot
+#'@export
 
 gcd_gof_plot <- function(
                        influence_out,
@@ -161,7 +168,9 @@ gcd_gof_plot <- function(
   p       
 }
 
-#' @rdname gcd_plot
+#'@importFrom rlang .data
+#'@rdname influence_plot
+#'@export
 
 gcd_gof_md_plot <- function(
                        influence_out,
