@@ -86,7 +86,7 @@ lavaan_rerun <- function(fit,
       pkgs <- .packages()
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
-      parallel::clusterExport(cl, "pkgs")
+      parallel::clusterExport(cl, "pkgs", envir = environment())
       parallel::clusterEvalQ(cl, {sapply(pkgs, 
                       function(x) library(x, character.only = TRUE))
                     })
