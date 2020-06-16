@@ -50,5 +50,12 @@ fit_measures_change <- function(rerun_out,
                       lavaan::fitMeasures(x, fit.measures = fit_measures,
                                              baseline.model = baseline_model)
                     }, fitm0 = fitm0)
-  out <- t(out)
+  if (is.null(dim(out))) {
+      out <- matrix(out, length(out), 1)
+      colnames(out) <- fit_measures
+    } else {
+      out <- t(out)
+    }
+  rownames(out) <- case_ids
+  out
 }
