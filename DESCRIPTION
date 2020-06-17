@@ -17,10 +17,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Suggests: 
     testthat,
-    parallel
+    parallel,
+    knitr,
+    rmarkdown
 Imports: 
     lavaan,
     ggplot2,
     ggrepel,
     rlang,
     stats
+VignetteBuilder: knitr
