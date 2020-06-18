@@ -33,6 +33,9 @@ for each case.
 For each case, compute the difference in selected fit measures between rerun without
 this case and the original fit with this case.
 
+If the analysis is not admissible or did not converge when a case was
+deleted, \code{NA} will be turned for this case.
+
 Currently only work for one group analysis.
 }
 \examples{

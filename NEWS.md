@@ -1,3 +1,3 @@
-# semfindr 0.0.1
+# semfindr 0.0.2
 
-- Setting up ... 
+- First internal testing release.

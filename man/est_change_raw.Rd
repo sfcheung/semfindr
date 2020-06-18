@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_change_raw.R
 \name{est_change_raw}
 \alias{est_change_raw}
-\title{Case influence on parameter estimates}
+\title{Case influence on parameter estimates by raw change}
 \usage{
 est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
 }
@@ -35,7 +35,11 @@ For each case, compute the differences in the estimates of selected parameter
 between rerun without
 this case and the original fit with this case.
 The change is the raw change, either for the standardized or
-unstandardized solution. The change is \emph{not} divided by standard error.#'
+unstandardized solution. The change is \emph{not} divided by standard error.
+
+If the analysis is not admissible or did not converge when a case was
+deleted, \code{NA} will be turned for this case.
+
 Currently only work for one group analysis.
 }
 \examples{

@@ -1,5 +1,5 @@
 #'@title
-#' Case influence on parameter estimates
+#' Case influence on parameter estimates by raw change
 #'
 #'@description
 #' Get a [lavaan_rerun()] output and compute the changes in selected parameters
@@ -10,7 +10,11 @@
 #' between rerun without
 #' this case and the original fit with this case.
 #' The change is the raw change, either for the standardized or
-#' unstandardized solution. The change is *not* divided by standard error.#'
+#' unstandardized solution. The change is *not* divided by standard error.
+#'
+#' If the analysis is not admissible or did not converge when a case was 
+#' deleted, `NA` will be turned for this case.
+#'
 #' Currently only work for one group analysis.
 #'
 #'@param rerun_out The output from [lavaan_rerun()].
@@ -113,7 +117,8 @@ est_change_raw <- function(rerun_out,
       parameters_selected <- parameters_names
     }
   tmpfct <- function(x, est, parameters_names,
-                             parameters_selected) {
+                             parameters_selected,
+                             standardized) {
     esti_full <- lavaan::parameterEstimates(
                   x,
                   se = TRUE,
@@ -138,17 +143,37 @@ est_change_raw <- function(rerun_out,
     outi
   }
   out <- sapply(reruns,
-                tmpfct,
+                function(x, est, parameters_names, parameters_selected,
+                                 standardized) {
+                  chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
+                  if (isTRUE(chk)) {
+                      return(tmpfct(x, est = est,
+                                       parameters_names = parameters_names,
+                                       parameters_selected = parameters_selected,
+                                       standardized = standardized)
+                            )
+                    } else {
+                      return(rep(NA, length(parameters_selected)))
+                    }
+                  },
                 est = est0,
                 parameters_names = parameters_names,
-                parameters_selected = parameters_selected
+                parameters_selected = parameters_selected,
+                standardized = standardized
               )
+  # out <- sapply(reruns,
+                # tmpfct,
+                # est = est0,
+                # parameters_names = parameters_names,
+                # parameters_selected = parameters_selected
+              # )
   if (is.null(dim(out))) {
       out <- matrix(out, length(out), 1)
       colnames(out) <- parameters
     } else {
       out <- t(out)
     }
+  colnames(out) <- c(parameters_selected)
   rownames(out) <- case_ids
   out
 }

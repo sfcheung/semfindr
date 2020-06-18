@@ -25,9 +25,6 @@ fit <- lavaan::sem(mod, dat)
 pa_dat <- dat
 usethis::use_data(pa_dat, overwrite = TRUE)
 
-pa_rerun <- semfindr::lavaan_rerun(fit, parallel = FALSE)
-usethis::use_data(pa_rerun, overwrite = TRUE)
-
 # A CFA model
 
 mod_p <- 
@@ -51,8 +48,6 @@ summary(fit, fit.measures = TRUE)
 cfa_dat <- dat
 usethis::use_data(cfa_dat, overwrite = TRUE)
 
-cfa_rerun <- semfindr::lavaan_rerun(fit, parallel = FALSE)
-usethis::use_data(cfa_rerun, overwrite = TRUE)
 
 
 # An SEM model

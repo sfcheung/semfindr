@@ -9,6 +9,9 @@
 #' For each case, compute the difference in selected fit measures between rerun without
 #' this case and the original fit with this case.
 #'
+#' If the analysis is not admissible or did not converge when a case was 
+#' deleted, `NA` will be turned for this case.
+#'
 #' Currently only work for one group analysis.
 #'
 #'@param rerun_out The output from [lavaan_rerun()].
@@ -72,9 +75,15 @@ fit_measures_change <- function(rerun_out,
   fitm0  <- lavaan::fitMeasures(fit0, fit.measures = fit_measures,
                                       baseline.model = baseline_model)
   out <- sapply(reruns, function(x, fitm0) {
-                      fitm0 -
-                      lavaan::fitMeasures(x, fit.measures = fit_measures,
-                                             baseline.model = baseline_model)
+                      chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
+                      if (isTRUE(chk)) {
+                          outi <- fitm0 -
+                                  lavaan::fitMeasures(x, fit.measures = fit_measures,
+                                                 baseline.model = baseline_model)
+                          return(outi)
+                        } else {
+                          return(rep(NA, length(fitm0)))
+                        }
                     }, fitm0 = fitm0)
   if (is.null(dim(out))) {
       out <- matrix(out, length(out), 1)
@@ -82,6 +91,7 @@ fit_measures_change <- function(rerun_out,
     } else {
       out <- t(out)
     }
+  colnames(out) <- names(fitm0)
   rownames(out) <- case_ids
   out
 }

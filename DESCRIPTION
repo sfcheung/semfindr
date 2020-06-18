@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Compute diagnostic statistics for outliers and influential cases in structural equation modeling
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",

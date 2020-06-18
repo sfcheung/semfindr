@@ -38,6 +38,11 @@
 #'
 #' - `fit`: The original output from `lavaan`.
 #'
+#' - `post_check`: A list of length equals to *n*. Each analysis was checked by 
+#'                 [lavaan::lavTech()]. If `TRUE`, the estimation converged
+#'                 and the solution is admissible. If not `TRUE`, it is a 
+#'                 warning message issued by [lavaan::lavTech()].
+#'
 #' - `call`: The call to [lavaan_rerun()].
 #'
 #'@examples
@@ -61,6 +66,7 @@
 #'# Results by manually excluding the first case
 #'fit_01 <- lavaan::sem(mod, dat[-1, ])
 #'fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
+#'@importMethodsFrom lavaan coef
 #'@export lavaan_rerun
 
 lavaan_rerun <- function(fit,
@@ -85,7 +91,8 @@ lavaan_rerun <- function(fit,
     }
   
   if (fit@Data@ngroups != 1) {
-      stop("The output is based on more than one group. Multiple group analysis not yet supported.")
+      stop(paste0("The output is based on more than one group. \n",
+                  "Multiple group analysis not yet supported."))
     }
   
   n <- fit@Data@nobs[[1]]
@@ -102,8 +109,9 @@ lavaan_rerun <- function(fit,
   
   fit_total_time <- fit@timing$total
   time_expected <-  n*fit_total_time[[1]]
-  message(paste("The expected CPU time is", round(time_expected, 2), "second(s). Could be smaller if ran in parallel."))
-  flush.console()
+  message(paste0("The expected CPU time is ", round(time_expected, 2), "second(s).\n",
+                "Could be faster if ran in parallel."))
+  utils::flush.console()
   #environment(gen_fct) <- environment()
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
@@ -120,15 +128,40 @@ lavaan_rerun <- function(fit,
       parallel::clusterEvalQ(cl, {sapply(pkgs, 
                       function(x) library(x, character.only = TRUE))
                     })
-      out <- parallel::parLapplyLB(cl, seq_len(n), rerun_i)
+      rt <- system.time(out <- suppressWarnings(
+                          parallel::parLapplyLB(cl, seq_len(n), rerun_i)))
       parallel::stopCluster(cl)
 
     } else {
-      out <- lapply(seq_len(n), rerun_i)
+      rt <- system.time(out <- suppressWarnings(lapply(seq_len(n), rerun_i)))
+    }
+    
+  if (rt[[3]] > 60) {
+      message(paste0("The rerun took more than one minute.\n",
+                     "Consider saving the output to an external file.\n",
+                     "E.g., can use saveRDS() to save the object."))
+      utils::flush.console()
+    }
+    
+  names(out) <- case_ids
+  
+  # post.check
+  post_check <- sapply(out, function(x) {
+                    chk <- tryCatch(lavaan::lavTech(x, what = "post.check"),
+                                    warning = function(w) w)
+                    })
+  any_warning <- !all(sapply(post_check, isTRUE))
+  if (any_warning) {
+      message(paste0("Some cases led to warnings if excluded.\n",
+                    "Please check the element 'post_check'\n",
+                    "for cases with values other than `TRUE`."))
+      utils::flush.console()
     }
   
-  names(out) <- case_ids
-  list(rerun = out, fit = fit, call = call)
+  list(rerun = out, 
+       fit = fit,
+       post_check = post_check,
+       call = call)
 }
 
 gen_fct <- function(fit) {

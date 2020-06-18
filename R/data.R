@@ -35,26 +35,3 @@
 #' ```
 "sem_dat"
 
-#' The *n* [lavaan::sem()] results on [pa_dat] 
-#'
-#' The *n* [lavaan::sem()] results on [pa_dat].
-#'
-#' The [lavaan_rerun()] output fitting the following model to [pa_dat]
-#' ```
-#'`iv1 ~~ iv2`
-#'`m1 ~ iv1 + iv2`
-#'`dv ~ m1`
-#' ```
-"pa_rerun"
-
-#' The *n* [lavaan::sem()] results on [cfa_dat] 
-#'
-#' The *n* [lavaan::sem()] results on [cfa_dat]. 
-#'
-#' The [lavaan_rerun()] output fitting the following model to [cfa_dat]
-#' ```
-#'`f1 =~ x1 + x2 + x3`
-#'`f2 =~ x4 + x5 + x6`
-#' ```
-"cfa_rerun"
-

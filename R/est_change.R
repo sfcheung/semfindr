@@ -1,14 +1,19 @@
 #'@title
-#' Case influence on parameter estimates
+#' Case influence on parameter estimates by standardized change
 #'
 #'@description
-#' Get a [lavaan_rerun()] output and compute the changes in selected parameters
+#' Get a [lavaan_rerun()] output and compute the standardized changes in selected parameters
 #' for each case.
 #'
 #'@details
-#' For each case, compute the differences in the estimates of selected parameter
+#' For each case, compute the standardized differences in the estimates of selected parameter
 #' between rerun without
 #' this case and the original fit with this case.
+#' The differences are standardized by dividing the raw differences by their
+#' standard errors.
+#'
+#' If the analysis is not admissible or did not converge when a case was 
+#' deleted, `NA` will be turned for this case.
 #'
 #' Currently only work for one group analysis.
 #'
@@ -18,13 +23,16 @@
 #'                  corresponds to how each parameter is specified in `lavaan`.
 #'                  The naming convention of a `lavaan` output can be found
 #'                  by [lavaan::parameterEstimates()]. If `NULL`, the default,
-#'                  differences on all parameters will be computed.
+#'                  standardized differences on all parameters will be computed. 
 #'
 #'@return
 #'A matrix with the number of columns equal to the number of requested parameters,
 #'and the number of rows equal to the number of cases. The row names is the 
 #'case identification values used in [lavaan_rerun()]. The elements are the 
 #'standardized difference. Please see Pek and MacCallum (2011), Equation 7.
+#'
+#'@references
+#'Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. *Multivariate Behavioral Research, 46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #'@examples
 #'library(lavaan)
@@ -126,7 +134,17 @@ est_change <- function(rerun_out,
     outi
   }
   out <- sapply(reruns,
-                tmpfct,
+                function(x, est, parameters_names, parameters_selected) {
+                  chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
+                  if (isTRUE(chk)) {
+                      return(tmpfct(x, est = est,
+                                       parameters_names = parameters_names,
+                                       parameters_selected = parameters_selected)
+                            )
+                    } else {
+                      return(rep(NA, length(parameters_selected) + 1))
+                    }
+                  },
                 est = est0,
                 parameters_names = parameters_names,
                 parameters_selected = parameters_selected
@@ -134,5 +152,7 @@ est_change <- function(rerun_out,
   # No need to check the number of columns because it is always greater than one
 
   out <- t(out)
+  colnames(out) <- c(parameters_selected, "gcd")
+  rownames(out) <- case_ids
   out
 }
