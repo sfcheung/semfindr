@@ -3,7 +3,7 @@
 \docType{data}
 \name{pa_dat}
 \alias{pa_dat}
-\title{Sample datasets for testing}
+\title{A four-variable dataset with 100 cases}
 \format{
 An object of class \code{data.frame} with 100 rows and 4 columns.
 }
@@ -11,6 +11,11 @@ An object of class \code{data.frame} with 100 rows and 4 columns.
 pa_dat
 }
 \description{
-A four-variable dataset with 100 cases.
+A four-variable dataset with 100 cases
+}
+\details{
+Generated from this model:\preformatted{`m1 ~  0.5*iv1 + 0.6*iv2`
+`dv ~  0.4*iv1 + 0.1*iv2 + 0.5*m1`
+}
 }
 \keyword{datasets}

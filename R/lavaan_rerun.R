@@ -26,7 +26,10 @@
 #'                 `FALSE`.
 #'@param makeCluster_args A named list of arguments to be passed to 
 #'                       [parallel::makeCluster()]. Default is 
-#'                        `list(spec = getOption("cl.cores", 2)))`.
+#'                        `list(spec = getOption("cl.cores", 2)))`. If 
+#'                        only need to specify the number of cores, use
+#'                        `list(spec = ncpu)`, where `ncpu` is the number of 
+#'                        cores to use.
 #'
 #'@return
 #'Return a list with two elements
@@ -38,14 +41,33 @@
 #' - `call`: The call to [lavaan_rerun()].
 #'
 #'@examples
-#'# To be prepared.
-#'
+#'library(lavaan)
+#'dat <- pa_dat
+#'# For illustration only, select only the first 50 cases
+#'dat <- dat[1:50, ]
+#'# The model
+#'mod <- 
+#''
+#'m1 ~ iv1 + iv2
+#'dv ~ m1
+#''
+#'# Fit the model
+#'fit <- lavaan::sem(mod, dat)
+#'summary(fit)
+#'# Fit the model n times. Each time with one case removed.
+#'fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#'# Results excluding the first case
+#'fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
+#'# Results by manually excluding the first case
+#'fit_01 <- lavaan::sem(mod, dat[-1, ])
+#'fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
 #'@export lavaan_rerun
 
 lavaan_rerun <- function(fit,
                          case_id = NULL,
-                         parallel = TRUE,
-                         makeCluster_args = list(spec = getOption("cl.cores", 2))) 
+                         parallel = FALSE,
+                         makeCluster_args = list(spec = getOption("cl.cores", 2))
+                         ) 
 {
   # Create the call
   # Create the boot function
@@ -78,9 +100,17 @@ lavaan_rerun <- function(fit,
         }
     }
   
+  fit_total_time <- fit@timing$total
+  time_expected <-  n*fit_total_time[[1]]
+  message(paste("The expected CPU time is", round(time_expected, 2), "second(s). Could be smaller if ran in parallel."))
+  flush.console()
   #environment(gen_fct) <- environment()
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
+  rerun_test <- rerun_i(NULL)
+  if (!identical(coef(fit), coef(rerun_test))) {
+      stop("Something is wrong. The lavaan analysis cannot be rerun.")
+    }
 
   if (parallel & requireNamespace("parallel", quietly = TRUE)) {
       pkgs <- .packages()

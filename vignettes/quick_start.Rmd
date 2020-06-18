@@ -1,5 +1,5 @@
 ---
-title: "quick_start"
+title: "Quick Start"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{quick_start}
@@ -17,3 +17,5 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(semfindr)
 ```
+
+# To be drafted

@@ -8,36 +8,58 @@
 \alias{gcd_gof_md_plot}
 \title{Plot selected influence statistics and measures of extremeness}
 \usage{
-gcd_plot(influence_out, cutoff_gcd = 1)
+gcd_plot(influence_out, cutoff_gcd = NULL, largest_gcd = 1)
 
-md_plot(influence_out, cutoff_md = NULL, cutoff_md_qchisq = 0.975)
+md_plot(
+  influence_out,
+  cutoff_md = FALSE,
+  cutoff_md_qchisq = 0.975,
+  largest_md = 1
+)
 
-gcd_gof_plot(influence_out, fit_measure, cutoff_gcd = 1, cutoff_fit_measure)
+gcd_gof_plot(
+  influence_out,
+  fit_measure,
+  cutoff_gcd = NULL,
+  cutoff_fit_measure,
+  largest_gcd = 1
+)
 
 gcd_gof_md_plot(
   influence_out,
   fit_measure,
-  cutoff_md = NULL,
+  cutoff_md = FALSE,
   cutoff_fit_measure,
   circle_size = 2,
   cutoff_md_qchisq = 0.975,
-  cutoff_gcd = 1
+  cutoff_gcd = NULL,
+  largest_gcd = 1,
+  largest_md = 1
 )
 }
 \arguments{
 \item{influence_out}{The output from \code{\link[=influence_stat]{influence_stat()}}.}
 
 \item{cutoff_gcd}{Cases with generalized Cook's distance larger than this
-value will be labeled. Default is 1.}
+value will be labeled. Default is \code{NULL}. If \code{NULL}, no
+cutoff line will be drawn.}
+
+\item{largest_gcd}{The number of cases with the largest Cook's distance to be labelled.
+Default is 1. If not a integer, it will be rounded to the nearest
+integer.}
 
 \item{cutoff_md}{Cases with Mahalanobis distance larger than this value
-will be labeled. Default is \code{NULL}. If it is \code{NULL},
+will be labeled. If it is \code{TRUE},
 the (\code{cutoff_md_qchisq} x 100)th percentile of the chi-square distribution with
 the degrees of freedom equal to the number of variables
-will be used.}
+will be used.  Default is \code{FALSE}, no cutoff value.}
 
 \item{cutoff_md_qchisq}{This value multiplied by 100 is the percentile to be used
 for labeling case based on Mahalanobis distance. Default is .975.}
+
+\item{largest_md}{The number of cases with the largest Mahalanobis distance to be labelled.
+Default is 1. If not a integer, it will be rounded to the nearest
+integer.}
 
 \item{fit_measure}{Specify the fit measure to be used in a plot. Use the name
 in the \code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}} function. No default value.}

@@ -34,7 +34,34 @@ this case and the original fit with this case.
 Currently only work for one group analysis.
 }
 \examples{
-# To be prepared.
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <- 
+'
+m1 ~ iv1 + iv2
+dv ~ m1
+'
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Compute the changes in chisq if a case is removed
+out <- est_change(fit_rerun)
+# Results excluding a case, for the first few cases
+head(out)
+# Note that these are the differences divided by the standard error
+# The right most column contains the generalized Cook's distances.
+
+# Compute the changes for the paths from iv1 and iv2 to m1
+out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
+# Results excluding a case, for the first few cases
+head(out2)
+# Note that only the changes in the selected paths are included.
+# The generalized Cook's distance is computed only from the selected parameter estimates.
 
 }
 \references{

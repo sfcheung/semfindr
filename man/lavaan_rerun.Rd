@@ -7,7 +7,7 @@
 lavaan_rerun(
   fit,
   case_id = NULL,
-  parallel = TRUE,
+  parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
 }
@@ -31,7 +31,10 @@ parallel to rerun the analysis. Currently, only support
 
 \item{makeCluster_args}{A named list of arguments to be passed to
 \code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is
-\verb{list(spec = getOption("cl.cores", 2)))}.}
+\verb{list(spec = getOption("cl.cores", 2)))}. If
+only need to specify the number of cores, use
+\code{list(spec = ncpu)}, where \code{ncpu} is the number of
+cores to use.}
 }
 \value{
 Return a list with two elements
@@ -51,6 +54,24 @@ equal to the number of cases. In each run, one case will be left out.
 Currently only work for one group analysis.
 }
 \examples{
-# To be prepared.
-
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <- 
+'
+m1 ~ iv1 + iv2
+dv ~ m1
+'
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Results excluding the first case
+fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
+# Results by manually excluding the first case
+fit_01 <- lavaan::sem(mod, dat[-1, ])
+fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
 }

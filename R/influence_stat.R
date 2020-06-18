@@ -44,7 +44,24 @@
 #'functions for further details.
 #'
 #'@examples
-#'# To be prepared.
+#'library(lavaan)
+#'dat <- pa_dat
+#'# For illustration only, select only the first 50 cases
+#'dat <- dat[1:50, ]
+#'# The model
+#'mod <- 
+#''
+#'m1 ~ iv1 + iv2
+#'dv ~ m1
+#''
+#'# Fit the model
+#'fit <- lavaan::sem(mod, dat)
+#'summary(fit)
+#'# Fit the model n times. Each time with one case removed.
+#'fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#'# Get all default influence stats
+#'out <- influence_stat(fit_rerun)
+#'head(out)
 #'
 #'@references
 #'Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. *Multivariate Behavioral Research, 46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>

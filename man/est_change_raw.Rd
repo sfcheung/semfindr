@@ -39,7 +39,47 @@ unstandardized solution. The change is \emph{not} divided by standard error.#'
 Currently only work for one group analysis.
 }
 \examples{
-# To be prepared.
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <- 
+'
+m1 ~ iv1 + iv2
+dv ~ m1
+'
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Compute the changes in parameter estimates if a case is removed
+out <- est_change_raw(fit_rerun)
+# Results excluding a case, for the first few cases
+head(out)
+# Note that these are the differences parameter estimates.
+
+# The parameter estimates from all cases
+(coef_all <- coef(fit))
+# The parameter estimates from manually deleting the first case
+fit_no_1 <- lavaan::sem(mod, dat[-1, ])
+(coef_no_1 <- coef(fit_no_1))
+# The differences
+coef_all - coef_no_1
+
+# Compute the changes for the paths from iv1 and iv2 to m1
+out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
+# Results excluding a case, for the first few cases
+head(out2)
+# Note that only the changes in the selected paths are included.
+
+# Use standardized = TRUE to compare the differences in standardized solution
+out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"), standardized = TRUE)
+head(out2_std)
+parameterEstimates(fit, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
+parameterEstimates(fit_no_1, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
+out2_std[1, ]
 
 }
 \references{

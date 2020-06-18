@@ -61,7 +61,24 @@ A wrapper of \code{\link[=est_change]{est_change()}} and \code{\link[=fit_measur
 Currently only work for one group analysis.
 }
 \examples{
-# To be prepared.
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <- 
+'
+m1 ~ iv1 + iv2
+dv ~ m1
+'
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Get all default influence stats
+out <- influence_stat(fit_rerun)
+head(out)
 
 }
 \references{

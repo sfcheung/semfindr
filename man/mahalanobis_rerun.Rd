@@ -10,7 +10,7 @@ mahalanobis_rerun(rerun_out)
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 }
 \value{
-A one column matrix of the Mahalanobis distance for each case. The row names
+A one-column matrix (a column vector) of the Mahalanobis distance for each case. The row names
 are the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
@@ -22,7 +22,29 @@ For each case, compute the Mahalanobis distance of each case.
 Currently only work for one group analysis.
 }
 \examples{
-# To be prepared.
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <- 
+'
+m1 ~ iv1 + iv2
+dv ~ m1
+'
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Compute the Mahalanobis distance for each case
+out <- mahalanobis_rerun(fit_rerun)
+# Results excluding a case, for the first few cases
+head(out)
+# Compute the Mahalanobis distance using stats::mahalanobis
+md1 <- stats::mahalanobis(dat, colMeans(dat), stats::cov(dat))
+# Compare the results
+head(md1)
 
 }
 \references{
