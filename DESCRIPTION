@@ -1,0 +1,29 @@
+Package: semfindr
+Title: Compute diagnostic statistics for outliers and influential cases in structural equation modeling
+Version: 0.0.2
+Authors@R: c(
+    person(given = "Shu Fai",
+           family = "Cheung",
+           role = c("aut", "cre"),
+           email = "shufai.cheung@gmail.com",
+           comment = c(ORCID = "0000-0002-9871-9448")))
+Description: Compute diagnostic statistics for outliers and influential cases in structural equation modeling.
+BugReports: https://github.com/sfcheung/semfindr/issues
+Depends: R (>= 3.6.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Suggests: 
+    testthat,
+    parallel,
+    knitr,
+    rmarkdown
+Imports: 
+    lavaan,
+    ggplot2,
+    ggrepel,
+    rlang,
+    stats
+VignetteBuilder: knitr
