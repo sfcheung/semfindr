@@ -164,7 +164,7 @@ lavaan_rerun <- function(fit,
        call = call)
 }
 
-gen_fct <- function(fit) {
+gen_fct_old <- function(fit) {
   fit_call <- fit@call
   fit_call2 <- fit_call
   for (i in seq_len(length(fit_call2))) {
@@ -177,6 +177,19 @@ gen_fct <- function(fit) {
         } else {
           fit_call2$data <- data_full[-i, ]
           return(eval(fit_call2))
+        }
+    }
+  }
+
+gen_fct <- function(fit) {
+  fit_org <- eval(fit)
+  data_full <- fit_org@Data@X[[1]]
+  colnames(data_full) <- fit_org@Data@ov$name
+  function(i = NULL) {
+      if (is.null(i)) {
+          return(lavaan::update(fit_org, data = data_full))
+        } else {
+          return(lavaan::update(fit_org, data = data_full[-i, ]))
         }
     }
   }
