@@ -20,7 +20,7 @@ f2 =~ x4 + x5 + x6
 set.seed(48157438)
 dat <- lavaan::simulateData(mod_p, sample.nobs =  45L)
 fit <- lavaan::cfa(mod, dat)
-summary(fit, fit.measures = TRUE)
+#summary(fit, fit.measures = TRUE)
 fit_rerun <- lavaan_rerun(fit)
 fit_post_check <- sapply(fit_rerun$rerun, function(x) {
                     chk <- tryCatch(lavaan::lavTech(x, what = "post.check"),
