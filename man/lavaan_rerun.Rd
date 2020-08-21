@@ -42,9 +42,9 @@ Return a list with two elements
 \item \code{rerun}: The \emph{n} \code{lavaan} output objects.
 \item \code{fit}: The original output from \code{lavaan}.
 \item \code{post_check}: A list of length equals to \emph{n}. Each analysis was checked by
-\code{\link[lavaan:lavTech]{lavaan::lavTech()}}. If \code{TRUE}, the estimation converged
+\code{\link[lavaan:lavInspect]{lavaan::lavTech()}}. If \code{TRUE}, the estimation converged
 and the solution is admissible. If not \code{TRUE}, it is a
-warning message issued by \code{\link[lavaan:lavTech]{lavaan::lavTech()}}.
+warning message issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
 \item \code{call}: The call to \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 }
