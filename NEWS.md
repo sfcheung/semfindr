@@ -1,3 +1,7 @@
+# semfindr 0.0.4
+
+- Initialize version 0.0.4
+
 # semfindr 0.0.3
 
 - Use lavaan::update in lavaan_rerun. This is more reliable than recreating the call.
