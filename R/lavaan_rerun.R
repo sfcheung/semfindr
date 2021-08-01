@@ -158,10 +158,12 @@ lavaan_rerun <- function(fit,
       utils::flush.console()
     }
   
-  list(rerun = out, 
-       fit = fit,
-       post_check = post_check,
-       call = call)
+  out <- list(rerun = out,
+              fit = fit,
+              post_check = post_check,
+              call = call)
+  class(out) <- "lavaan_rerun"
+  out
 }
 
 gen_fct_old <- function(fit) {
