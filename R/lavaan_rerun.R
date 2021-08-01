@@ -1,102 +1,103 @@
-#'@title
+#' @title
 #' Rerun a `lavaan` analysis with one-left-out
 #'
-#'@description
+#' @description
 #' Rerun a `lavaan` analysis *n* times, each time with one case left out.
 #'
-#'@details
-#' Rerun a `lavaan` analysis using the same arguments and options *n* times, *n* 
+#' @details
+#' Rerun a `lavaan` analysis using the same arguments and options *n* times,
+#'  *n*
 #' equal to the number of cases. In each run, one case will be left out.
 #'
 #' Currently only work for one group analysis.
 #'
-#'@param fit The output from `lavaan`, such as [lavaan::cfa()] and 
+#' @param fit The output from `lavaan`, such as [lavaan::cfa()] and
 #'        [lavaan::sem()].
-#'@param case_id If this 
-#'               is a character vector of 
+#' @param case_id If this
+#'               is a character vector of
 #'               length equal to the number of cases (the number of rows in the
 #'               data), then it is the vector of case identification values.
-#'               If this is the `NULL`, the default, then `case.idx` used 
-#'               by `lavaan` functions will be used as case identification 
+#'               If this is the `NULL`, the default, then `case.idx` used
+#'               by `lavaan` functions will be used as case identification
 #'               values. The case identification
 #'               values will be used to name the list of `n` output.
-#'@param parallel Whether parallel will be used. If `TRUE`, will use 
+#' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'                 parallel to rerun the analysis. Currently, only support
-#'                 `"FORK"` type cluster using local CPU cores. Default is 
+#'                 `"FORK"` type cluster using local CPU cores. Default is
 #'                 `FALSE`.
-#'@param makeCluster_args A named list of arguments to be passed to 
-#'                       [parallel::makeCluster()]. Default is 
-#'                        `list(spec = getOption("cl.cores", 2)))`. If 
+#' @param makeCluster_args A named list of arguments to be passed to
+#'                       [parallel::makeCluster()]. Default is
+#'                        `list(spec = getOption("cl.cores", 2)))`. If
 #'                        only need to specify the number of cores, use
-#'                        `list(spec = ncpu)`, where `ncpu` is the number of 
+#'                        `list(spec = ncpu)`, where `ncpu` is the number of
 #'                        cores to use.
 #'
-#'@return
-#'Return a list with two elements
+#' @return
+#' Return a list with two elements
 #'
 #' - `rerun`: The *n* `lavaan` output objects.
 #'
 #' - `fit`: The original output from `lavaan`.
 #'
-#' - `post_check`: A list of length equals to *n*. Each analysis was checked by 
+#' - `post_check`: A list of length equals to *n*. Each analysis was checked by
 #'                 [lavaan::lavTech()]. If `TRUE`, the estimation converged
-#'                 and the solution is admissible. If not `TRUE`, it is a 
+#'                 and the solution is admissible. If not `TRUE`, it is a
 #'                 warning message issued by [lavaan::lavTech()].
 #'
 #' - `call`: The call to [lavaan_rerun()].
 #'
-#'@examples
-#'library(lavaan)
-#'dat <- pa_dat
-#'# For illustration only, select only the first 50 cases
-#'dat <- dat[1:50, ]
-#'# The model
-#'mod <- 
-#''
-#'m1 ~ iv1 + iv2
-#'dv ~ m1
-#''
-#'# Fit the model
-#'fit <- lavaan::sem(mod, dat)
-#'summary(fit)
-#'# Fit the model n times. Each time with one case removed.
-#'fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
-#'# Results excluding the first case
-#'fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
-#'# Results by manually excluding the first case
-#'fit_01 <- lavaan::sem(mod, dat[-1, ])
-#'fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
-#'@importMethodsFrom lavaan coef
-#'@export lavaan_rerun
+#' @examples
+#' library(lavaan)
+#' dat <- pa_dat
+#' # For illustration only, select only the first 50 cases
+#' dat <- dat[1:50, ]
+#' # The model
+#' mod <-
+#' '
+#' m1 ~ iv1 + iv2
+#' dv ~ m1
+#' '
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#' summary(fit)
+#' # Fit the model n times. Each time with one case removed.
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#' # Results excluding the first case
+#' fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
+#' # Results by manually excluding the first case
+#' fit_01 <- lavaan::sem(mod, dat[-1, ])
+#' fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
+#' @importMethodsFrom lavaan coef
+#' @export lavaan_rerun
 
 lavaan_rerun <- function(fit,
                          case_id = NULL,
                          parallel = FALSE,
-                         makeCluster_args = list(spec = getOption("cl.cores", 2))
-                         ) 
-{
+                         makeCluster_args =
+                            list(spec = getOption("cl.cores", 2))
+                         ) {
   # Create the call
   # Create the boot function
   # Run it n times
   # Return the results
-  
+
   call <- match.call()
-  
+
   if (missing(fit)) {
       stop("lavaan output is missing.")
     }
-  
+
   if (!inherits(fit, "lavaan")) {
       stop("The fit object is not a lavaan output.")
     }
-  
+
   if (fit@Data@ngroups != 1) {
       stop(paste0("The output is based on more than one group. \n",
                   "Multiple group analysis not yet supported."))
     }
-  
+
   n <- fit@Data@nobs[[1]]
-  
+
   if (is.null(case_id)) {
       case_ids <- fit@Data@case.idx[[1]]
     } else {
@@ -106,13 +107,13 @@ lavaan_rerun <- function(fit,
           case_ids <- case_id
         }
     }
-  
+
   fit_total_time <- fit@timing$total
-  time_expected <-  n*fit_total_time[[1]]
-  message(paste0("The expected CPU time is ", round(time_expected, 2), "second(s).\n",
-                "Could be faster if ran in parallel."))
+  time_expected <-  n * fit_total_time[[1]]
+  message(paste0("The expected CPU time is ", round(time_expected, 2),
+                 " second(s).\n",
+                 "Could be faster if ran in parallel."))
   utils::flush.console()
-  #environment(gen_fct) <- environment()
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
   rerun_test <- rerun_i(NULL)
@@ -125,7 +126,8 @@ lavaan_rerun <- function(fit,
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
       parallel::clusterExport(cl, "pkgs", envir = environment())
-      parallel::clusterEvalQ(cl, {sapply(pkgs, 
+      parallel::clusterEvalQ(cl, {
+                      sapply(pkgs,
                       function(x) library(x, character.only = TRUE))
                     })
       rt <- system.time(out <- suppressWarnings(
@@ -135,16 +137,16 @@ lavaan_rerun <- function(fit,
     } else {
       rt <- system.time(out <- suppressWarnings(lapply(seq_len(n), rerun_i)))
     }
-    
+
   if (rt[[3]] > 60) {
       message(paste0("The rerun took more than one minute.\n",
                      "Consider saving the output to an external file.\n",
                      "E.g., can use saveRDS() to save the object."))
       utils::flush.console()
     }
-    
+
   names(out) <- case_ids
-  
+
   # post.check
   post_check <- sapply(out, function(x) {
                     chk <- tryCatch(lavaan::lavTech(x, what = "post.check"),
@@ -157,7 +159,7 @@ lavaan_rerun <- function(fit,
                     "for cases with values other than `TRUE`."))
       utils::flush.console()
     }
-  
+
   out <- list(rerun = out,
               fit = fit,
               post_check = post_check,

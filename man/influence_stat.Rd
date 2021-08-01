@@ -2,7 +2,8 @@
 % Please edit documentation in R/influence_stat.R
 \name{influence_stat}
 \alias{influence_stat}
-\title{Compute case influence on parameter estimates and fit measures and extremeness}
+\title{Compute case influence on parameter estimates and fit measures and
+extremeness}
 \usage{
 influence_stat(
   rerun_out,
@@ -30,7 +31,8 @@ corresponds to how each parameter is specified in \code{lavaan}.
 The naming convention of a \code{lavaan} output can be found
 by \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
 differences on all parameters will be computed.
-If \code{FALSE}, changes in parameter estimates will not be computed.}
+If \code{FALSE}, changes in parameter estimates will not be
+computed.}
 
 \item{mahalanobis}{If \code{TRUE}, will call \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} to compute the
 Mahalanobis distance. Default is \code{TRUE}.}
@@ -40,9 +42,11 @@ sample as an attribute to the output. For other functions to
 extract necessary information. Default is \code{TRUE}.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested statistics,
+A matrix with the number of columns equal to the number of requested
+statistics,
 and the number of rows equal to the number of cases. The row names is the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the corresponding
+case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the
+corresponding
 functions for further details.
 }
 \description{
@@ -50,7 +54,8 @@ Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the changes
 and fit measures for each case.
 }
 \details{
-For each case, compute the differences in the estimates of selected parameters
+For each case, compute the differences in the estimates of selected
+parameters
 and fit measures
 between rerun without
 this case and the original fit with this case. Can also request measures of
@@ -66,7 +71,7 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
@@ -82,7 +87,9 @@ head(out)
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \seealso{
 \code{\link[=fit_measures_change]{fit_measures_change()}}, \code{\link[=est_change]{est_change()}}, and \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}.

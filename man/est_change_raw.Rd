@@ -17,14 +17,15 @@ by \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \co
 differences on all parameters will be computed.}
 
 \item{standardized}{If \code{TRUE}, the changes in full standardized is returned.
-Otherwise, the changes in unstandardized solution is returned.
-Default is \code{FALSE}.}
+Otherwise, the changes in unstandardized solution is
+returned. Default is \code{FALSE}.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested parameters,
-and the number of rows equal to the number of cases. The row names is the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the
-standardized difference. Please see Pek and MacCallum (2011), Equation 7.
+A matrix with the number of columns equal to the number of requested
+parameters, and the number of rows equal to the number of cases. The
+row names is the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+The elements are the standardized difference. Please see Pek and
+MacCallum (2011), Equation 7.
 }
 \description{
 Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the changes in selected parameters
@@ -48,7 +49,7 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
@@ -79,13 +80,18 @@ head(out2)
 # Note that only the changes in the selected paths are included.
 
 # Use standardized = TRUE to compare the differences in standardized solution
-out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"), standardized = TRUE)
+out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"),
+                          standardized = TRUE)
 head(out2_std)
-parameterEstimates(fit, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
-parameterEstimates(fit_no_1, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
+parameterEstimates(fit, standardized = TRUE)[1:2,
+                       c("lhs", "op", "rhs", "std.all")]
+parameterEstimates(fit_no_1, standardized = TRUE)[1:2,
+                       c("lhs", "op", "rhs", "std.all")]
 out2_std[1, ]
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }

@@ -14,20 +14,23 @@ Each element is of this form: \code{x ~ y} or \code{x ~~ y},
 corresponds to how each parameter is specified in \code{lavaan}.
 The naming convention of a \code{lavaan} output can be found
 by \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
-standardized differences on all parameters will be computed.}
+standardized differences on all parameters will be
+computed.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested parameters,
+A matrix with the number of columns equal to the number of requested
+parameters,
 and the number of rows equal to the number of cases. The row names is the
 case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the
 standardized difference. Please see Pek and MacCallum (2011), Equation 7.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the standardized changes in selected parameters
-for each case.
+Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the standardized changes in
+selected parameters for each case.
 }
 \details{
-For each case, compute the standardized differences in the estimates of selected parameter
+For each case, compute the standardized differences in the estimates of
+selected parameter
 between rerun without
 this case and the original fit with this case.
 The differences are standardized by dividing the raw differences by their
@@ -44,7 +47,7 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
@@ -66,11 +69,16 @@ out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 # Results excluding a case, for the first few cases
 head(out2)
 # Note that only the changes in the selected paths are included.
-# The generalized Cook's distance is computed only from the selected parameter estimates.
+# The generalized Cook's distance is computed only from the selected
+# parameter estimates.
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }

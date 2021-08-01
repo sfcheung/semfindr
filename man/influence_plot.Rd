@@ -46,39 +46,54 @@ gcd_gof_md_plot(
 value will be labeled. Default is \code{NULL}. If \code{NULL}, no
 cutoff line will be drawn.}
 
-\item{largest_gcd}{The number of cases with the largest Cook's distance to be labelled.
-Default is 1. If not an integer, it will be rounded to the nearest
+\item{largest_gcd}{The number of cases with the largest Cook's distance
+to be labelled.
+Default is 1. If not an integer, it will be rounded
+to the nearest
 integer.}
 
 \item{cutoff_md}{Cases with Mahalanobis distance larger than this value
 will be labeled. If it is \code{TRUE},
-the (\code{cutoff_md_qchisq} x 100)th percentile of the chi-square distribution with
+the (\code{cutoff_md_qchisq} x 100)th percentile of the
+chi-square distribution with
 the degrees of freedom equal to the number of variables
 will be used.  Default is \code{FALSE}, no cutoff value.}
 
-\item{cutoff_md_qchisq}{This value multiplied by 100 is the percentile to be used
-for labeling case based on Mahalanobis distance. Default is .975.}
+\item{cutoff_md_qchisq}{This value multiplied by 100 is the percentile to
+be used
+for labeling case based on Mahalanobis distance.
+Default is .975.}
 
-\item{largest_md}{The number of cases with the largest Mahalanobis distance to be labelled.
-Default is 1. If not an integer, it will be rounded to the nearest
-integer.}
-
-\item{fit_measure}{Specify the fit measure to be used in a plot. Use the name
-in the \code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}} function. No default value.}
-
-\item{cutoff_fit_measure}{Cases with \code{fit_measure} larger than this cutoff in magnitude
-will be labeled. No default value and must be specified.}
-
-\item{largest_fit_measure}{The number of cases with the largest selected fit measure change in magnitude
+\item{largest_md}{The number of cases with the largest Mahalanobis distance
 to be labelled.
-Default is 1. If not an integer, it will be rounded to the nearest
+Default is 1. If not an integer, it will be rounded to
+the nearest
 integer.}
 
-\item{circle_size}{The size of the largest circle when the size of a circle is controlled
+\item{fit_measure}{Specify the fit measure to be used in a plot. Use the
+name
+in the \code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}} function. No default
+value.}
+
+\item{cutoff_fit_measure}{Cases with \code{fit_measure} larger than this cutoff
+in magnitude
+will be labeled. No default value and must be
+specified.}
+
+\item{largest_fit_measure}{The number of cases with the largest selected
+fit measure change in magnitude
+to be labelled.
+Default is 1. If not an integer, it will be rounded to
+the nearest
+integer.}
+
+\item{circle_size}{The size of the largest circle when the size of a circle
+is controlled
 by a statistic.}
 }
 \value{
-A \link{ggplot2} plot. It will not be plot. To plot it, use \code{\link[=plot]{plot()}} on the output.
+A \link{ggplot2} plot. It will not be plot. To plot it, use \code{\link[=plot]{plot()}} on
+the output.
 }
 \description{
 Get a \code{\link[=influence_stat]{influence_stat()}} output and plot selected statistics
@@ -86,7 +101,8 @@ Get a \code{\link[=influence_stat]{influence_stat()}} output and plot selected s
 \details{
 The output of \code{\link[=influence_stat]{influence_stat()}} is simply a matrix. Therefore, this
 function will work for any matrix provided.
-Row number will be used on the x-axis if applicable. However, case identification
+Row number will be used on the x-axis if applicable. However, case
+identification
 values in the output from \code{\link[=influence_stat]{influence_stat()}} will be used for labeling
 individual cases.
 }
@@ -96,7 +112,7 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
@@ -119,24 +135,27 @@ md_plot(out, largest_md = 3)
 # Plot changes in model chi-square against generalized Cook's distance.
 # Label the 3 cases largest changes in magnitude.
 # Label the 3 cases with largest generalized Cook's distance.
-gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3, largest_fit_measure = 3)
+gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+             largest_fit_measure = 3)
 
 # Plot changes in model chi-square against Mahalanobis distance.
 # Size of bubble determined by generalized Cook's distance.
 # Label the 3 cases largest changes in magnitude.
 # Label the 3 cases with largest Mahalanobis distance.
 # Label the 3 cases with largest generalized Cook's distance.
-# 
-gcd_gof_md_plot(out, fit_measure = "chisq", 
-                    largest_gcd = 3, 
-                    largest_fit_measure = 3,
-                    largest_md = 3,
-                    circle_size = 10)
+#
+gcd_gof_md_plot(out, fit_measure = "chisq",
+                     largest_gcd = 3,
+                     largest_fit_measure = 3,
+                     largest_md = 3,
+                     circle_size = 10)
 
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \seealso{
 \code{\link[=influence_stat]{influence_stat()}}.

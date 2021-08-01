@@ -21,16 +21,19 @@ is \code{c("chisq", "cfi", "tli")}.}
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default}
 }
 \value{
-A matrix with the number of columns equal to the number of requested fit measures,
+A matrix with the number of columns equal to the number of requested fit
+measures,
 and the number of rows equal to the number of cases. The row names is the
 case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the change in selected fit measures
+Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the change in selected fit
+measures
 for each case.
 }
 \details{
-For each case, compute the difference in selected fit measures between rerun without
+For each case, compute the difference in selected fit measures between
+rerun without
 this case and the original fit with this case.
 
 If the analysis is not admissible or did not converge when a case was
@@ -69,5 +72,7 @@ chisq_all - chisq_no_1
 out[1, ]
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }

@@ -52,7 +52,8 @@ warning message issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
 Rerun a \code{lavaan} analysis \emph{n} times, each time with one case left out.
 }
 \details{
-Rerun a \code{lavaan} analysis using the same arguments and options \emph{n} times, \emph{n}
+Rerun a \code{lavaan} analysis using the same arguments and options \emph{n} times,
+\emph{n}
 equal to the number of cases. In each run, one case will be left out.
 
 Currently only work for one group analysis.
@@ -63,7 +64,7 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
