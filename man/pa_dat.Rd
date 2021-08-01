@@ -14,8 +14,8 @@ pa_dat
 A four-variable dataset with 100 cases
 }
 \details{
-Generated from this model:\preformatted{`m1 ~  0.5*iv1 + 0.6*iv2`
-`dv ~  0.4*iv1 + 0.1*iv2 + 0.5*m1`
+Fitted by this model:\preformatted{`m1 ~  iv1 + iv2`
+`dv ~  m1`
 }
 }
 \keyword{datasets}
