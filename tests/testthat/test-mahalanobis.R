@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test mahalanobis_rerun.R")
+#context("Test mahalanobis_rerun.R")
 
 mod <- 
 '
@@ -23,7 +23,7 @@ md_rerun <- mahalanobis_rerun(rerun_out)
 md_stats <- mahalanobis(dat0, colMeans(dat0), cov(dat0))
 
 test_that("Compare Mahalanobis distances", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         as.vector(md_rerun),  
         md_stats
       )

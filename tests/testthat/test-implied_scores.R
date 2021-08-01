@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test implied_scores with x variables free")
+#context("Test implied_scores with x variables free")
 
 mod <- 
 '
@@ -35,20 +35,20 @@ for (i in y_names) {
 y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]
 
 test_that("Can implied means be reproduced?", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         implied_means0, implied_means_lavaan,
         tolerance = .00001
       )
   })
 
 test_that("Can implied R-squares be reproduced?", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         y_hat_rsquare, fit_rsquare,
         tolerance = .00001
       )
   })
 
-context("Test implied_scores with x variables fixed")
+#context("Test implied_scores with x variables fixed")
 
 mod <- 
 '
@@ -80,14 +80,14 @@ for (i in y_names) {
 y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]
 
 test_that("Can implied means be reproduced?", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         implied_means0, implied_means_lavaan,
         tolerance = .00001
       )
   })
 
 test_that("Can implied R-squares be reproduced?", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         y_hat_rsquare, fit_rsquare,
         tolerance = .00001
       )

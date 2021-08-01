@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test lavaan_rerun")
+#context("Test lavaan_rerun")
 
 mod <- 
 '
@@ -21,7 +21,7 @@ rerun_out <- lavaan_rerun(fit0, parallel = FALSE)
 rerun_15 <- rerun_out$rerun[[15]]
 
 test_that("Compare parameter estimates of omitting an arbitrary case", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         parameterEstimates(fit0_15), parameterEstimates(rerun_15)
       )
   })

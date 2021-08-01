@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test fit measure changes")
+#context("Test fit measure changes")
 
 mod <- 
 '
@@ -28,7 +28,7 @@ fitm_chagne_manual_15 <- as.numeric(fitm0 - fitm0_15)
 
 
 test_that("Compare fit measures differences omitting an arbitrary case", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         fitm_change_rerun_15, fitm_chagne_manual_15
       )
   })

@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test est_change")
+#context("Test est_change")
 
 mod <- 
 '
@@ -45,21 +45,21 @@ est0_15_gcd
 est_change_rerun_all[15, "gcd"]
 
 test_that("Compare standardized change for an arbitrary case", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         (est0$est - est0_15$est)/est0_15$se,  
         est_change_rerun_all[15, seq_len(k)]
       )
   })
 
 test_that("Compare standardized change for an arbitrary case, with selected parameters", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         est0_15_all_paths,
         est_change_rerun_all_paths[15, seq_len(k2)]
       )
   })
 
 test_that("Compare generalized Cook's distance for for an arbitrary case", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         as.vector(est0_15_gcd),
         est_change_rerun_all[15, "gcd"]
       )

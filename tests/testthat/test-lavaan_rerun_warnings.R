@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-context("Test handling of reruns with warnings")
+#context("Test handling of reruns with warnings")
 
 mod_p <- 
 '
@@ -37,56 +37,56 @@ fit_fm_change1 <- fit_measures_change(fit_rerun, c("chisq", "cfi"))
 fit_fm_change2 <- fit_measures_change(fit_rerun, c("tli"))                    
                     
 test_that("Check if lavTech post.check results are stored.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         fit_rerun$post_check, fit_post_check
       )
   })
 
 test_that("Check fit_est_change1.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change1), i_valid
       )
   })
 
 test_that("Check fit_est_change_raw1.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change_raw1), i_valid
       )
   })
 
 
 test_that("Check fit_est_change2.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change2), i_valid
       )
   })
 
 test_that("Check fit_est_change_raw2.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change_raw2), i_valid
       )
   })
 
 test_that("Check fit_est_change3.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change3), i_valid
       )
   })
 
 test_that("Check fit_est_change_raw3.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_est_change_raw3), i_valid
       )
   })
 
 test_that("Check fit_fm_change1.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_fm_change1), i_valid
       )
   })
 
 test_that("Check fit_fm_change2.", {
-    expect_equivalent(
+    expect_equal(ignore_attr = TRUE,
         complete.cases(fit_fm_change2), i_valid
       )
   })
