@@ -5,11 +5,19 @@
 \title{Compute the Mahalanobis distance for each case using only the exogenous
 observed variables}
 \usage{
-mahalanobis_exo(fit)
+mahalanobis_exo(
+  fit,
+  emNorm_arg = list(estimate.worst = FALSE, criterion = 1e-06)
+)
 }
 \arguments{
 \item{fit}{It can be the output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
 \code{\link[lavaan:sem]{lavaan::sem()}}, or the output from  \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+
+\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}. Default is
+\code{list(estimate.worst = FALSE, criterion = 1e-6)}. Ignored
+if there is no missing data on the exogenous observed
+variables.}
 }
 \value{
 A one-column matrix (a column vector) of the Mahalanobis distance for each

@@ -13,10 +13,14 @@
 #'
 #' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
 #'        [lavaan::sem()], or the output from  [lavaan_rerun()].
+#' @param emNorm_arg A list of argument for [norm2::emNorm()]. Default is
+#'                   `list(estimate.worst = FALSE, criterion = 1e-6)`. Ignored
+#'                   if there is no missing data on the exogenous observed 
+#'                   variables.
 #'
 #' @return
 #' A one-column matrix (a column vector) of the Mahalanobis distance for each
-#'  case. The number of rows equal to the data stored in the fit object. 
+#'  case. The number of rows equal to the data stored in the fit object.
 #'
 #' @examples
 #' library(lavaan)
@@ -42,7 +46,9 @@
 #'
 #' @export
 
-mahalanobis_exo <- function(fit) {
+mahalanobis_exo <- function(fit,
+                            emNorm_arg = list(estimate.worst = FALSE,
+                                              criterion = 1e-6)) {
   if (missing(fit)) {
       stop("No fit object supplied.")
     }
@@ -71,29 +77,54 @@ mahalanobis_exo <- function(fit) {
       fit_free <- lavaan::lavInspect(fit$fit, "free")
     }
 
+  out_na <- matrix(NA, nrow(fit_data), 1)
+  colnames(out_na) <- "md"
+
   if (is.null(fit_free$beta)) {
       warning("The model has no exogenous observed variables.")
-      out <- matrix(NA, nrow(fit_data), 1)
-      colnames(out) <- "md"
-      return(out)
+      return(out_na)
     }
+
   i <- apply(fit_free$beta, 1, function(x) all(x == 0))
   exo_vars <- names(i)[i]
   exo_vars <- exo_vars[exo_vars %in% colnames(fit_data)]
   if (length(exo_vars) == 0) {
       warning("The model has no exogenous observed variables.")
-      out <- matrix(NA, nrow(fit_data), 1)
-      colnames(out) <- "md"
-      return(out)
+      return(out_na)
     }
   fit_data_exo <- fit_data[, exo_vars, drop = FALSE]
-  if ((length(complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
-      stop(paste("Currently does not support missing data on the exogenous",
-                 "variables."))
+  if ((sum(complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
+      if (!requireNamespace("modi", quietly = TRUE)) {
+          stop(paste("Missing data is present but the modi package",
+                     "is not installed."))
+        }
+      if (!requireNamespace("norm2", quietly = TRUE)) {
+          stop(paste("Missing data is present but the norm2 package",
+                     "is not installed."))
+        }
+      emNorm_arg_final <- modifyList(list(),
+                                    emNorm_arg)
+      em_out <- tryCatch(do.call(norm2::emNorm,
+                                 c(list(obj = fit_data_exo),
+                                 emNorm_arg_final)),
+                         error = function(e) e)
+      if (inherits(em_out, "SimpleError")) {
+          warning("Missing data is present but norm2::emNorm raised an error.")
+          warning(em_out)
+          return(out_na)
+        }
+      if (!em_out$converged) {
+          warning("Missing data is present but norm2::emNorm did not converge.")
+          return(out_na)
+        }
+      md_exo <- modi::MDmiss(fit_data_exo,
+                            em_out$param$beta,
+                            em_out$param$sigma)
+    } else {
+      md_exo <- stats::mahalanobis(fit_data_exo,
+                            colMeans(fit_data_exo),
+                            cov(fit_data_exo))
     }
-  md_exo <- stats::mahalanobis(fit_data_exo,
-                        colMeans(fit_data_exo),
-                        cov(fit_data_exo))
 
   out <- matrix(md_exo, length(md_exo), 1)
   colnames(out) <- "md"
