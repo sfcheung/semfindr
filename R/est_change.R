@@ -130,6 +130,10 @@ est_change <- function(rerun_out,
     esti_change <- esti_change[parameters_selected]
     vcovi_full <- vcov(x)
     class(vcovi_full) <- "matrix"
+    vcovi_full_names <- colnames(vcovi_full)
+    q <- which(vcovi_full_names %in% est$label)
+    colnames(vcovi_full)[q] <- parameters_names[q]
+    rownames(vcovi_full)[q] <- parameters_names[q]
     vcovi_full <- vcovi_full[parameters_selected, parameters_selected]
     k <- length(esti_change)
     esti_change_raw <- (est$est - esti_full$est)
