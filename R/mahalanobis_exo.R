@@ -11,8 +11,8 @@
 #'
 #' Currently only work for one group analysis.
 #'
-#' @param fit The output from `lavaan`, such as [lavaan::cfa()] and
-#'        [lavaan::sem()].
+#' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
+#'        [lavaan::sem()], or the output from  [lavaan_rerun()].
 #'
 #' @return
 #' A one-column matrix (a column vector) of the Mahalanobis distance for each
@@ -44,25 +44,33 @@
 
 mahalanobis_exo <- function(fit) {
   if (missing(fit)) {
-      stop("No lavaan output supplied.")
+      stop("No fit object supplied.")
     }
-  if (!inherits(fit, "lavaan")) {
-      stop("The fit object must of of the class 'lavaan'.")
+  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+      stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
-  if (lavaan::lavInspect(fit, "ngroups") > 1) {
-      stop("Currently only support single group models.")
+  if (inherits(fit, "lavaan")) {
+      if (lavaan::lavInspect(fit, "ngroups") > 1) {
+          stop("Currently only support single group models.")
+        }
+      if (lavaan::lavInspect(fit, "nclusters") > 1) {
+          stop("Currently does not support models with more than one cluster.")
+        }
+      if (lavaan::lavInspect(fit, "nlevels") > 1) {
+          stop("Currently does not support models with more than one level.")
+        }
     }
-  if (lavaan::lavInspect(fit, "nclusters") > 1) {
-      stop("Currently does not support models with more than one cluster.")
+  if (inherits(fit, "lavaan")) {
+      fit_data <- lavaan::lavInspect(fit, "data")
+      colnames(fit_data) <- lavaan::lavNames(fit)
+      fit_free <- lavaan::lavInspect(fit, "free")
     }
-  if (lavaan::lavInspect(fit, "nlevels") > 1) {
-      stop("Currently does not support models with more than one level.")
+  if (inherits(fit, "lavaan_rerun")) {
+      fit_data <- lavaan::lavInspect(fit$fit, "data")
+      colnames(fit_data) <- lavaan::lavNames(fit$fit)
+      fit_free <- lavaan::lavInspect(fit$fit, "free")
     }
 
-  fit_data <- lavaan::lavInspect(fit, "data")
-  colnames(fit_data) <- lavaan::lavNames(fit)
-
-  fit_free <- lavaan::lavInspect(fit, "free")
   i <- apply(fit_free$beta, 1, function(x) all(x == 0))
   exo_vars <- names(i)[i]
   fit_data_exo <- fit_data[, exo_vars]
@@ -70,9 +78,9 @@ mahalanobis_exo <- function(fit) {
       stop(paste("Currently does not support missing data on the exogenous",
                  "variables."))
     }
-  md_exo <- stats::mahalanobis(fit0_data_exo,
-                        colMeans(fit0_data_exo),
-                        cov(fit0_data_exo))
+  md_exo <- stats::mahalanobis(fit_data_exo,
+                        colMeans(fit_data_exo),
+                        cov(fit_data_exo))
 
   out <- matrix(md_exo, length(md_exo), 1)
   colnames(out) <- "md"
