@@ -28,20 +28,20 @@ md_exo_check <- mahalanobis(fit0_data_exo,
 
 md_exo <- mahalanobis_exo(fit0)
 
-test_that("Compare Mahalanobis distances", {
+test_that("Compare Mahalanobis distances: lavaan", {
     expect_equal(ignore_attr = TRUE,
         as.vector(md_exo),
         md_exo_check
       )
   })
 
-# rerun_out <- lavaan_rerun(fit0, parallel = FALSE)
+rerun_out <- lavaan_rerun(fit0, parallel = FALSE)
 
-# md_exo_rerun <- mahalanobis_exo(rerun_out)
+md_exo_rerun <- mahalanobis_exo(rerun_out)
 
-# test_that("Compare Mahalanobis distances", {
-#     expect_equal(ignore_attr = TRUE,
-#         as.vector(md_exo_rerun),
-#         md_exo_check
-#       )
-#   })
+test_that("Compare Mahalanobis distances: lavaan_rerun", {
+    expect_equal(ignore_attr = TRUE,
+        as.vector(md_exo_rerun),
+        md_exo_check
+      )
+  })
