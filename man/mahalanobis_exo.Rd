@@ -8,8 +8,8 @@ observed variables}
 mahalanobis_exo(fit)
 }
 \arguments{
-\item{fit}{The output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
-\code{\link[lavaan:sem]{lavaan::sem()}}.}
+\item{fit}{It can be the output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
+\code{\link[lavaan:sem]{lavaan::sem()}}, or the output from  \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 }
 \value{
 A one-column matrix (a column vector) of the Mahalanobis distance for each
