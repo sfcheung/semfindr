@@ -71,9 +71,22 @@ mahalanobis_exo <- function(fit) {
       fit_free <- lavaan::lavInspect(fit$fit, "free")
     }
 
+  if (is.null(fit_free$beta)) {
+      warning("The model has no exogenous observed variables.")
+      out <- matrix(NA, nrow(fit_data), 1)
+      colnames(out) <- "md"
+      return(out)
+    }
   i <- apply(fit_free$beta, 1, function(x) all(x == 0))
   exo_vars <- names(i)[i]
-  fit_data_exo <- fit_data[, exo_vars]
+  exo_vars <- exo_vars[exo_vars %in% colnames(fit_data)]
+  if (length(exo_vars) == 0) {
+      warning("The model has no exogenous observed variables.")
+      out <- matrix(NA, nrow(fit_data), 1)
+      colnames(out) <- "md"
+      return(out)
+    }
+  fit_data_exo <- fit_data[, exo_vars, drop = FALSE]
   if ((length(complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
       stop(paste("Currently does not support missing data on the exogenous",
                  "variables."))
