@@ -32,6 +32,7 @@
 #'
 #'
 #' @importFrom rlang .data
+#' @importFrom lavaan fitted
 #' @export implied_scores
 
 implied_scores <- function(fit) {
@@ -110,7 +111,7 @@ implied_scores <- function(fit) {
     names(y_hat_rsquare) <- y_names
     for (i in y_names) {
         y_hat_rsquare[i] <-
-            suppressWarnings(cor(dat[, i], y_hat[, i],
+            suppressWarnings(stats::cor(dat[, i], y_hat[, i],
                              use = "pairwise.complete.obs")^2)
     }
     y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]

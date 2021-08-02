@@ -93,7 +93,7 @@ mahalanobis_exo <- function(fit,
       return(out_na)
     }
   fit_data_exo <- fit_data[, exo_vars, drop = FALSE]
-  if ((sum(complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
+  if ((sum(stats::complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
       if (!requireNamespace("modi", quietly = TRUE)) {
           stop(paste("Missing data is present but the modi package",
                      "is not installed."))
@@ -102,7 +102,7 @@ mahalanobis_exo <- function(fit,
           stop(paste("Missing data is present but the norm2 package",
                      "is not installed."))
         }
-      emNorm_arg_final <- modifyList(list(),
+      emNorm_arg_final <- utils::modifyList(list(),
                                     emNorm_arg)
       em_out <- tryCatch(do.call(norm2::emNorm,
                                  c(list(obj = fit_data_exo),
@@ -123,7 +123,7 @@ mahalanobis_exo <- function(fit,
     } else {
       md_exo <- stats::mahalanobis(fit_data_exo,
                             colMeans(fit_data_exo),
-                            cov(fit_data_exo))
+                            stats::cov(fit_data_exo))
     }
 
   out <- matrix(md_exo, length(md_exo), 1)

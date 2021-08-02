@@ -27,7 +27,8 @@ Imports:
     rlang,
     stats,
     modi,
-    norm2
+    norm2,
+    methods
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 Config/testthat/edition: 3
