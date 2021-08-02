@@ -96,7 +96,8 @@ lavaan_rerun <- function(fit,
                   "Multiple group analysis not yet supported."))
     }
 
-  n <- fit@Data@nobs[[1]]
+#  n <- fit@Data@nobs[[1]]
+  n <- nrow(lavaan::lavInspect(fit, "data"))
 
   if (is.null(case_id)) {
       case_ids <- fit@Data@case.idx[[1]]
@@ -144,7 +145,6 @@ lavaan_rerun <- function(fit,
                      "E.g., can use saveRDS() to save the object."))
       utils::flush.console()
     }
-
   names(out) <- case_ids
 
   # post.check
