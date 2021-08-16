@@ -54,7 +54,7 @@ mahalanobis_rerun <- function(rerun_out
       stop("No lavaan_rerun output supplied.")
     }
   case_ids <- names(rerun_out$rerun)
-  dat <- rerun_out$fit@Data@X[[1]]
+  dat <- lavaan::lavInspect(rerun_out$fit, "data")
   md <- stats::mahalanobis(dat, colMeans(dat), stats::cov(dat))
   out <- matrix(md, length(md), 1)
   rownames(out) <- case_ids
