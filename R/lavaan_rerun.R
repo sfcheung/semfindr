@@ -91,9 +91,10 @@ lavaan_rerun <- function(fit,
       stop("The fit object is not a lavaan output.")
     }
 
-  if (fit@Data@ngroups != 1) {
-      stop(paste0("The output is based on more than one group. \n",
-                  "Multiple group analysis not yet supported."))
+  check_out <- lavaan_rerun_check(fit, print_messages = FALSE)
+
+  if (check_out != 0) {
+      stop(attr(check_out, "info"))
     }
 
 #  n <- fit@Data@nobs[[1]]
