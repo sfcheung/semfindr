@@ -97,11 +97,11 @@ lavaan_rerun <- function(fit,
       stop(attr(check_out, "info"))
     }
 
-#  n <- fit@Data@nobs[[1]]
   n <- nrow(lavaan::lavInspect(fit, "data"))
 
   if (is.null(case_id)) {
-      case_ids <- fit@Data@case.idx[[1]]
+      # Assume the model is a single-group model
+      case_ids <- lavaan::lavInspect(fit, "case.idx")
     } else {
       if (length(case_id) != n) {
           stop("The length of case_id is not equal to the number of cases.")
@@ -110,7 +110,7 @@ lavaan_rerun <- function(fit,
         }
     }
 
-  fit_total_time <- fit@timing$total
+  fit_total_time <- lavaan::lavInspect(fit, "timing")$total
   time_expected <-  n * fit_total_time[[1]]
   message(paste0("The expected CPU time is ", round(time_expected, 2),
                  " second(s).\n",
@@ -170,6 +170,8 @@ lavaan_rerun <- function(fit,
 }
 
 gen_fct_old <- function(fit) {
+  # Need to use @call instead of lavInspect(fit, "call") to ensure
+  # the returned object is a call.
   fit_call <- fit@call
   fit_call2 <- fit_call
   for (i in seq_len(length(fit_call2))) {
@@ -188,8 +190,10 @@ gen_fct_old <- function(fit) {
 
 gen_fct <- function(fit) {
   fit_org <- eval(fit)
-  data_full <- fit_org@Data@X[[1]]
-  colnames(data_full) <- fit_org@Data@ov$name
+  # data_full <- fit_org@Data@X[[1]]
+  data_full <- lavaan::lavInspect(fit_org, "data")
+  # colnames(data_full) <- fit_org@Data@ov$name
+  colnames(data_full) <- lavaan::lavNames(fit_org)
   function(i = NULL) {
       if (is.null(i)) {
           return(lavaan::update(fit_org, data = data_full))
