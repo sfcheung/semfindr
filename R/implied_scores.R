@@ -39,21 +39,37 @@ implied_scores <- function(fit) {
 
     if (missing(fit)) {
         stop("lavaan output is missing.")
-        }
+      }
 
     if (!inherits(fit, "lavaan")) {
         stop("The fit object is not a lavaan output.")
-        }
+      }
 
-    if (fit@Data@ngroups != 1) {
-        stop(paste0("The output is based on more than one group. \n",
+    if (lavaan::lavInspect(fit, "ngroups") != 1) {
+        stop(paste0("The model has more than one group. \n",
                     "Multiple group analysis not yet supported."))
-        }
+      }
 
     if (is.null(lavaan::inspect(fit, "est")$alpha)) {
         stop(paste0("Mean structure not analyzed. It is required."))
-        }
+      }
 
+    if (lavaan::lavInspect(fit, "nlevels") != 1) {
+        stop(paste0("The model has more than one level. \n",
+                    "Multiple group analysis not yet supported."))
+      }
+
+    if (max(unlist(lavaan::lavInspect(fit, "nclusters"))) > 1) {
+        stop(paste0("Clustered mode not yet supported."))
+      }
+
+    check_data <- tryCatch(lavaan::lavInspect(fit, "data"),
+                            error = function(e) e)
+    if (inherits(check_data, "simpleError")) {
+        stop("Raw data not available. Implied scores cannot be computed.")
+      }
+
+    # dat <- as.data.frame(lavaan::lavInspect(fit, "data"))
     dat <- as.data.frame(fit@Data@X[[1]])
     colnames(dat) <- fit@Data@ov.names[[1]]
     n <- nrow(dat)
@@ -61,6 +77,11 @@ implied_scores <- function(fit) {
     v_names <- fit@Data@ov.names[[1]]
     x_names <- fit@Data@ov.names.x[[1]]
     y_names <- v_names[!(v_names %in% x_names)]
+    # The following three lines do not work
+    # v_names <- lavaan::lavNames(fit, "ov")
+    # x_names <- lavaan::lavNames(fit, "eqs.x")
+    # y_names <- lavaan::lavNames(fit, "eqs.y")
+
     dat_y <- dat[, y_names]
     dat_x <- dat[, x_names]
 
@@ -118,7 +139,7 @@ implied_scores <- function(fit) {
     fit_rsquare
     check_rsquare <- all(round(y_hat_rsquare, 5) == round(fit_rsquare, 5))
 
-    check_summary <- ""
+    check_summary <- vector(mode = "character")
     if (!check_implied_cov_yy) {
         check_summary <- c(check_summary,
             "Implied covariances matrix of Y variables cannot be reproduced.")
@@ -140,7 +161,7 @@ implied_scores <- function(fit) {
             "Implied R-sauares of Y variables cannot be reproduced.")
     }
 
-    if (check_summary != "") {
+    if (length(check_summary) > 0) {
         stop(paste0(paste("Some results cannot be reproduced.",
                           "The implied scores cannot be trusted. \n"),
                     paste0(check_summary, collapse = "\n")))
