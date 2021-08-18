@@ -15,30 +15,30 @@
 #'
 #' @export
 
-setGeneric("print")
-
 print.lavaan_rerun <- function(x,
                           ...) {
     nrerun <- length(x$rerun)
     i_checked <- sapply(x$post_check, isTRUE)
     n_checked <- sum(i_checked)
     n_failed <- nrerun - n_checked
-    failed_messages <- sapply(x$post_check[which(!i_checked)],
-                          function(x) {
-                              msg <- tryCatch(x$message,
-                                              error = function(e) e)
-                              if (inherits(msg, "SimpleError")) {
-                                  msg <- tryCatch(as.character(x),
-                                              error = function(e) e)
-                                }
-                              if (inherits(msg, "SimpleError")) {
-                                  msg <- "Unknown. Please check the fit object."
-                                }
-                              msg
-                            })
-    failed_messages_df <- as.data.frame(table(failed_messages))
-    failed_messages_df <- failed_messages_df[, c(2, 1)]
-    colnames(failed_messages_df) <- c("N", "Warning or error messages")
+    if (n_failed > 0) {
+        failed_messages <- sapply(x$post_check[which(!i_checked)],
+                              function(x) {
+                                  msg <- tryCatch(x$message,
+                                                  error = function(e) e)
+                                  if (inherits(msg, "SimpleError")) {
+                                      msg <- tryCatch(as.character(x),
+                                                  error = function(e) e)
+                                    }
+                                  if (inherits(msg, "SimpleError")) {
+                                      msg <- "Unknown. Please check the fit object."
+                                    }
+                                  msg
+                                })
+        failed_messages_df <- as.data.frame(table(failed_messages))
+        failed_messages_df <- failed_messages_df[, c(2, 1)]
+        colnames(failed_messages_df) <- c("N", "Warning or error messages")
+      }
     org_call <- x$call
     cat("=== lavaan_rerun Output ===\n")
     cat("Call:\n")
