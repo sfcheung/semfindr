@@ -7,6 +7,7 @@
 lavaan_rerun(
   fit,
   case_id = NULL,
+  to_rerun,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
@@ -23,6 +24,12 @@ If this is the \code{NULL}, the default, then \code{case.idx} used
 by \code{lavaan} functions will be used as case identification
 values. The case identification
 values will be used to name the list of \code{n} output.}
+
+\item{to_rerun}{Sepcify the cases to be processed. If \code{case_id} is
+specified, this should be a subset of \code{case_id}. If
+\code{case_id} is not sepcified, then this should be a vecctor
+of integers used to indicate the rows to te processed,
+as appeared in the data in \code{fit}.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 parallel to rerun the analysis. Currently, only support

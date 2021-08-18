@@ -21,6 +21,11 @@
 #'               by `lavaan` functions will be used as case identification
 #'               values. The case identification
 #'               values will be used to name the list of `n` output.
+#' @param to_rerun Sepcify the cases to be processed. If `case_id` is
+#'                   specified, this should be a subset of `case_id`. If 
+#'                   `case_id` is not sepcified, then this should be a vecctor
+#'                    of integers used to indicate the rows to te processed,
+#'                    as appeared in the data in `fit`.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'                 parallel to rerun the analysis. Currently, only support
 #'                 `"FORK"` type cluster using local CPU cores. Default is
@@ -72,6 +77,7 @@
 
 lavaan_rerun <- function(fit,
                          case_id = NULL,
+                         to_rerun,
                          parallel = FALSE,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2))
@@ -110,6 +116,28 @@ lavaan_rerun <- function(fit,
         }
     }
 
+  if (!missing(to_rerun)) {
+      if (!is.null(case_id)) {
+          if (!all(to_rerun %in% case_id)) {
+              stop("Some elements in to_rerun is not in the case_id vectors.")
+            }
+        } else {
+          if (!all(to_rerun %in% seq_len(n))) {
+              stop("Some elements in to_rerun is not valid row numbers.")
+            }
+        }
+    } else {
+      to_rerun <- case_ids
+    }
+
+  if (!is.null(case_id)) {
+      case_ids <- to_rerun
+      id_to_rerun <- match(to_rerun, case_id)
+    } else {
+      case_ids <- lavaan::lavInspect(fit, "case.idx")[to_rerun]
+      id_to_rerun <- to_rerun
+    }
+
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
   time_expected <-  n * fit_total_time[[1]]
   message(paste0("The expected CPU time is ", round(time_expected, 2),
@@ -133,11 +161,11 @@ lavaan_rerun <- function(fit,
                       function(x) library(x, character.only = TRUE))
                     })
       rt <- system.time(out <- suppressWarnings(
-                          parallel::parLapplyLB(cl, seq_len(n), rerun_i)))
+                          parallel::parLapplyLB(cl, id_to_rerun, rerun_i)))
       parallel::stopCluster(cl)
 
     } else {
-      rt <- system.time(out <- suppressWarnings(lapply(seq_len(n), rerun_i)))
+      rt <- system.time(out <- suppressWarnings(lapply(id_to_rerun, rerun_i)))
     }
 
   if (rt[[3]] > 60) {
