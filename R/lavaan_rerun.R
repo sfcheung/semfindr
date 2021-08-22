@@ -32,6 +32,10 @@
 #'                distance, and the top `md_top` case(s) will be processed.
 #'                If both `md_top` and `to_rerun` are not missing, an error
 #'                will be raised.
+#' @param resid_md_top The number of cases to be processed based on the Mahalanobis
+#'               distance computed from the residuals of outcome variables.
+#'                The cases will be ranked from the largest to the smallest
+#'                distance, and the top `resid_md_top` case(s) will be processed.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'                 parallel to rerun the analysis. Currently, only support
 #'                 `"FORK"` type cluster using local CPU cores. Default is
@@ -85,6 +89,7 @@ lavaan_rerun <- function(fit,
                          case_id = NULL,
                          to_rerun,
                          md_top,
+                         resid_md_top,
                          parallel = FALSE,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2))
@@ -123,8 +128,16 @@ lavaan_rerun <- function(fit,
         }
     }
 
-  if (!missing(to_rerun) && !missing(md_top)) {
-      stop("Both to_rerun and md_top are specifiied. Please specify only one of them.")
+  if (sum(!missing(to_rerun), !missing(md_top), !missing(resid_md_top)) > 1) {
+      stop("Among to_rerun, md_top, and resid_md_top, only one of them can be specified.")
+    }
+
+  if (!missing(resid_md_top) & !lavaan::lavInspect(fit, "meanstructure")) {
+      stop("resid_md_top does not support a model without mean structure.")
+    }
+
+  if (!missing(resid_md_top) & !all(lavaan::lavInspect(fit, "pattern") == 1) ) {
+      stop("resid_md_top does not analysis with missing data.")
     }
 
   if (!missing(to_rerun)) {
@@ -148,6 +161,21 @@ lavaan_rerun <- function(fit,
       case_md_selected <- case_md_ordered[seq_len(md_top)]
       case_md_selected <- case_md_selected[!is.na(case_md_selected)] 
       to_rerun <- case_ids[case_md_selected]
+    }
+
+  if (!missing(resid_md_top)) {
+      fit_data <- lavaan::lavInspect(fit, "data")
+      fit_implied <- implied_scores(fit)
+      fit_observed <- fit_data[, colnames(fit_implied)]
+      fit_residual <- fit_implied - fit_observed
+      fit_resid_md <- stats::mahalanobis(fit_residual,
+                                         colMeans(fit_residual),
+                                         cov(fit_residual))
+      fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
+      fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
+      fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
+      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)] 
+      to_rerun <- case_ids[fit_resid_md_selected]
     }
 
   if (!is.null(case_id)) {

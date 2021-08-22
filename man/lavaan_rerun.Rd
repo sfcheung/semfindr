@@ -9,6 +9,7 @@ lavaan_rerun(
   case_id = NULL,
   to_rerun,
   md_top,
+  resid_md_top,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
@@ -38,6 +39,11 @@ The cases will be ranked from the largerst to the smallest
 distance, and the top \code{md_top} case(s) will be processed.
 If both \code{md_top} and \code{to_rerun} are not missing, an error
 will be raised.}
+
+\item{resid_md_top}{The number of cases to be processed based on the Mahalanobis
+distance computed from the residuals of outcome variables.
+The cases will be ranked from the largest to the smallest
+distance, and the top \code{resid_md_top} case(s) will be processed.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 parallel to rerun the analysis. Currently, only support
