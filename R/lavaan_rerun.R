@@ -26,6 +26,12 @@
 #'                   `case_id` is not sepcified, then this should be a vecctor
 #'                    of integers used to indicate the rows to te processed,
 #'                    as appeared in the data in `fit`.
+#' @param md_top The number of cases to be processed based on the Mahalanobis
+#'               distance computed on all variables used in the model.
+#'                The cases will be ranked from the largerst to the smallest
+#'                distance, and the top `md_top` case(s) will be processed.
+#'                If both `md_top` and `to_rerun` are not missing, an error
+#'                will be raised.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'                 parallel to rerun the analysis. Currently, only support
 #'                 `"FORK"` type cluster using local CPU cores. Default is
@@ -78,6 +84,7 @@
 lavaan_rerun <- function(fit,
                          case_id = NULL,
                          to_rerun,
+                         md_top,
                          parallel = FALSE,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2))
@@ -116,6 +123,10 @@ lavaan_rerun <- function(fit,
         }
     }
 
+  if (!missing(to_rerun) && !missing(md_top)) {
+      stop("Both to_rerun and md_top are specifiied. Please specify only one of them.")
+    }
+
   if (!missing(to_rerun)) {
       if (!is.null(case_id)) {
           if (!all(to_rerun %in% case_id)) {
@@ -128,6 +139,15 @@ lavaan_rerun <- function(fit,
         }
     } else {
       to_rerun <- case_ids
+    }
+
+  if (!missing(md_top)) {
+      case_md <- as.vector(mahalanobis_rerun(fit))
+      case_md_ordered <- order(case_md, decreasing = TRUE, na.last = NA)
+      case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
+      case_md_selected <- case_md_ordered[seq_len(md_top)]
+      case_md_selected <- case_md_selected[!is.na(case_md_selected)] 
+      to_rerun <- case_ids[case_md_selected]
     }
 
   if (!is.null(case_id)) {

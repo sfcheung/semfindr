@@ -8,6 +8,7 @@ lavaan_rerun(
   fit,
   case_id = NULL,
   to_rerun,
+  md_top,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
@@ -30,6 +31,13 @@ specified, this should be a subset of \code{case_id}. If
 \code{case_id} is not sepcified, then this should be a vecctor
 of integers used to indicate the rows to te processed,
 as appeared in the data in \code{fit}.}
+
+\item{md_top}{The number of cases to be processed based on the Mahalanobis
+distance computed on all variables used in the model.
+The cases will be ranked from the largerst to the smallest
+distance, and the top \code{md_top} case(s) will be processed.
+If both \code{md_top} and \code{to_rerun} are not missing, an error
+will be raised.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 parallel to rerun the analysis. Currently, only support
