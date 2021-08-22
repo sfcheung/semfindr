@@ -10,7 +10,12 @@
 #'
 #' Currently only work for one group analysis.
 #'
-#' @param rerun_out The output from [lavaan_rerun()].
+#' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
+#'        [lavaan::sem()], or the output from  [lavaan_rerun()].
+#' @param emNorm_arg A list of argument for [norm2::emNorm()]. Default is
+#'                   `list(estimate.worst = FALSE, criterion = 1e-6)`. Ignored
+#'                   if there is no missing data on the exogenous observed 
+#'                   variables.
 #'
 #' @return
 #' A one-column matrix (a column vector) of the Mahalanobis distance for each
@@ -48,14 +53,101 @@
 #'
 #' @export
 
-mahalanobis_rerun <- function(rerun_out
-                       ) {
-  if (missing(rerun_out)) {
-      stop("No lavaan_rerun output supplied.")
+mahalanobis_rerun <- function(fit,
+                              emNorm_arg = list(estimate.worst = FALSE,
+                                                criterion = 1e-6))
+{
+  if (missing(fit)) {
+      stop("No fit object supplied.")
     }
-  case_ids <- names(rerun_out$rerun)
-  dat <- lavaan::lavInspect(rerun_out$fit, "data")
-  md <- stats::mahalanobis(dat, colMeans(dat), stats::cov(dat))
+  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+      stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
+    }
+  if (inherits(fit, "lavaan")) {
+      if (lavaan::lavInspect(fit, "ngroups") > 1) {
+          stop("Currently only support single group models.")
+        }
+      if (lavaan::lavInspect(fit, "nclusters") > 1) {
+          stop("Currently does not support models with more than one cluster.")
+        }
+      if (lavaan::lavInspect(fit, "nlevels") > 1) {
+          stop("Currently does not support models with more than one level.")
+        }
+    }
+
+  if (inherits(fit, "lavaan")) {
+      fit_data <- lavaan::lavInspect(fit, "data")
+      colnames(fit_data) <- lavaan::lavNames(fit)
+      fit_free <- lavaan::lavInspect(fit, "free")
+    }
+  if (inherits(fit, "lavaan_rerun")) {
+      fit_data <- lavaan::lavInspect(fit$fit, "data")
+      colnames(fit_data) <- lavaan::lavNames(fit$fit)
+      fit_free <- lavaan::lavInspect(fit$fit, "free")
+    }
+
+  if (missing(fit)) {
+      stop("No fit object supplied.")
+    }
+  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+      stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
+    }
+  if (inherits(fit, "lavaan")) {
+      if (lavaan::lavInspect(fit, "ngroups") > 1) {
+          stop("Currently only support single group models.")
+        }
+      if (lavaan::lavInspect(fit, "nclusters") > 1) {
+          stop("Currently does not support models with more than one cluster.")
+        }
+      if (lavaan::lavInspect(fit, "nlevels") > 1) {
+          stop("Currently does not support models with more than one level.")
+        }
+    }
+  if (inherits(fit, "lavaan")) {
+      case_ids <- lavaan::lavInspect(fit, "case.idx")
+      fit_data <- lavaan::lavInspect(fit, "data")
+    }
+  if (inherits(fit, "lavaan_rerun")) {
+      case_ids <- names(fit$rerun)
+      fit_data <- lavaan::lavInspect(fit$fit, "data")
+    }
+
+  out_na <- matrix(NA, nrow(fit_data), 1)
+  colnames(out_na) <- "md"
+
+  if ((sum(stats::complete.cases(fit_data))) != nrow(fit_data)) {
+      if (!requireNamespace("modi", quietly = TRUE)) {
+          stop(paste("Missing data is present but the modi package",
+                     "is not installed."))
+        }
+      if (!requireNamespace("norm2", quietly = TRUE)) {
+          stop(paste("Missing data is present but the norm2 package",
+                     "is not installed."))
+        }
+      emNorm_arg_final <- utils::modifyList(list(),
+                                    emNorm_arg)
+      em_out <- tryCatch(do.call(norm2::emNorm,
+                                 c(list(obj = fit_data),
+                                 emNorm_arg_final)),
+                         error = function(e) e)
+      if (inherits(em_out, "SimpleError")) {
+          warning("Missing data is present but norm2::emNorm raised an error.")
+          warning(em_out)
+          return(out_na)
+        }
+      if (!em_out$converged) {
+          warning("Missing data is present but norm2::emNorm did not converge.")
+          return(out_na)
+        }
+      md <- modi::MDmiss(fit_data,
+                            em_out$param$beta,
+                            em_out$param$sigma)
+    } else {
+      md <- stats::mahalanobis(fit_data,
+                            colMeans(fit_data),
+                            stats::cov(fit_data))
+    }
+
   out <- matrix(md, length(md), 1)
   rownames(out) <- case_ids
   colnames(out) <- "md"

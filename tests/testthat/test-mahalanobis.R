@@ -1,6 +1,5 @@
 library(testthat)
 library(lavaan)
-library(semfindr)
 
 #context("Test mahalanobis_rerun.R")
 
@@ -20,11 +19,21 @@ rerun_out <- lavaan_rerun(fit0, parallel = FALSE)
 
 md_rerun <- mahalanobis_rerun(rerun_out)
 
+md_fit <- mahalanobis_rerun(fit0)
+
+
 md_stats <- mahalanobis(dat0, colMeans(dat0), cov(dat0))
 
 test_that("Compare Mahalanobis distances", {
     expect_equal(ignore_attr = TRUE,
-        as.vector(md_rerun),  
+        as.vector(md_rerun),
+        md_stats
+      )
+  })
+
+test_that("Can accept a lavaan fit object", {
+    expect_equal(ignore_attr = TRUE,
+        as.vector(md_fit),
         md_stats
       )
   })
