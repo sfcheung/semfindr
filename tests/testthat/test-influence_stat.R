@@ -34,13 +34,13 @@ test_that("Check Mahalanobis distances", {
 test_that("Check changes in estimates", {
     expect_equal(ignore_attr = TRUE,
         es_rerun,  
-        in_rerun[, 4:12]
+        in_rerun[, colnames(es_rerun)]
       )
   })
 
 test_that("Check changes in fit measures", {
     expect_equal(ignore_attr = TRUE,
         fm_rerun,  
-        in_rerun[, 1:3]
+        in_rerun[, c("chisq", "cfi", "rmsea", "tli")]
       )
   })
