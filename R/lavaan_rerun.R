@@ -170,7 +170,7 @@ lavaan_rerun <- function(fit,
       fit_residual <- fit_implied - fit_observed
       fit_resid_md <- stats::mahalanobis(fit_residual,
                                          colMeans(fit_residual),
-                                         cov(fit_residual))
+                                         stats::cov(fit_residual))
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
