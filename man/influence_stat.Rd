@@ -7,7 +7,7 @@ extremeness}
 \usage{
 influence_stat(
   rerun_out,
-  fit_measures = c("chisq", "cfi", "tli"),
+  fit_measures = c("chisq", "cfi", "rmsea", "tli"),
   baseline_model = NULL,
   parameters = NULL,
   mahalanobis = TRUE,
