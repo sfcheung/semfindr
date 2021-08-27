@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun_check.R
 \name{lavaan_rerun_check}
 \alias{lavaan_rerun_check}
-\title{Check whether the model being fitted is supported}
+\title{Check whether the model being fitted is supported by lavaan_rerun}
 \usage{
 lavaan_rerun_check(fit, print_messages = TRUE)
 }
@@ -25,10 +25,28 @@ value of this number without the negative sign is the number of tests failed.
 Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and check whether it is supported.
 }
 \details{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and check whether it is supported.
+This function is not supposed to be used by users. It is called by
+\code{\link[=lavaan_rerun]{lavaan_rerun()}} to see if the analysis being passed to it is supported.
+If not, messages will be printed to indicate why.
 }
 \examples{
 
-# To be prepared.
+dat <- cfa_dat
+
+mod <-
+"
+f1 =~ x4 + x5 + x6
+"
+dat_gp <- dat
+dat$gp <- rep(c("gp1", "gp2"), length.out = nrow(dat_gp))
+
+fit01 <- lavaan::sem(mod, dat)
+# If supported, returns a zero
+lavaan_rerun_check(fit01)
+
+fit05 <- lavaan::cfa(mod, dat, group = "gp")
+# If not supported, returns a negative number
+lavaan_rerun_check(fit05)
+
 
 }
