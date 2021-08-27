@@ -1,39 +1,40 @@
 #' @title
-#' Case influence on parameter estimates by raw change
+#' Case influence on parameter estimates
 #'
 #' @description
 #' Get a [lavaan_rerun()] output and compute the changes in selected parameters
 #' for each case.
 #'
 #' @details
-#' For each case, compute the differences in the estimates of selected parameter
-#' between rerun without
-#' this case and the original fit with this case.
+#' For each case, compute the differences in the estimates of selected
+#' parameters with and without this case: (estimate with all case) -
+#' (estimate without this case).
 #' The change is the raw change, either for the standardized or
 #' unstandardized solution. The change is *not* divided by standard error.
 #'
 #' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA` will be turned for this case.
+#' deleted, `NA`s will be turned for this case on the differnces.
 #'
-#' Currently only work for one group analysis.
+#' Currently only support single-sample models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
-#' @param parameters A vector of characters to specify the selected parameters.
-#'                  Each element is of this form: `x ~ y` or `x ~~ y`,
-#'                  corresponds to how each parameter is specified in `lavaan`.
-#'                  The naming convention of a `lavaan` output can be found
-#'                  by [lavaan::parameterEstimates()]. If `NULL`, the default,
-#'                  differences on all parameters will be computed.
-#' @param standardized If `TRUE`, the changes in full standardized is returned.
-#'                    Otherwise, the changes in unstandardized solution is
+#' @param parameters A character vector to specify the selected parameters.
+#'                  Each parameter is named as in `lavaan` syntax, e.g.,
+#'                  `x ~ y` or `x ~~ y`, as appeared in the columns
+#'                  `lhs`, `op`, and `rhs` in the output of
+#'                  [lavaan::parameterEstimates()]. If `NULL`, the default,
+#'                  differences on all free parameters will be computed.
+#' @param standardized If `TRUE`, the changes in the full standardized solution
+#'                    is returned (`type` = `std.all` in
+#'                     [lavaan::standardizedSolution()]).
+#'                    Otherwise, the changes in the unstandardized solution is
 #'                    returned. Default is `FALSE`.
 #'
 #' @return
 #' A matrix with the number of columns equal to the number of requested
 #' parameters, and the number of rows equal to the number of cases. The
-#' row names is the case identification values used in [lavaan_rerun()].
-#' The elements are the standardized difference. Please see Pek and
-#' MacCallum (2011), Equation 7.
+#' row names are the case identification values used in [lavaan_rerun()].
+#' The elements are the raw differences.
 #'
 #' @examples
 #' library(lavaan)
@@ -42,10 +43,10 @@
 #' dat <- dat[1:50, ]
 #' # The model
 #' mod <-
-#' '
+#' "
 #' m1 ~ iv1 + iv2
 #' dv ~ m1
-#' '
+#' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
@@ -55,7 +56,7 @@
 #' out <- est_change_raw(fit_rerun)
 #' # Results excluding a case, for the first few cases
 #' head(out)
-#' # Note that these are the differences parameter estimates.
+#' # Note that these are the differences in parameter estimates.
 #'
 #' # The parameter estimates from all cases
 #' (coef_all <- coef(fit))
@@ -64,8 +65,10 @@
 #' (coef_no_1 <- coef(fit_no_1))
 #' # The differences
 #' coef_all - coef_no_1
+#' # The first row of `est_change_raw(fit_rerun)`
+#' round(out[1, ], 3)
 #'
-#' # Compute the changes for the paths from iv1 and iv2 to m1
+#' # Compute only the changes of the paths from iv1 and iv2 to m1
 #' out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 #' # Results excluding a case, for the first few cases
 #' head(out2)
@@ -75,10 +78,13 @@
 #' out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"),
 #'                           standardized = TRUE)
 #' head(out2_std)
-#' parameterEstimates(fit, standardized = TRUE)[1:2,
-#'                        c("lhs", "op", "rhs", "std.all")]
-#' parameterEstimates(fit_no_1, standardized = TRUE)[1:2,
-#'                        c("lhs", "op", "rhs", "std.all")]
+#' (est_std_all <- parameterEstimates(fit, standardized = TRUE)[1:2,
+#'                        c("lhs", "op", "rhs", "std.all")])
+#' (est_std_no_1 <- parameterEstimates(fit_no_1, standardized = TRUE)[1:2,
+#'                        c("lhs", "op", "rhs", "std.all")])
+#' # The differences
+#' est_std_all$std.all - est_std_no_1$std.all
+#' # The first row of `out2_std`
 #' out2_std[1, ]
 #'
 #' @references
