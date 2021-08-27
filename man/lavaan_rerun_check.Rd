@@ -48,5 +48,4 @@ fit05 <- lavaan::cfa(mod, dat, group = "gp")
 # If not supported, returns a negative number
 lavaan_rerun_check(fit05)
 
-
 }

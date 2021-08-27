@@ -41,7 +41,7 @@
 #' # If not supported, returns a negative number
 #' lavaan_rerun_check(fit05)
 #'
-#'
+#'@export
 
 lavaan_rerun_check <- function(fit,
                                print_messages = TRUE
