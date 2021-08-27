@@ -1,36 +1,37 @@
 #' @title
-#' Case influence on parameter estimates by standardized change
+#' Standardized case influence on parameter estimates
 #'
 #' @description
 #' Get a [lavaan_rerun()] output and compute the standardized changes in
 #'  selected parameters for each case.
 #'
 #' @details
-#' For each case, compute the standardized differences in the estimates of
-#' selected parameter
-#' between rerun without
-#' this case and the original fit with this case.
+#' For each case, compute the differences in the estimates of selected
+#' parameters with and without this case: (estimate with all case) -
+#' (estimate without this case).
 #' The differences are standardized by dividing the raw differences by their
-#' standard errors.
+#' standard errors (Pek & MacCallum, 2011)/
 #'
 #' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA` will be turned for this case.
+#' deleted, `NA`s will be turned for this case on the differnces.
 #'
-#' Currently only work for one group analysis.
+#' Unlike [est_change_raw()], [est_change()] does not support
+#' computing the standardized changes of standardized estimates.
+#'
+#' Currently only support single-sample models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
-#' @param parameters A vector of characters to specify the selected parameters.
-#'                   Each element is of this form: `x ~ y` or `x ~~ y`,
-#'                   corresponds to how each parameter is specified in `lavaan`.
-#'                   The naming convention of a `lavaan` output can be found
-#'                   by [lavaan::parameterEstimates()]. If `NULL`, the default,
-#'                   standardized differences on all parameters will be
-#'                   computed.
+#' @param parameters A character vector to specify the selected parameters.
+#'                  Each parameter is named as in `lavaan` syntax, e.g.,
+#'                  `x ~ y` or `x ~~ y`, as appeared in the columns
+#'                  `lhs`, `op`, and `rhs` in the output of
+#'                  [lavaan::parameterEstimates()]. If `NULL`, the default,
+#'                  differences on all free parameters will be computed.
 #'
 #' @return
 #' A matrix with the number of columns equal to the number of requested
 #' parameters,
-#' and the number of rows equal to the number of cases. The row names is the
+#' and the number of rows equal to the number of cases. The row names are the
 #' case identification values used in [lavaan_rerun()]. The elements are the
 #' standardized difference. Please see Pek and MacCallum (2011), Equation 7.
 #'
@@ -59,14 +60,16 @@
 #' out <- est_change(fit_rerun)
 #' # Results excluding a case, for the first few cases
 #' head(out)
-#' # Note that these are the differences divided by the standard error
-#' # The right most column contains the generalized Cook's distances.
+#' # Note that these are the differences divided by the standard errors
+#' # The rightmost column, `gcd`, contains the
+#' # generalized Cook's distances (Pek & MacCallum, 2011).
+#' head(out[, "gcd", drop = FALSE])
 #'
 #' # Compute the changes for the paths from iv1 and iv2 to m1
 #' out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 #' # Results excluding a case, for the first few cases
 #' head(out2)
-#' # Note that only the changes in the selected paths are included.
+#' # Note that only the changes in the selected parameters are included.
 #' # The generalized Cook's distance is computed only from the selected
 #' # parameter estimates.
 #'

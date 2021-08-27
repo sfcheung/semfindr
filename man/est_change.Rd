@@ -2,25 +2,24 @@
 % Please edit documentation in R/est_change.R
 \name{est_change}
 \alias{est_change}
-\title{Case influence on parameter estimates by standardized change}
+\title{Standardized case influence on parameter estimates}
 \usage{
 est_change(rerun_out, parameters = NULL)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{parameters}{A vector of characters to specify the selected parameters.
-Each element is of this form: \code{x ~ y} or \code{x ~~ y},
-corresponds to how each parameter is specified in \code{lavaan}.
-The naming convention of a \code{lavaan} output can be found
-by \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
-standardized differences on all parameters will be
-computed.}
+\item{parameters}{A character vector to specify the selected parameters.
+Each parameter is named as in \code{lavaan} syntax, e.g.,
+\code{x ~ y} or \code{x ~~ y}, as appeared in the columns
+\code{lhs}, \code{op}, and \code{rhs} in the output of
+\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
+differences on all free parameters will be computed.}
 }
 \value{
 A matrix with the number of columns equal to the number of requested
 parameters,
-and the number of rows equal to the number of cases. The row names is the
+and the number of rows equal to the number of cases. The row names are the
 case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the
 standardized difference. Please see Pek and MacCallum (2011), Equation 7.
 }
@@ -29,17 +28,19 @@ Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the standar
 selected parameters for each case.
 }
 \details{
-For each case, compute the standardized differences in the estimates of
-selected parameter
-between rerun without
-this case and the original fit with this case.
+For each case, compute the differences in the estimates of selected
+parameters with and without this case: (estimate with all case) -
+(estimate without this case).
 The differences are standardized by dividing the raw differences by their
-standard errors.
+standard errors (Pek & MacCallum, 2011)/
 
 If the analysis is not admissible or did not converge when a case was
-deleted, \code{NA} will be turned for this case.
+deleted, \code{NA}s will be turned for this case on the differnces.
 
-Currently only work for one group analysis.
+Unlike \code{\link[=est_change_raw]{est_change_raw()}}, \code{\link[=est_change]{est_change()}} does not support
+computing the standardized changes of standardized estimates.
+
+Currently only support single-sample models.
 }
 \examples{
 library(lavaan)
@@ -61,14 +62,16 @@ fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
 out <- est_change(fit_rerun)
 # Results excluding a case, for the first few cases
 head(out)
-# Note that these are the differences divided by the standard error
-# The right most column contains the generalized Cook's distances.
+# Note that these are the differences divided by the standard errors
+# The rightmost column, `gcd`, contains the
+# generalized Cook's distances (Pek & MacCallum, 2011).
+head(out[, "gcd", drop = FALSE])
 
 # Compute the changes for the paths from iv1 and iv2 to m1
 out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 # Results excluding a case, for the first few cases
 head(out2)
-# Note that only the changes in the selected paths are included.
+# Note that only the changes in the selected parameters are included.
 # The generalized Cook's distance is computed only from the selected
 # parameter estimates.
 
