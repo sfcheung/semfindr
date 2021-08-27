@@ -1,17 +1,22 @@
 #' @title
-#' Compute the implied scores for an SEM model
+#' Implied scores for observed outcome variables
 #'
 #' @description
 #' Get a [lavaan::lavaan()] output and compute the implied scores.
 #'
 #' @details
-#' It currently supports single-group path analytic models only.
+#' The implied scores for each observed outcome variable are simply computed
+#' in the same way the predicted scores in a linear regression model are
+#' computed.
 #'
-#' @param fit The output from `lavaan`, such as [lavaan::cfa()] and
+#' It currently supports single-group path analytic models with only observed
+#' variables.
+#'
+#' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()] and
 #'        [lavaan::sem()].
 #'
 #' @return
-#' A matrix of the implied scores
+#' A matrix of the implied scores.
 #'
 #' @examples
 #' library(lavaan)
@@ -45,18 +50,18 @@ implied_scores <- function(fit) {
         stop("The fit object is not a lavaan output.")
       }
 
-    if (nrow(lavaan::lavInspect(fit, "pattern")) != 1) {
-        stop("Datasets with missing data is not yet supported.")
-      }
+    # if (nrow(lavaan::lavInspect(fit, "pattern")) != 1) {
+    #     stop("Datasets with missing data is not yet supported.")
+    #   }
 
     if (lavaan::lavInspect(fit, "ngroups") != 1) {
         stop(paste0("The model has more than one group. \n",
                     "Multiple group analysis not yet supported."))
       }
 
-    if (is.null(lavaan::inspect(fit, "est")$alpha)) {
-        stop(paste0("Mean structure not analyzed. It is required."))
-      }
+    # if (is.null(lavaan::inspect(fit, "est")$alpha)) {
+    #     stop(paste0("Mean structure not analyzed. It is required."))
+    #   }
 
     if (lavaan::lavInspect(fit, "nlevels") != 1) {
         stop(paste0("The model has more than one level. \n",
@@ -88,6 +93,9 @@ implied_scores <- function(fit) {
 
     dat_y <- dat[, y_names]
     dat_x <- dat[, x_names]
+    if (!lavaan::lavInspect(fit, "meanstructure")) {
+        dat_x <- scale(dat_x, center = TRUE, scale = FALSE)
+      }
 
     beta_l  <- lavaan::inspect(fit, "est")$beta
     psi_l   <- lavaan::inspect(fit, "est")$psi
@@ -97,8 +105,15 @@ implied_scores <- function(fit) {
     gamma   <- beta_l[y_names, x_names]
     psi     <- psi_l[y_names, y_names]
     phi     <- psi_l[x_names, x_names]
-    alpha   <- as.matrix(alpha_l[y_names, ])
-    x_means <- alpha_l[x_names, ]
+    if (lavaan::lavInspect(fit, "meanstructure")) {
+        alpha <- as.matrix(alpha_l[y_names, ])
+        x_means <- alpha_l[x_names, ]
+      } else {
+        alpha <- matrix(0, length(y_names), 1)
+        rownames(alpha) <- y_names
+        x_means <- matrix(0, length(x_names), 1)
+        rownames(x_means) <- x_names
+      }
 
     p <- length(y_names)
     i <- diag(p)
@@ -156,10 +171,12 @@ implied_scores <- function(fit) {
         check_summary <- c(check_summary,
         "Implied covariances matrix of X vs. Y variables cannot be reproduced.")
     }
-    if (!check_implied_mean_y) {
-        check_summary <- c(check_summary,
-            "Implied means of Y variables cannot be reproduced.")
-    }
+    if (lavaan::lavInspect(fit, "meanstructure")) {
+        if (!check_implied_mean_y) {
+            check_summary <- c(check_summary,
+                "Implied means of Y variables cannot be reproduced.")
+        }
+      } 
     if (!check_rsquare) {
         check_summary <- c(check_summary,
             "Implied R-sauares of Y variables cannot be reproduced.")

@@ -2,22 +2,27 @@
 % Please edit documentation in R/implied_scores.R
 \name{implied_scores}
 \alias{implied_scores}
-\title{Compute the implied scores for an SEM model}
+\title{Implied scores for observed outcome variables}
 \usage{
 implied_scores(fit)
 }
 \arguments{
-\item{fit}{The output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
 \code{\link[lavaan:sem]{lavaan::sem()}}.}
 }
 \value{
-A matrix of the implied scores
+A matrix of the implied scores.
 }
 \description{
-Get a \code{lavaan} output and compute the implied scores.
+Get a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the implied scores.
 }
 \details{
-It currently supports single-group path analytic models only.
+The implied scores for each observed outcome variable are simply computed
+in the same way the predicted scores in a linear regression model are
+computed.
+
+It currently supports single-group path analytic models with only observed
+variables.
 }
 \examples{
 library(lavaan)
