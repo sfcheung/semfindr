@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun.R
 \name{lavaan_rerun}
 \alias{lavaan_rerun}
-\title{Rerun a \code{lavaan} analysis with one-left-out}
+\title{Rerun a \code{lavaan} analysis \emph{n} times}
 \usage{
 lavaan_rerun(
   fit,
@@ -15,35 +15,42 @@ lavaan_rerun(
 )
 }
 \arguments{
-\item{fit}{The output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
 \code{\link[lavaan:sem]{lavaan::sem()}}.}
 
-\item{case_id}{If this
+\item{case_id}{If it
 is a character vector of
 length equal to the number of cases (the number of rows in the
-data), then it is the vector of case identification values.
-If this is the \code{NULL}, the default, then \code{case.idx} used
+data in \code{fit}), then it is the vector of case identification
+values.
+If it is \code{NULL}, the default, then \code{case.idx} used
 by \code{lavaan} functions will be used as case identification
 values. The case identification
-values will be used to name the list of \code{n} output.}
+values will be used to name the list of \emph{n} output.}
 
 \item{to_rerun}{Sepcify the cases to be processed. If \code{case_id} is
 specified, this should be a subset of \code{case_id}. If
 \code{case_id} is not sepcified, then this should be a vecctor
 of integers used to indicate the rows to te processed,
-as appeared in the data in \code{fit}.}
+as appeared in the data in \code{fit}.
+\code{to_rerun} cannot be used together with \code{md_top} or
+\code{resid_md_top.}}
 
 \item{md_top}{The number of cases to be processed based on the Mahalanobis
 distance computed on all variables used in the model.
-The cases will be ranked from the largerst to the smallest
+The cases will be ranked from the largest to the smallest
 distance, and the top \code{md_top} case(s) will be processed.
-If both \code{md_top} and \code{to_rerun} are not missing, an error
-will be raised.}
+\code{md_top} cannot be used together with \code{to_rerun} or
+\code{resid_md_top.}}
 
-\item{resid_md_top}{The number of cases to be processed based on the Mahalanobis
+\item{resid_md_top}{The number of cases to be processed based on the
+Mahalanobis
 distance computed from the residuals of outcome variables.
 The cases will be ranked from the largest to the smallest
-distance, and the top \code{resid_md_top} case(s) will be processed.}
+distance, and the top \code{resid_md_top} case(s) will be
+processed.
+\code{resid_md_top} cannot be used together with \code{to_rerun} or
+\code{md_top.}}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 parallel to rerun the analysis. Currently, only support
@@ -58,26 +65,56 @@ only need to specify the number of cores, use
 cores to use.}
 }
 \value{
-Return a list with two elements
+Return a list with the following elements
 \itemize{
 \item \code{rerun}: The \emph{n} \code{lavaan} output objects.
 \item \code{fit}: The original output from \code{lavaan}.
 \item \code{post_check}: A list of length equals to \emph{n}. Each analysis was checked by
-\code{\link[lavaan:lavInspect]{lavaan::lavTech()}}. If \code{TRUE}, the estimation converged
+\link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the \code{lavaan}
+results. The resultes of this test are stored in this
+list. If the value is \code{TRUE}, the estimation converged
 and the solution is admissible. If not \code{TRUE}, it is a
 warning message issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
 \item \code{call}: The call to \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 }
 \description{
-Rerun a \code{lavaan} analysis \emph{n} times, each time with one case left out.
+Rerun a \code{lavaan} analysis \emph{n} times, each time with one case removed.
 }
 \details{
-Rerun a \code{lavaan} analysis using the same arguments and options \emph{n} times,
-\emph{n}
-equal to the number of cases. In each run, one case will be left out.
+Get an \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and rerun the analysis \emph{n} times, using the
+same arguments and options, \emph{n}
+equal to the number of cases. In each run, one case will be removed.
 
-Currently only work for one group analysis.
+Optionally, users can rerun the analysis with only selected cases removed.
+These cases can be specified by case IDs, by Mahalanobis distance computed
+from all variables used in the model, or by Mahalanobis distance computed
+from the residuals (observed score - implied scores) of observed outcome
+variables.
+
+It is not recommended to use Mahalanobis distance computed from all
+variables, especially for models with observed variables as predictors.
+Cases that are extreme on predictors may not be influential on the results.
+Nevertheless, this distance is reported in some SEM programs and so this
+option is provided.
+
+Mahalanobis distance based on residuals are supported for models with no
+latent factors. The implied scores are computed by \code{\link[=implied_scores]{implied_scores()}}.
+
+If the sample size is large, it is recommended to use parallel processing.
+However, due to the nature of \code{\link[=update]{update()}}, it is possible that parallel
+processing will fail. If this is the case, try to use serial processing,
+by simply remove the argument \code{parallel} or set it to \code{FALSE}.
+
+Many other functions in \link{semfindr} use the output from \link{lavaan_rerun}.
+Instead of running the \emph{n} analyses everytime, do this step once and then
+users can compute whatever influence statistics they want quickly.
+
+If the analysis took a few minutes to run due to the large number of cases
+or the long processing time in fitting the model, it is recommended to save
+the output to an external file (e.g., by [saveRDS()).
+
+Currently only support single-sample models.
 }
 \examples{
 library(lavaan)
