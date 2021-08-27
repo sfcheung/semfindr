@@ -21,8 +21,8 @@ The implied scores for each observed outcome variable are simply computed
 in the same way the predicted scores in a linear regression model are
 computed.
 
-It currently supports single-group path analytic models with only observed
-variables.
+It currently supports only single-sample path analytic models with only
+observed variables.
 }
 \examples{
 library(lavaan)
@@ -39,7 +39,9 @@ dv ~ m1
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 
-# (To be continued)
+# Compute the implied scores for `m1` and `dv`
+fit_implied_scores <- implied_scores(fit)
+head(fit_implied_scores)
 
 
 }

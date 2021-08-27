@@ -9,8 +9,8 @@
 #' in the same way the predicted scores in a linear regression model are
 #' computed.
 #'
-#' It currently supports single-group path analytic models with only observed
-#' variables.
+#' It currently supports only single-sample path analytic models with only
+#' observed variables.
 #'
 #' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()] and
 #'        [lavaan::sem()].
@@ -33,7 +33,9 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #'
-#' # (To be continued)
+#' # Compute the implied scores for `m1` and `dv`
+#' fit_implied_scores <- implied_scores(fit)
+#' head(fit_implied_scores)
 #'
 #'
 #' @importFrom rlang .data
