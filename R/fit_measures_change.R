@@ -1,25 +1,23 @@
 #' @title
-#' Case influence on fit measures from `lavaan` fitMeasures
+#' Case influence on fit measures
 #'
 #' @description
 #' Get a [lavaan_rerun()] output and compute the change in selected fit
-#' measures 
-#' for each case.
+#' measures if a case is deleted
 #'
 #' @details
-#' For each case, compute the difference in selected fit measures between
-#' rerun without
-#' this case and the original fit with this case.
+#' For each case, compute the differences in selected fit measures with
+#' and without this case.
 #'
 #' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA` will be turned for this case.
+#' deleted, `NA`s will be turned for the differneces of this case.
 #'
-#' Currently only work for one group analysis.
+#' Currently only support single-sample models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #' @param fit_measures The argument `fit.measures` used in
 #'                     [lavaan::fitMeasures]. Default
-#'                     is `c("chisq", "cfi", "tli")`.
+#'                     is `c("chisq", "cfi", "rmsea", "tli")`.
 #' @param baseline_model The argument `baseline.model` 	used in
 #'                       [lavaan::fitMeasures]. Default
 #                        is `NULL`.
@@ -27,7 +25,7 @@
 #' @return
 #' A matrix with the number of columns equal to the number of requested fit
 #' measures,
-#' and the number of rows equal to the number of cases. The row names is the
+#' and the number of rows equal to the number of cases. The row names are the
 #' case identification values used in [lavaan_rerun()].
 #'
 #' @references
@@ -41,11 +39,11 @@
 #' # For illustration only, select only the first 50 cases
 #' dat <- dat[1:50, ]
 #' # The model
-#' mod <- 
-#' '
+#' mod <-
+#' "
 #' m1 ~ iv1 + iv2
 #' dv ~ m1
-#' '
+#' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
@@ -62,12 +60,12 @@
 #' (chisq_no_1 <- fitMeasures(fit_01, c("chisq")))
 #' # Difference
 #' chisq_all - chisq_no_1
-#' # Compare the result from the function
+#' # Compare to the result from the fit_measures_change
 #' out[1, ]
 #' @export
 
 fit_measures_change <- function(rerun_out,
-                         fit_measures = c("chisq", "cfi", "tli"),
+                         fit_measures = c("chisq", "cfi", "rmsea", "tli"),
                          baseline_model = NULL
                          ) {
   if (missing(rerun_out)) {
