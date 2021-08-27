@@ -2,7 +2,7 @@
 #' Compute the implied scores for an SEM model
 #'
 #' @description
-#' Get a `lavaan` output and compute the implied scores.
+#' Get a [lavaan::lavaan()] output and compute the implied scores.
 #'
 #' @details
 #' It currently supports single-group path analytic models only.
@@ -43,6 +43,10 @@ implied_scores <- function(fit) {
 
     if (!inherits(fit, "lavaan")) {
         stop("The fit object is not a lavaan output.")
+      }
+
+    if (nrow(lavaan::lavInspect(fit, "pattern")) != 1) {
+        stop("Datasets with missing data is not yet supported.")
       }
 
     if (lavaan::lavInspect(fit, "ngroups") != 1) {

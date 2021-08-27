@@ -93,3 +93,11 @@ test_that("Can implied R-squares be reproduced?", {
       )
   })
 
+dat <- pa_dat
+dat[1, 2] <- NA # Impute one missing data
+y_names <- c("m1", "dv")
+fit0 <- lavaan::sem(mod, dat, meanstructure = TRUE, missing = "fiml")
+
+test_that("Can detect a dataset with missing data", {
+    expect_error(implied_scores(fit0), "missing data")
+  })
