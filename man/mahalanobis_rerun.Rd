@@ -39,10 +39,10 @@ dat <- pa_dat
 dat <- dat[1:50, ]
 # The model
 mod <-
-'
+"
 m1 ~ iv1 + iv2
 dv ~ m1
-'
+"
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
