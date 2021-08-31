@@ -27,26 +27,26 @@ i <- apply(fit0_free$beta, 1, function(x) all(x == 0))
 exo_vars <- names(i)[i]
 fit0_data_exo <- dat0[, exo_vars]
 em_out <- norm2::emNorm(fit0_data_exo, estimate.worst = FALSE, criterion = 1e-6)
-md_exo_check <- modi::MDmiss(fit0_data_exo,
+md_predictors_check <- modi::MDmiss(fit0_data_exo,
                       em_out$param$beta,
                       em_out$param$sigma)
 
-md_exo <- mahalanobis_exo(fit0)
+md_predictors <- mahalanobis_predictors(fit0)
 
 test_that("Compare Mahalanobis distances: lavaan", {
     expect_equal(ignore_attr = TRUE,
-        as.vector(md_exo),
-        md_exo_check
+        as.vector(md_predictors),
+        md_predictors_check
       )
   })
 
 suppressWarnings(rerun_out <- lavaan_rerun(fit0, parallel = FALSE))
 
-md_exo_rerun <- mahalanobis_exo(rerun_out)
+md_predictors_rerun <- mahalanobis_predictors(rerun_out)
 
 test_that("Compare Mahalanobis distances: lavaan_rerun", {
     expect_equal(ignore_attr = TRUE,
-        as.vector(md_exo_rerun),
-        md_exo_check
+        as.vector(md_predictors_rerun),
+        md_predictors_check
       )
   })

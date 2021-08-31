@@ -1,26 +1,36 @@
 #' @title
-#' Compute the Mahalanobis distance for each case using only the exogenous
-#' observed variables
+#' Mahalanobis distance (observed predictors)
 #'
 #' @description
-#' Get a [lavaan_rerun()] output and compute the Mahalanobis distance for each
-#'  case using only the exogenous observed variables
+#' Get a [lavaan_rerun()] or [lavaan::lavaan()] output and compute the
+#' Mahalanobis distance for each
+#' case using only the observed predictors.
 #'
 #' @details
-#' For each case, compute the Mahalanobis distance of each case.
+#' For each case, compute the Mahalanobis distance of each case on the observed
+#' predictors.
 #'
-#' Currently only work for one group analysis.
+#' If there are no missing values, [stats::mahalanobis()] will be used to
+#' compute the Mahalanobis distance.
+#'
+#' If there are missing values on the observed predictors, the means and
+#' variance-covariance matrices will be estimated by maximum likelihood using
+#' [norm2::emNorm()]. The estimates will be passed to [modi::MDmiss()] to
+#' compute the Mahalanobis distance.
+#'
+#' Currently only support single-sample models.
 #'
 #' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
 #'        [lavaan::sem()], or the output from  [lavaan_rerun()].
 #' @param emNorm_arg A list of argument for [norm2::emNorm()]. Default is
 #'                   `list(estimate.worst = FALSE, criterion = 1e-6)`. Ignored
-#'                   if there is no missing data on the exogenous observed 
+#'                   if there is no missing data on the exogenous observed
 #'                   variables.
 #'
 #' @return
 #' A one-column matrix (a column vector) of the Mahalanobis distance for each
-#'  case. The number of rows equal to the data stored in the fit object.
+#' case. The number of rows equal to the number of cases in the data stored in
+#' the fit object.
 #'
 #' @examples
 #' library(lavaan)
@@ -37,16 +47,27 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #' 
-#' md_exo <- mahalanobis_exo(fit)
-#' md_exo
+#' md_predictors <- mahalanobis_predictors(fit)
+#' md_predictors
 #'
+#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' 
 #' @references
-#' Mahalanobis, P. C. (1936). On the generaized distance in statistics.
-#'  *Proceedings of the National Institute of Science of India, 2*, 49–55.
+#'
+#' Béguin, C., & Hulliger, B. (2004). Multivariate outlier detection in
+#' incomplete survey data: The epidemic algorithm and transformed rank
+#' correlations. *Journal of the Royal Statistical Society: Series A
+#' (Statistics in Society)*, 167(2), 275–294.
+#'
+#' Mahalanobis, P. C. (1936). On the generalized distance in statistics.
+#' *Proceedings of the National Institute of Science of India, 2*, 49–55.
+#'
+#' Schafer, J.L. (1997) *Analysis of incomplete multivariate data*.
+#' Chapman & Hall/CRC Press.
 #'
 #' @export
 
-mahalanobis_exo <- function(fit,
+mahalanobis_predictors <- function(fit,
                             emNorm_arg = list(estimate.worst = FALSE,
                                               criterion = 1e-6)) {
   if (missing(fit)) {
@@ -117,17 +138,17 @@ mahalanobis_exo <- function(fit,
           warning("Missing data is present but norm2::emNorm did not converge.")
           return(out_na)
         }
-      md_exo <- modi::MDmiss(fit_data_exo,
+      md_predictors <- modi::MDmiss(fit_data_exo,
                             em_out$param$beta,
                             em_out$param$sigma)
     } else {
-      md_exo <- stats::mahalanobis(fit_data_exo,
+      md_predictors <- stats::mahalanobis(fit_data_exo,
                             colMeans(fit_data_exo),
                             stats::cov(fit_data_exo))
     }
 
-  out <- matrix(md_exo, length(md_exo), 1)
+  out <- matrix(md_predictors, length(md_predictors), 1)
   colnames(out) <- "md"
-  # No need to check the dimenson. The result is always a column vector
+  # No need to check the dimension. The result is always a column vector
   out
 }
