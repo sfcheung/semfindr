@@ -1,20 +1,29 @@
 #' @title
-#' Compute the Mahalanobis distance for each case
+#' Mahalanobis distance (All observed variables)
 #'
 #' @description
-#' Get a [lavaan_rerun()] output and compute the Mahalanobis distance for each
-#'  case.
+#' Compute the
+#' Mahalanobis distance for each case on all observed variables in a model.
 #'
 #' @details
-#' For each case, compute the Mahalanobis distance of each case.
+#' Get a [lavaan_rerun()] or [lavaan::lavaan()] output and compute the
+#' Mahalanobis distance for each case on all observed variables.
 #'
-#' Currently only work for one group analysis.
+#' If there are no missing values, [stats::mahalanobis()] will be used to
+#' compute the Mahalanobis distance.
+#'
+#' If there are missing values on the observed predictors, the means and
+#' variance-covariance matrices will be estimated by maximum likelihood using
+#' [norm2::emNorm()]. The estimates will be passed to [modi::MDmiss()] to
+#' compute the Mahalanobis distance.
+#'
+#' Currently only support single-sample models.
 #'
 #' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
 #'        [lavaan::sem()], or the output from  [lavaan_rerun()].
 #' @param emNorm_arg A list of argument for [norm2::emNorm()]. Default is
 #'                   `list(estimate.worst = FALSE, criterion = 1e-6)`. Ignored
-#'                   if there is no missing data on the exogenous observed 
+#'                   if there is no missing data on the exogenous observed
 #'                   variables.
 #'
 #' @return
@@ -23,7 +32,7 @@
 #' are the case identification values used in [lavaan_rerun()].
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
@@ -50,7 +59,7 @@
 #' head(md1)
 #'
 #' @references
-#' Mahalanobis, P. C. (1936). On the generaized distance in statistics.
+#' Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 #'  *Proceedings of the National Institute of Science of India, 2*, 49–55.
 #'
 #' @export
@@ -153,6 +162,6 @@ mahalanobis_rerun <- function(fit,
   out <- matrix(md, length(md), 1)
   rownames(out) <- case_ids
   colnames(out) <- "md"
-  # No need to check the dimenson. The result is always a column vector
+  # No need to check the dimension. The result is always a column vector
   out
 }
