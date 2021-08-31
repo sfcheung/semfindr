@@ -1,4 +1,4 @@
-#' @title Print the results of lavaan_rerun
+#' @title Print method for lavaan_rerun
 #'
 #' @description Print the results of lavaan_rerun
 #'
@@ -13,7 +13,22 @@
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
 #' 
 #' @examples
-#' # TODO
+#' library(lavaan)
+#' dat <- pa_dat
+#' # For illustration only, select only the first 50 cases
+#' dat <- dat[1:50, ]
+#' # The model
+#' mod <-
+#' "
+#' m1 ~ iv1 + iv2
+#' dv ~ m1
+#' "
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#' summary(fit)
+#' # Fit the model n times. Each time with one case removed.
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#' fit_rerun
 #'
 #' @export
 
