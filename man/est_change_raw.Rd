@@ -40,7 +40,7 @@ The change is the raw change, either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard error.
 
 If the analysis is not admissible or did not converge when a case was
-deleted, \code{NA}s will be turned for this case on the differnces.
+deleted, \code{NA}s will be turned for this case on the differences.
 
 Currently only support single-sample models.
 }
@@ -100,4 +100,7 @@ out2_std[1, ]
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 models: Cases and their influence. \emph{Multivariate Behavioral Research,
 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

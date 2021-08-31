@@ -18,7 +18,7 @@ as an attribute. Default is \code{TRUE}.}
 A single-element vector.
 If confirmed to be supported, will return 0.
 If not confirmed be support but may still work, return 1.
-If confirmed to be not yet uppported, will return a negative number, the
+If confirmed to be not yet supported, will return a negative number, the
 value of this number without the negative sign is the number of tests failed.
 }
 \description{
@@ -48,4 +48,7 @@ fit05 <- lavaan::cfa(mod, dat, group = "gp")
 # If not supported, returns a negative number
 lavaan_rerun_check(fit05)
 
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

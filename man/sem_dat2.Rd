@@ -14,7 +14,7 @@ sem_dat2
 A nine-variable dataset with 100 cases and potential influential cases
 }
 \details{
-Fitted by this model:\preformatted{`f1 =~  x1 + x2 + x3`
+A Sample Model:\preformatted{`f1 =~  x1 + x2 + x3`
 `f2 =~  x4 + x5 + x6`
 `f3 =~  x7 + x8 + x9`
 `f2 ~   f1`

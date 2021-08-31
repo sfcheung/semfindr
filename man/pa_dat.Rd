@@ -14,7 +14,7 @@ pa_dat
 A four-variable dataset with 100 cases
 }
 \details{
-Fitted by this model:\preformatted{`m1 ~  iv1 + iv2`
+A Sample Model:\preformatted{`m1 ~  iv1 + iv2`
 `dv ~  m1`
 }
 }

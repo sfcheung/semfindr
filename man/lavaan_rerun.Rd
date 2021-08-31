@@ -30,7 +30,7 @@ values will be used to name the list of \emph{n} output.}
 
 \item{to_rerun}{Sepcify the cases to be processed. If \code{case_id} is
 specified, this should be a subset of \code{case_id}. If
-\code{case_id} is not sepcified, then this should be a vecctor
+\code{case_id} is not specified, then this should be a vector
 of integers used to indicate the rows to te processed,
 as appeared in the data in \code{fit}.
 \code{to_rerun} cannot be used together with \code{md_top} or
@@ -71,7 +71,7 @@ Return a list with the following elements
 \item \code{fit}: The original output from \code{lavaan}.
 \item \code{post_check}: A list of length equals to \emph{n}. Each analysis was checked by
 \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the \code{lavaan}
-results. The resultes of this test are stored in this
+results. The results of this test are stored in this
 list. If the value is \code{TRUE}, the estimation converged
 and the solution is admissible. If not \code{TRUE}, it is a
 warning message issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
@@ -107,7 +107,7 @@ processing will fail. If this is the case, try to use serial processing,
 by simply remove the argument \code{parallel} or set it to \code{FALSE}.
 
 Many other functions in \link{semfindr} use the output from \link{lavaan_rerun}.
-Instead of running the \emph{n} analyses everytime, do this step once and then
+Instead of running the \emph{n} analyses every time, do this step once and then
 users can compute whatever influence statistics they want quickly.
 
 If the analysis took a few minutes to run due to the large number of cases
@@ -137,4 +137,7 @@ fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
 # Results by manually excluding the first case
 fit_01 <- lavaan::sem(mod, dat[-1, ])
 fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

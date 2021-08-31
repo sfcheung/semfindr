@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_rerun.R
 \name{mahalanobis_rerun}
 \alias{mahalanobis_rerun}
-\title{Compute the Mahalanobis distance for each case}
+\title{Mahalanobis distance (All observed variables)}
 \usage{
 mahalanobis_rerun(
   fit,
@@ -24,13 +24,22 @@ case. The row names
 are the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the Mahalanobis distance for each
-case.
+Compute the
+Mahalanobis distance for each case on all observed variables in a model.
 }
 \details{
-For each case, compute the Mahalanobis distance of each case.
+Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the
+Mahalanobis distance for each case on all observed variables.
 
-Currently only work for one group analysis.
+If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used to
+compute the Mahalanobis distance.
+
+If there are missing values on the observed predictors, the means and
+variance-covariance matrices will be estimated by maximum likelihood using
+\code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed to \code{\link[modi:MDmiss]{modi::MDmiss()}} to
+compute the Mahalanobis distance.
+
+Currently only support single-sample models.
 }
 \examples{
 library(lavaan)
@@ -59,6 +68,9 @@ head(md1)
 
 }
 \references{
-Mahalanobis, P. C. (1936). On the generaized distance in statistics.
+Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 \emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

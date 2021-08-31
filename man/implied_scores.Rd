@@ -45,3 +45,6 @@ head(fit_implied_scores)
 
 
 }
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
+}

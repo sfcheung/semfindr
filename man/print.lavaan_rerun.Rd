@@ -2,7 +2,7 @@
 % Please edit documentation in R/print_lavaan_rerun.R
 \name{print.lavaan_rerun}
 \alias{print.lavaan_rerun}
-\title{Print the results of lavaan_rerun}
+\title{Print method for lavaan_rerun}
 \usage{
 \method{print}{lavaan_rerun}(x, ...)
 }
@@ -21,6 +21,24 @@ Print the results of lavaan_rerun
 Print the results of lavaan_rerun
 }
 \examples{
-# TODO
+library(lavaan)
+dat <- pa_dat
+# For illustration only, select only the first 50 cases
+dat <- dat[1:50, ]
+# The model
+mod <-
+"
+m1 ~ iv1 + iv2
+dv ~ m1
+"
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Fit the model n times. Each time with one case removed.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+fit_rerun
 
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

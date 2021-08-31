@@ -46,7 +46,8 @@ gcd_gof_md_plot(
 value will be labeled. Default is \code{NULL}. If \code{NULL}, no
 cutoff line will be drawn.}
 
-\item{largest_gcd}{The number of cases with the largest Cook's distance
+\item{largest_gcd}{The number of cases with the largest generalized
+Cook's distance
 to be labelled.
 Default is 1. If not an integer, it will be rounded
 to the nearest
@@ -92,7 +93,7 @@ is controlled
 by a statistic.}
 }
 \value{
-A \link{ggplot2} plot. It will not be plot. To plot it, use \code{\link[=plot]{plot()}} on
+A \link{ggplot2} plot. It will not be plotted. To plot it, use \code{\link[=plot]{plot()}} on
 the output.
 }
 \description{
@@ -155,8 +156,11 @@ gcd_gof_md_plot(out, fit_measure = "chisq",
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 models: Cases and their influence. \emph{Multivariate Behavioral Research,
-46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+46}(2), 202-228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \seealso{
 \code{\link[=influence_stat]{influence_stat()}}.
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }
