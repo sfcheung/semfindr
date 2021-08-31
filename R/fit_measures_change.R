@@ -28,6 +28,8 @@
 #' and the number of rows equal to the number of cases. The row names are the
 #' case identification values used in [lavaan_rerun()].
 #'
+#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' 
 #' @references
 #' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 #'  models: Cases and their influence. *Multivariate Behavioral Research,

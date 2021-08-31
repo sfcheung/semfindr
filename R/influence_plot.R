@@ -58,6 +58,8 @@
 #' A [ggplot2] plot. It will not be plot. To plot it, use [plot()] on
 #'  the output.
 #'
+#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' 
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat

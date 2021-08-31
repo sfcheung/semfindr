@@ -35,6 +35,8 @@
 #' case identification values used in [lavaan_rerun()]. The elements are the
 #' standardized difference. Please see Pek and MacCallum (2011), Equation 7.
 #'
+#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' 
 #' @references
 #' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 #'  models: Cases and their influence. *Multivariate Behavioral Research,
