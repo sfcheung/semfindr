@@ -13,7 +13,7 @@
 #' unstandardized solution. The change is *not* divided by standard error.
 #'
 #' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA`s will be turned for this case on the differnces.
+#' deleted, `NA`s will be turned for this case on the differences.
 #'
 #' Currently only support single-sample models.
 #'
@@ -37,7 +37,7 @@
 #' The elements are the raw differences.
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat

@@ -30,7 +30,7 @@
 #' by simply remove the argument `parallel` or set it to `FALSE`.
 #'
 #' Many other functions in [semfindr] use the output from [lavaan_rerun].
-#' Instead of running the *n* analyses everytime, do this step once and then
+#' Instead of running the *n* analyses every time, do this step once and then
 #' users can compute whatever influence statistics they want quickly.
 #'
 #' If the analysis took a few minutes to run due to the large number of cases
@@ -52,7 +52,7 @@
 #'               values will be used to name the list of *n* output.
 #' @param to_rerun Sepcify the cases to be processed. If `case_id` is
 #'                   specified, this should be a subset of `case_id`. If
-#'                   `case_id` is not sepcified, then this should be a vecctor
+#'                   `case_id` is not specified, then this should be a vector
 #'                    of integers used to indicate the rows to te processed,
 #'                    as appeared in the data in `fit`.
 #'                `to_rerun` cannot be used together with `md_top` or
@@ -91,7 +91,7 @@
 #'
 #' - `post_check`: A list of length equals to *n*. Each analysis was checked by
 #'                 [lavaan::lavTech]`(x, "post.check")`, `x` being the `lavaan`
-#'                  results. The resultes of this test are stored in this
+#'                  results. The results of this test are stored in this
 #'                 list. If the value is `TRUE`, the estimation converged
 #'                 and the solution is admissible. If not `TRUE`, it is a
 #'                 warning message issued by [lavaan::lavTech()].

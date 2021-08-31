@@ -10,7 +10,7 @@
 #' and without this case.
 #'
 #' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA`s will be turned for the differneces of this case.
+#' deleted, `NA`s will be turned for the differences of this case.
 #'
 #' Currently only support single-sample models.
 #'
@@ -29,7 +29,7 @@
 #' case identification values used in [lavaan_rerun()].
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @references
 #' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 #'  models: Cases and their influence. *Multivariate Behavioral Research,

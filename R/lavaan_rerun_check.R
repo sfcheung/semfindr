@@ -5,7 +5,7 @@
 #' Get a [lavaan_rerun()] output and check whether it is supported.
 #'
 #' @details
-#' This function is not supposed to be used by users. It is called by 
+#' This function is not supposed to be used by users. It is called by
 #' [lavaan_rerun()] to see if the analysis being passed to it is supported.
 #' If not, messages will be printed to indicate why.
 #'
@@ -19,7 +19,7 @@
 #' A single-element vector.
 #' If confirmed to be supported, will return 0.
 #' If not confirmed be support but may still work, return 1.
-#' If confirmed to be not yet uppported, will return a negative number, the
+#' If confirmed to be not yet supported, will return a negative number, the
 #' value of this number without the negative sign is the number of tests failed.
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
