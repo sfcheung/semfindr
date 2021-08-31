@@ -2,7 +2,7 @@
 #'
 #' A four-variable dataset with 100 cases
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `m1 ~  iv1 + iv2`
 #' `dv ~  m1`
@@ -13,7 +13,7 @@
 #'
 #' A six-variable dataset with 100 cases.
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `f1 =~  x1 + x2 + x3`
 #' `f2 =~  x4 + x5 + x6`
@@ -25,7 +25,7 @@
 #'
 #' A nine-variable dataset with 100 cases.
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `f1 =~  x1 + x2 + x3`
 #' `f2 =~  x4 + x5 + x6`
@@ -39,7 +39,7 @@
 #'
 #' A four-variable dataset with 100 cases and potential influential cases
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `m1 ~  iv1 + iv2`
 #' `dv ~  m1`
@@ -52,7 +52,7 @@
 #'
 #' A six-variable dataset with 100 cases and potential influential cases
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `f1 =~  x1 + x2 + x3`
 #' `f2 =~  x4 + x5 + x6`
@@ -66,7 +66,7 @@
 #'
 #' A nine-variable dataset with 100 cases and potential influential cases
 #'
-#' Fitted by this model:
+#' A Sample Model:
 #' ```
 #' `f1 =~  x1 + x2 + x3`
 #' `f2 =~  x4 + x5 + x6`
