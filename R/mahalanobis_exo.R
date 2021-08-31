@@ -46,12 +46,12 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' 
+#'
 #' md_predictors <- mahalanobis_predictors(fit)
 #' md_predictors
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @references
 #'
 #' Béguin, C., & Hulliger, B. (2004). Multivariate outlier detection in
