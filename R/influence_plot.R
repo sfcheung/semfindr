@@ -26,7 +26,8 @@
 #'                         be used
 #'                         for labeling case based on Mahalanobis distance.
 #'                         Default is .975.
-#' @param largest_gcd The number of cases with the largest Cook's distance
+#' @param largest_gcd The number of cases with the largest generalized
+#'                    Cook's distance
 #'                    to be labelled.
 #'                   Default is 1. If not an integer, it will be rounded
 #'                    to the nearest
@@ -55,7 +56,7 @@
 #'                   by a statistic.
 #'
 #' @return
-#' A [ggplot2] plot. It will not be plot. To plot it, use [plot()] on
+#' A [ggplot2] plot. It will not be plotted. To plot it, use [plot()] on
 #'  the output.
 #'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
@@ -108,7 +109,7 @@
 #' @references
 #' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 #'  models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>
+#'  46*(2), 202-228. <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #' @seealso [influence_stat()].
 #' @name influence_plot
@@ -356,8 +357,8 @@ gcd_gof_md_plot <- function(
                              fill = "white") +
          ggplot2::scale_size_area(name = "gCD", max_size = circle_size) +
          ggplot2::labs(title =
-            paste("Change in Test Statistics against Mahalanobis Distance,",
-                  "with Generalized Cook's Distance as size")) +
+            paste0("Change in Test Statistics against Mahalanobis Distance,\n",
+                   "Generalized Cook's Distance as the Size")) +
          ggplot2::xlab("Mahalanobis Distance") +
          ggplot2::ylab("Change in Test Statistics")
 
