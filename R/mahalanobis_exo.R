@@ -88,11 +88,13 @@ mahalanobis_predictors <- function(fit,
         }
     }
   if (inherits(fit, "lavaan")) {
+      case_ids <- lavaan::lavInspect(fit, "case.idx")
       fit_data <- lavaan::lavInspect(fit, "data")
       colnames(fit_data) <- lavaan::lavNames(fit)
       fit_free <- lavaan::lavInspect(fit, "free")
     }
   if (inherits(fit, "lavaan_rerun")) {
+      case_ids <- names(fit$rerun)
       fit_data <- lavaan::lavInspect(fit$fit, "data")
       colnames(fit_data) <- lavaan::lavNames(fit$fit)
       fit_free <- lavaan::lavInspect(fit$fit, "free")
@@ -146,8 +148,11 @@ mahalanobis_predictors <- function(fit,
                             colMeans(fit_data_exo),
                             stats::cov(fit_data_exo))
     }
-
+  if (inherits(fit, "lavaan_rerun")) {
+      md_predictors <- md_predictors[fit$selected]
+    }
   out <- matrix(md_predictors, length(md_predictors), 1)
+  rownames(out) <- case_ids
   colnames(out) <- "md"
   # No need to check the dimension. The result is always a column vector
   out
