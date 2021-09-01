@@ -158,7 +158,9 @@ mahalanobis_rerun <- function(fit,
                             colMeans(fit_data),
                             stats::cov(fit_data))
     }
-
+  if (inherits(fit, "lavaan_rerun")) {
+      md <- md[fit$selected]
+    }
   out <- matrix(md, length(md), 1)
   rownames(out) <- case_ids
   colnames(out) <- "md"
