@@ -166,5 +166,4 @@ fit_with_means <- sem(mod, dat, meanstructure = TRUE)
 fit_implied_scores <- implied_scores(fit_with_means)
 
 head(fit_implied_scores)
-psych::pairs.panels(fit_implied_scores)
 ```
