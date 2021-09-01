@@ -38,6 +38,11 @@ test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), as.character(md_selected))
   })
 
+test_that("Check selected", {
+    expect_equal(rerun_out$selected, md_selected)
+  })
+
+
 # With Case ID
 
 case_id_test <- paste0(sample(letters, 50, replace = TRUE),
@@ -50,5 +55,9 @@ test_that("Check the number of reruns", {
 
 test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), case_id_test[md_selected])
+  })
+
+test_that("Check selected", {
+    expect_equal(case_id_test[rerun_out$selected], case_id_test[md_selected])
   })
 

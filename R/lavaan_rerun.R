@@ -98,6 +98,9 @@
 #'
 #' - `call`: The call to [lavaan_rerun()].
 #'
+#' - `selected`: A numeric vector of the row numbers of cases selected in the
+#'               analysis. Its length should be equal to the length of `rerun`. 
+#'
 #' @author S. F. Cheung (shufai.cheung@gmail.com)
 #' 
 #' @examples
@@ -280,7 +283,8 @@ lavaan_rerun <- function(fit,
   out <- list(rerun = out,
               fit = fit,
               post_check = post_check,
-              call = call)
+              call = call,
+              selected = id_to_rerun)
   class(out) <- "lavaan_rerun"
   out
 }

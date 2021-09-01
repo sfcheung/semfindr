@@ -39,6 +39,11 @@ test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), as.character(resid_md_selected))
   })
 
+test_that("Check selected", {
+    expect_equal(rerun_out$selected, resid_md_selected)
+  })
+
+
 # With Case ID
 
 set.seed(80689)
@@ -54,3 +59,7 @@ test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), case_id_test[resid_md_selected])
   })
 
+
+test_that("Check selected", {
+    expect_equal(case_id_test[rerun_out$selected], case_id_test[resid_md_selected])
+  })

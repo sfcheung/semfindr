@@ -32,6 +32,10 @@ test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), as.character(c(1, 3, 9, 15, 50)))
   })
 
+test_that("Check selected", {
+    expect_equal(rerun_out$selected, c(1, 3, 9, 15, 50))
+  })
+
 # With case_id
 
 dat <- pa_dat
@@ -63,4 +67,8 @@ test_that("Check the number of reruns", {
 
 test_that("Check the names of reruns", {
     expect_equal(names(rerun_out$rerun), case_id_to_rerun)
+  })
+
+test_that("Check selected", {
+    expect_equal(case_id_test[rerun_out$selected], case_id_to_rerun)
   })
