@@ -230,11 +230,6 @@ lavaan_rerun <- function(fit,
     }
 
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
-  time_expected <-  n * fit_total_time[[1]]
-  message(paste0("The expected CPU time is ", round(time_expected, 2),
-                 " second(s).\n",
-                 "Could be faster if ran in parallel."))
-  utils::flush.console()
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
   rerun_test <- rerun_i(NULL)
@@ -246,6 +241,10 @@ lavaan_rerun <- function(fit,
       pkgs <- .packages()
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
+      time_expected <-  length(id_to_rerun) * fit_total_time[[1]] / length(cl)
+      message(paste0("The expected CPU time is ", round(time_expected, 2),
+                    " second(s)."))
+      utils::flush.console()
       parallel::clusterExport(cl, "pkgs", envir = environment())
       parallel::clusterEvalQ(cl, {
                       sapply(pkgs,
@@ -256,6 +255,11 @@ lavaan_rerun <- function(fit,
       parallel::stopCluster(cl)
 
     } else {
+      time_expected <-  length(id_to_rerun) * fit_total_time[[1]]
+      message(paste0("The expected CPU time is ", round(time_expected, 2),
+                    " second(s).\n",
+                    "Could be faster if ran in parallel."))
+      utils::flush.console()
       rt <- system.time(out <- suppressWarnings(lapply(id_to_rerun, rerun_i)))
     }
 
