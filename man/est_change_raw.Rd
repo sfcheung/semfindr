@@ -2,45 +2,47 @@
 % Please edit documentation in R/est_change_raw.R
 \name{est_change_raw}
 \alias{est_change_raw}
-\title{Case influence on parameter estimates by raw change}
+\title{Case influence on parameter estimates}
 \usage{
 est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{parameters}{A vector of characters to specify the selected parameters.
-Each element is of this form: \code{x ~ y} or \code{x ~~ y},
-corresponds to how each parameter is specified in \code{lavaan}.
-The naming convention of a \code{lavaan} output can be found
-by \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
-differences on all parameters will be computed.}
+\item{parameters}{A character vector to specify the selected parameters.
+Each parameter is named as in \code{lavaan} syntax, e.g.,
+\code{x ~ y} or \code{x ~~ y}, as appeared in the columns
+\code{lhs}, \code{op}, and \code{rhs} in the output of
+\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
+differences on all free parameters will be computed.}
 
-\item{standardized}{If \code{TRUE}, the changes in full standardized is returned.
-Otherwise, the changes in unstandardized solution is returned.
-Default is \code{FALSE}.}
+\item{standardized}{If \code{TRUE}, the changes in the full standardized solution
+is returned (\code{type} = \code{std.all} in
+\code{\link[lavaan:standardizedSolution]{lavaan::standardizedSolution()}}).
+Otherwise, the changes in the unstandardized solution is
+returned. Default is \code{FALSE}.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested parameters,
-and the number of rows equal to the number of cases. The row names is the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the
-standardized difference. Please see Pek and MacCallum (2011), Equation 7.
+A matrix with the number of columns equal to the number of requested
+parameters, and the number of rows equal to the number of cases. The
+row names are the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+The elements are the raw differences.
 }
 \description{
 Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the changes in selected parameters
 for each case.
 }
 \details{
-For each case, compute the differences in the estimates of selected parameter
-between rerun without
-this case and the original fit with this case.
+For each case, compute the differences in the estimates of selected
+parameters with and without this case: (estimate with all case) -
+(estimate without this case).
 The change is the raw change, either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard error.
 
 If the analysis is not admissible or did not converge when a case was
-deleted, \code{NA} will be turned for this case.
+deleted, \code{NA}s will be turned for this case on the differences.
 
-Currently only work for one group analysis.
+Currently only support single-sample models.
 }
 \examples{
 library(lavaan)
@@ -48,11 +50,11 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
-'
+mod <-
+"
 m1 ~ iv1 + iv2
 dv ~ m1
-'
+"
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
@@ -62,7 +64,7 @@ fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
 out <- est_change_raw(fit_rerun)
 # Results excluding a case, for the first few cases
 head(out)
-# Note that these are the differences parameter estimates.
+# Note that these are the differences in parameter estimates.
 
 # The parameter estimates from all cases
 (coef_all <- coef(fit))
@@ -71,21 +73,34 @@ fit_no_1 <- lavaan::sem(mod, dat[-1, ])
 (coef_no_1 <- coef(fit_no_1))
 # The differences
 coef_all - coef_no_1
+# The first row of `est_change_raw(fit_rerun)`
+round(out[1, ], 3)
 
-# Compute the changes for the paths from iv1 and iv2 to m1
+# Compute only the changes of the paths from iv1 and iv2 to m1
 out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 # Results excluding a case, for the first few cases
 head(out2)
 # Note that only the changes in the selected paths are included.
 
 # Use standardized = TRUE to compare the differences in standardized solution
-out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"), standardized = TRUE)
+out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"),
+                          standardized = TRUE)
 head(out2_std)
-parameterEstimates(fit, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
-parameterEstimates(fit_no_1, standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")]
+(est_std_all <- parameterEstimates(fit, standardized = TRUE)[1:2,
+                       c("lhs", "op", "rhs", "std.all")])
+(est_std_no_1 <- parameterEstimates(fit_no_1, standardized = TRUE)[1:2,
+                       c("lhs", "op", "rhs", "std.all")])
+# The differences
+est_std_all$std.all - est_std_no_1$std.all
+# The first row of `out2_std`
 out2_std[1, ]
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. \emph{Multivariate Behavioral Research, 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. \emph{Multivariate Behavioral Research,
+46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

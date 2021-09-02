@@ -2,24 +2,44 @@
 % Please edit documentation in R/mahalanobis_rerun.R
 \name{mahalanobis_rerun}
 \alias{mahalanobis_rerun}
-\title{Compute the Mahalanobis distance for each case}
+\title{Mahalanobis distance (All observed variables)}
 \usage{
-mahalanobis_rerun(rerun_out)
+mahalanobis_rerun(
+  fit,
+  emNorm_arg = list(estimate.worst = FALSE, criterion = 1e-06)
+)
 }
 \arguments{
-\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+\item{fit}{It can be the output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
+\code{\link[lavaan:sem]{lavaan::sem()}}, or the output from  \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+
+\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}. Default is
+\code{list(estimate.worst = FALSE, criterion = 1e-6)}. Ignored
+if there is no missing data on the exogenous observed
+variables.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis distance for each case. The row names
+A one-column matrix (a column vector) of the Mahalanobis distance for each
+case. The row names
 are the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the Mahalanobis distance for each case.
+Compute the
+Mahalanobis distance for each case on all observed variables in a model.
 }
 \details{
-For each case, compute the Mahalanobis distance of each case.
+Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the
+Mahalanobis distance for each case on all observed variables.
 
-Currently only work for one group analysis.
+If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used to
+compute the Mahalanobis distance.
+
+If there are missing values on the observed predictors, the means and
+variance-covariance matrices will be estimated by maximum likelihood using
+\code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed to \code{\link[modi:MDmiss]{modi::MDmiss()}} to
+compute the Mahalanobis distance.
+
+Currently only support single-sample models.
 }
 \examples{
 library(lavaan)
@@ -27,11 +47,11 @@ dat <- pa_dat
 # For illustration only, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
-mod <- 
-'
+mod <-
+"
 m1 ~ iv1 + iv2
 dv ~ m1
-'
+"
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
@@ -48,5 +68,9 @@ head(md1)
 
 }
 \references{
-Mahalanobis, P. C. (1936). On the generaized distance in statistics. \emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
+Mahalanobis, P. C. (1936). On the generalized distance in statistics.
+\emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
+}
+\author{
+S. F. Cheung (shufai.cheung@gmail.com)
 }

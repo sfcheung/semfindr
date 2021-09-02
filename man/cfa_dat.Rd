@@ -14,9 +14,9 @@ cfa_dat
 A six-variable dataset with 100 cases.
 }
 \details{
-Generated from this model:\preformatted{`f1 =~  .7*x1 + .6*x2 + .8*x3 + .3*x5`
-`f2 =~  .2*x1 + .6*x4 + .8*x5 + .7*x6`
-`f1 ~~ .2*f2`
+A Sample Model:\preformatted{`f1 =~  x1 + x2 + x3`
+`f2 =~  x4 + x5 + x6`
+`f1 ~~ f2`
 }
 }
 \keyword{datasets}
