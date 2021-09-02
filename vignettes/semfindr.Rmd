@@ -165,7 +165,7 @@ fit_mc <- fit_measures_change(fit_rerun,
 round(fit_mc[i_top5, ], 3)
 ```
 
-The value is computed by $M_{full sample} - M_{one case removed}$.
+The value is computed by $M_\textrm{full sample} - M_\textrm{one case removed}$.
 Therefore, if the value is positive, the measure is higher
 in the full sample. If the value is negative, the measure
 is lower in the full sample.
@@ -185,7 +185,7 @@ fit_influence <- influence_stat(fit_rerun)
 round(fit_influence[i_top5, ], 3)
 ```
 
-One major use of `influence_stat` is to provide information
+One major use of [influence_stat] is to provide information
 for the diagnostic plots introduced below.
 
 # Plot Generalized Cook's Distance
@@ -197,21 +197,16 @@ on the horizontal axis and the `gcd` on the vertical axis:
 gcd_plot(fit_influence, largest_gcd = 3)
 ```
 
-It accepts an output of `influence_stat`.
+It accepts an output of [influence_stat].
 
-Can set the number of cases to label, based on the distance.
+`largest_gcd` controls the number of cases with the largest
+`gcd` to be labelled. The default is 1.
 
-```{r}
-gcd_plot(fit_influence,
-         largest_gcd = 3)
-```
-
-`largest_gcd` is used to control how many cases with
-high `gcd` will be labelled. The default is 1.
+More options of [gcd_plot] can be found on its help page.
 
 # Plot Mahalanobis Distance
 
-Similarly, an index plot can be computed on the
+An index plot can be computed on the
 Mahalanobis distance compute by `influence_stat`:
 
 ```{r}
@@ -223,37 +218,50 @@ md_plot(fit_influence,
 high Mahalanobis distnace on all the variables in the
 fitted model will be labelled. The default is 1.
 
+More options for [md_plot] can be found from its help page.
+
 # Plot a Fit Measure against Generalized Cook's Distance
+
+To examine how the overall change in parameter estimates
+measuresd by `gcd` relates to a selected goodness of fit
+measures, [gcd_gof_plot] can be used:
 
 ```{r}
 gcd_gof_plot(fit_influence,
-             fit_measure = "rmsea")
+             fit_measure = "rmsea",
+             largest_gcd = 3,
+             largest_fit_measure = 3)
 ```
 
-# Plot a fit measure against Mahalanobis distance, with bubble size determined by generalized Cook's distance.
+`largest_gcd` determines the number of cases with largest
+`gcd` to be labelled, and `largest_fit_measure` determines
+the number of cases with largest *absolute* change in
+the selected goodness of fit measure to be labelled.
+The default is 1 for both arguments.
 
-```{r}
-gcd_gof_md_plot(fit_influence,
-                fit_measure = "chisq")
-```
+More options of [gcd_gof_plot] can be found from its help
+page.
 
-Can use circle_size to control the size of the largest bubble.
+# A Bubble Plot of Goodness of Fit Measure, Mahalanobis Distance, and Generalized Cook's Distance
+
+We can also use [gcd_gof_md_plot] to plot a bubble plot
+of a selected goodness of fit measure against Mahalanobis distance, with the bubble size determined by generalized
+Cook's distance:
 
 ```{r}
 gcd_gof_md_plot(fit_influence,
                 fit_measure = "rmsea",
-                circle_size = 30)
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
 ```
 
-Can add cutoff lines
+`circle_size` controls the size of the largest bubble.
+`largest_gcd`, `largest_fit_measure`, and `largest_md`
+controls the number of cases with highest absolute values
+one the these measures to be labelled. Their default values
+are 1.
 
-```{r}
-gcd_gof_md_plot(fit_influence,
-                fit_measure = "chisq",
-                circle_size = 10,
-                cutoff_fit_measure = 1,
-                cutoff_md = 9)
-```
-
-Other influence plot functions also have these features.
-See ?influence_plot for more options.
+More options of [gcd_gof_md_plot] can be found from its help
+page.
