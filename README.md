@@ -4,8 +4,8 @@ A find(e)r of outliers and influential cases in structural equation modeling.
 
 # Installation
 
-Currently only for private internal test. Need to be installed from source.
+The latest version can be installed by `remotes::install_github`:
 
 ```
-install.packages(path_to_the_source_package, repos = NULL, type = "source")
+remotes::install_github("sfcheung/semfindr")
 ```
