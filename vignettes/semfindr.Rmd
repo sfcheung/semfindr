@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Purpose
 
-The [semfindr] package has functions for doing SEM (
+The `semfindr` package has functions for doing SEM (
 structural equation modeling) diagnostics, such as 
 identifying influential cases and computing various
 diagnostic measures.
@@ -25,7 +25,7 @@ diagnostic measures.
 
 Many of the measures for a case is computed by refitting
 a model with this case removed. Instead of doing this once
-for each measure, [semfindr] refits the model for at most
+for each measure, `semfindr` refits the model for at most
 as many times as the number of cases, each time with one
 case removed, store them as a list of SEM results.
 Functions for deletion statistics will compute them from
@@ -35,9 +35,9 @@ time consuming process.
 
 # Loading the Package and the Sample Dataset
 
-First, we load the package. The sample dataset is [pa_dat2],
+First, we load the package. The sample dataset is `semfindr::pa_dat2`,
 with variables `iv1`, `iv2`, `m1`, and `dv`, and 100 cases.
-For conveienice, we assign [pa_dat] to a new symbol, `dat`.
+For conveienice, we assign `pa_dat` to a new symbol, `dat`.
 
 ```{r}
 library(semfindr)
@@ -59,7 +59,7 @@ dv ~ m1
 "
 ```
 
-We fit the model by [lavaan::sem]:
+We fit the model by `lavaan::sem`:
 
 ```{r}
 library(lavaan)
@@ -76,11 +76,11 @@ fit_rerun <- lavaan_rerun(fit)
 ```
 
 This example takes about 4 to 8 seconds. For larger samples
-or more complicated models, [lavaan_rerun] supports
+or more complicated models, `semfindr::lavaan_rerun` supports
 parallel processing by setting `parallel` to `TRUE`.
 
-If this process is slow, we can seave `fit_rerun` by 
-`saveRDS` such that we can load it for future analysis.
+If this process is slow, we can save `fit_rerun` by 
+`base::saveRDS` such that we can load it for future analysis.
 
 # Standardized Changes in Parameter Estimates
 
@@ -93,7 +93,7 @@ fit_est_change <- est_change(fit_rerun)
 round(head(fit_est_change), 3)
 ```
 
-`est_change` will compute the generalized Cook's distance,
+`semfindr::est_change` will compute the generalized Cook's distance,
 `gcd` using the parameters examined. `gcd` is analogous to
 Cook's distance in multiple regression, measure the
 "overall" change in the parameters if a case is deleted.
@@ -110,7 +110,7 @@ round(fit_est_change[i_top5, ], 3)
 We can also specify the parameters to be included. For
 example, we may only want to compute the change and the
 `gcd` only for path coefficients. See the help
-page of `est_change` for the detail.
+page of `semfindr::est_change` for the detail.
 
 # Compute Raw Change in Parameter Estimates
 
@@ -118,14 +118,15 @@ The standardized changes in parameter may not be easy
 to interpret. If the original units are interpretable,
 we can compute the *raw* changes, that is, the changes
 in parameter estiamtes if a case is deleted, not
-standardized by their standard errors.
+standardized by their standard errors. This can be done
+by `semfindr::est_change_raw`:
 
 ```{r}
 fit_est_change_raw <- est_change_raw(fit_rerun)
 round(fit_est_change_raw[i_top5, ], 3)
 ```
 
-If desired, `est_change_raw` can also compute the changes
+If desired, `semfindr::est_change_raw` can also compute the changes
 in parameters in the *standardized solution*:
 
 ```{r}
@@ -137,7 +138,7 @@ round(fit_est_change_raw_std[i_top5, ], 3)
 # Compute Mahalanobis Distance
 
 One commonly used measure for identifying outliers is
-Mahalanobis distance. [mahalanobis_rerun] can be used to
+Mahalanobis distance. `semfindr::mahalanobis_rerun` can be used to
 compute the Mahalanobis distance of each case on all the
 variables used in a fitted model:
 
@@ -155,9 +156,9 @@ that are not extreme but are influential.
 
 Another set of intuitive measures of influence is to compute
 a goodness of fit mreasures if a case is deleted. This can
-be done by [fit_measures_change], which simply get any
-fit measures supported by [lavaan::fitMeasures] from the list
-of results in [lavaan_rerun]:
+be done by `semfindr::fit_measures_change`, which simply get any
+fit measures supported by `lavaan::fitMeasures` from the list
+of results from `semfindr::lavaan_rerun`:
 
 ```{r}
 fit_mc <- fit_measures_change(fit_rerun,
@@ -170,14 +171,14 @@ Therefore, if the value is positive, the measure is higher
 in the full sample. If the value is negative, the measure
 is lower in the full sample.
 
-The argument `fit_measures` is passed to [lavaan::fitMeasures]
+The argument `fit_measures` is passed to `lavaan::fitMeasures`
 to sepcify the measures to be computed.
 
 # Request All These Statistics by One Function
 
-We can also use [influence_stat] to compute the previous
-measures. It calls [fit_measures_change], [est_change],
-and [mahalanobis_rerun] (if requested) and then merges
+We can also use `semfindr::influence_stat` to compute the previous
+measures. It calls `semfindr::fit_measures_change`, `semfindr::est_change`,
+and `semfindr::mahalanobis_rerun` (if requested) and then merges
 their results into one matrix:
 
 ```{r}
@@ -185,7 +186,7 @@ fit_influence <- influence_stat(fit_rerun)
 round(fit_influence[i_top5, ], 3)
 ```
 
-One major use of [influence_stat] is to provide information
+One major use of `semfindr::influence_stat` is to provide information
 for the diagnostic plots introduced below.
 
 # Plot Generalized Cook's Distance
@@ -197,17 +198,17 @@ on the horizontal axis and the `gcd` on the vertical axis:
 gcd_plot(fit_influence, largest_gcd = 3)
 ```
 
-It accepts an output of [influence_stat].
+It accepts an output of `semfindr::influence_stat`.
 
 `largest_gcd` controls the number of cases with the largest
 `gcd` to be labelled. The default is 1.
 
-More options of [gcd_plot] can be found on its help page.
+More options of `semfindr::gcd_plot` can be found on its help page.
 
 # Plot Mahalanobis Distance
 
 An index plot can be computed on the
-Mahalanobis distance compute by `influence_stat`:
+Mahalanobis distance compute by `semfindr::influence_stat`:
 
 ```{r}
 md_plot(fit_influence,
@@ -218,13 +219,13 @@ md_plot(fit_influence,
 high Mahalanobis distnace on all the variables in the
 fitted model will be labelled. The default is 1.
 
-More options for [md_plot] can be found from its help page.
+More options for `md_plot` can be found from its help page.
 
 # Plot a Fit Measure against Generalized Cook's Distance
 
 To examine how the overall change in parameter estimates
 measuresd by `gcd` relates to a selected goodness of fit
-measures, [gcd_gof_plot] can be used:
+measures, `gcd_gof_plot` can be used:
 
 ```{r}
 gcd_gof_plot(fit_influence,
@@ -239,12 +240,12 @@ the number of cases with largest *absolute* change in
 the selected goodness of fit measure to be labelled.
 The default is 1 for both arguments.
 
-More options of [gcd_gof_plot] can be found from its help
+More options of `semfindr::gcd_gof_plot` can be found from its help
 page.
 
 # A Bubble Plot of Goodness of Fit Measure, Mahalanobis Distance, and Generalized Cook's Distance
 
-We can also use [gcd_gof_md_plot] to plot a bubble plot
+We can also use `semfindr::gcd_gof_md_plot` to plot a bubble plot
 of a selected goodness of fit measure against Mahalanobis distance, with the bubble size determined by generalized
 Cook's distance:
 
@@ -263,5 +264,5 @@ controls the number of cases with highest absolute values
 one the these measures to be labelled. Their default values
 are 1.
 
-More options of [gcd_gof_md_plot] can be found from its help
+More options of `semfindr::gcd_gof_md_plot` can be found from its help
 page.
