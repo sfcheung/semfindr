@@ -18,7 +18,7 @@
 #' @return
 #' A matrix of the implied scores.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @examples
 #' library(lavaan)

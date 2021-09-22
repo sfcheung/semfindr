@@ -22,7 +22,7 @@
 #' If confirmed to be not yet supported, will return a negative number, the
 #' value of this number without the negative sign is the number of tests failed.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #' 
 #' @examples
 #'

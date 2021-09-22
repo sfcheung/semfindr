@@ -50,7 +50,7 @@
 #' md_predictors <- mahalanobis_predictors(fit)
 #' md_predictors
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @references
 #'

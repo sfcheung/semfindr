@@ -50,5 +50,5 @@ lavaan_rerun_check(fit05)
 
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

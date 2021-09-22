@@ -92,5 +92,5 @@ models: Cases and their influence. \emph{Multivariate Behavioral Research,
 \code{\link[=fit_measures_change]{fit_measures_change()}}, \code{\link[=est_change]{est_change()}}, and \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}.
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

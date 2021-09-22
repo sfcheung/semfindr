@@ -141,5 +141,5 @@ fit_01 <- lavaan::sem(mod, dat[-1, ])
 fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

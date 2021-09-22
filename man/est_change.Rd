@@ -82,5 +82,5 @@ models: Cases and their influence. \emph{Multivariate Behavioral Research,
 46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

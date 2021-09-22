@@ -59,7 +59,7 @@
 #' A [ggplot2] plot. It will not be plotted. To plot it, use [plot()] on
 #'  the output.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @examples
 #' library(lavaan)

@@ -74,5 +74,5 @@ Schafer, J.L. (1997) \emph{Analysis of incomplete multivariate data}.
 Chapman & Hall/CRC Press.
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

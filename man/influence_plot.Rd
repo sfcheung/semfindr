@@ -162,5 +162,5 @@ models: Cases and their influence. \emph{Multivariate Behavioral Research,
 \code{\link[=influence_stat]{influence_stat()}}.
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

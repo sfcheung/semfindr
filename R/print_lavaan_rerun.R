@@ -10,7 +10,7 @@
 #' @param x The output of [lavaan_rerun()].
 #' @param ... Other arguments. They will be ignored.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #' 
 #' @examples
 #' library(lavaan)

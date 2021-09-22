@@ -101,7 +101,7 @@
 #' - `selected`: A numeric vector of the row numbers of cases selected in the
 #'               analysis. Its length should be equal to the length of `rerun`. 
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #' 
 #' @examples
 #' library(lavaan)

@@ -45,7 +45,7 @@
 #'  corresponding
 #' functions for further details.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @examples
 #' library(lavaan)

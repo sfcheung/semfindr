@@ -31,7 +31,7 @@
 #'  case. The row names
 #' are the case identification values used in [lavaan_rerun()].
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @examples
 #' library(lavaan)

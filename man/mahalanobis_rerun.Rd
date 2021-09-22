@@ -72,5 +72,5 @@ Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 \emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }
