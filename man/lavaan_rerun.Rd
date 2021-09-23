@@ -10,6 +10,7 @@ lavaan_rerun(
   to_rerun,
   md_top,
   resid_md_top,
+  allow_inadmissible = FALSE,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
@@ -51,6 +52,10 @@ distance, and the top \code{resid_md_top} case(s) will be
 processed.
 \code{resid_md_top} cannot be used together with \code{to_rerun} or
 \code{md_top.}}
+
+\item{allow_inadmissible}{If \code{TRUE}, accepts a fit object with inadmissible
+results (i.e., \code{post.check} from \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}).
+Default is \code{FALSE}.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 parallel to rerun the analysis. Currently, only support

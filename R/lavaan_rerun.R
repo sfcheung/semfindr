@@ -71,6 +71,9 @@
 #'                processed.
 #'                `resid_md_top` cannot be used together with `to_rerun` or
 #'                `md_top.`
+#' @param allow_inadmissible If `TRUE`, accepts a fit object with inadmissible
+#'  results (i.e., `post.check` from [lavaan::lavInspect()] is `FALSE`).
+#'  Default is `FALSE`.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'                 parallel to rerun the analysis. Currently, only support
 #'                 `"FORK"` type cluster using local CPU cores. Default is
@@ -132,6 +135,7 @@ lavaan_rerun <- function(fit,
                          to_rerun,
                          md_top,
                          resid_md_top,
+                         allow_inadmissible = FALSE,
                          parallel = FALSE,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2))
@@ -154,7 +158,12 @@ lavaan_rerun <- function(fit,
   check_out <- lavaan_rerun_check(fit, print_messages = FALSE)
 
   if (check_out != 0) {
-      stop(attr(check_out, "info"))
+      if ((check_out == -1) &&
+          !(suppressWarnings(lavaan::lavInspect(fit, "post.check"))) &&
+          allow_inadmissible) {
+        } else {
+          stop(attr(check_out, "info"))
+        }
     }
 
   n <- nrow(lavaan::lavInspect(fit, "data"))
@@ -228,12 +237,11 @@ lavaan_rerun <- function(fit,
       case_ids <- lavaan::lavInspect(fit, "case.idx")[to_rerun]
       id_to_rerun <- to_rerun
     }
-
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
-  rerun_test <- rerun_i(NULL)
-  if (!identical(coef(fit), coef(rerun_test))) {
+  rerun_test <- suppressWarnings(rerun_i(NULL))
+  if (!all.equal(unclass(coef(fit)), coef(rerun_test)[names(coef(fit))])) {
       stop("Something is wrong. The lavaan analysis cannot be rerun.")
     }
 
