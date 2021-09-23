@@ -36,7 +36,7 @@ sapply(fit_rr, lavInspect, what = "converged")
 sapply(fit_rr, lavInspect, what = "post.check")
 standardizedSolution(fit)[, c(1:4)]
 dat2 <- dat
-dat2[1, ] <- dat[1, ] + c(3, 3, -4, 0, 0, 0)
+dat2[1, ] <- dat[1, ] + c(-2.95, 3.35, -3.5, 0, 0, 0)
 round(cor(dat2), 2)
 psych::pairs.panels(dat2)
 fit2 <- lavaan::cfa(mod, dat2)
@@ -46,16 +46,19 @@ fit2_rr <- lapply(seq_len(nrow(dat2)), function(x) {
   })
 sapply(fit2_rr, lavInspect, what = "converged")
 sapply(fit2_rr, lavInspect, what = "post.check")
+coef(fit2)
+tmp <- t(sapply(fit2_rr, coef))
+max(tmp[, "x1~~x1"])
+
 semfindr::mahalanobis_rerun(fit2)
+
 dat3 <- dat2[-1, ]
 fit3 <- lavaan::cfa(mod, dat3)
-standardizedSolution(fit3)[, c(1:4)]
 fit3_rr <- lapply(seq_len(nrow(dat3)), function(x) {
     lavaan::cfa(mod, dat3[-x, ])
   })
-all(sapply(fit3_rr, lavInspect, what = "converged"))
-all(sapply(fit3_rr, lavInspect, what = "post.check"))
-round(cor(dat3) - cor(dat2), 2)
+sapply(fit3_rr, lavInspect, what = "converged")
+sapply(fit3_rr, lavInspect, what = "post.check")
 
 cfa_dat_heywood <- dat2
 usethis::use_data(cfa_dat_heywood, overwrite = TRUE)
