@@ -1,0 +1,150 @@
+---
+title: "Use Case ID"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Use Case ID}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Instead of using row numbers (`case.idx` in the `lavaan` object),
+`semfindr::lavaan_rerun` supports user-supplied case ids. This makes
+the output more readable.
+
+```{r}
+library(semfindr)
+dat <- pa_dat
+# Add case id
+dat <- cbind(id = paste0("case", seq_len(nrow(dat))), dat)
+head(dat)
+```
+
+Suppose that the data set has a column of case ids. A model
+is fitted to this data set using `lavaan::sem()`:
+
+```{r}
+mod <-
+"
+m1 ~ iv1 + iv2
+dv ~ m1
+"
+library(lavaan)
+fit <- sem(mod, dat)
+```
+
+# Rerun *n* Times
+
+We refit the model 100 times, each time with one case
+removed. Although the `id` column is not stored in
+`lavaan`, it can be supplied through the argument
+`case_id`:
+
+```{r echo = FALSE, include = FALSE}
+if (file.exists("user_id_fit_rerun.RDS")) {
+    fit_rerun <- readRDS("user_id_fit_rerun.RDS")
+  } else {
+    fit_rerun <- lavaan_rerun(fit, case_id = dat$id)
+    saveRDS(fit_rerun, "user_id_fit_rerun.RDS")
+  }
+```
+
+```{r eval = FALSE}
+fit_rerun <- lavaan_rerun(fit, case_id = dat$id)
+```
+
+The list of reruns now use `id` as the names:
+
+```{r}
+head(fit_rerun$rerun[1:3])
+```
+
+As shown below most diagnostic functions will use case id
+in their displays, making it easier to locate them in the
+original data set.
+
+# Diagnostic Functions
+
+## Standardized Changes in Estimates
+
+```{r}
+fit_est_change <- est_change(fit_rerun)
+round(head(fit_est_change), 3)
+```
+```{r}
+fit_est_change_paths_only <- est_change(fit_rerun,
+                                parameters = c("m1 ~ iv1",
+                                                "m1 ~ iv2",
+                                                "dv ~ m1"))
+round(fit_est_change_paths_only[1:5, ], 3)
+```
+
+## Raw Changes in Estimates
+
+```{r}
+fit_est_change_raw <- est_change_raw(fit_rerun)
+round(fit_est_change_raw[1:5, ], 3)
+```
+
+## Mahalanobis Distance
+
+```{r}
+fit_md <- mahalanobis_rerun(fit_rerun)
+round(fit_md[1:5, , drop = FALSE], 3)
+```
+
+## Changes in Fit Measures
+
+```{r}
+fit_mc <- fit_measures_change(fit_rerun,
+            fit_measures = c("chisq", "cfi", "tli", "rmsea"))
+round(fit_mc[1:5, ], 3)
+```
+
+## All-In-One-Function
+
+```{r}
+fit_influence <- influence_stat(fit_rerun)
+round(fit_influence[1:5, ], 3)
+```
+
+# Diagnostic Plots
+
+## Generalized Cook's Distance
+
+```{r}
+gcd_plot(fit_influence, largest_gcd = 3)
+```
+
+## Mahalanobis Distance
+
+```{r}
+md_plot(fit_influence,
+        largest_md = 3)
+```
+
+## Fit Measure vs. Generalized Cook's Distance
+
+```{r}
+gcd_gof_plot(fit_influence,
+             fit_measure = "rmsea",
+             largest_gcd = 3,
+             largest_fit_measure = 3)
+```
+
+## Bubble Plot
+
+```{r}
+gcd_gof_md_plot(fit_influence,
+                fit_measure = "rmsea",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
