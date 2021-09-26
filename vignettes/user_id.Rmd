@@ -1,8 +1,8 @@
 ---
-title: "Use Case ID"
+title: "Use Case IDs"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Use Case ID}
+  %\VignetteIndexEntry{Use Case IDs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 Instead of using row numbers (`case.idx` in the `lavaan` object),
-`semfindr::lavaan_rerun()` supports user-supplied case ids. This makes
-the output more readable.
+`semfindr::lavaan_rerun()` supports user supplied case IDs.
+This can make the output more readable.
 
 ```{r}
 library(semfindr)
@@ -26,7 +26,7 @@ dat <- cbind(id = paste0("case", seq_len(nrow(dat))), dat)
 head(dat)
 ```
 
-Suppose that the data set has a column of case ids. A model
+Suppose that the data set has a column of case IDs. A model
 is fitted to this data set using `lavaan::sem()`:
 
 ```{r}
@@ -66,7 +66,7 @@ head(fit_rerun$rerun[1:3])
 ```
 
 As shown below, most diagnostic functions will use user
-supplied case ids
+supplied case IDs
 in their displays, making it easier to locate them in the
 original data set.
 
@@ -81,8 +81,8 @@ round(head(fit_est_change), 3)
 ```{r}
 fit_est_change_paths_only <- est_change(fit_rerun,
                                 parameters = c("m1 ~ iv1",
-                                                "m1 ~ iv2",
-                                                "dv ~ m1"))
+                                               "m1 ~ iv2",
+                                               "dv ~ m1"))
 round(fit_est_change_paths_only[1:5, ], 3)
 ```
 
