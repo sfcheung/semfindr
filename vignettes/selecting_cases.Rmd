@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-Instead of rerunning fitting the model *n* times, once
+Instead of refitting the model *n* times, once
 with each case removed, it is possible to use some criteria
-to select cases to be included in the reruns. This is useful
+to select cases to be included in the analysis. This is useful
 when the speed to fit the model is slow and/or the sample
 size is very large.
 
@@ -63,9 +63,8 @@ rerun_out
 round(est_change(rerun_out), 3)
 ```
 
-If user-supplied case IDs are used, then the value of
-`to_rerun` should be a vector of case IDs:
-
+If user supplied case IDs are used, then the value of
+`to_rerun` should be a vector of these case IDs:
 
 ```{r}
 rerun_out <- lavaan_rerun(fit,
@@ -141,7 +140,8 @@ round(est_change(rerun_out), 3)
 ```
 
 Note that selecting cases by this method *can* miss some
-influential cases. Unlike multiple regression, this distance
+influential cases (Pek & MacCallum, 2011). Unlike multiple
+regression, this distance
 is not a measure of leverage. For a path model, this distance
 used distances from the centroid on *all* observed variables,
 including exogenous variables and endogenous variables.
@@ -159,3 +159,9 @@ to be explored. For the final model(s),
 `semfindr::lavaan_rerun()` using
 all cases are recommended, to serve as a final check on the
 sensitivity of the results to individual cases.
+
+# Reference
+
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. *Multivariate Behavioral Research, 46*(2),
+202–228. https://doi.org/10.1080/00273171.2011.561068
