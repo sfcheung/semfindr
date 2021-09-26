@@ -1,5 +1,5 @@
 Package: semfindr
-Title: Diagnostic statistics in structural equation modeling
+Title: Diagnostic Tools in Structural Equation Modeling
 Version: 0.1.0
 Authors@R: c(
     person(given = "Shu Fai",
@@ -10,7 +10,7 @@ Authors@R: c(
 Description: Sensitivity analysis in structural
     equation modeling using change statistics and
     diagnostic plots.
-URL: https://sfcheung.github.io/semfindr
+URL: https://sfcheung.github.io/semfindr/
 BugReports: https://github.com/sfcheung/semfindr/issues
 Depends: R (>= 4.1.0)
 License: GPL-3

@@ -89,7 +89,7 @@
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
 #'  *Multivariate Behavioral Research, 46*(2), 202–228.
-#'  <https://doi.org/10.1080/00273171.2011.561068>
+#'  doi:10.1080/00273171.2011.561068
 #'
 #' @export
 #' @importMethodsFrom lavaan vcov
