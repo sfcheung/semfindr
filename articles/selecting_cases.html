@@ -101,7 +101,7 @@
 <p>Instead of refitting the model <em>n</em> times, once with each case removed, it is possible to use some criteria to select cases to be included in the analysis. This is useful when the speed to fit the model is slow and/or the sample size is very large.</p>
 <p>The sample data set <code>pa_dat</code> will be used for illustration:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr">semfindr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span>
 <span class="co"># Add case id</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"case"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="va">dat</span><span class="op">)</span>
@@ -132,7 +132,7 @@ dv ~ m1
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.44 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.5 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Only four reruns in the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -157,7 +157,7 @@ dv ~ m1
                                        <span class="st">"case4"</span>,
                                        <span class="st">"case15"</span>,
                                        <span class="st">"case18"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.44 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.5 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Only four reruns in the output. User supplied case IDs are used in the output:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -185,7 +185,7 @@ dv ~ m1
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,
                           resid_md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.55 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.62 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -213,7 +213,7 @@ dv ~ m1
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,
                           md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.55 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.62 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

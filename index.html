@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic statistics in structural equation modeling • semfindr</title>
+<title>Diagnostic Tools in Structural Equation Modeling • semfindr</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Diagnostic statistics in structural equation modeling">
+<script src="pkgdown.js"></script><meta property="og:title" content="Diagnostic Tools in Structural Equation Modeling">
 <meta property="og:description" content="Sensitivity analysis in structural
     equation modeling using change statistics and
     diagnostic plots.">
@@ -93,7 +93,19 @@
 <div id="semfindr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#semfindr" class="anchor"></a>semfindr</h1></div>
-<p>A find(e)r of outliers and influential cases in structural equation modeling through sensitivity analysis Jek and MacCallum (2011). Unlike other similar packages, the workflow adopted in this package separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures. Users first do the leave-one-out analysis for all cases, or cases selected based on some criteria (<code><a href="articles/selecting_cases.html">vignette("selecting_cases")</a></code>), using <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>. Users can then compute various case influence measures using the output of <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>. The functions were designed to be flexible such that users can compute case influence measures on estimates and generalized Cook’s distance for selected parameters, on raw or standardized estimates, and on any fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures()</a></code>. This package also support various plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in the Quick Start (<code><a href="articles/semfindr.html">vignette("semfindr")</a></code>).</p>
+<p>A find(e)r of outliers and influential cases in structural equation modeling through sensitivity analysis presented by Jek and MacCallum (2011).</p>
+<p>Unlike other similar packages, the workflow adopted in this package separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures.</p>
+<ul>
+<li>Users first do the leave-one-out analysis for all cases, or cases selected based on some criteria (<code><a href="articles/selecting_cases.html">vignette("selecting_cases")</a></code>), using <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</li>
+<li>Users can then compute various case influence measures using the output of <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</li>
+</ul>
+<p>The functions were designed to be flexible such that users can compute case influence measures on</p>
+<ul>
+<li>standardized parameter estimates and generalized Cook’s distance for selected parameters;</li>
+<li>raw or standardized estimates;</li>
+<li>on any fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures()</a></code>.</li>
+</ul>
+<p>This package also supports various plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in the Quick Start (<code><a href="articles/semfindr.html">vignette("semfindr")</a></code>).</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">

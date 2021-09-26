@@ -238,7 +238,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lavaan_rerun.html'>lavaan_rerun</a></span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.25 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.9 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Compute the Mahalanobis distance for each case</span>
 <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>mahalanobis_rerun</span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>)</span>
 <span class='co'># Results excluding a case, for the first few cases</span>

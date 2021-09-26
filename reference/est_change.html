@@ -183,7 +183,7 @@ computing the standardized changes of standardized estimates.</p>
     <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
 <em>Multivariate Behavioral Research, 46</em>(2), 202–228.
-<a href='https://doi.org/10.1080/00273171.2011.561068'>https://doi.org/10.1080/00273171.2011.561068</a></p>
+doi:10.1080/00273171.2011.561068</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
@@ -237,7 +237,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lavaan_rerun.html'>lavaan_rerun</a></span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 10.8 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 14.1 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Compute the changes in chisq if a case is removed</span>
 <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>est_change</span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>)</span>
 <span class='co'># Results excluding a case, for the first few cases</span>
