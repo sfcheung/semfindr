@@ -4,13 +4,16 @@
 \name{semfindr-package}
 \alias{semfindr}
 \alias{semfindr-package}
-\title{semfindr: Compute diagnostic statistics for outliers and influential cases in structural equation modeling}
+\title{semfindr: Diagnostic statistics in structural equation modeling}
 \description{
-Compute diagnostic statistics for outliers and influential cases in structural equation modeling.
+Sensitivity analysis in structural
+    equation modeling using change statistics and
+    diagnostic plots.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://sfcheung.github.io/semfindr}
   \item Report bugs at \url{https://github.com/sfcheung/semfindr/issues}
 }
 
