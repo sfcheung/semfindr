@@ -1,3 +1,11 @@
+# semfindr 0.1.0
+
+- Added more vignettes.
+
+- `lavaan_rerun()` can accept an output with inadmissible
+  estimates. Disabled by default. Can be enabled by
+  setting `allow_inadmissible` to `TRUE`.
+
 # semfindr 0.0.4
 
 - Added a print method for the `lavaan_rerun()` class.
