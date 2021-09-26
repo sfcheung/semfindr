@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Diagnostic statistics in structural equation modeling
-Version: 0.0.4
+Version: 0.1.0
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
