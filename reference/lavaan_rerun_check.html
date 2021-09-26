@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check whether the model being fitted is supported by lavaan_rerun — lavaan_rerun_check • semfindr</title>
+<title>Compatibility Check — lavaan_rerun_check • semfindr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Check whether the model being fitted is supported by lavaan_rerun — lavaan_rerun_check" />
-<meta property="og:description" content="Get a lavaan_rerun() output and check whether it is supported." />
+<meta property="og:title" content="Compatibility Check — lavaan_rerun_check" />
+<meta property="og:description" content="Gets a lavaan_rerun() output and checks whether it is
+supported." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -89,6 +90,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -114,13 +130,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check whether the model being fitted is supported by lavaan_rerun</h1>
+    <h1>Compatibility Check</h1>
     <small class="dont-index">Source: <a href='https://github.com/sfcheung/semfindr/blob/master/R/lavaan_rerun_check.R'><code>R/lavaan_rerun_check.R</code></a></small>
     <div class="hidden name"><code>lavaan_rerun_check.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and check whether it is supported.</p>
+    <p>Gets a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and checks whether it is
+supported.</p>
     </div>
 
     <pre class="usage"><span class='fu'>lavaan_rerun_check</span><span class='op'>(</span><span class='va'>fit</span>, print_messages <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
@@ -143,19 +160,19 @@ as an attribute. Default is <code>TRUE</code>.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A single-element vector.
-If confirmed to be supported, will return 0.
-If not confirmed be support but may still work, return 1.
-If confirmed to be not yet supported, will return a negative number, the
-value of this number without the negative sign is the number of tests failed.</p>
+    <p>A single-element vector. If confirmed to be supported, will
+return 0. If not confirmed be support but may still work, return 1.
+If confirmed to be not yet supported, will return a negative
+number, the value of this number without the negative sign is the
+number of tests failed.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is not supposed to be used by users. It is called by
-<code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> to see if the analysis being passed to it is supported.
-If not, messages will be printed to indicate why.</p>
+    <p>This function is not supposed to be used by users. It is
+called by <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> to see if the analysis being passed to
+it is supported. If not, messages will be printed to indicate why.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>S. F. Cheung (shufai.cheung@gmail.com)</p>
+    <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

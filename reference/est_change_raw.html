@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Case influence on parameter estimates — est_change_raw • semfindr</title>
+<title>Case Influence on Parameter Estimates — est_change_raw • semfindr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Case influence on parameter estimates — est_change_raw" />
-<meta property="og:description" content="Get a lavaan_rerun() output and compute the changes in selected parameters
-for each case." />
+<meta property="og:title" content="Case Influence on Parameter Estimates — est_change_raw" />
+<meta property="og:description" content="Gets a lavaan_rerun() output and computes the
+changes in selected parameters for each case." />
 
 
 
@@ -73,7 +73,7 @@ for each case." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -90,6 +90,21 @@ for each case." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,14 +130,14 @@ for each case." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Case influence on parameter estimates</h1>
+    <h1>Case Influence on Parameter Estimates</h1>
     <small class="dont-index">Source: <a href='https://github.com/sfcheung/semfindr/blob/master/R/est_change_raw.R'><code>R/est_change_raw.R</code></a></small>
     <div class="hidden name"><code>est_change_raw.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and compute the changes in selected parameters
-for each case.</p>
+    <p>Gets a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and computes the
+changes in selected parameters for each case.</p>
     </div>
 
     <pre class="usage"><span class='fu'>est_change_raw</span><span class='op'>(</span><span class='va'>rerun_out</span>, parameters <span class='op'>=</span> <span class='cn'>NULL</span>, standardized <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
@@ -136,47 +151,48 @@ for each case.</p>
     </tr>
     <tr>
       <th>parameters</th>
-      <td><p>A character vector to specify the selected parameters.
-Each parameter is named as in <code>lavaan</code> syntax, e.g.,
-<code>x ~ y</code> or <code>x ~~ y</code>, as appeared in the columns
-<code>lhs</code>, <code>op</code>, and <code>rhs</code> in the output of
-<code><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>lavaan::parameterEstimates()</a></code>. If <code>NULL</code>, the default,
-differences on all free parameters will be computed.</p></td>
+      <td><p>A character vector to specify the selected
+parameters. Each parameter is named as in <code>lavaan</code> syntax, e.g.,
+<code>x ~ y</code> or <code>x ~~ y</code>, as appeared in the columns <code>lhs</code>, <code>op</code>, and <code>rhs</code>
+in the output of <code><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>lavaan::parameterEstimates()</a></code>. If <code>NULL</code>, the
+default, differences on all free parameters will be computed.</p></td>
     </tr>
     <tr>
       <th>standardized</th>
-      <td><p>If <code>TRUE</code>, the changes in the full standardized solution
-is returned (<code>type</code> = <code>std.all</code> in
-<code><a href='https://rdrr.io/pkg/lavaan/man/standardizedSolution.html'>lavaan::standardizedSolution()</a></code>).
-Otherwise, the changes in the unstandardized solution is
-returned. Default is <code>FALSE</code>.</p></td>
+      <td><p>If <code>TRUE</code>, the changes in the full standardized
+solution is returned (<code>type</code> = <code>std.all</code> in
+<code><a href='https://rdrr.io/pkg/lavaan/man/standardizedSolution.html'>lavaan::standardizedSolution()</a></code>). Otherwise, the changes in the
+unstandardized solution is returned. Default is <code>FALSE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A matrix with the number of columns equal to the number of requested
-parameters, and the number of rows equal to the number of cases. The
-row names are the case identification values used in <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>.
-The elements are the raw differences.</p>
+    <p>A matrix with the number of columns equals to the number of
+requested parameters, and the number of rows equals to the number
+of cases. The row names are the case identification values used in
+<code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>. The elements are the raw differences.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For each case, compute the differences in the estimates of selected
-parameters with and without this case: (estimate with all case) -
-(estimate without this case).
-The change is the raw change, either for the standardized or
-unstandardized solution. The change is <em>not</em> divided by standard error.</p>
-<p>If the analysis is not admissible or did not converge when a case was
-deleted, <code>NA</code>s will be turned for this case on the differences.</p>
-<p>Currently only support single-sample models.</p>
+    <p>For each case, <code>est_change_raw()</code> computes the differences
+in the estimates of selected parameters with and without this
+case: (estimate with all case) - (estimate without this case). The
+change is the raw change, either for the standardized or
+unstandardized solution. The change is <em>not</em> divided by standard
+error.</p>
+<p>If the analysis is not admissible or did not converge when a case
+is deleted, <code>NA</code>s will be returned for this case on the
+differences.</p>
+<p>Currently it only supports single-group models.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. <em>Multivariate Behavioral Research,
-46</em>(2), 202–228. <a href='https://doi.org/10.1080/00273171.2011.561068'>https://doi.org/10.1080/00273171.2011.561068</a></p>
+    <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+<em>Multivariate Behavioral Research, 46</em>(2), 202–228.
+<a href='https://doi.org/10.1080/00273171.2011.561068'>https://doi.org/10.1080/00273171.2011.561068</a></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>S. F. Cheung (shufai.cheung@gmail.com)</p>
+    <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lavaan.ugent.be'>lavaan</a></span><span class='op'>)</span>
@@ -226,7 +242,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lavaan_rerun.html'>lavaan_rerun</a></span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.25 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Compute the changes in parameter estimates if a case is removed</span>
 <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>est_change_raw</span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>)</span>
 <span class='co'># Results excluding a case, for the first few cases</span>
@@ -266,7 +282,8 @@ dv ~ m1
 #&gt; 6  0.0011748382 -1.479950e-06</div><div class='input'><span class='co'># Note that only the changes in the selected paths are included.</span>
 
 <span class='co'># Use standardized = TRUE to compare the differences in standardized solution</span>
-<span class='va'>out2_std</span> <span class='op'>&lt;-</span> <span class='fu'>est_change_raw</span><span class='op'>(</span><span class='va'>fit_rerun</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1 ~ iv1"</span>, <span class='st'>"m1 ~ iv2"</span><span class='op'>)</span>,
+<span class='va'>out2_std</span> <span class='op'>&lt;-</span> <span class='fu'>est_change_raw</span><span class='op'>(</span><span class='va'>fit_rerun</span>, 
+                          <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m1 ~ iv1"</span>, <span class='st'>"m1 ~ iv2"</span><span class='op'>)</span>,
                           standardized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>out2_std</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;         m1~iv1        m1~iv2
@@ -275,12 +292,12 @@ dv ~ m1
 #&gt; 3 -0.001648843  7.628945e-03
 #&gt; 4 -0.004308885 -3.605264e-04
 #&gt; 5  0.017794702 -5.627259e-03
-#&gt; 6  0.000810271 -5.165699e-05</div><div class='input'><span class='op'>(</span><span class='va'>est_std_all</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>parameterEstimates</a></span><span class='op'>(</span><span class='va'>fit</span>, standardized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>,
-                       <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lhs"</span>, <span class='st'>"op"</span>, <span class='st'>"rhs"</span>, <span class='st'>"std.all"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+#&gt; 6  0.000810271 -5.165699e-05</div><div class='input'><span class='op'>(</span><span class='va'>est_std_all</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>parameterEstimates</a></span><span class='op'>(</span><span class='va'>fit</span>,
+                 standardized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lhs"</span>, <span class='st'>"op"</span>, <span class='st'>"rhs"</span>, <span class='st'>"std.all"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   lhs op rhs std.all
 #&gt; 1  m1  ~ iv1  -0.125
-#&gt; 2  m1  ~ iv2   0.425</div><div class='input'><span class='op'>(</span><span class='va'>est_std_no_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>parameterEstimates</a></span><span class='op'>(</span><span class='va'>fit_no_1</span>, standardized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>,
-                       <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lhs"</span>, <span class='st'>"op"</span>, <span class='st'>"rhs"</span>, <span class='st'>"std.all"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+#&gt; 2  m1  ~ iv2   0.425</div><div class='input'><span class='op'>(</span><span class='va'>est_std_no_1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>parameterEstimates</a></span><span class='op'>(</span><span class='va'>fit_no_1</span>,
+                 standardized <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"lhs"</span>, <span class='st'>"op"</span>, <span class='st'>"rhs"</span>, <span class='st'>"std.all"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;   lhs op rhs std.all
 #&gt; 1  m1  ~ iv1  -0.133
 #&gt; 2  m1  ~ iv2   0.433</div><div class='input'><span class='co'># The differences</span>

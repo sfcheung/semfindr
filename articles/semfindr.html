@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -48,6 +48,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -86,19 +101,26 @@
 <div id="purpose" class="section level1">
 <h1 class="hasAnchor">
 <a href="#purpose" class="anchor"></a>Purpose</h1>
-<p>The <code>semfindr</code> package has functions for doing SEM ( structural equation modeling) diagnostics, such as identifying influential cases and computing various diagnostic measures.</p>
+<p>The <code>semfindr</code> package contains functions for doing structural equation modeling (SEM) diagnostics, such as identifying influential cases and computing various diagnostic measures. This is an implementation of sensitivity analysis proposed by Pek and MacCallum (2011), with some plots based on similar plots available in the <code>car</code> package by Fox and Weisberg (2019).</p>
 </div>
 <div id="workflow" class="section level1">
 <h1 class="hasAnchor">
 <a href="#workflow" class="anchor"></a>Workflow</h1>
-<p>Many of the measures for a case is computed by refitting a model with this case removed. Instead of doing this once for each measure, <code>semfindr</code> refits the model for at most as many times as the number of cases, each time with one case removed, store them as a list of SEM results. Functions for deletion statistics will compute them from this list. By saving this list of results, users can do any further diagnostic analysis later without repeating this time consuming process.</p>
+<p>Many of the measures for a case is computed by refitting a model with this case removed. Instead of doing this once for each measure, <code>semfindr</code> adopts this workflow:</p>
+<ul>
+<li><p>Decide cases to examine. All cases will be examined, by default.</p></li>
+<li><p>For each selected case, remove it and refit the model.</p></li>
+<li><p>Store the results.</p></li>
+</ul>
+<p>Functions for deletion statistics will compute them from this list. Users can do as many diagnostic analysis as they want without repeating the time consuming refitting step.</p>
+<p>The following sections illustrates how to use some of the major functions.</p>
 </div>
-<div id="loading-the-package-and-the-sample-dataset" class="section level1">
+<div id="fitting-the-target-model" class="section level1">
 <h1 class="hasAnchor">
-<a href="#loading-the-package-and-the-sample-dataset" class="anchor"></a>Loading the Package and the Sample Dataset</h1>
-<p>First, we load the package. The sample dataset is <code><a href="../reference/pa_dat2.html">semfindr::pa_dat2</a></code>, with variables <code>iv1</code>, <code>iv2</code>, <code>m1</code>, and <code>dv</code>, and 100 cases. For conveienice, we assign <code>pa_dat</code> to a new symbol, <code>dat</code>.</p>
+<a href="#fitting-the-target-model" class="anchor"></a>Fitting the Target Model</h1>
+<p>The sample dataset is <code><a href="../reference/pa_dat2.html">semfindr::pa_dat2</a></code>, with variables <code>iv1</code>, <code>iv2</code>, <code>m1</code>, and <code>dv</code>, and 100 cases. For convenience, we assign <code>pa_dat</code> to a new symbol, <code>dat</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">semfindr</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr">semfindr</a></span><span class="op">)</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>
 <span class="co">#&gt;            m1         dv        iv1         iv2</span>
@@ -108,10 +130,6 @@
 <span class="co">#&gt; 4 -0.56529330 -0.9766142  0.2884440  0.04563409</span>
 <span class="co">#&gt; 5 -1.60657017 -1.0948066 -0.5756171 -0.18184854</span>
 <span class="co">#&gt; 6  0.03143301  0.5859886  0.1420111  0.06286986</span></code></pre></div>
-</div>
-<div id="fitting-the-target-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#fitting-the-target-model" class="anchor"></a>Fitting the Target Model</h1>
 <p>Assume that the target model under examination is a path model with two predictors, one mediator, and one outcome variable:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mod</span> <span class="op">&lt;-</span>
@@ -119,28 +137,30 @@
 m1 ~ iv1 + iv2
 dv ~ m1
 "</span></code></pre></div>
-<p>We fit the model by <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html">lavaan::sem</a></code>:</p>
+<p>We fit the model by <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html">lavaan::sem()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span>
 <span class="co">#&gt; This is lavaan 0.6-9</span>
 <span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span>
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="fit-the-model-n0-times" class="section level1">
+<div id="rerun-n-times" class="section level1">
 <h1 class="hasAnchor">
-<a href="#fit-the-model-n0-times" class="anchor"></a>Fit the Model <em>n0</em> Times</h1>
+<a href="#rerun-n-times" class="anchor"></a>Rerun <em>n</em> Times</h1>
 <p>We refit the model 100 times, each time with one case removed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 9.5 second(s).</span>
-<span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
-<p>This example takes about 4 to 8 seconds. For larger samples or more complicated models, <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun</a></code> supports parallel processing by setting <code>parallel</code> to <code>TRUE</code>.</p>
-<p>If this process is slow, we can save <code>fit_rerun</code> by <code><a href="https://rdrr.io/r/base/readRDS.html">base::saveRDS</a></code> such that we can load it for future analysis.</p>
+<code class="sourceCode R"><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<p>This example takes about 4 to 8 seconds. For larger samples or more complicated models, <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code> supports parallel processing by setting <code>parallel</code> to <code>TRUE</code>.</p>
+<p><code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code> also supports selecting cases based on Mahalanobis distance on all variables in the model or on implied scores of outcome variables. See the help page of <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code> or <code><a href="../articles/selecting_cases.html">vignette("selecting_cases")</a></code> for the details.</p>
+<p>If this process is slow, we can save the results by <code><a href="https://rdrr.io/r/base/readRDS.html">base::saveRDS()</a></code> such that we can load it for analysis later.</p>
 </div>
-<div id="standardized-changes-in-parameter-estimates" class="section level1">
+<div id="diagnostic-functions" class="section level1">
 <h1 class="hasAnchor">
-<a href="#standardized-changes-in-parameter-estimates" class="anchor"></a>Standardized Changes in Parameter Estimates</h1>
-<p>One intuitive measures is to compute the changes in parameter estimates if a case is deleted, with the changes standardized by their standard errors.</p>
+<a href="#diagnostic-functions" class="anchor"></a>Diagnostic Functions</h1>
+<div id="standardized-changes-in-estimates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#standardized-changes-in-estimates" class="anchor"></a>Standardized Changes in Estimates</h2>
+<p>One intuitive measure is to compute the changes in parameter estimates if a case is deleted, with the changes standardized by their standard errors (Pek &amp; MacCallum, 2011, Equation 7):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_est_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">fit_est_change</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>
@@ -151,7 +171,9 @@ dv ~ m1
 <span class="co">#&gt; 4 -0.024 -0.003  0.022 -0.051 -0.044 0.006</span>
 <span class="co">#&gt; 5  0.067  0.028  0.033  0.050 -0.066 0.013</span>
 <span class="co">#&gt; 6  0.004  0.001  0.010 -0.069 -0.054 0.008</span></code></pre></div>
-<p><code><a href="../reference/est_change.html">semfindr::est_change</a></code> will compute the generalized Cook’s distance, <code>gcd</code> using the parameters examined. <code>gcd</code> is analogous to Cook’s distance in multiple regression, measure the “overall” change in the parameters if a case is deleted.</p>
+<p>If the standardized change of a parameter for a case is positive, then the estimate in the full sample is larger than that with this case removed.</p>
+<p>For example, the standardized change of the path from <code>iv1</code> to <code>m1</code> is 0.024 for the first case. The estimates of this path with and without the first case are 0.215 and 0.212, respectively. The full sample estimate is larger than the estimate with the first case removed.</p>
+<p><code><a href="../reference/est_change.html">semfindr::est_change()</a></code> also computes the generalized Cook’s distance (Cook, 1977; Pek &amp; MacCallum, 2011, Equation 6), <code>gcd</code>, using the parameters examined. <code>gcd</code> is analogous to Cook’s distance in multiple regression. It measures the “overall” change in the parameters if a case is deleted.</p>
 <p>Let’s examine the top five cases with largest <code>gcd</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">fit_est_change</span><span class="op">[</span>, <span class="st">"gcd"</span><span class="op">]</span>,
@@ -164,13 +186,28 @@ dv ~ m1
 <span class="co">#&gt; 65  0.152  0.191  0.363  0.076  0.161 0.221</span>
 <span class="co">#&gt; 85 -0.174  0.216 -0.119  0.335 -0.052 0.208</span>
 <span class="co">#&gt; 51  0.421 -0.057  0.094  0.089 -0.044 0.200</span></code></pre></div>
-<p>We can also specify the parameters to be included. For example, we may only want to compute the change and the <code>gcd</code> only for path coefficients. See the help page of <code><a href="../reference/est_change.html">semfindr::est_change</a></code> for the detail.</p>
-</div>
-<div id="compute-raw-change-in-parameter-estimates" class="section level1">
-<h1 class="hasAnchor">
-<a href="#compute-raw-change-in-parameter-estimates" class="anchor"></a>Compute Raw Change in Parameter Estimates</h1>
-<p>The standardized changes in parameter may not be easy to interpret. If the original units are interpretable, we can compute the <em>raw</em> changes, that is, the changes in parameter estiamtes if a case is deleted, not standardized by their standard errors. This can be done by <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw</a></code>:</p>
+<p>Pek and MacCallum recommended computing generalized Cook’s distance for subset of parameters that researchers would like to assess case influence. This can be done by specifying the parameters to be included. For example, we may compute the changes and the <code>gcd</code> only for path coefficients, using the argument <code>parameters</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_est_change_paths_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,
+                                parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"m1 ~ iv1"</span>,
+                                               <span class="st">"m1 ~ iv2"</span>,
+                                              <span class="st">"dv ~ m1"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">fit_est_change_paths_only</span><span class="op">[</span>, <span class="st">"gcd"</span><span class="op">]</span>,
+           decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_est_change_paths_only</span><span class="op">[</span><span class="va">i</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="co">#&gt;    m1~iv1 m1~iv2  dv~m1   gcd</span>
+<span class="co">#&gt; 43 -0.403 -0.263 -0.135 0.238</span>
+<span class="co">#&gt; 51  0.421 -0.057  0.094 0.190</span>
+<span class="co">#&gt; 65  0.152  0.191  0.363 0.189</span>
+<span class="co">#&gt; 34 -0.314 -0.192 -0.109 0.142</span>
+<span class="co">#&gt; 32 -0.247  0.195 -0.191 0.138</span></code></pre></div>
+<p>See the help page of <code><a href="../reference/est_change.html">semfindr::est_change()</a></code> for further information.</p>
+</div>
+<div id="raw-changes-in-estimates" class="section level2">
+<h2 class="hasAnchor">
+<a href="#raw-changes-in-estimates" class="anchor"></a>Raw Changes in Estimates</h2>
+<p>The standardized changes in parameter may not be easy to interpret. If the original units are interpretable, we can compute the <em>raw</em> changes, that is, the changes in parameter estimates if a case is deleted, not standardized by their standard errors. This can be done by <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_est_change_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt;    m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv</span>
@@ -179,8 +216,9 @@ dv ~ m1
 <span class="co">#&gt; 65  0.016  0.019  0.039  0.010  0.030</span>
 <span class="co">#&gt; 85 -0.018  0.021 -0.013  0.041 -0.010</span>
 <span class="co">#&gt; 51  0.046 -0.006  0.010  0.011 -0.008</span></code></pre></div>
-<p>If desired, <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw</a></code> can also compute the changes in parameters in the <em>standardized solution</em>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>For example, the change of the path from <code>iv1</code> to <code>m1</code> is -0.043 for the 43rd case. The estimates of this path with and without the 43rd cases are 0.215 and 0.258, respectively. The full sample estimate is smaller than the estimate with the 43rd case removed. The raw changes is 0.215 - 0.258 or -0.043.</p>
+<p>If desired, <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code> can also compute the changes in parameters in the <em>standardized solution</em>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_est_change_raw_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span>,
                                          standardized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw_std</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
@@ -190,12 +228,36 @@ dv ~ m1
 <span class="co">#&gt; 65  0.011  0.011  0.029 -0.016 -0.024</span>
 <span class="co">#&gt; 85 -0.020  0.008  0.001  0.001  0.000</span>
 <span class="co">#&gt; 51  0.042 -0.010  0.011 -0.001 -0.009</span></code></pre></div>
+<p>For example, these are standardized solutions of the full sample and the sample with the 43rd case removed:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">fit</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
+<span class="co">#&gt;   lhs op rhs est.std</span>
+<span class="co">#&gt; 1  m1  ~ iv1   0.178</span>
+<span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">[</span><span class="op">-</span><span class="fl">43</span>, <span class="op">]</span><span class="op">)</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
+<span class="co">#&gt;   lhs op rhs est.std</span>
+<span class="co">#&gt; 1  m1  ~ iv1    0.21</span></code></pre></div>
+<p>The change of the standardized estimate of the path from <code>iv1</code> to <code>m1</code> is -0.032 for the 43rd case. The standardized estimates of this path with and without the 43rd cases are 0.178 and 0.21, respectively. The full sample estimate is smaller than the estimate with the 43rd case removed. The raw changes of standardized estimate is 0.178 - 0.21 or -0.032.</p>
+<p><code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code> also supports computing the changes for selected parameters:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_est_change_raw_std_paths_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span>,
+                                          standardized <span class="op">=</span> <span class="cn">TRUE</span>,
+                                          parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"m1 ~ iv1"</span>,
+                                                         <span class="st">"m1 ~ iv2"</span>,
+                                                         <span class="st">"dv ~ m1"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw_std_paths_only</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="co">#&gt;    m1~iv1 m1~iv2  dv~m1</span>
+<span class="co">#&gt; 16  0.004 -0.004 -0.033</span>
+<span class="co">#&gt; 43 -0.032 -0.021 -0.013</span>
+<span class="co">#&gt; 65  0.011  0.011  0.029</span>
+<span class="co">#&gt; 85 -0.020  0.008  0.001</span>
+<span class="co">#&gt; 51  0.042 -0.010  0.011</span></code></pre></div>
+<p>See the help page of <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code> for further information.</p>
 </div>
-<div id="compute-mahalanobis-distance" class="section level1">
-<h1 class="hasAnchor">
-<a href="#compute-mahalanobis-distance" class="anchor"></a>Compute Mahalanobis Distance</h1>
-<p>One commonly used measure for identifying outliers is Mahalanobis distance. <code><a href="../reference/mahalanobis_rerun.html">semfindr::mahalanobis_rerun</a></code> can be used to compute the Mahalanobis distance of each case on all the variables used in a fitted model:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div id="mahalanobis-distance" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mahalanobis-distance" class="anchor"></a>Mahalanobis Distance</h2>
+<p>One commonly used measure for identifying outliers is Mahalanobis distance (Mahalanobis, 1936; Pek &amp; MacCallum, 2011, Equation 9). <code><a href="../reference/mahalanobis_rerun.html">semfindr::mahalanobis_rerun()</a></code> can be used to compute the Mahalanobis distance of each case on all the variables used in the target model:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mahalanobis_rerun.html">mahalanobis_rerun</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_md</span><span class="op">[</span><span class="va">i_top5</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt;        md</span>
@@ -204,13 +266,13 @@ dv ~ m1
 <span class="co">#&gt; 65  7.277</span>
 <span class="co">#&gt; 85  6.709</span>
 <span class="co">#&gt; 51  9.869</span></code></pre></div>
-<p>Note that a case with large Mahalanobis distance is not necessarily an influential case. Therefore, if time allows, influence measures should be examined to avoid missing cases that are not extreme but are influential.</p>
+<p>Note that a case with a large Mahalanobis distance is not necessarily an influential case (Pek &amp; MacCallum, 2011). Therefore, if time allows, influence measures should be examined to avoid overlooking cases that are not extreme but are influential.</p>
 </div>
-<div id="compute-fit-measure-changes" class="section level1">
-<h1 class="hasAnchor">
-<a href="#compute-fit-measure-changes" class="anchor"></a>Compute Fit Measure Changes</h1>
-<p>Another set of intuitive measures of influence is to compute a goodness of fit mreasures if a case is deleted. This can be done by <code><a href="../reference/fit_measures_change.html">semfindr::fit_measures_change</a></code>, which simply get any fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures</a></code> from the list of results from <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun</a></code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div id="changes-in-fit-measures" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-in-fit-measures" class="anchor"></a>Changes in Fit Measures</h2>
+<p>Another set of intuitive measures of influence is to compute goodness of fit measures with a case deleted and measure the changes. This can be done by <code><a href="../reference/fit_measures_change.html">semfindr::fit_measures_change()</a></code>, which simply gets any fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures</a></code> from the results from <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun</a></code>:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change.html">fit_measures_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,
             fit_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chisq"</span>, <span class="st">"cfi"</span>, <span class="st">"tli"</span>, <span class="st">"rmsea"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_mc</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
@@ -220,14 +282,15 @@ dv ~ m1
 <span class="co">#&gt; 65  0.474  0.002  0.004  0.007</span>
 <span class="co">#&gt; 85  0.280 -0.004 -0.011  0.004</span>
 <span class="co">#&gt; 51  0.432 -0.005 -0.012  0.006</span></code></pre></div>
-<p>The value is computed by <span class="math inline">\(M_\textrm{full sample} - M_\textrm{one case removed}\)</span>. Therefore, if the value is positive, the measure is higher in the full sample. If the value is negative, the measure is lower in the full sample.</p>
-<p>The argument <code>fit_measures</code> is passed to <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures</a></code> to sepcify the measures to be computed.</p>
+<p>The value is computed by <span class="math inline">\(M_\textrm{full sample} - M_\textrm{one case removed}\)</span>. Therefore, if the value is positive, the measure is higher in the full sample. If the value is negative, the measure is lower in the full sample. This convention is selected such that the interpretation is consistent with that for changes in parameter estimates.</p>
+<p>For example, the change in CFI for the 43rd case is -0.03. Therefore, the CFI in the full sample is lower than that with the 43rd case removed, and the difference is 0.03.</p>
+<p>The argument <code>fit_measures</code> is passed to <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html">lavaan::fitMeasures</a></code> to specify the measures to be computed.</p>
 </div>
-<div id="request-all-these-statistics-by-one-function" class="section level1">
-<h1 class="hasAnchor">
-<a href="#request-all-these-statistics-by-one-function" class="anchor"></a>Request All These Statistics by One Function</h1>
-<p>We can also use <code><a href="../reference/influence_stat.html">semfindr::influence_stat</a></code> to compute the previous measures. It calls <code><a href="../reference/fit_measures_change.html">semfindr::fit_measures_change</a></code>, <code><a href="../reference/est_change.html">semfindr::est_change</a></code>, and <code><a href="../reference/mahalanobis_rerun.html">semfindr::mahalanobis_rerun</a></code> (if requested) and then merges their results into one matrix:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div id="an-all-in-one-function" class="section level2">
+<h2 class="hasAnchor">
+<a href="#an-all-in-one-function" class="anchor"></a>An All-In-One-Function</h2>
+<p>We can also use <code><a href="../reference/influence_stat.html">semfindr::influence_stat()</a></code> to compute the previous measures. It calls <code><a href="../reference/fit_measures_change.html">semfindr::fit_measures_change()</a></code>, <code><a href="../reference/est_change.html">semfindr::est_change()</a></code>, and <code><a href="../reference/mahalanobis_rerun.html">semfindr::mahalanobis_rerun()</a></code> (if requested) and then merges their results into one matrix:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit_influence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">fit_influence</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt;     chisq    cfi  rmsea    tli m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd     md</span>
@@ -236,57 +299,78 @@ dv ~ m1
 <span class="co">#&gt; 65  0.474  0.002  0.007  0.004  0.152  0.191  0.363  0.076  0.161 0.221  7.277</span>
 <span class="co">#&gt; 85  0.280 -0.004  0.004 -0.011 -0.174  0.216 -0.119  0.335 -0.052 0.208  6.709</span>
 <span class="co">#&gt; 51  0.432 -0.005  0.006 -0.012  0.421 -0.057  0.094  0.089 -0.044 0.200  9.869</span></code></pre></div>
-<p>One major use of <code><a href="../reference/influence_stat.html">semfindr::influence_stat</a></code> is to provide information for the diagnostic plots introduced below.</p>
+<p>One major use of <code><a href="../reference/influence_stat.html">semfindr::influence_stat()</a></code> is to provide information for the diagnostic plots introduced below.</p>
 </div>
-<div id="plot-generalized-cooks-distance" class="section level1">
+</div>
+<div id="diagnostic-plots" class="section level1">
 <h1 class="hasAnchor">
-<a href="#plot-generalized-cooks-distance" class="anchor"></a>Plot Generalized Cook’s Distance</h1>
-<p>To visualize the <code>gcd</code>, we can plot an index plot with cases on the horizontal axis and the <code>gcd</code> on the vertical axis:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>, largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
-<p>It accepts an output of <code><a href="../reference/influence_stat.html">semfindr::influence_stat</a></code>.</p>
+<a href="#diagnostic-plots" class="anchor"></a>Diagnostic Plots</h1>
+<p><code>semfindr</code> provides several functions to generate diagnostic plots.</p>
+<div id="generalized-cooks-distance" class="section level2">
+<h2 class="hasAnchor">
+<a href="#generalized-cooks-distance" class="anchor"></a>Generalized Cook’s Distance</h2>
+<p>To visualize the <code>gcd</code>, we can plot an index plot with cases on the horizontal axis and the <code>gcd</code> on the vertical axis using <code>semfindr:gcd_plot</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,
+         largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p>It accepts an output of <code><a href="../reference/influence_stat.html">semfindr::influence_stat()</a></code>.</p>
 <p><code>largest_gcd</code> controls the number of cases with the largest <code>gcd</code> to be labelled. The default is 1.</p>
-<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_plot</a></code> can be found on its help page.</p>
+<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_plot()</a></code> can be found on its help page.</p>
 </div>
-<div id="plot-mahalanobis-distance" class="section level1">
-<h1 class="hasAnchor">
-<a href="#plot-mahalanobis-distance" class="anchor"></a>Plot Mahalanobis Distance</h1>
-<p>An index plot can be computed on the Mahalanobis distance compute by <code><a href="../reference/influence_stat.html">semfindr::influence_stat</a></code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div id="mahalanobis-distance-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mahalanobis-distance-1" class="anchor"></a>Mahalanobis Distance</h2>
+<p>An index plot can be computed on the Mahalanobis distance given by <code><a href="../reference/influence_stat.html">semfindr::influence_stat()</a></code>:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/influence_plot.html">md_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,
         largest_md <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
-<p><code>largest_m</code> is used to control how many cases with high Mahalanobis distnace on all the variables in the fitted model will be labelled. The default is 1.</p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><code>largest_m</code> is used to control how many cases with high Mahalanobis distance on all the variables in the fitted model will be labelled. The default is 1.</p>
 <p>More options for <code>md_plot</code> can be found from its help page.</p>
 </div>
-<div id="plot-a-fit-measure-against-generalized-cooks-distance" class="section level1">
-<h1 class="hasAnchor">
-<a href="#plot-a-fit-measure-against-generalized-cooks-distance" class="anchor"></a>Plot a Fit Measure against Generalized Cook’s Distance</h1>
-<p>To examine how the overall change in parameter estimates measuresd by <code>gcd</code> relates to a selected goodness of fit measures, <code>gcd_gof_plot</code> can be used:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div id="fit-measure-vs--generalized-cooks-distance" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fit-measure-vs--generalized-cooks-distance" class="anchor"></a>Fit Measure vs. Generalized Cook’s Distance</h2>
+<p>To examine how the overall change in parameter estimates measured by <code>gcd</code> relates to a selected goodness of fit (<code>gof</code>) measure, <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_plot()</a></code> can be used:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/influence_plot.html">gcd_gof_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,
              fit_measure <span class="op">=</span> <span class="st">"rmsea"</span>,
              largest_gcd <span class="op">=</span> <span class="fl">3</span>,
              largest_fit_measure <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <p><code>largest_gcd</code> determines the number of cases with largest <code>gcd</code> to be labelled, and <code>largest_fit_measure</code> determines the number of cases with largest <em>absolute</em> change in the selected goodness of fit measure to be labelled. The default is 1 for both arguments.</p>
-<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_plot</a></code> can be found from its help page.</p>
+<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_plot()</a></code> can be found from its help page.</p>
 </div>
-<div id="a-bubble-plot-of-goodness-of-fit-measure-mahalanobis-distance-and-generalized-cooks-distance" class="section level1">
-<h1 class="hasAnchor">
-<a href="#a-bubble-plot-of-goodness-of-fit-measure-mahalanobis-distance-and-generalized-cooks-distance" class="anchor"></a>A Bubble Plot of Goodness of Fit Measure, Mahalanobis Distance, and Generalized Cook’s Distance</h1>
-<p>We can also use <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_md_plot</a></code> to plot a bubble plot of a selected goodness of fit measure against Mahalanobis distance, with the bubble size determined by generalized Cook’s distance:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div id="bubble-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bubble-plot" class="anchor"></a>Bubble Plot</h2>
+<p>We can also use <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_md_plot()</a></code> to plot a bubble plot of a selected goodness of fit measure against Mahalanobis distance, with the bubble size determined by generalized Cook’s distance. This plot is similar to the plot by <code>car::influencePlot()</code> for regression models.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/influence_plot.html">gcd_gof_md_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,
                 fit_measure <span class="op">=</span> <span class="st">"rmsea"</span>,
                 largest_gcd <span class="op">=</span> <span class="fl">3</span>,
                 largest_fit_measure <span class="op">=</span> <span class="fl">3</span>,
                 largest_md <span class="op">=</span> <span class="fl">3</span>,
                 circle_size <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 <p><code>circle_size</code> controls the size of the largest bubble. <code>largest_gcd</code>, <code>largest_fit_measure</code>, and <code>largest_md</code> controls the number of cases with highest absolute values one the these measures to be labelled. Their default values are 1.</p>
-<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_md_plot</a></code> can be found from its help page.</p>
+<p>More options of <code><a href="../reference/influence_plot.html">semfindr::gcd_gof_md_plot()</a></code> can be found from its help page.</p>
+</div>
+</div>
+<div id="final-remarks" class="section level1">
+<h1 class="hasAnchor">
+<a href="#final-remarks" class="anchor"></a>Final Remarks</h1>
+<p>The example above use row numbers to identify cases. If users have meaningful case IDs, they can be used to label case ( see <code><a href="../articles/user_id.html">vignette("user_id")</a></code>). If users want to refit the model only with selected cases removed one-by-one, <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code> supports various methods to examine only selected cases (see <code><a href="../articles/selecting_cases.html">vignette("selecting_cases")</a></code>).</p>
+<p>Last, all the plot functions return <code>ggplot</code> graph objects. Users can further modify them to suit their needs.</p>
+</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<p>Cook, R. D. (1977). Detection of influential observation in linear regression. <em>Technometrics, 19</em>(1), 15–18.</p>
+<p>Fox J., &amp; Weisberg, S. (2019). <em>An R companion to applied regression</em> (3rd Edition). Sage. <a href="https://socialsciences.mcmaster.ca/jfox/Books/Companion/" class="uri">https://socialsciences.mcmaster.ca/jfox/Books/Companion/</a>.</p>
+<p>Mahalanobis, P. C. (1936). On the generalized distance in statistics. <em>Proceedings of the National Institute of Science of India</em>, 2, 49–55.</p>
+<p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. <em>Multivariate Behavioral Research, 46</em>(2), 202–228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
 </div>
   </div>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Implied scores for observed outcome variables — implied_scores • semfindr</title>
+<title>Implied Scores of Observed Outcome Variable — implied_scores • semfindr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Implied scores for observed outcome variables — implied_scores" />
-<meta property="og:description" content="Get a lavaan::lavaan() output and compute the implied scores." />
+<meta property="og:title" content="Implied Scores of Observed Outcome Variable — implied_scores" />
+<meta property="og:description" content="Gets a lavaan::lavaan() output and computes the
+implied scores." />
 
 
 
@@ -72,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -89,6 +90,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -114,13 +130,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Implied scores for observed outcome variables</h1>
+    <h1>Implied Scores of Observed Outcome Variable</h1>
     <small class="dont-index">Source: <a href='https://github.com/sfcheung/semfindr/blob/master/R/implied_scores.R'><code>R/implied_scores.R</code></a></small>
     <div class="hidden name"><code>implied_scores.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get a <code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code> output and compute the implied scores.</p>
+    <p>Gets a <code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code> output and computes the
+implied scores.</p>
     </div>
 
     <pre class="usage"><span class='fu'>implied_scores</span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span></pre>
@@ -130,8 +147,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>fit</th>
-      <td><p>The output from <code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code>, such as <code><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>lavaan::cfa()</a></code> and
-<code><a href='https://rdrr.io/pkg/lavaan/man/sem.html'>lavaan::sem()</a></code>.</p></td>
+      <td><p>The output from <code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code>, such as <code><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>lavaan::cfa()</a></code>
+and <code><a href='https://rdrr.io/pkg/lavaan/man/sem.html'>lavaan::sem()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -140,14 +157,14 @@
     <p>A matrix of the implied scores.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The implied scores for each observed outcome variable are simply computed
-in the same way the predicted scores in a linear regression model are
-computed.</p>
-<p>It currently supports only single-sample path analytic models with only
+    <p>The implied scores for each observed outcome variable are
+simply computed in the same way the predicted scores in a linear
+regression model are computed.</p>
+<p>Currently it supports only single-group path analysis models with only
 observed variables.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>S. F. Cheung (shufai.cheung@gmail.com)</p>
+    <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lavaan.ugent.be'>lavaan</a></span><span class='op'>)</span>

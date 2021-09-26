@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,6 +88,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -117,22 +132,30 @@
       <small>Source: <a href='https://github.com/sfcheung/semfindr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="semfindr-010" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.0">
+<a href="#semfindr-010" class="anchor"></a>semfindr 0.1.0</h1>
+<ul>
+<li><p>Added more vignettes.</p></li>
+<li><p><code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> can accept an output with inadmissible estimates. Disabled by default. Can be enabled by setting <code>allow_inadmissible</code> to <code>TRUE</code>.</p></li>
+</ul>
+</div>
     <div id="semfindr-004" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.4">
 <a href="#semfindr-004" class="anchor"></a>semfindr 0.0.4</h1>
 <ul>
-<li><p>Added a print method for the <code>lavaan_rerun</code> class.</p></li>
-<li><p>Added [mahalanobis_predictors()] to compute the Mahalanobis distance using only the observed predictors.</p></li>
-<li><p>Both [mahalanobis_predictors()] and [mahalanobis_rerun()] support datasets with missing data.</p></li>
-<li><p>Users [lavaan_rerun()] can specify cases to exclude and rerun by specifying the case IDs or selecting cases based on Mahalanobis distance on all observed variables or on residuals of observed variables in a path model.</p></li>
+<li><p>Added a print method for the <code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> class.</p></li>
+<li><p>Added <code><a href="../reference/mahalanobis_predictors.html">mahalanobis_predictors()</a></code> to compute the Mahalanobis distance using only the observed predictors.</p></li>
+<li><p>Both <code><a href="../reference/mahalanobis_predictors.html">mahalanobis_predictors()</a></code> and <code><a href="../reference/mahalanobis_rerun.html">mahalanobis_rerun()</a></code> support datasets with missing data.</p></li>
+<li><p><code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> can specify cases to exclude and rerun by specifying the case IDs or selecting cases based on Mahalanobis distance on all observed variables or on residuals of observed variables in a path model.</p></li>
 </ul>
 </div>
     <div id="semfindr-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
 <a href="#semfindr-003" class="anchor"></a>semfindr 0.0.3</h1>
 <ul>
-<li><p>Use [lavaan::update()] in lavaan_rerun. This is more reliable than recreating the call.</p></li>
-<li><p>Add [implied_scores()]. It supports only single-group path analytic models for now.</p></li>
+<li><p>Use <code>lavaan::update()</code> in lavaan_rerun. This is more reliable than recreating the call.</p></li>
+<li><p>Add <code><a href="../reference/implied_scores.html">implied_scores()</a></code>. It supports only single-group path analysis models for now.</p></li>
 </ul>
 </div>
     <div id="semfindr-002" class="section level1">

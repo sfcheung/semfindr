@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mahalanobis distance (All observed variables) — mahalanobis_rerun • semfindr</title>
+<title>Mahalanobis Distance (All Observed Variables) — mahalanobis_rerun • semfindr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Mahalanobis distance (All observed variables) — mahalanobis_rerun" />
-<meta property="og:description" content="Compute the
-Mahalanobis distance for each case on all observed variables in a model." />
+<meta property="og:title" content="Mahalanobis Distance (All Observed Variables) — mahalanobis_rerun" />
+<meta property="og:description" content="Computes the Mahalanobis distance for each case on all
+observed variables in a model." />
 
 
 
@@ -73,7 +73,7 @@ Mahalanobis distance for each case on all observed variables in a model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -90,6 +90,21 @@ Mahalanobis distance for each case on all observed variables in a model." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,14 +130,14 @@ Mahalanobis distance for each case on all observed variables in a model." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Mahalanobis distance (All observed variables)</h1>
+    <h1>Mahalanobis Distance (All Observed Variables)</h1>
     <small class="dont-index">Source: <a href='https://github.com/sfcheung/semfindr/blob/master/R/mahalanobis_rerun.R'><code>R/mahalanobis_rerun.R</code></a></small>
     <div class="hidden name"><code>mahalanobis_rerun.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute the
-Mahalanobis distance for each case on all observed variables in a model.</p>
+    <p>Computes the Mahalanobis distance for each case on all
+observed variables in a model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>mahalanobis_rerun</span><span class='op'>(</span>
@@ -135,41 +150,45 @@ Mahalanobis distance for each case on all observed variables in a model.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>fit</th>
-      <td><p>It can be the output from <code>lavaan</code>, such as <code><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>lavaan::cfa()</a></code> and
-<code><a href='https://rdrr.io/pkg/lavaan/man/sem.html'>lavaan::sem()</a></code>, or the output from  <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>.</p></td>
+      <td><p>It can be the output from <code>lavaan</code>, such as
+<code><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>lavaan::cfa()</a></code> and <code><a href='https://rdrr.io/pkg/lavaan/man/sem.html'>lavaan::sem()</a></code>, or the output from
+<code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>.</p></td>
     </tr>
     <tr>
       <th>emNorm_arg</th>
-      <td><p>A list of argument for <code><a href='https://rdrr.io/pkg/norm2/man/emNorm.html'>norm2::emNorm()</a></code>. Default is
-<code><a href='https://rdrr.io/r/base/list.html'>list(estimate.worst = FALSE, criterion = 1e-6)</a></code>. Ignored
-if there is no missing data on the exogenous observed
+      <td><p>A list of argument for
+<code><a href='https://rdrr.io/pkg/norm2/man/emNorm.html'>norm2::emNorm()</a></code>. Default is
+<code><a href='https://rdrr.io/r/base/list.html'>list(estimate.worst = FALSE, criterion = 1e-6)</a></code>.
+Ignored if there is no missing data on the exogenous observed
 variables.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A one-column matrix (a column vector) of the Mahalanobis distance for each
-case. The row names
-are the case identification values used in <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>.</p>
+    <p>A one-column matrix (a column vector) of the Mahalanobis
+distance for each case. The row names are the case identification
+values used in <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Get a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> or <code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code> output and compute the
-Mahalanobis distance for each case on all observed variables.</p>
-<p>If there are no missing values, <code><a href='https://rdrr.io/r/stats/mahalanobis.html'>stats::mahalanobis()</a></code> will be used to
-compute the Mahalanobis distance.</p>
-<p>If there are missing values on the observed predictors, the means and
-variance-covariance matrices will be estimated by maximum likelihood using
-<code><a href='https://rdrr.io/pkg/norm2/man/emNorm.html'>norm2::emNorm()</a></code>. The estimates will be passed to <code><a href='https://rdrr.io/pkg/modi/man/MDmiss.html'>modi::MDmiss()</a></code> to
-compute the Mahalanobis distance.</p>
-<p>Currently only support single-sample models.</p>
+    <p><code>mahalanobis_rerun()</code> gets a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> or
+<code><a href='https://rdrr.io/pkg/lavaan/man/lavaan.html'>lavaan::lavaan()</a></code> output and computes the Mahalanobis distance for
+each case on all observed variables.</p>
+<p>If there are no missing values, <code><a href='https://rdrr.io/r/stats/mahalanobis.html'>stats::mahalanobis()</a></code> will be used
+to compute the Mahalanobis distance.</p>
+<p>If there are missing values on the observed predictors, the means
+and variance-covariance matrices will be estimated by maximum
+likelihood using <code><a href='https://rdrr.io/pkg/norm2/man/emNorm.html'>norm2::emNorm()</a></code>. The estimates will be passed
+to <code><a href='https://rdrr.io/pkg/modi/man/MDmiss.html'>modi::MDmiss()</a></code> to compute the Mahalanobis distance.</p>
+<p>Currently it only support single-group models.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Mahalanobis, P. C. (1936). On the generalized distance in statistics.
-<em>Proceedings of the National Institute of Science of India, 2</em>, 49–55.</p>
+    <p>Mahalanobis, P. C. (1936). On the generalized distance
+in statistics. <em>Proceedings of the National Institute of Science
+of India, 2</em>, 49–55.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>S. F. Cheung (shufai.cheung@gmail.com)</p>
+    <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lavaan.ugent.be'>lavaan</a></span><span class='op'>)</span>
@@ -219,7 +238,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lavaan_rerun.html'>lavaan_rerun</a></span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.1 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.25 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Compute the Mahalanobis distance for each case</span>
 <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>mahalanobis_rerun</span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>)</span>
 <span class='co'># Results excluding a case, for the first few cases</span>

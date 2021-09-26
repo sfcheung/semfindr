@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Standardized case influence on parameter estimates — est_change • semfindr</title>
+<title>Standardized Case Influence on Parameter Estimates — est_change • semfindr</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Standardized case influence on parameter estimates — est_change" />
-<meta property="og:description" content="Get a lavaan_rerun() output and compute the standardized changes in
-selected parameters for each case." />
+<meta property="og:title" content="Standardized Case Influence on Parameter Estimates — est_change" />
+<meta property="og:description" content="Gets a lavaan_rerun() output and computes the
+standardized changes in selected parameters for each case." />
 
 
 
@@ -73,7 +73,7 @@ selected parameters for each case." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -90,6 +90,21 @@ selected parameters for each case." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -115,14 +130,14 @@ selected parameters for each case." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Standardized case influence on parameter estimates</h1>
+    <h1>Standardized Case Influence on Parameter Estimates</h1>
     <small class="dont-index">Source: <a href='https://github.com/sfcheung/semfindr/blob/master/R/est_change.R'><code>R/est_change.R</code></a></small>
     <div class="hidden name"><code>est_change.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and compute the standardized changes in
-selected parameters for each case.</p>
+    <p>Gets a <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code> output and computes the
+standardized changes in selected parameters for each case.</p>
     </div>
 
     <pre class="usage"><span class='fu'>est_change</span><span class='op'>(</span><span class='va'>rerun_out</span>, parameters <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -136,42 +151,42 @@ selected parameters for each case.</p>
     </tr>
     <tr>
       <th>parameters</th>
-      <td><p>A character vector to specify the selected parameters.
-Each parameter is named as in <code>lavaan</code> syntax, e.g.,
-<code>x ~ y</code> or <code>x ~~ y</code>, as appeared in the columns
-<code>lhs</code>, <code>op</code>, and <code>rhs</code> in the output of
-<code><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>lavaan::parameterEstimates()</a></code>. If <code>NULL</code>, the default,
-differences on all free parameters will be computed.</p></td>
+      <td><p>A character vector to specify the selected
+parameters. Each parameter is named as in <code>lavaan</code> syntax, e.g.,
+<code>x ~ y</code> or <code>x ~~ y</code>, as appeared in the columns <code>lhs</code>, <code>op</code>, and <code>rhs</code>
+in the output of <code><a href='https://rdrr.io/pkg/lavaan/man/parameterEstimates.html'>lavaan::parameterEstimates()</a></code>. If <code>NULL</code>, the
+default, differences on all free parameters will be computed.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A matrix with the number of columns equal to the number of requested
-parameters,
-and the number of rows equal to the number of cases. The row names are the
-case identification values used in <code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>. The elements are the
-standardized difference. Please see Pek and MacCallum (2011), Equation 7.</p>
+    <p>A matrix with the number of columns equal to the number of
+requested parameters, and the number of rows equal to the number
+of cases. The row names are the case identification values used in
+<code><a href='lavaan_rerun.html'>lavaan_rerun()</a></code>. The elements are the standardized difference.
+Please see Pek and MacCallum (2011), Equation 7.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>For each case, compute the differences in the estimates of selected
-parameters with and without this case: (estimate with all case) -
-(estimate without this case).
-The differences are standardized by dividing the raw differences by their
-standard errors (Pek &amp; MacCallum, 2011)/</p>
-<p>If the analysis is not admissible or did not converge when a case was
-deleted, <code>NA</code>s will be turned for this case on the differnces.</p>
+    <p>For each case, <code>est_change()</code> computes the differences in
+the estimates of selected parameters with and without this case:
+(estimate with all case) - (estimate without this case). The
+differences are standardized by dividing the raw differences by
+their standard errors (Pek &amp; MacCallum, 2011).</p>
+<p>If the analysis is not admissible or does not converge when a case
+is deleted, <code>NA</code>s will be turned for this case on the differences.</p>
 <p>Unlike <code><a href='est_change_raw.html'>est_change_raw()</a></code>, <code>est_change()</code> does not support
 computing the standardized changes of standardized estimates.</p>
-<p>Currently only support single-sample models.</p>
+<p>Currently it only supports single-group models.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. <em>Multivariate Behavioral Research,
-46</em>(2), 202–228. <a href='https://doi.org/10.1080/00273171.2011.561068'>https://doi.org/10.1080/00273171.2011.561068</a></p>
+    <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+<em>Multivariate Behavioral Research, 46</em>(2), 202–228.
+<a href='https://doi.org/10.1080/00273171.2011.561068'>https://doi.org/10.1080/00273171.2011.561068</a></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>S. F. Cheung (shufai.cheung@gmail.com)</p>
+    <p>Shu Fai Cheung (shufai.cheung@gmail.com)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://lavaan.ugent.be'>lavaan</a></span><span class='op'>)</span>
@@ -222,7 +237,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='lavaan_rerun.html'>lavaan_rerun</a></span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 13.8 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 10.8 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Compute the changes in chisq if a case is removed</span>
 <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'>est_change</span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>)</span>
 <span class='co'># Results excluding a case, for the first few cases</span>

@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -88,6 +88,21 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    </li>
+    <li>
+      <a href="../articles/user_id.html">Use Case IDs</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -141,103 +156,109 @@
         <td>
           <p><code><a href="cfa_dat.html">cfa_dat</a></code> </p>
         </td>
-        <td><p>A six-variable dataset with 100 cases</p></td>
+        <td><p>Sample data set for a CFA model</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cfa_dat2.html">cfa_dat2</a></code> </p>
         </td>
-        <td><p>A six-variable dataset with 100 cases and potential influential cases</p></td>
+        <td><p>Sample data set for a CFA model with an influential case</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cfa_dat_heywood.html">cfa_dat_heywood</a></code> </p>
+        </td>
+        <td><p>Sample data set for a structural equation model with a negative variance</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="est_change.html">est_change()</a></code> </p>
         </td>
-        <td><p>Standardized case influence on parameter estimates</p></td>
+        <td><p>Standardized Case Influence on Parameter Estimates</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="est_change_raw.html">est_change_raw()</a></code> </p>
         </td>
-        <td><p>Case influence on parameter estimates</p></td>
+        <td><p>Case Influence on Parameter Estimates</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="fit_measures_change.html">fit_measures_change()</a></code> </p>
         </td>
-        <td><p>Case influence on fit measures</p></td>
+        <td><p>Case Influence on Fit Measures</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="implied_scores.html">implied_scores()</a></code> </p>
         </td>
-        <td><p>Implied scores for observed outcome variables</p></td>
+        <td><p>Implied Scores of Observed Outcome Variable</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="influence_plot.html">gcd_plot()</a></code> <code><a href="influence_plot.html">md_plot()</a></code> <code><a href="influence_plot.html">gcd_gof_plot()</a></code> <code><a href="influence_plot.html">gcd_gof_md_plot()</a></code> </p>
         </td>
-        <td><p>Plot selected influence statistics and measures of extremeness</p></td>
+        <td><p>Various Plots of Influence Measures</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="influence_stat.html">influence_stat()</a></code> </p>
         </td>
-        <td><p>Compute case influence</p></td>
+        <td><p>Case Influence Measures</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="lavaan_rerun.html">lavaan_rerun()</a></code> </p>
         </td>
-        <td><p>Rerun a <code>lavaan</code> analysis <em>n</em> times</p></td>
+        <td><p>Rerun a <code>lavaan</code> Analysis (Leaving-One-Out-Each-Time)</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="lavaan_rerun_check.html">lavaan_rerun_check()</a></code> </p>
         </td>
-        <td><p>Check whether the model being fitted is supported by lavaan_rerun</p></td>
+        <td><p>Compatibility Check</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="mahalanobis_predictors.html">mahalanobis_predictors()</a></code> </p>
         </td>
-        <td><p>Mahalanobis distance (observed predictors)</p></td>
+        <td><p>Mahalanobis Distance (Observed Predictors)</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="mahalanobis_rerun.html">mahalanobis_rerun()</a></code> </p>
         </td>
-        <td><p>Mahalanobis distance (All observed variables)</p></td>
+        <td><p>Mahalanobis Distance (All Observed Variables)</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="pa_dat.html">pa_dat</a></code> </p>
         </td>
-        <td><p>A four-variable dataset with 100 cases</p></td>
+        <td><p>Sample data set for a path model</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="pa_dat2.html">pa_dat2</a></code> </p>
         </td>
-        <td><p>A four-variable dataset with 100 cases and potential influential cases</p></td>
+        <td><p>Sample data set for a path model with an influential case</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="print.lavaan_rerun.html">print(<i>&lt;lavaan_rerun&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Print method for lavaan_rerun</p></td>
+        <td><p>Print Method for lavaan_rerun</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="sem_dat.html">sem_dat</a></code> </p>
         </td>
-        <td><p>A nine-variable dataset with 100 cases</p></td>
+        <td><p>Sample data set for a structural equation model</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="sem_dat2.html">sem_dat2</a></code> </p>
         </td>
-        <td><p>A nine-variable dataset with 100 cases and potential influential cases</p></td>
+        <td><p>Sample data set for a structural equation model with an influential case</p></td>
       </tr>
     </tbody>
     </table>
