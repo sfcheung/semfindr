@@ -1,5 +1,5 @@
 Package: semfindr
-Title: Compute diagnostic statistics for outliers and influential cases in structural equation modeling
+Title: Diagnostic statistics in structural equation modeling
 Version: 0.0.4
 Authors@R: c(
     person(given = "Shu Fai",
@@ -7,7 +7,10 @@ Authors@R: c(
            role = c("aut", "cre"),
            email = "shufai.cheung@gmail.com",
            comment = c(ORCID = "0000-0002-9871-9448")))
-Description: Compute diagnostic statistics for outliers and influential cases in structural equation modeling.
+Description: Sensitivity analysis in structural
+    equation modeling using change statistics and
+    diagnostic plots.
+URL: https://sfcheung.github.io/semfindr
 BugReports: https://github.com/sfcheung/semfindr/issues
 Depends: R (>= 4.1.0)
 License: GPL-3
