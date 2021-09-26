@@ -1,24 +1,21 @@
-#' @title
-#' Implied scores for observed outcome variables
+#' @title Implied Scores of Observed Outcome Variable
 #'
-#' @description
-#' Get a [lavaan::lavaan()] output and compute the implied scores.
+#' @description Gets a [lavaan::lavaan()] output and computes the
+#' implied scores.
 #'
-#' @details
-#' The implied scores for each observed outcome variable are simply computed
-#' in the same way the predicted scores in a linear regression model are
-#' computed.
+#' @details The implied scores for each observed outcome variable are
+#'  simply computed in the same way the predicted scores in a linear
+#'  regression model are computed.
 #'
-#' It currently supports only single-sample path analytic models with only
-#' observed variables.
+#' Currently it supports only single-group path analysis models with only
+#'  observed variables.
 #'
-#' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()] and
-#'        [lavaan::sem()].
+#' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()]
+#'  and [lavaan::sem()].
 #'
-#' @return
-#' A matrix of the implied scores.
+#' @return A matrix of the implied scores.
 #'
-#' @author S. F. Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
 #' @examples
 #' library(lavaan)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun_check.R
 \name{lavaan_rerun_check}
 \alias{lavaan_rerun_check}
-\title{Check whether the model being fitted is supported by lavaan_rerun}
+\title{Compatibility Check}
 \usage{
 lavaan_rerun_check(fit, print_messages = TRUE)
 }
@@ -15,19 +15,20 @@ check. If \code{FALSE}, the messages will be attached to the return value
 as an attribute. Default is \code{TRUE}.}
 }
 \value{
-A single-element vector.
-If confirmed to be supported, will return 0.
-If not confirmed be support but may still work, return 1.
-If confirmed to be not yet supported, will return a negative number, the
-value of this number without the negative sign is the number of tests failed.
+A single-element vector. If confirmed to be supported, will
+return 0. If not confirmed be support but may still work, return 1.
+If confirmed to be not yet supported, will return a negative
+number, the value of this number without the negative sign is the
+number of tests failed.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and check whether it is supported.
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and checks whether it is
+supported.
 }
 \details{
-This function is not supposed to be used by users. It is called by
-\code{\link[=lavaan_rerun]{lavaan_rerun()}} to see if the analysis being passed to it is supported.
-If not, messages will be printed to indicate why.
+This function is not supposed to be used by users. It is
+called by \code{\link[=lavaan_rerun]{lavaan_rerun()}} to see if the analysis being passed to
+it is supported. If not, messages will be printed to indicate why.
 }
 \examples{
 
@@ -50,5 +51,5 @@ lavaan_rerun_check(fit05)
 
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

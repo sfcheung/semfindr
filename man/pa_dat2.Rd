@@ -3,7 +3,7 @@
 \docType{data}
 \name{pa_dat2}
 \alias{pa_dat2}
-\title{A four-variable dataset with 100 cases and potential influential cases}
+\title{Sample data set for a path model with an influential case}
 \format{
 An object of class \code{data.frame} with 100 rows and 5 columns.
 }

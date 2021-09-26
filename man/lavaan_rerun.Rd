@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun.R
 \name{lavaan_rerun}
 \alias{lavaan_rerun}
-\title{Rerun a \code{lavaan} analysis \emph{n} times}
+\title{Rerun a \code{lavaan} Analysis (Leaving-One-Out-Each-Time)}
 \usage{
 lavaan_rerun(
   fit,
@@ -10,113 +10,120 @@ lavaan_rerun(
   to_rerun,
   md_top,
   resid_md_top,
+  allow_inadmissible = FALSE,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
-\code{\link[lavaan:sem]{lavaan::sem()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}.}
 
-\item{case_id}{If it
-is a character vector of
-length equal to the number of cases (the number of rows in the
-data in \code{fit}), then it is the vector of case identification
-values.
-If it is \code{NULL}, the default, then \code{case.idx} used
-by \code{lavaan} functions will be used as case identification
-values. The case identification
-values will be used to name the list of \emph{n} output.}
+\item{case_id}{If it is a character vector of length equals to the
+number of cases (the number of rows in the data in \code{fit}), then it
+is the vector of case identification values. If it is \code{NULL}, the
+default, then \code{case.idx} used by \code{lavaan} functions will be used
+as case identification values. The case identification values will
+be used to name the list of \emph{n} output.}
 
-\item{to_rerun}{Sepcify the cases to be processed. If \code{case_id} is
-specified, this should be a subset of \code{case_id}. If
-\code{case_id} is not specified, then this should be a vector
-of integers used to indicate the rows to te processed,
-as appeared in the data in \code{fit}.
+\item{to_rerun}{The cases to be processed. If \code{case_id} is
+specified, this should be a subset of \code{case_id}. If \code{case_id} is
+not specified, then this should be a vector of integers indicating
+the rows to te processed, as appeared in the data in \code{fit}.
 \code{to_rerun} cannot be used together with \code{md_top} or
 \code{resid_md_top.}}
 
-\item{md_top}{The number of cases to be processed based on the Mahalanobis
-distance computed on all variables used in the model.
-The cases will be ranked from the largest to the smallest
-distance, and the top \code{md_top} case(s) will be processed.
+\item{md_top}{The number of cases to be processed based on the
+Mahalanobis distance computed on all observed variables used in
+the model. The cases will be ranked from the largest to the
+smallest distance, and the top \code{md_top} case(s) will be processed.
 \code{md_top} cannot be used together with \code{to_rerun} or
 \code{resid_md_top.}}
 
-\item{resid_md_top}{The number of cases to be processed based on the
-Mahalanobis
-distance computed from the residuals of outcome variables.
-The cases will be ranked from the largest to the smallest
-distance, and the top \code{resid_md_top} case(s) will be
-processed.
-\code{resid_md_top} cannot be used together with \code{to_rerun} or
-\code{md_top.}}
+\item{resid_md_top}{The number of cases to be processed based on
+the Mahalanobis distance computed from the residuals of outcome
+variables. The cases will be ranked from the largest to the
+smallest distance, and the top \code{resid_md_top} case(s) will be
+processed. \code{resid_md_top} cannot be used together with \code{to_rerun}
+or \code{md_top.}}
+
+\item{allow_inadmissible}{If \code{TRUE}, accepts a fit object with
+inadmissible results (i.e., \code{post.check} from
+\code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
-parallel to rerun the analysis. Currently, only support
-\code{"FORK"} type cluster using local CPU cores. Default is
-\code{FALSE}.}
+functions in the \code{parallel} package to rerun the analysis.
+Currently, only support \code{"snow"} type clusters using local CPU
+cores. Default is \code{FALSE}.}
 
 \item{makeCluster_args}{A named list of arguments to be passed to
-\code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is
-\verb{list(spec = getOption("cl.cores", 2)))}. If
-only need to specify the number of cores, use
-\code{list(spec = ncpu)}, where \code{ncpu} is the number of
-cores to use.}
+\code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is \verb{list(spec = getOption("cl.cores", 2)))}. If only the number of cores need to
+be specified, use \code{list(spec = x)}, where \code{x} is the number
+of cores to use.}
 }
 \value{
-Return a list with the following elements
+A list with the following elements:
 \itemize{
 \item \code{rerun}: The \emph{n} \code{lavaan} output objects.
 \item \code{fit}: The original output from \code{lavaan}.
-\item \code{post_check}: A list of length equals to \emph{n}. Each analysis was checked by
-\link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the \code{lavaan}
-results. The results of this test are stored in this
-list. If the value is \code{TRUE}, the estimation converged
-and the solution is admissible. If not \code{TRUE}, it is a
-warning message issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
+\item \code{post_check}: A list of length equals to \emph{n}. Each analysis was
+checked by \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the
+\code{lavaan} results. The results of this test are stored in this
+list. If the value is \code{TRUE}, the estimation converged and the
+solution is admissible. If not \code{TRUE}, it is a warning message
+issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
 \item \code{call}: The call to \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
-\item \code{selected}: A numeric vector of the row numbers of cases selected in the
-analysis. Its length should be equal to the length of \code{rerun}.
+\item \code{selected}: A numeric vector of the row numbers of cases selected
+in the analysis. Its length should be equal to the length of
+\code{rerun}.
 }
 }
 \description{
-Rerun a \code{lavaan} analysis \emph{n} times, each time with one case removed.
+\code{\link[=lavaan_rerun]{lavaan_rerun()}} reruns a \code{lavaan} analysis several
+times, each time with one case removed.
 }
 \details{
-Get an \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and rerun the analysis \emph{n} times, using the
-same arguments and options, \emph{n}
-equal to the number of cases. In each run, one case will be removed.
+\code{\link[=lavaan_rerun]{lavaan_rerun()}} gets an \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and
+reruns the analysis \emph{n} times, using the same arguments and
+options in the output, \emph{n} equals to the number of cases. In each
+run, one case will be removed.
 
-Optionally, users can rerun the analysis with only selected cases removed.
-These cases can be specified by case IDs, by Mahalanobis distance computed
-from all variables used in the model, or by Mahalanobis distance computed
-from the residuals (observed score - implied scores) of observed outcome
-variables.
+Optionally, users can rerun the analysis with only selected cases
+removed. These cases can be specified by case IDs, by Mahalanobis
+distance computed from all variables used in the model, or by
+Mahalanobis distance computed from the residuals (observed score -
+implied scores) of observed outcome variables. See the help on the
+arguments \code{to_rerun}, \code{md_top}, and \code{resid_md_top}.
 
 It is not recommended to use Mahalanobis distance computed from all
-variables, especially for models with observed variables as predictors.
-Cases that are extreme on predictors may not be influential on the results.
-Nevertheless, this distance is reported in some SEM programs and so this
-option is provided.
+variables, especially for models with observed variables as
+predictors (Pek & MacCallum, 2011). Cases that are extreme on
+predictors may not be influential on the results. Nevertheless,
+this distance is reported in some SEM programs and so this option
+is provided.
 
-Mahalanobis distance based on residuals are supported for models with no
-latent factors. The implied scores are computed by \code{\link[=implied_scores]{implied_scores()}}.
+Mahalanobis distance based on residuals are supported for models
+with no latent factors. The implied scores are computed by
+\code{\link[=implied_scores]{implied_scores()}}.
 
-If the sample size is large, it is recommended to use parallel processing.
-However, due to the nature of \code{\link[=update]{update()}}, it is possible that parallel
-processing will fail. If this is the case, try to use serial processing,
-by simply remove the argument \code{parallel} or set it to \code{FALSE}.
+If the sample size is large, it is recommended to use parallel
+processing. However, due to the nature of the \code{\link[=update]{update()}} method
+for \link[lavaan:lavaan-class]{lavaan::lavaan} object, it is possible that parallel
+processing will fail. If this is the case, try to use serial
+processing, by simply remove the argument \code{parallel} or set it to
+\code{FALSE}.
 
-Many other functions in \link{semfindr} use the output from \link{lavaan_rerun}.
-Instead of running the \emph{n} analyses every time, do this step once and then
-users can compute whatever influence statistics they want quickly.
+Many other functions in \link{semfindr} use the output from
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}. Instead of running the \emph{n} analyses every time, do
+this step once and then users can compute whatever influence
+statistics they want quickly.
 
-If the analysis took a few minutes to run due to the large number of cases
-or the long processing time in fitting the model, it is recommended to save
-the output to an external file (e.g., by [saveRDS()).
+If the analysis took a few minutes to run due to the large number
+of cases or the long processing time in fitting the model, it is
+recommended to save the output to an external file (e.g., by
+\code{\link[base:readRDS]{base::saveRDS()}}).
 
-Currently only support single-sample models.
+Currently \code{\link[=lavaan_rerun]{lavaan_rerun()}} only supports single-group models.
 }
 \examples{
 library(lavaan)
@@ -139,7 +146,8 @@ fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
 # Results by manually excluding the first case
 fit_01 <- lavaan::sem(mod, dat[-1, ])
 fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
+
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

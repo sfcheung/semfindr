@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_measures_change.R
 \name{fit_measures_change}
 \alias{fit_measures_change}
-\title{Case influence on fit measures}
+\title{Case Influence on Fit Measures}
 \usage{
 fit_measures_change(
   rerun_out,
@@ -14,30 +14,31 @@ fit_measures_change(
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
 \item{fit_measures}{The argument \code{fit.measures} used in
-\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default
-is \code{c("chisq", "cfi", "rmsea", "tli")}.}
+\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
+\code{c("chisq", "cfi", "rmsea", "tli")}.}
 
-\item{baseline_model}{The argument \code{baseline.model}     used in
-\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default}
+\item{baseline_model}{The argument \code{baseline.model} used in
+\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested fit
-measures,
-and the number of rows equal to the number of cases. The row names are the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+A matrix with the number of columns equals to the number of
+requested fit measures, and the number of rows equals to the number
+of cases. The row names are the case identification values used in
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the change in selected fit
-measures if a case is deleted
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the change
+in selected fit measures if a case is deleted
 }
 \details{
-For each case, compute the differences in selected fit measures with
-and without this case.
+For each case, \code{\link[=fit_measures_change]{fit_measures_change()}} computes the
+differences in selected fit measures with and without this case.
 
-If the analysis is not admissible or did not converge when a case was
-deleted, \code{NA}s will be turned for the differences of this case.
+If the analysis is not admissible or does not converge when a case
+is deleted, \code{NA}s will be turned for the differences of this
+case.
 
-Currently only support single-sample models.
+Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
@@ -70,10 +71,11 @@ chisq_all - chisq_no_1
 out[1, ]
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. \emph{Multivariate Behavioral Research,
-46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

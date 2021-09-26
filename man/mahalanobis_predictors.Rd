@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_exo.R
 \name{mahalanobis_predictors}
 \alias{mahalanobis_predictors}
-\title{Mahalanobis distance (observed predictors)}
+\title{Mahalanobis Distance (Observed Predictors)}
 \usage{
 mahalanobis_predictors(
   fit,
@@ -10,37 +10,38 @@ mahalanobis_predictors(
 )
 }
 \arguments{
-\item{fit}{It can be the output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
-\code{\link[lavaan:sem]{lavaan::sem()}}, or the output from  \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+\item{fit}{It can be the output from \code{lavaan}, such as
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}, or the output from
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}. Default is
-\code{list(estimate.worst = FALSE, criterion = 1e-6)}. Ignored
-if there is no missing data on the exogenous observed
-variables.}
+\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}.
+Default is \code{list(estimate.worst = FALSE, criterion = 1e-6)}.
+Ignored if there is no missing data on the observed
+predictors.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis distance for each
-case. The number of rows equal to the number of cases in the data stored in
-the fit object.
+A one-column matrix (a column vector) of the Mahalanobis
+distance for each case. The number of rows equals to the number of
+cases in the data stored in the fit object.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the
-Mahalanobis distance for each
-case using only the observed predictors.
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output
+and computes the Mahalanobis distance for each case using only the
+observed predictors.
 }
 \details{
-For each case, compute the Mahalanobis distance of each case on the observed
-predictors.
+For each case, \code{\link[=mahalanobis_predictors]{mahalanobis_predictors()}} computes the
+Mahalanobis distance of each case on the observed predictors.
 
-If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used to
-compute the Mahalanobis distance.
+If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used
+to compute the Mahalanobis distance.
 
-If there are missing values on the observed predictors, the means and
-variance-covariance matrices will be estimated by maximum likelihood using
-\code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed to \code{\link[modi:MDmiss]{modi::MDmiss()}} to
-compute the Mahalanobis distance.
+If there are missing values on the observed predictors, the means
+and variance-covariance matrices will be estimated by maximum
+likelihood using \code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed
+to \code{\link[modi:MDmiss]{modi::MDmiss()}} to compute the Mahalanobis distance.
 
-Currently only support single-sample models.
+Currently this function only supports single-group models.
 }
 \examples{
 library(lavaan)
@@ -74,5 +75,5 @@ Schafer, J.L. (1997) \emph{Analysis of incomplete multivariate data}.
 Chapman & Hall/CRC Press.
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

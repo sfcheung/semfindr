@@ -2,26 +2,27 @@
 % Please edit documentation in R/implied_scores.R
 \name{implied_scores}
 \alias{implied_scores}
-\title{Implied scores for observed outcome variables}
+\title{Implied Scores of Observed Outcome Variable}
 \usage{
 implied_scores(fit)
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
-\code{\link[lavaan:sem]{lavaan::sem()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}}
+and \code{\link[lavaan:sem]{lavaan::sem()}}.}
 }
 \value{
 A matrix of the implied scores.
 }
 \description{
-Get a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the implied scores.
+Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
+implied scores.
 }
 \details{
-The implied scores for each observed outcome variable are simply computed
-in the same way the predicted scores in a linear regression model are
-computed.
+The implied scores for each observed outcome variable are
+simply computed in the same way the predicted scores in a linear
+regression model are computed.
 
-It currently supports only single-sample path analytic models with only
+Currently it supports only single-group path analysis models with only
 observed variables.
 }
 \examples{
@@ -46,5 +47,5 @@ head(fit_implied_scores)
 
 }
 \author{
-S. F. Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung (shufai.cheung@gmail.com)
 }

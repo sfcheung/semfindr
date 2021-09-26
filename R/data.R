@@ -1,4 +1,4 @@
-#' A four-variable dataset with 100 cases
+#' Sample data set for a path model
 #'
 #' A four-variable dataset with 100 cases
 #'
@@ -9,7 +9,7 @@
 #' ```
 "pa_dat"
 
-#' A six-variable dataset with 100 cases
+#' Sample data set for a CFA model
 #'
 #' A six-variable dataset with 100 cases.
 #'
@@ -21,7 +21,7 @@
 #' ```
 "cfa_dat"
 
-#' A nine-variable dataset with 100 cases
+#' Sample data set for a structural equation model
 #'
 #' A nine-variable dataset with 100 cases.
 #'
@@ -35,7 +35,7 @@
 #' ```
 "sem_dat"
 
-#' A four-variable dataset with 100 cases and potential influential cases
+#' Sample data set for a path model with an influential case
 #'
 #' A four-variable dataset with 100 cases and potential influential cases
 #'
@@ -48,7 +48,7 @@
 #'
 "pa_dat2"
 
-#' A six-variable dataset with 100 cases and potential influential cases
+#' Sample data set for a CFA model with an influential case
 #'
 #' A six-variable dataset with 100 cases and potential influential cases
 #'
@@ -62,7 +62,7 @@
 #'
 "cfa_dat2"
 
-#' A nine-variable dataset with 100 cases and potential influential cases
+#' Sample data set for a structural equation model with an influential case
 #'
 #' A nine-variable dataset with 100 cases and potential influential cases
 #'
@@ -78,3 +78,16 @@
 #'
 "sem_dat2"
 
+#' Sample data set for a structural equation model with a negative variance
+#'
+#' A six-variable dataset with 60 cases that has a case that, if not removed,
+#' will result in a negative variance in the solution
+#'
+#' A Sample Model:
+#' ```
+#' `f1 =~  x1 + x2 + x3`
+#' `f2 =~  x4 + x5 + x6`
+#' `f1 ~~ f2`
+#' ```
+#'
+"cfa_dat_heywood"
