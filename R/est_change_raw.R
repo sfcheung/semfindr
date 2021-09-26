@@ -1,40 +1,36 @@
-#' @title
-#' Case influence on parameter estimates
+#' @title Case Influence on Parameter Estimates
 #'
-#' @description
-#' Get a [lavaan_rerun()] output and compute the changes in selected parameters
-#' for each case.
+#' @description Gets a [lavaan_rerun()] output and computes the
+#'  changes in selected parameters for each case.
 #'
-#' @details
-#' For each case, compute the differences in the estimates of selected
-#' parameters with and without this case: (estimate with all case) -
-#' (estimate without this case).
-#' The change is the raw change, either for the standardized or
-#' unstandardized solution. The change is *not* divided by standard error.
+#' @details For each case, [est_change_raw()] computes the differences
+#'  in the estimates of selected parameters with and without this
+#'  case: (estimate with all case) - (estimate without this case). The
+#'  change is the raw change, either for the standardized or
+#'  unstandardized solution. The change is *not* divided by standard
+#'  error.
 #'
-#' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA`s will be turned for this case on the differences.
+#' If the analysis is not admissible or did not converge when a case
+#'  is deleted, `NA`s will be returned for this case on the
+#'  differences.
 #'
-#' Currently only support single-sample models.
+#' Currently it only supports single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
-#' @param parameters A character vector to specify the selected parameters.
-#'                  Each parameter is named as in `lavaan` syntax, e.g.,
-#'                  `x ~ y` or `x ~~ y`, as appeared in the columns
-#'                  `lhs`, `op`, and `rhs` in the output of
-#'                  [lavaan::parameterEstimates()]. If `NULL`, the default,
-#'                  differences on all free parameters will be computed.
-#' @param standardized If `TRUE`, the changes in the full standardized solution
-#'                    is returned (`type` = `std.all` in
-#'                     [lavaan::standardizedSolution()]).
-#'                    Otherwise, the changes in the unstandardized solution is
-#'                    returned. Default is `FALSE`.
+#' @param parameters A character vector to specify the selected
+#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#'  in the output of [lavaan::parameterEstimates()]. If `NULL`, the
+#'  default, differences on all free parameters will be computed.
+#' @param standardized If `TRUE`, the changes in the full standardized
+#'  solution is returned (`type` = `std.all` in
+#'  [lavaan::standardizedSolution()]). Otherwise, the changes in the
+#'  unstandardized solution is returned. Default is `FALSE`.
 #'
-#' @return
-#' A matrix with the number of columns equal to the number of requested
-#' parameters, and the number of rows equal to the number of cases. The
-#' row names are the case identification values used in [lavaan_rerun()].
-#' The elements are the raw differences.
+#' @return A matrix with the number of columns equals to the number of
+#'  requested parameters, and the number of rows equals to the number
+#'  of cases. The row names are the case identification values used in
+#'  [lavaan_rerun()]. The elements are the raw differences.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
@@ -77,22 +73,23 @@
 #' # Note that only the changes in the selected paths are included.
 #'
 #' # Use standardized = TRUE to compare the differences in standardized solution
-#' out2_std <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"),
+#' out2_std <- est_change_raw(fit_rerun, 
+#'                           c("m1 ~ iv1", "m1 ~ iv2"),
 #'                           standardized = TRUE)
 #' head(out2_std)
-#' (est_std_all <- parameterEstimates(fit, standardized = TRUE)[1:2,
-#'                        c("lhs", "op", "rhs", "std.all")])
-#' (est_std_no_1 <- parameterEstimates(fit_no_1, standardized = TRUE)[1:2,
-#'                        c("lhs", "op", "rhs", "std.all")])
+#' (est_std_all <- parameterEstimates(fit,
+#'                  standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")])
+#' (est_std_no_1 <- parameterEstimates(fit_no_1,
+#'                  standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")])
 #' # The differences
 #' est_std_all$std.all - est_std_no_1$std.all
 #' # The first row of `out2_std`
 #' out2_std[1, ]
 #'
-#' @references
-#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-#'  models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>
+#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#'  in structural equation models: Cases and their influence.
+#'  *Multivariate Behavioral Research, 46*(2), 202–228.
+#'  <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #' @export
 #' @importMethodsFrom lavaan vcov

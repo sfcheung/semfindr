@@ -2,45 +2,44 @@
 % Please edit documentation in R/est_change.R
 \name{est_change}
 \alias{est_change}
-\title{Standardized case influence on parameter estimates}
+\title{Standardized Case Influence on Parameter Estimates}
 \usage{
 est_change(rerun_out, parameters = NULL)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{parameters}{A character vector to specify the selected parameters.
-Each parameter is named as in \code{lavaan} syntax, e.g.,
-\code{x ~ y} or \code{x ~~ y}, as appeared in the columns
-\code{lhs}, \code{op}, and \code{rhs} in the output of
-\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
-differences on all free parameters will be computed.}
+\item{parameters}{A character vector to specify the selected
+parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
+\code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
+in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the
+default, differences on all free parameters will be computed.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested
-parameters,
-and the number of rows equal to the number of cases. The row names are the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the
-standardized difference. Please see Pek and MacCallum (2011), Equation 7.
+A matrix with the number of columns equal to the number of
+requested parameters, and the number of rows equal to the number
+of cases. The row names are the case identification values used in
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
+Please see Pek and MacCallum (2011), Equation 7.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the standardized changes in
-selected parameters for each case.
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
+standardized changes in selected parameters for each case.
 }
 \details{
-For each case, compute the differences in the estimates of selected
-parameters with and without this case: (estimate with all case) -
-(estimate without this case).
-The differences are standardized by dividing the raw differences by their
-standard errors (Pek & MacCallum, 2011)/
+For each case, \code{\link[=est_change]{est_change()}} computes the differences in
+the estimates of selected parameters with and without this case:
+(estimate with all case) - (estimate without this case). The
+differences are standardized by dividing the raw differences by
+their standard errors (Pek & MacCallum, 2011).
 
-If the analysis is not admissible or did not converge when a case was
-deleted, \code{NA}s will be turned for this case on the differnces.
+If the analysis is not admissible or does not converge when a case
+is deleted, \code{NA}s will be turned for this case on the differences.
 
 Unlike \code{\link[=est_change_raw]{est_change_raw()}}, \code{\link[=est_change]{est_change()}} does not support
 computing the standardized changes of standardized estimates.
 
-Currently only support single-sample models.
+Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
@@ -77,9 +76,10 @@ head(out2)
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. \emph{Multivariate Behavioral Research,
-46}(2), 202–228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \author{
 Shu Fai Cheung (shufai.cheung@gmail.com)

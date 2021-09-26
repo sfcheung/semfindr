@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_rerun.R
 \name{mahalanobis_rerun}
 \alias{mahalanobis_rerun}
-\title{Mahalanobis distance (All observed variables)}
+\title{Mahalanobis Distance (All Observed Variables)}
 \usage{
 mahalanobis_rerun(
   fit,
@@ -10,36 +10,39 @@ mahalanobis_rerun(
 )
 }
 \arguments{
-\item{fit}{It can be the output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
-\code{\link[lavaan:sem]{lavaan::sem()}}, or the output from  \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+\item{fit}{It can be the output from \code{lavaan}, such as
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}, or the output from
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}. Default is
-\code{list(estimate.worst = FALSE, criterion = 1e-6)}. Ignored
-if there is no missing data on the exogenous observed
+\item{emNorm_arg}{A list of argument for
+\code{\link[norm2:emNorm]{norm2::emNorm()}}. Default is
+\code{list(estimate.worst = FALSE, criterion = 1e-6)}.
+Ignored if there is no missing data on the exogenous observed
 variables.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis distance for each
-case. The row names
-are the case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+A one-column matrix (a column vector) of the Mahalanobis
+distance for each case. The row names are the case identification
+values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Compute the
-Mahalanobis distance for each case on all observed variables in a model.
+Computes the Mahalanobis distance for each case on all
+observed variables in a model.
 }
 \details{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and compute the
-Mahalanobis distance for each case on all observed variables.
+\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or
+\code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the Mahalanobis distance for
+each case on all observed variables.
 
-If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used to
-compute the Mahalanobis distance.
+If there are no missing values, \code{\link[stats:mahalanobis]{stats::mahalanobis()}} will be used
+to compute the Mahalanobis distance.
 
-If there are missing values on the observed predictors, the means and
-variance-covariance matrices will be estimated by maximum likelihood using
-\code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed to \code{\link[modi:MDmiss]{modi::MDmiss()}} to
-compute the Mahalanobis distance.
+If there are missing values on the observed predictors, the means
+and variance-covariance matrices will be estimated by maximum
+likelihood using \code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed
+to \code{\link[modi:MDmiss]{modi::MDmiss()}} to compute the Mahalanobis distance.
 
-Currently only support single-sample models.
+Currently it only support single-group models.
 }
 \examples{
 library(lavaan)
@@ -68,8 +71,9 @@ head(md1)
 
 }
 \references{
-Mahalanobis, P. C. (1936). On the generalized distance in statistics.
-\emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
+Mahalanobis, P. C. (1936). On the generalized distance
+in statistics. \emph{Proceedings of the National Institute of Science
+of India, 2}, 49–55.
 }
 \author{
 Shu Fai Cheung (shufai.cheung@gmail.com)

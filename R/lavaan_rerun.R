@@ -1,108 +1,108 @@
-#' @title
-#' Rerun a `lavaan` analysis *n* times
+#' @title Rerun a `lavaan` Analysis (Leaving-One-Out-Each-Time)
 #'
-#' @description
-#' Rerun a `lavaan` analysis *n* times, each time with one case removed.
+#' @description [lavaan_rerun()] reruns a `lavaan` analysis several
+#' times, each time with one case removed.
 #'
-#' @details
-#' Get an [lavaan::lavaan()] output and rerun the analysis *n* times, using the
-#' same arguments and options, *n*
-#' equal to the number of cases. In each run, one case will be removed.
+#' @details [lavaan_rerun()] gets an [lavaan::lavaan()] output and
+#'  reruns the analysis *n* times, using the same arguments and
+#'  options in the output, *n* equals to the number of cases. In each
+#'  run, one case will be removed.
 #'
-#' Optionally, users can rerun the analysis with only selected cases removed.
-#' These cases can be specified by case IDs, by Mahalanobis distance computed
-#' from all variables used in the model, or by Mahalanobis distance computed
-#' from the residuals (observed score - implied scores) of observed outcome
-#' variables.
+#' Optionally, users can rerun the analysis with only selected cases
+#'  removed. These cases can be specified by case IDs, by Mahalanobis
+#'  distance computed from all variables used in the model, or by
+#'  Mahalanobis distance computed from the residuals (observed score -
+#'  implied scores) of observed outcome variables. See the help on the
+#'  arguments `to_rerun`, `md_top`, and `resid_md_top`.
 #'
 #' It is not recommended to use Mahalanobis distance computed from all
-#' variables, especially for models with observed variables as predictors.
-#' Cases that are extreme on predictors may not be influential on the results.
-#' Nevertheless, this distance is reported in some SEM programs and so this
-#' option is provided.
+#'  variables, especially for models with observed variables as
+#'  predictors (Pek & MacCallum, 2011). Cases that are extreme on
+#'  predictors may not be influential on the results. Nevertheless,
+#'  this distance is reported in some SEM programs and so this option
+#'  is provided.
 #'
-#' Mahalanobis distance based on residuals are supported for models with no
-#' latent factors. The implied scores are computed by [implied_scores()].
+#' Mahalanobis distance based on residuals are supported for models
+#'  with no latent factors. The implied scores are computed by
+#'  [implied_scores()].
 #'
-#' If the sample size is large, it is recommended to use parallel processing.
-#' However, due to the nature of [update()], it is possible that parallel
-#' processing will fail. If this is the case, try to use serial processing,
-#' by simply remove the argument `parallel` or set it to `FALSE`.
+#' If the sample size is large, it is recommended to use parallel
+#'  processing. However, due to the nature of the [update()] method
+#'  for [lavaan::lavaan-class] object, it is possible that parallel
+#'  processing will fail. If this is the case, try to use serial
+#'  processing, by simply remove the argument `parallel` or set it to
+#'  `FALSE`.
 #'
-#' Many other functions in [semfindr] use the output from [lavaan_rerun].
-#' Instead of running the *n* analyses every time, do this step once and then
-#' users can compute whatever influence statistics they want quickly.
+#' Many other functions in [semfindr] use the output from
+#'  [lavaan_rerun()]. Instead of running the *n* analyses every time, do
+#'  this step once and then users can compute whatever influence
+#'  statistics they want quickly.
 #'
-#' If the analysis took a few minutes to run due to the large number of cases
-#' or the long processing time in fitting the model, it is recommended to save
-#' the output to an external file (e.g., by [saveRDS()).
+#' If the analysis took a few minutes to run due to the large number
+#'  of cases or the long processing time in fitting the model, it is
+#'  recommended to save the output to an external file (e.g., by
+#'  [base::saveRDS()]).
 #'
-#' Currently only support single-sample models.
+#' Currently [lavaan_rerun()] only supports single-group models.
 #'
-#' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()] and
-#'        [lavaan::sem()].
-#' @param case_id If it
-#'               is a character vector of
-#'               length equal to the number of cases (the number of rows in the
-#'               data in `fit`), then it is the vector of case identification
-#'               values.
-#'               If it is `NULL`, the default, then `case.idx` used
-#'               by `lavaan` functions will be used as case identification
-#'               values. The case identification
-#'               values will be used to name the list of *n* output.
-#' @param to_rerun Sepcify the cases to be processed. If `case_id` is
-#'                   specified, this should be a subset of `case_id`. If
-#'                   `case_id` is not specified, then this should be a vector
-#'                    of integers used to indicate the rows to te processed,
-#'                    as appeared in the data in `fit`.
-#'                `to_rerun` cannot be used together with `md_top` or
-#'                `resid_md_top.`
-#' @param md_top The number of cases to be processed based on the Mahalanobis
-#'               distance computed on all variables used in the model.
-#'                The cases will be ranked from the largest to the smallest
-#'                distance, and the top `md_top` case(s) will be processed.
-#'                `md_top` cannot be used together with `to_rerun` or
-#'                `resid_md_top.`
-#' @param resid_md_top The number of cases to be processed based on the
-#'               Mahalanobis
-#'               distance computed from the residuals of outcome variables.
-#'                The cases will be ranked from the largest to the smallest
-#'                distance, and the top `resid_md_top` case(s) will be
-#'                processed.
-#'                `resid_md_top` cannot be used together with `to_rerun` or
-#'                `md_top.`
-#' @param allow_inadmissible If `TRUE`, accepts a fit object with inadmissible
-#'  results (i.e., `post.check` from [lavaan::lavInspect()] is `FALSE`).
-#'  Default is `FALSE`.
+#' @param fit The output from [lavaan::lavaan()], such as
+#'  [lavaan::cfa()] and [lavaan::sem()].
+#' @param case_id If it is a character vector of length equals to the
+#'  number of cases (the number of rows in the data in `fit`), then it
+#'  is the vector of case identification values. If it is `NULL`, the
+#'  default, then `case.idx` used by `lavaan` functions will be used
+#'  as case identification values. The case identification values will
+#'  be used to name the list of *n* output.
+#' @param to_rerun The cases to be processed. If `case_id` is
+#'  specified, this should be a subset of `case_id`. If `case_id` is
+#'  not specified, then this should be a vector of integers indicating
+#'  the rows to te processed, as appeared in the data in `fit`. 
+#'  `to_rerun` cannot be used together with `md_top` or
+#'  `resid_md_top.`
+#' @param md_top The number of cases to be processed based on the
+#'  Mahalanobis distance computed on all observed variables used in
+#'  the model. The cases will be ranked from the largest to the
+#'  smallest distance, and the top `md_top` case(s) will be processed.
+#'  `md_top` cannot be used together with `to_rerun` or
+#'  `resid_md_top.`
+#' @param resid_md_top The number of cases to be processed based on
+#'  the Mahalanobis distance computed from the residuals of outcome
+#'  variables. The cases will be ranked from the largest to the
+#'  smallest distance, and the top `resid_md_top` case(s) will be
+#'  processed. `resid_md_top` cannot be used together with `to_rerun`
+#'  or `md_top.`
+#' @param allow_inadmissible If `TRUE`, accepts a fit object with
+#'  inadmissible results (i.e., `post.check` from
+#'  [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
-#'                 parallel to rerun the analysis. Currently, only support
-#'                 `"FORK"` type cluster using local CPU cores. Default is
-#'                 `FALSE`.
+#'  functions in the `parallel` package to rerun the analysis.
+#'  Currently, only support `"snow"` type clusters using local CPU
+#'  cores. Default is `FALSE`.
 #' @param makeCluster_args A named list of arguments to be passed to
-#'                       [parallel::makeCluster()]. Default is
-#'                        `list(spec = getOption("cl.cores", 2)))`. If
-#'                        only need to specify the number of cores, use
-#'                        `list(spec = ncpu)`, where `ncpu` is the number of
-#'                        cores to use.
+#'  [parallel::makeCluster()]. Default is `list(spec =
+#'  getOption("cl.cores", 2)))`. If only the number of cores need to
+#'  be specified, use `list(spec = x)`, where `x` is the number
+#'  of cores to use.
 #'
 #' @return
-#' Return a list with the following elements
+#' A list with the following elements:
 #'
 #' - `rerun`: The *n* `lavaan` output objects.
 #'
 #' - `fit`: The original output from `lavaan`.
 #'
-#' - `post_check`: A list of length equals to *n*. Each analysis was checked by
-#'                 [lavaan::lavTech]`(x, "post.check")`, `x` being the `lavaan`
-#'                  results. The results of this test are stored in this
-#'                 list. If the value is `TRUE`, the estimation converged
-#'                 and the solution is admissible. If not `TRUE`, it is a
-#'                 warning message issued by [lavaan::lavTech()].
+#' - `post_check`: A list of length equals to *n*. Each analysis was
+#'   checked by [lavaan::lavTech]`(x, "post.check")`, `x` being the
+#'   `lavaan` results. The results of this test are stored in this
+#'   list. If the value is `TRUE`, the estimation converged and the
+#'   solution is admissible. If not `TRUE`, it is a warning message
+#'   issued by [lavaan::lavTech()].
 #'
 #' - `call`: The call to [lavaan_rerun()].
 #'
-#' - `selected`: A numeric vector of the row numbers of cases selected in the
-#'               analysis. Its length should be equal to the length of `rerun`. 
+#' - `selected`: A numeric vector of the row numbers of cases selected
+#'   in the analysis. Its length should be equal to the length of
+#'   `rerun`. 
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #' 
@@ -127,6 +127,7 @@
 #' # Results by manually excluding the first case
 #' fit_01 <- lavaan::sem(mod, dat[-1, ])
 #' fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
+#' 
 #' @importMethodsFrom lavaan coef
 #' @export lavaan_rerun
 

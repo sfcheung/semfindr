@@ -1,49 +1,40 @@
-#' @title
-#' Compute case influence
+#' @title Case Influence Measures
 #'
-#' @description
-#' Get a [lavaan_rerun()] output and compute the changes in selected parameters
-#' and fit measures for each case.
+#' @description Gets a [lavaan_rerun()] output and computes the changes
+#'  in selected parameters and fit measures for each case.
 #'
-#' @details
-#' For each case, compute the differences in the estimates of selected
-#'  parameters
-#' and fit measures
-#' with and without this case. Can also request measures of
-#' extremeness (only Mahalanobis distance is available for now).
+#' @details For each case, [influence_stat()] computes the differences
+#'  in the estimates of selected parameters and fit measures with and
+#'  without this case. Users can request measures of extremeness (only
+#'  Mahalanobis distance is available for now).
 #'
-#' It is a wrapper of [est_change()] and [fit_measures_change()].
+#' Measures are computed by [est_change()] and [fit_measures_change()].
 #'
-#' Currently only work for single-sample models.
+#' Currently it only works for single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #' @param fit_measures The argument `fit.measures` used in
-#'                     [lavaan::fitMeasures]. Default
-#'                     is `c("chisq", "cfi", "rmsea", "tli")`.
-#' @param baseline_model The argument `baseline.model` 	used in
-#'                       [lavaan::fitMeasures]. Default
-#                        is `NULL`.
-#' @param parameters A character vector to specify the selected parameters.
-#'                  Each parameter is named as in `lavaan` syntax, e.g.,
-#'                  `x ~ y` or `x ~~ y`, as appeared in the columns
-#'                  `lhs`, `op`, and `rhs` in the output of
-#'                  [lavaan::parameterEstimates()]. If `NULL`, the default,
-#'                  differences on all free parameters will be computed.
-#' @param mahalanobis If `TRUE`, will call [mahalanobis_rerun()] to compute the
-#'                   Mahalanobis distance. Default is `TRUE`.
-#' @param keep_fit If `TRUE`, will keep the original `lavaan` output using the
-#'                 full
-#'                sample as an attribute to the output. It can be used by
-#'                 other functions to
-#'                extract necessary information. Default is `TRUE`.
+#'  [lavaan::fitMeasures]. Default is
+#'  `c("chisq", "cfi", "rmsea", "tli")`.
+#' @param baseline_model The argument `baseline.model` used in
+#'  [lavaan::fitMeasures]. Default is `NULL`.
+#' @param parameters A character vector to specify the selected
+#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#'  in the output of [lavaan::parameterEstimates()]. If `NULL`, the
+#'  default, differences on all free parameters will be computed.
+#' @param mahalanobis If `TRUE`, it will call [mahalanobis_rerun()] to
+#'  compute the Mahalanobis distance. Default is `TRUE`.
+#' @param keep_fit If `TRUE`, it will keep the original `lavaan` output
+#'  using the full sample as an attribute to the output. It can be used
+#'  by other functions to extract necessary information. Default is
+#'  `TRUE`.
 #'
-#' @return
-#' A matrix with the number of columns equal to the number of requested
-#'  statistics,
-#' and the number of rows equal to the number of cases. The row names is the
-#' case identification values used in [lavaan_rerun()]. Please refer to the
-#'  corresponding
-#' functions for further details.
+#' @return A matrix with the number of columns equals to the number of
+#'  requested statistics, and the number of rows equals to the number of
+#'  cases. The row names are the case identification values used in
+#'  [lavaan_rerun()]. Please refer to the help pages of [est_change()] and
+#'  [fit_measures_change()] for details.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
@@ -73,6 +64,7 @@
 #'  46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #' @seealso [fit_measures_change()], [est_change()], and [mahalanobis_rerun()].
+#' 
 #' @export
 
 

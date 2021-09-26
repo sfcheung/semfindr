@@ -2,7 +2,7 @@
 % Please edit documentation in R/influence_stat.R
 \name{influence_stat}
 \alias{influence_stat}
-\title{Compute case influence}
+\title{Case Influence Measures}
 \usage{
 influence_stat(
   rerun_out,
@@ -17,50 +17,46 @@ influence_stat(
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
 \item{fit_measures}{The argument \code{fit.measures} used in
-\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default
-is \code{c("chisq", "cfi", "rmsea", "tli")}.}
+\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
+\code{c("chisq", "cfi", "rmsea", "tli")}.}
 
-\item{baseline_model}{The argument \code{baseline.model}     used in
-\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default}
+\item{baseline_model}{The argument \code{baseline.model} used in
+\link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}
 
-\item{parameters}{A character vector to specify the selected parameters.
-Each parameter is named as in \code{lavaan} syntax, e.g.,
-\code{x ~ y} or \code{x ~~ y}, as appeared in the columns
-\code{lhs}, \code{op}, and \code{rhs} in the output of
-\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the default,
-differences on all free parameters will be computed.}
+\item{parameters}{A character vector to specify the selected
+parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
+\code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
+in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the
+default, differences on all free parameters will be computed.}
 
-\item{mahalanobis}{If \code{TRUE}, will call \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} to compute the
-Mahalanobis distance. Default is \code{TRUE}.}
+\item{mahalanobis}{If \code{TRUE}, it will call \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} to
+compute the Mahalanobis distance. Default is \code{TRUE}.}
 
-\item{keep_fit}{If \code{TRUE}, will keep the original \code{lavaan} output using the
-full
-sample as an attribute to the output. It can be used by
-other functions to
-extract necessary information. Default is \code{TRUE}.}
+\item{keep_fit}{If \code{TRUE}, it will keep the original \code{lavaan} output
+using the full sample as an attribute to the output. It can be used
+by other functions to extract necessary information. Default is
+\code{TRUE}.}
 }
 \value{
-A matrix with the number of columns equal to the number of requested
-statistics,
-and the number of rows equal to the number of cases. The row names is the
-case identification values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the
-corresponding
-functions for further details.
+A matrix with the number of columns equals to the number of
+requested statistics, and the number of rows equals to the number of
+cases. The row names are the case identification values used in
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the help pages of \code{\link[=est_change]{est_change()}} and
+\code{\link[=fit_measures_change]{fit_measures_change()}} for details.
 }
 \description{
-Get a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and compute the changes in selected parameters
-and fit measures for each case.
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
+in selected parameters and fit measures for each case.
 }
 \details{
-For each case, compute the differences in the estimates of selected
-parameters
-and fit measures
-with and without this case. Can also request measures of
-extremeness (only Mahalanobis distance is available for now).
+For each case, \code{\link[=influence_stat]{influence_stat()}} computes the differences
+in the estimates of selected parameters and fit measures with and
+without this case. Users can request measures of extremeness (only
+Mahalanobis distance is available for now).
 
-It is a wrapper of \code{\link[=est_change]{est_change()}} and \code{\link[=fit_measures_change]{fit_measures_change()}}.
+Measures are computed by \code{\link[=est_change]{est_change()}} and \code{\link[=fit_measures_change]{fit_measures_change()}}.
 
-Currently only work for single-sample models.
+Currently it only works for single-group models.
 }
 \examples{
 library(lavaan)

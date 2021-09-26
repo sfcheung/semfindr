@@ -3,7 +3,7 @@
 \docType{data}
 \name{cfa_dat_heywood}
 \alias{cfa_dat_heywood}
-\title{A six-variable dataset with 60 cases that results in negative variance}
+\title{Sample data set for a structural equation model with a negative variance}
 \format{
 An object of class \code{data.frame} with 60 rows and 6 columns.
 }

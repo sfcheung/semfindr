@@ -3,7 +3,7 @@
 \docType{data}
 \name{sem_dat}
 \alias{sem_dat}
-\title{A nine-variable dataset with 100 cases}
+\title{Sample data set for a structural equation model}
 \format{
 An object of class \code{data.frame} with 200 rows and 9 columns.
 }

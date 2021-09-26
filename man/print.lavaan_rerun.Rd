@@ -2,7 +2,7 @@
 % Please edit documentation in R/print_lavaan_rerun.R
 \name{print.lavaan_rerun}
 \alias{print.lavaan_rerun}
-\title{Print method for lavaan_rerun}
+\title{Print Method for lavaan_rerun}
 \usage{
 \method{print}{lavaan_rerun}(x, ...)
 }
@@ -11,14 +11,8 @@
 
 \item{...}{Other arguments. They will be ignored.}
 }
-\value{
-Nothing
-}
 \description{
-Print the results of lavaan_rerun
-}
-\details{
-Print the results of lavaan_rerun
+Prints the results of lavaan_rerun
 }
 \examples{
 library(lavaan)

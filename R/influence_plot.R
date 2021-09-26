@@ -1,63 +1,47 @@
-#' @title
-#' Plot selected influence statistics and measures of extremeness
+#' @title Various Plots of Influence Measures
 #'
-#' @description
-#' Get a [influence_stat()] output and plot selected statistics
+#' @description Gets a [influence_stat()] output and plots selected
+#' statistics.
 #'
-#' @details
-#' The output of [influence_stat()] is simply a matrix. Therefore, this
-#' function will work for any matrix provided.
-#' Row number will be used on the x-axis if applicable. However, case
-#' identification
-#' values in the output from [influence_stat()] will be used for labeling
-#' individual cases.
+#' @details The output of [influence_stat()] is simply a matrix.
+#'  Therefore, this function will work for any matrix provided. Row
+#'  number will be used on the x-axis if applicable. However, case
+#'  identification values in the output from [influence_stat()] will
+#'  be used for labeling individual cases.
 #'
 #' @param influence_out The output from [influence_stat()].
-#' @param cutoff_gcd Cases with generalized Cook's distance larger than this
-#'                  value will be labeled. Default is `NULL`. If `NULL`, no
-#'                  cutoff line will be drawn.
-#' @param cutoff_md Cases with Mahalanobis distance larger than this value
-#'                  will be labeled. If it is `TRUE`,
-#'                  the (`cutoff_md_qchisq` x 100)th percentile of the
-#'                  chi-square distribution with
-#'                  the degrees of freedom equal to the number of variables
-#'                  will be used.  Default is `FALSE`, no cutoff value.
-#' @param cutoff_md_qchisq This value multiplied by 100 is the percentile to
-#'                         be used
-#'                         for labeling case based on Mahalanobis distance.
-#'                         Default is .975.
+#' @param cutoff_gcd Cases with generalized Cook's distance larger
+#'  than this value will be labeled. Default is `NULL`. If `NULL`, no
+#'  cutoff line will be drawn.
+#' @param cutoff_md Cases with Mahalanobis distance larger than this
+#'  value will be labeled. If it is `TRUE`, the (`cutoff_md_qchisq` x
+#'  100)th percentile of the chi-square distribution with the degrees
+#'  of freedom equal to the number of variables will be used.  Default
+#'  is `FALSE`, no cutoff value.
+#' @param cutoff_md_qchisq This value multiplied by 100 is the
+#'  percentile to be used for labeling case based on Mahalanobis
+#'  distance. Default is .975.
 #' @param largest_gcd The number of cases with the largest generalized
-#'                    Cook's distance
-#'                    to be labelled.
-#'                   Default is 1. If not an integer, it will be rounded
-#'                    to the nearest
-#'                   integer.
-#' @param largest_md  The number of cases with the largest Mahalanobis distance
-#'                     to be labelled.
-#'                   Default is 1. If not an integer, it will be rounded to
-#'                   the nearest
-#'                   integer.
-#' @param largest_fit_measure  The number of cases with the largest selected
-#'                    fit measure change in magnitude
-#'                   to be labelled.
-#'                   Default is 1. If not an integer, it will be rounded to
-#'                   the nearest
-#'                   integer.
-#' @param fit_measure Specify the fit measure to be used in a plot. Use the
-#'                    name
-#'                    in the [lavaan::fitMeasures()] function. No default
-#'                    value.
-#' @param cutoff_fit_measure Cases with `fit_measure` larger than this cutoff
-#'                           in magnitude
-#'                          will be labeled. No default value and must be
-#'                           specified.
-#' @param circle_size The size of the largest circle when the size of a circle
-#'                     is controlled
-#'                   by a statistic.
+#'  Cook's distance to be labelled. Default is 1. If not an integer, it
+#'  will be rounded to the nearest integer.
+#' @param largest_md  The number of cases with the largest Mahalanobis
+#'  distance to be labelled. Default is 1. If not an integer, it will
+#'  be rounded to the nearest integer.
+#' @param largest_fit_measure  The number of cases with the largest
+#'  selected fit measure change in magnitude to be labelled. Default is
+#'  1. If not an integer, it will be rounded to the nearest integer.
+#' @param fit_measure The fit measure to be used in a
+#'  plot. Use the name in the [lavaan::fitMeasures()] function. No
+#'  default value.
+#' @param cutoff_fit_measure Cases with `fit_measure` larger than
+#'  this cutoff in magnitude will be labeled. No default value and
+#'  must be specified.
+#' @param circle_size The size of the largest circle when the size
+#'  of a circle is controlled by a statistic.
 #'
-#' @return
-#' A [ggplot2] plot. It will not be plotted. To plot it, use [plot()] on
-#'  the output.
+#' @return A [ggplot2] plot. Plotted by default. If assigned to a variable
+#'  or called inside a function, it will not be plotted. Use [plot()] to
+#'  plot it.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
@@ -106,10 +90,10 @@
 #'                      circle_size = 10)
 #'
 #'
-#' @references
-#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-#'  models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202-228. <https://doi.org/10.1080/00273171.2011.561068>
+#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#'  in structural equation models: Cases and their influence.
+#'  *Multivariate Behavioral Research, 46*(2), 202-228.
+#'  <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #' @seealso [influence_stat()].
 #' @name influence_plot

@@ -1,17 +1,14 @@
-#' @title Print method for lavaan_rerun
+#' @title Print Method for lavaan_rerun
 #'
-#' @description Print the results of lavaan_rerun
+#' @description Prints the results of lavaan_rerun
 #'
-#' @details Print the results of lavaan_rerun
-#'
-#' @return
-#'  Nothing
+#' @return NULL
 #'
 #' @param x The output of [lavaan_rerun()].
 #' @param ... Other arguments. They will be ignored.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat

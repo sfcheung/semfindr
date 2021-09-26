@@ -1,39 +1,35 @@
-#' @title
-#' Case influence on fit measures
+#' @title Case Influence on Fit Measures
 #'
-#' @description
-#' Get a [lavaan_rerun()] output and compute the change in selected fit
-#' measures if a case is deleted
+#' @description Gets a [lavaan_rerun()] output and computes the change
+#'  in selected fit measures if a case is deleted
 #'
-#' @details
-#' For each case, compute the differences in selected fit measures with
-#' and without this case.
+#' @details For each case, [fit_measures_change()] computes the
+#'  differences in selected fit measures with and without this case.
 #'
-#' If the analysis is not admissible or did not converge when a case was
-#' deleted, `NA`s will be turned for the differences of this case.
+#' If the analysis is not admissible or does not converge when a case
+#'  is deleted, `NA`s will be turned for the differences of this
+#'  case.
 #'
-#' Currently only support single-sample models.
+#' Currently it only supports single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #' @param fit_measures The argument `fit.measures` used in
-#'                     [lavaan::fitMeasures]. Default
-#'                     is `c("chisq", "cfi", "rmsea", "tli")`.
-#' @param baseline_model The argument `baseline.model` 	used in
-#'                       [lavaan::fitMeasures]. Default
-#                        is `NULL`.
+#'  [lavaan::fitMeasures]. Default is 
+#'  `c("chisq", "cfi", "rmsea", "tli")`.
+#' @param baseline_model The argument `baseline.model` used in
+#'  [lavaan::fitMeasures]. Default is `NULL`.
 #'
-#' @return
-#' A matrix with the number of columns equal to the number of requested fit
-#' measures,
-#' and the number of rows equal to the number of cases. The row names are the
-#' case identification values used in [lavaan_rerun()].
+#' @return A matrix with the number of columns equals to the number of
+#'  requested fit measures, and the number of rows equals to the number
+#'  of cases. The row names are the case identification values used in
+#'  [lavaan_rerun()].
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
 #'
-#' @references
-#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-#'  models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202–228. <https://doi.org/10.1080/00273171.2011.561068>
+#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#'  in structural equation models: Cases and their influence.
+#'  *Multivariate Behavioral Research, 46*(2), 202–228.
+#'  <https://doi.org/10.1080/00273171.2011.561068>
 #'
 #' @examples
 #' library(lavaan)

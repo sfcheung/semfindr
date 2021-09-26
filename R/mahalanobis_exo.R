@@ -1,36 +1,33 @@
-#' @title
-#' Mahalanobis distance (observed predictors)
+#' @title Mahalanobis Distance (Observed Predictors)
 #'
-#' @description
-#' Get a [lavaan_rerun()] or [lavaan::lavaan()] output and compute the
-#' Mahalanobis distance for each
-#' case using only the observed predictors.
+#' @description Gets a [lavaan_rerun()] or [lavaan::lavaan()] output
+#'  and computes the Mahalanobis distance for each case using only the
+#'  observed predictors.
 #'
-#' @details
-#' For each case, compute the Mahalanobis distance of each case on the observed
-#' predictors.
+#' @details For each case, [mahalanobis_predictors()] computes the
+#'  Mahalanobis distance of each case on the observed predictors.
 #'
-#' If there are no missing values, [stats::mahalanobis()] will be used to
-#' compute the Mahalanobis distance.
+#' If there are no missing values, [stats::mahalanobis()] will be used
+#'  to compute the Mahalanobis distance.
 #'
-#' If there are missing values on the observed predictors, the means and
-#' variance-covariance matrices will be estimated by maximum likelihood using
-#' [norm2::emNorm()]. The estimates will be passed to [modi::MDmiss()] to
-#' compute the Mahalanobis distance.
+#' If there are missing values on the observed predictors, the means
+#'  and variance-covariance matrices will be estimated by maximum
+#'  likelihood using [norm2::emNorm()]. The estimates will be passed
+#'  to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
-#' Currently only support single-sample models.
+#' Currently this function only supports single-group models.
 #'
-#' @param fit It can be the output from `lavaan`, such as [lavaan::cfa()] and
-#'        [lavaan::sem()], or the output from  [lavaan_rerun()].
-#' @param emNorm_arg A list of argument for [norm2::emNorm()]. Default is
-#'                   `list(estimate.worst = FALSE, criterion = 1e-6)`. Ignored
-#'                   if there is no missing data on the exogenous observed
-#'                   variables.
+#' @param fit It can be the output from `lavaan`, such as
+#'  [lavaan::cfa()] and [lavaan::sem()], or the output from
+#'  [lavaan_rerun()].
+#' @param emNorm_arg A list of argument for [norm2::emNorm()].
+#'  Default is `list(estimate.worst = FALSE, criterion = 1e-6)`.
+#'  Ignored if there is no missing data on the observed
+#'  predictors.
 #'
-#' @return
-#' A one-column matrix (a column vector) of the Mahalanobis distance for each
-#' case. The number of rows equal to the number of cases in the data stored in
-#' the fit object.
+#' @return A one-column matrix (a column vector) of the Mahalanobis
+#'  distance for each case. The number of rows equals to the number of
+#'  cases in the data stored in the fit object.
 #'
 #' @examples
 #' library(lavaan)

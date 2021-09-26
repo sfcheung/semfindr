@@ -1,29 +1,26 @@
-#' @title
-#' Check whether the model being fitted is supported by lavaan_rerun
+#' @title Compatibility Check
 #'
-#' @description
-#' Get a [lavaan_rerun()] output and check whether it is supported.
+#' @description Gets a [lavaan_rerun()] output and checks whether it is
+#'  supported.
 #'
-#' @details
-#' This function is not supposed to be used by users. It is called by
-#' [lavaan_rerun()] to see if the analysis being passed to it is supported.
-#' If not, messages will be printed to indicate why.
+#' @details This function is not supposed to be used by users. It is
+#'  called by [lavaan_rerun()] to see if the analysis being passed to
+#'  it is supported. If not, messages will be printed to indicate why.
 #'
 #' @param fit The output from `lavaan`, such as [lavaan::cfa()] and
-#'        [lavaan::sem()].
+#'  [lavaan::sem()].
 #' @param print_messages Logical. If `TRUE`, will print messages about the
-#'        check. If `FALSE`, the messages will be attached to the return value
-#'        as an attribute. Default is `TRUE`.
+#'  check. If `FALSE`, the messages will be attached to the return value
+#'  as an attribute. Default is `TRUE`.
 #'
-#' @return
-#' A single-element vector.
-#' If confirmed to be supported, will return 0.
-#' If not confirmed be support but may still work, return 1.
-#' If confirmed to be not yet supported, will return a negative number, the
-#' value of this number without the negative sign is the number of tests failed.
+#' @return A single-element vector. If confirmed to be supported, will
+#'  return 0. If not confirmed be support but may still work, return 1.
+#'  If confirmed to be not yet supported, will return a negative
+#'  number, the value of this number without the negative sign is the
+#'  number of tests failed.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @examples
 #'
 #' dat <- cfa_dat

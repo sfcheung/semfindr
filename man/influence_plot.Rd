@@ -6,7 +6,7 @@
 \alias{md_plot}
 \alias{gcd_gof_plot}
 \alias{gcd_gof_md_plot}
-\title{Plot selected influence statistics and measures of extremeness}
+\title{Various Plots of Influence Measures}
 \usage{
 gcd_plot(influence_out, cutoff_gcd = NULL, largest_gcd = 1)
 
@@ -42,70 +42,60 @@ gcd_gof_md_plot(
 \arguments{
 \item{influence_out}{The output from \code{\link[=influence_stat]{influence_stat()}}.}
 
-\item{cutoff_gcd}{Cases with generalized Cook's distance larger than this
-value will be labeled. Default is \code{NULL}. If \code{NULL}, no
+\item{cutoff_gcd}{Cases with generalized Cook's distance larger
+than this value will be labeled. Default is \code{NULL}. If \code{NULL}, no
 cutoff line will be drawn.}
 
 \item{largest_gcd}{The number of cases with the largest generalized
-Cook's distance
-to be labelled.
-Default is 1. If not an integer, it will be rounded
-to the nearest
-integer.}
+Cook's distance to be labelled. Default is 1. If not an integer, it
+will be rounded to the nearest integer.}
 
-\item{cutoff_md}{Cases with Mahalanobis distance larger than this value
-will be labeled. If it is \code{TRUE},
-the (\code{cutoff_md_qchisq} x 100)th percentile of the
-chi-square distribution with
-the degrees of freedom equal to the number of variables
-will be used.  Default is \code{FALSE}, no cutoff value.}
+\item{cutoff_md}{Cases with Mahalanobis distance larger than this
+value will be labeled. If it is \code{TRUE}, the (\code{cutoff_md_qchisq} x
+100)th percentile of the chi-square distribution with the degrees
+of freedom equal to the number of variables will be used.  Default
+is \code{FALSE}, no cutoff value.}
 
-\item{cutoff_md_qchisq}{This value multiplied by 100 is the percentile to
-be used
-for labeling case based on Mahalanobis distance.
-Default is .975.}
+\item{cutoff_md_qchisq}{This value multiplied by 100 is the
+percentile to be used for labeling case based on Mahalanobis
+distance. Default is .975.}
 
-\item{largest_md}{The number of cases with the largest Mahalanobis distance
-to be labelled.
-Default is 1. If not an integer, it will be rounded to
-the nearest
-integer.}
+\item{largest_md}{The number of cases with the largest Mahalanobis
+distance to be labelled. Default is 1. If not an integer, it will
+be rounded to the nearest integer.}
 
-\item{fit_measure}{Specify the fit measure to be used in a plot. Use the
-name
-in the \code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}} function. No default
-value.}
+\item{fit_measure}{The fit measure to be used in a
+plot. Use the name in the \code{\link[lavaan:fitMeasures]{lavaan::fitMeasures()}} function. No
+default value.}
 
-\item{cutoff_fit_measure}{Cases with \code{fit_measure} larger than this cutoff
-in magnitude
-will be labeled. No default value and must be
-specified.}
+\item{cutoff_fit_measure}{Cases with \code{fit_measure} larger than
+this cutoff in magnitude will be labeled. No default value and
+must be specified.}
 
-\item{largest_fit_measure}{The number of cases with the largest selected
-fit measure change in magnitude
-to be labelled.
-Default is 1. If not an integer, it will be rounded to
-the nearest
-integer.}
+\item{largest_fit_measure}{The number of cases with the largest
+selected fit measure change in magnitude to be labelled. Default is
+\enumerate{
+\item If not an integer, it will be rounded to the nearest integer.
+}}
 
-\item{circle_size}{The size of the largest circle when the size of a circle
-is controlled
-by a statistic.}
+\item{circle_size}{The size of the largest circle when the size
+of a circle is controlled by a statistic.}
 }
 \value{
-A \link{ggplot2} plot. It will not be plotted. To plot it, use \code{\link[=plot]{plot()}} on
-the output.
+A \link{ggplot2} plot. Plotted by default. If assigned to a variable
+or called inside a function, it will not be plotted. Use \code{\link[=plot]{plot()}} to
+plot it.
 }
 \description{
-Get a \code{\link[=influence_stat]{influence_stat()}} output and plot selected statistics
+Gets a \code{\link[=influence_stat]{influence_stat()}} output and plots selected
+statistics.
 }
 \details{
-The output of \code{\link[=influence_stat]{influence_stat()}} is simply a matrix. Therefore, this
-function will work for any matrix provided.
-Row number will be used on the x-axis if applicable. However, case
-identification
-values in the output from \code{\link[=influence_stat]{influence_stat()}} will be used for labeling
-individual cases.
+The output of \code{\link[=influence_stat]{influence_stat()}} is simply a matrix.
+Therefore, this function will work for any matrix provided. Row
+number will be used on the x-axis if applicable. However, case
+identification values in the output from \code{\link[=influence_stat]{influence_stat()}} will
+be used for labeling individual cases.
 }
 \examples{
 library(lavaan)
@@ -154,9 +144,10 @@ gcd_gof_md_plot(out, fit_measure = "chisq",
 
 }
 \references{
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. \emph{Multivariate Behavioral Research,
-46}(2), 202-228. \url{https://doi.org/10.1080/00273171.2011.561068}
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
+\url{https://doi.org/10.1080/00273171.2011.561068}
 }
 \seealso{
 \code{\link[=influence_stat]{influence_stat()}}.

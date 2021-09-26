@@ -3,7 +3,7 @@
 \docType{data}
 \name{cfa_dat}
 \alias{cfa_dat}
-\title{A six-variable dataset with 100 cases}
+\title{Sample data set for a CFA model}
 \format{
 An object of class \code{data.frame} with 100 rows and 6 columns.
 }
