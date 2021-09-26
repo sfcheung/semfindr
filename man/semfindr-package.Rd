@@ -4,7 +4,7 @@
 \name{semfindr-package}
 \alias{semfindr}
 \alias{semfindr-package}
-\title{semfindr: Diagnostic statistics in structural equation modeling}
+\title{semfindr: Diagnostic Tools in Structural Equation Modeling}
 \description{
 Sensitivity analysis in structural
     equation modeling using change statistics and

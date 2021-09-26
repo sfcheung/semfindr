@@ -147,7 +147,7 @@ gcd_gof_md_plot(out, fit_measure = "chisq",
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
 \emph{Multivariate Behavioral Research, 46}(2), 202-228.
-\url{https://doi.org/10.1080/00273171.2011.561068}
+doi:10.1080/00273171.2011.561068
 }
 \seealso{
 \code{\link[=influence_stat]{influence_stat()}}.
