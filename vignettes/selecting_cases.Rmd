@@ -1,0 +1,161 @@
+---
+title: "Selecting Cases In Rerun"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Selecting Cases In Rerun}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Instead of rerunning fitting the model *n* times, once
+with each case removed, it is possible to use some criteria
+to select cases to be included in the reruns. This is useful
+when the speed to fit the model is slow and/or the sample
+size is very large.
+
+The sample data set `pa_dat` will be used for illustration:
+
+```{r}
+library(semfindr)
+dat <- pa_dat
+# Add case id
+dat <- cbind(id = paste0("case", seq_len(nrow(dat))), dat)
+head(dat)
+```
+
+The following model is fitted to the data set:
+
+```{r}
+library(lavaan)
+mod <- 
+"
+iv1 ~~ iv2
+m1 ~ iv1 + iv2
+dv ~ m1
+"
+fit <- sem(mod, dat)
+```
+
+# Row Numbers or Case IDs
+
+Suppose, for some reasons, users want to refit a model
+only with selected rows removed. For example, only
+rows 1, 4, 15, and 18 should be selected. This can be
+done using
+the argument `to_rerun` of `semfindr::lavaan_rerun()`:
+
+```{r}
+rerun_out <- lavaan_rerun(fit,
+                          to_rerun = c(1, 4, 15, 18))
+```
+
+Only four reruns in the output:
+
+```{r}
+rerun_out
+round(est_change(rerun_out), 3)
+```
+
+If user-supplied case IDs are used, then the value of
+`to_rerun` should be a vector of case IDs:
+
+
+```{r}
+rerun_out <- lavaan_rerun(fit,
+                          case_id = dat$id,
+                          to_rerun = c("case1",
+                                       "case4",
+                                       "case15",
+                                       "case18"))
+```
+
+Only four reruns in the output. User supplied case IDs
+are used in the output:
+
+```{r}
+rerun_out
+round(est_change(rerun_out), 3)
+```
+
+# Mahalanobis Distance on Residuals
+
+Users can select cases using their rankings on the
+Mahalanobis distance computed using the regression-based
+residuals. This is possible only for models with observed
+variables only (i.e., path models). This is analogous to
+selecting cases based on their residuals in a multiple
+regression model. A path model can have more than one
+endogenous variables. The residuals of a case on all
+endogenous variables will be computed, and the Mahalanobis
+distance will be computed using these residuals.
+
+This is done using the argument `resid_md_top`. Users specify
+the top *x* cases on this distance to be selected for
+refitting a model.
+
+```{r}
+rerun_out <- lavaan_rerun(fit,
+                          case_id = dat$id,
+                          resid_md_top = 5)
+```
+
+Five cases were selected, as shown below:
+
+```{r}
+rerun_out
+round(est_change(rerun_out), 3)
+```
+
+Note that selecting cases by this method *can* miss some
+influential cases. As in multiple regression, a case that
+is influential on the results needs not be a case that is
+poorly predicted by the exogenous variables. Therefore,
+this method should be used with caution.
+
+# Mahalanobis Distance on All Variables
+
+Users can select cases using their rankings on the
+Mahalanobis distance computed using all observed variables.
+This is done using the argument `md_top`. Users specify
+the top *x* cases on this distance to be selected for
+refitting a model.
+
+```{r}
+rerun_out <- lavaan_rerun(fit,
+                          case_id = dat$id,
+                          md_top = 5)
+```
+
+Five cases were selected, as shown below:
+
+```{r}
+rerun_out
+round(est_change(rerun_out), 3)
+```
+
+Note that selecting cases by this method *can* miss some
+influential cases. Unlike multiple regression, this distance
+is not a measure of leverage. For a path model, this distance
+used distances from the centroid on *all* observed variables,
+including exogenous variables and endogenous variables.
+For a model with latent factors, this distance is affected by
+both residuals and values predicted by the latent factors.
+Therefore, this method should be used with caution.
+
+# Final Remarks
+
+If feasible, it is recommended to refit a model once for 
+each case, such that the influential of all cases can be
+considered together. The methods above are included when
+the processing time is slow and so only selected cases are
+to be explored. For the final model(s),
+`semfindr::lavaan_rerun()` using
+all cases are recommended, to serve as a final check on the
+sensitivity of the results to individual cases.
