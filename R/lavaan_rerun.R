@@ -74,6 +74,10 @@
 #' @param allow_inadmissible If `TRUE`, accepts a fit object with
 #'  inadmissible results (i.e., `post.check` from
 #'  [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
+#' @param skip_all_checks If `TRUE`, skips all checks and allow
+#'  users to run this function on any object of `lavaan` class.
+#'  For users to experiment this and other functions on models
+#'  not officially supported. Default is `FALSE`.
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
 #'  functions in the `parallel` package to rerun the analysis.
 #'  Currently, only support `"snow"` type clusters using local CPU
@@ -137,6 +141,7 @@ lavaan_rerun <- function(fit,
                          md_top,
                          resid_md_top,
                          allow_inadmissible = FALSE,
+                         skip_all_checks = FALSE,
                          parallel = FALSE,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2))
@@ -156,15 +161,17 @@ lavaan_rerun <- function(fit,
       stop("The fit object is not a lavaan output.")
     }
 
-  check_out <- lavaan_rerun_check(fit, print_messages = FALSE)
+  if (!skip_all_checks) {
+    check_out <- lavaan_rerun_check(fit, print_messages = FALSE)
 
-  if (check_out != 0) {
-      if ((check_out == -1) &&
-          !(suppressWarnings(lavaan::lavInspect(fit, "post.check"))) &&
-          allow_inadmissible) {
-        } else {
-          stop(attr(check_out, "info"))
-        }
+    if (check_out != 0) {
+        if ((check_out == -1) &&
+            !(suppressWarnings(lavaan::lavInspect(fit, "post.check"))) &&
+            allow_inadmissible) {
+          } else {
+            stop(attr(check_out, "info"))
+          }
+      }
     }
 
   n <- nrow(lavaan::lavInspect(fit, "data"))

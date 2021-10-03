@@ -13,7 +13,7 @@ Sensitivity analysis in structural
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://sfcheung.github.io/semfindr}
+  \item \url{https://sfcheung.github.io/semfindr/}
   \item Report bugs at \url{https://github.com/sfcheung/semfindr/issues}
 }
 

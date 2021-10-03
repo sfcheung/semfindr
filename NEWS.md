@@ -1,3 +1,11 @@
+# semfindr 0.1.0.1
+
+(Minor update. Will be merged to 0.1.1)
+
+- Added `skip_all_checks` to `lavaan_rerun()`, allowing users
+  to experiment `lavaan_rerun()` and other functions on
+  models not officially supported.
+
 # semfindr 0.1.0
 
 - Added more vignettes.

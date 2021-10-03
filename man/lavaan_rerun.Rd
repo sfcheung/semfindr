@@ -11,6 +11,7 @@ lavaan_rerun(
   md_top,
   resid_md_top,
   allow_inadmissible = FALSE,
+  skip_all_checks = FALSE,
   parallel = FALSE,
   makeCluster_args = list(spec = getOption("cl.cores", 2))
 )
@@ -50,6 +51,11 @@ or \code{md_top.}}
 \item{allow_inadmissible}{If \code{TRUE}, accepts a fit object with
 inadmissible results (i.e., \code{post.check} from
 \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
+
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allow
+users to run this function on any object of \code{lavaan} class.
+For users to experiment this and other functions on models
+not officially supported. Default is \code{FALSE}.}
 
 \item{parallel}{Whether parallel will be used. If \code{TRUE}, will use
 functions in the \code{parallel} package to rerun the analysis.
