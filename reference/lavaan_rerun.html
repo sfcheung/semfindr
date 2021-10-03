@@ -73,7 +73,7 @@ times, each time with one case removed." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.1</span>
       </span>
     </div>
 
@@ -147,6 +147,7 @@ times, each time with one case removed.</p>
   <span class='va'>md_top</span>,
   <span class='va'>resid_md_top</span>,
   allow_inadmissible <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  skip_all_checks <span class='op'>=</span> <span class='cn'>FALSE</span>,
   parallel <span class='op'>=</span> <span class='cn'>FALSE</span>,
   makeCluster_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>spec <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"cl.cores"</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
@@ -200,6 +201,13 @@ or <code>md_top.</code></p></td>
       <td><p>If <code>TRUE</code>, accepts a fit object with
 inadmissible results (i.e., <code>post.check</code> from
 <code><a href='https://rdrr.io/pkg/lavaan/man/lavInspect.html'>lavaan::lavInspect()</a></code> is <code>FALSE</code>). Default is <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>skip_all_checks</th>
+      <td><p>If <code>TRUE</code>, skips all checks and allow
+users to run this function on any object of <code>lavaan</code> class.
+For users to experiment this and other functions on models
+not officially supported. Default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -322,7 +330,7 @@ dv ~ m1
 #&gt;    .dv                1.423    0.285    5.000    0.000
 #&gt; </div><div class='input'><span class='co'># Fit the model n times. Each time with one case removed.</span>
 <span class='va'>fit_rerun</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan_rerun</span><span class='op'>(</span><span class='va'>fit</span>, parallel <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 3.3 second(s).</span>
+</div><div class='output co'>#&gt; <span class='message'>The expected CPU time is 2.9 second(s).</span>
 #&gt; <span class='message'>Could be faster if ran in parallel.</span></div><div class='input'><span class='co'># Results excluding the first case</span>
 <span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/fitMeasures.html'>fitMeasures</a></span><span class='op'>(</span><span class='va'>fit_rerun</span><span class='op'>$</span><span class='va'>rerun</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"chisq"</span>, <span class='st'>"cfi"</span>, <span class='st'>"tli"</span>, <span class='st'>"rmsea"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; chisq   cfi   tli rmsea 

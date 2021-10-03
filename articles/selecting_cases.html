@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">semfindr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.1</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@ dv ~ m1
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.5 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.48 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Only four reruns in the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -157,7 +157,7 @@ dv ~ m1
                                        <span class="st">"case4"</span>,
                                        <span class="st">"case15"</span>,
                                        <span class="st">"case18"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.5 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.48 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Only four reruns in the output. User supplied case IDs are used in the output:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -185,7 +185,7 @@ dv ~ m1
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,
                           resid_md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.62 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.6 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -213,7 +213,7 @@ dv ~ m1
 <code class="sourceCode R"><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,
                           case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,
                           md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; The expected CPU time is 0.62 second(s).</span>
+<span class="co">#&gt; The expected CPU time is 0.6 second(s).</span>
 <span class="co">#&gt; Could be faster if ran in parallel.</span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
