@@ -6,7 +6,13 @@ Authors@R: c(
            family = "Cheung",
            role = c("aut", "cre"),
            email = "shufai.cheung@gmail.com",
-           comment = c(ORCID = "0000-0002-9871-9448")))
+           comment = c(ORCID = "0000-0002-9871-9448")),
+    person(given = "Mark Hok Chio",
+           family = "Lai",
+           role = c("aut"),
+           email = "marklhc@gmail.com ",
+           comment = c(ORCID = "0000-0002-9196-7406"))
+           )
 Description: Sensitivity analysis in structural
     equation modeling using change statistics and
     diagnostic plots.
