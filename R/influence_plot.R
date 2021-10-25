@@ -274,7 +274,7 @@ gcd_gof_plot <- function(
   label_fm <- (abs(dat$fm) >= c_fm_cut) | (abs(dat$fm) >= m_fm_cut)
 
   if (is.numeric(cutoff_gcd)) {
-      p <- p + ggplot2::geom_hline(yintercept = cutoff_gcd,
+      p <- p + ggplot2::geom_vline(xintercept = cutoff_gcd,
                                    linetype = "dashed")
       c_gcd_cut <- cutoff_gcd
     } else {
