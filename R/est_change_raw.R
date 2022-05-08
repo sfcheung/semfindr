@@ -114,7 +114,7 @@ est_change_raw <- function(rerun_out,
               fmi = FALSE,
               cov.std = TRUE,
               rsquare = FALSE,
-              remove.nonfree = TRUE,
+              remove.nonfree = !standardized,
               output = "data.frame"
               )
   parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
@@ -140,7 +140,7 @@ est_change_raw <- function(rerun_out,
                   fmi = FALSE,
                   cov.std = TRUE,
                   rsquare = FALSE,
-                  remove.nonfree = TRUE,
+                  remove.nonfree = !standardized,
                   output = "data.frame"
                   )
     if (standardized) {

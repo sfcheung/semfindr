@@ -1,4 +1,3 @@
-skip("WIP")
 library(testthat)
 library(lavaan)
 library(semfindr)
@@ -38,7 +37,7 @@ est0_15$par_names <- paste0(est0_15$lhs, est0_15$op, est0_15$rhs)
 
 k <- nrow(est0)
 
-test_that("Compare raw change in standardized solution for an arbitrary case", {
+test_that("Raw change in standardized loading in CFA", {
     expect_equal(ignore_attr = TRUE,
         est0_15$est_std_cha,  
         est_change_rerun_all_std[15, ]
