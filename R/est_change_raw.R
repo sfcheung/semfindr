@@ -20,7 +20,11 @@
 #' @param parameters A character vector to specify the selected
 #'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
 #'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()]. If `NULL`, the
+#'  in the output of [lavaan::parameterEstimates()].
+#'  Supports specifying an operator to select all parameters with this
+#'  operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#'  both parameter names and operators.
+#'  If `NULL`, the
 #'  default, differences on all free parameters will be computed.
 #' @param standardized If `TRUE`, the changes in the full standardized
 #'  solution is returned (`type` = `std.all` in
@@ -119,7 +123,8 @@ est_change_raw <- function(rerun_out,
               )
   parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
   if (!is.null(parameters)) {
-    parameters_selected <- gsub(" ", "", parameters)
+    # parameters_selected <- gsub(" ", "", parameters)
+    parameters_selected <- est_names_selected(est0, parameters)
     if (!all(parameters_selected %in% parameters_names)) {
         stop(paste("Not all parameters can be found in the output.",
                    "Please check the parameters argument."))
