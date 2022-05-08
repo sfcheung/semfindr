@@ -328,10 +328,7 @@ gen_fct_old <- function(fit) {
 
 gen_fct <- function(fit) {
   fit_org <- eval(fit)
-  # data_full <- fit_org@Data@X[[1]]
   data_full <- lavaan::lavInspect(fit_org, "data")
-  # colnames(data_full) <- fit_org@Data@ov$name
-  colnames(data_full) <- lavaan::lavNames(fit_org)
   function(i = NULL) {
       if (is.null(i)) {
           return(lavaan::update(fit_org, data = data_full))
