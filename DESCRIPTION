@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Diagnostic Tools in Structural Equation Modeling
-Version: 0.1.0.1
+Version: 0.1.0.9001
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
@@ -23,21 +23,20 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     testthat (>= 3.0.0),
     parallel,
     knitr,
-    rmarkdown
+    rmarkdown,
+    modi,
+    norm2
 Imports: 
     lavaan,
     ggplot2,
     ggrepel,
     rlang,
-    stats,
-    modi,
-    norm2,
-    methods
+    stats
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 Config/testthat/edition: 3
