@@ -249,7 +249,8 @@ lavaan_rerun <- function(fit,
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
   rerun_test <- suppressWarnings(rerun_i(NULL))
-  if (!all.equal(unclass(coef(fit)), coef(rerun_test)[names(coef(fit))])) {
+  if (!isTRUE(all.equal(unclass(coef(fit)),
+                        coef(rerun_test)[names(coef(fit))]))) {
       stop("Something is wrong. The lavaan analysis cannot be rerun.")
     }
 
