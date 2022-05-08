@@ -97,7 +97,8 @@ est_change <- function(rerun_out,
               )
   parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
   if (!is.null(parameters)) {
-    parameters_selected <- gsub(" ", "", parameters)
+    # parameters_selected <- gsub(" ", "", parameters)
+    parameters_selected <- est_names_selected(est0, parameters)
     if (!all(parameters_selected %in% parameters_names)) {
         stop(paste("Not all parameters can be found in the output.",
                    "Please check the parameters argument."))
