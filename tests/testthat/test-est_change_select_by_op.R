@@ -21,19 +21,19 @@ rerun_out <- lavaan_rerun(fit0, parallel = FALSE)
 rerun_15 <- rerun_out$rerun[[15]]
 
 est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
-est0_15 <- lavaan::parameterEstimates(fit0_15, standardized = TRUE)
+
 est_change_rerun_test1 <- est_change(rerun_out, 
                                 c("~"))
 est_change_rerun_test2 <- est_change(rerun_out, 
                                 c("~~"))
 est_change_rerun_test3 <- est_change(rerun_out, 
                                 c("=~"))
-est_change_rerun_test4 <- est_change(rerun_out, 
-                                c(":="))
+# est_change_rerun_test4 <- est_change(rerun_out, 
+#                                 c(":="))
 est_change_rerun_test5 <- est_change(rerun_out, 
-                                c(":=", "~~"))
+                                c("=~", "~~"))
 est_change_rerun_test6 <- est_change(rerun_out, 
-                                c("f3 ~ f2", ":=", "~~"))
+                                c("f3 ~ f2", "=~", "~~"))
 est_change_rerun_test7 <- est_change(rerun_out, 
                                 c("~1"))
 
@@ -48,33 +48,35 @@ parameters_names_int <- parameters_names[(est0$op == "~1") & !is.na(est0$z)]
 test_that("Parameter selected by operators", {
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test1)),
-        sort(parameters_names_paths)
+        sort(c("gcd", parameters_names_paths))
       )
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test2)),
-        sort(parameters_names_cov)
+        sort(c("gcd", parameters_names_cov))
       )
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test3)),
-        sort(parameters_names_loads)
+        sort(c("gcd", parameters_names_loads))
       )
-    expect_equal(ignore_attr = TRUE,
-        sort(colnames(est_change_rerun_test4)),
-        sort(parameters_names_def)
-      )
+    # expect_equal(ignore_attr = TRUE,
+    #     sort(colnames(est_change_rerun_test4)),
+    #     sort(parameters_names_def)
+    #   )
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test5)),
-        sort(c(parameters_names_def,
-               parameters_names_cov))
+        sort(c(c("gcd",
+               parameters_names_loads,
+               parameters_names_cov)))
       )
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test6)),
-        sort(c(parameters_names_def,
+        sort(c("gcd",
+               parameters_names_loads,
                parameters_names_cov,
                "f3~f2"))
       )
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test7)),
-        sort(parameters_names_int)
+        sort(c("gcd", parameters_names_int))
       )
   })
