@@ -310,9 +310,7 @@ lavaan_rerun <- function(fit,
 }
 
 gen_fct_old <- function(fit) {
-  # Need to use @call instead of lavInspect(fit, "call") to ensure
-  # the returned object is a call.
-  fit_call <- fit@call
+  fit_call <- as.call(lavaan::lavInspect(fit, "call"))
   fit_call2 <- fit_call
   for (i in seq_len(length(fit_call2))) {
       fit_call2[[i]] <- eval(fit_call[[i]])

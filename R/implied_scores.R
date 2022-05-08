@@ -79,18 +79,12 @@ implied_scores <- function(fit) {
         stop("Raw data not available. Implied scores cannot be computed.")
       }
 
-    # dat <- as.data.frame(lavaan::lavInspect(fit, "data"))
-    dat <- as.data.frame(fit@Data@X[[1]])
-    colnames(dat) <- fit@Data@ov.names[[1]]
+    dat <- as.data.frame(lavaan::lavInspect(fit, "data"))
     n <- nrow(dat)
 
-    v_names <- fit@Data@ov.names[[1]]
-    x_names <- fit@Data@ov.names.x[[1]]
-    y_names <- v_names[!(v_names %in% x_names)]
-    # The following three lines do not work
-    # v_names <- lavaan::lavNames(fit, "ov")
-    # x_names <- lavaan::lavNames(fit, "eqs.x")
-    # y_names <- lavaan::lavNames(fit, "eqs.y")
+    v_names <- lavaan::lavNames(fit, "ov")
+    y_names <- lavaan::lavNames(fit, "eqs.y")
+    x_names <- v_names[!(v_names %in% y_names)]
 
     dat_y <- dat[, y_names]
     dat_x <- dat[, x_names]
