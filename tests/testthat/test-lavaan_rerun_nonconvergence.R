@@ -31,3 +31,20 @@ test_that("Warnings", {
     expect_true(all(sapply(fit_rerun$post_check, inherits,
                             what = "simpleWarning")[c(1, 20)]))
   })
+
+test_that("est_change_raw", {
+    tmp <- est_change_raw(fit_rerun)
+    expect_true(all(!complete.cases(tmp)[c(1, 3, 20)]))
+  })
+
+test_that("est_change", {
+    tmp <- est_change(fit_rerun)
+    expect_true(all(!complete.cases(tmp)[c(1, 3, 20)]))
+  })
+
+test_that("fit_measures_change", {
+    tmp <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+    expect_equal(which(is.na(tmp)),
+                 c(1, 3, 20))
+  })
+

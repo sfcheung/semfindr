@@ -76,7 +76,8 @@ fit_measures_change <- function(rerun_out,
                                       baseline.model = baseline_model)
   out <- sapply(reruns, function(x, fitm0) {
                       chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
-                      if (isTRUE(chk)) {
+                      chk2 <- lavaan::lavTech(x, "converged")
+                      if (isTRUE(chk) & isTRUE(chk2)) {
                           outi <- fitm0 -
                                     lavaan::fitMeasures(x, 
                                           fit.measures = fit_measures,

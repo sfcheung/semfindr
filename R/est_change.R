@@ -148,7 +148,8 @@ est_change <- function(rerun_out,
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
-                  if (isTRUE(chk)) {
+                  chk2 <- lavaan::lavTech(x, "converged")
+                  if (isTRUE(chk) & isTRUE(chk2)) {
                       return(tmpfct(x, est = est,
                                     parameters_names = parameters_names,
                                     parameters_selected = parameters_selected)
