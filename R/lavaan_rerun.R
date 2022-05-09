@@ -288,8 +288,8 @@ lavaan_rerun <- function(fit,
     }
 
   if (rt[[3]] > 60) {
-      message(paste0("The rerun took more than one minute.\n",
-                     "Consider saving the output to an external file.\n",
+      message(paste0("Note: The rerun took more than one minute. ",
+                     "Consider saving the output to an external file. ",
                      "E.g., can use saveRDS() to save the object."))
       utils::flush.console()
     }
@@ -302,8 +302,8 @@ lavaan_rerun <- function(fit,
                     })
   any_warning <- !all(sapply(post_check, isTRUE))
   if (any_warning) {
-      message(paste0("Some cases led to warnings if excluded.\n",
-                    "Please check the element 'post_check'\n",
+      message(paste0("Note: Some cases led to warnings if excluded. ",
+                    "Please check the element 'post_check' ",
                     "for cases with values other than `TRUE`."))
       utils::flush.console()
     }
