@@ -78,6 +78,12 @@ checked by \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \c
 list. If the value is \code{TRUE}, the estimation converged and the
 solution is admissible. If not \code{TRUE}, it is a warning message
 issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
+\item \code{converged}: A vector of length equals to \emph{n}. Each analysis was
+checked by \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "converged")}, \code{x} being the
+\code{lavaan} results. The results of this test are stored in this
+vector. If the value is \code{TRUE}, the estimation converged. If
+not \code{TRUE}, then the estimation failed to converge if the corresponding
+case is excluded.
 \item \code{call}: The call to \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 \item \code{selected}: A numeric vector of the row numbers of cases selected
 in the analysis. Its length should be equal to the length of

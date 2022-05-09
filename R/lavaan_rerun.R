@@ -102,6 +102,13 @@
 #'   solution is admissible. If not `TRUE`, it is a warning message
 #'   issued by [lavaan::lavTech()].
 #'
+#' - `converged`: A vector of length equals to *n*. Each analysis was
+#'   checked by [lavaan::lavTech]`(x, "converged")`, `x` being the
+#'   `lavaan` results. The results of this test are stored in this
+#'   vector. If the value is `TRUE`, the estimation converged. If
+#'   not `TRUE`, then the estimation failed to converge if the corresponding
+#'   case is excluded.
+#'
 #' - `call`: The call to [lavaan_rerun()].
 #'
 #' - `selected`: A numeric vector of the row numbers of cases selected
@@ -301,9 +308,22 @@ lavaan_rerun <- function(fit,
       utils::flush.console()
     }
 
+  # converged
+  converged <- sapply(out, function(x) {
+                      lavaan::lavTech(x, what = "converged")
+                    })
+  any_not_converged <- !all(sapply(post_check, isTRUE))
+  if (any_not_converged) {
+      message(paste0("Note: Some cases led to nonconvergence if excluded. ",
+                     "Please check the element 'converged' ",
+                     "for cases with values other than `TRUE`."))
+      utils::flush.console()
+    }
+
   out <- list(rerun = out,
               fit = fit,
               post_check = post_check,
+              converged = converged,
               call = call,
               selected = id_to_rerun)
   class(out) <- "lavaan_rerun"
