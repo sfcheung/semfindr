@@ -65,7 +65,7 @@ Here is a comparison between the approximation using scores from `lavaan::lavSco
 
 ```{r compare-est-change}
 # From semfindr
-fit_est_change <- est_change_raw(fit_rerun)
+fit_est_change_raw <- est_change_raw(fit_rerun)
 # From scores
 fit_est_change_approx <- lavScores(fit) %*% vcov(fit) * 
   nobs(fit) / (nobs(fit) - 1)
@@ -73,7 +73,7 @@ fit_est_change_approx <- lavScores(fit) %*% vcov(fit) *
 library(ggplot2)
 library(tidyr)
 est_change_df <- 
-  pivot_longer(as_tibble(fit_est_change), cols = 1:5,
+  pivot_longer(as_tibble(fit_est_change_raw), cols = 1:5,
                names_to = "param", values_to = "est_change") |>
   cbind(est_change_approx = 
               pivot_longer(as_tibble(fit_est_change_approx),
@@ -84,6 +84,37 @@ ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
   facet_wrap(~ param) +
   coord_fixed()
 ```
+
+### Generalized Cook's distance (gCD)
+
+We can use the approximate parameter change to approximate the gCD:
+
+```{r approx-gcd}
+# Hessian (inverse of covariance) with scale adjustment
+information_fit <- lavInspect(fit, what = "information") * (nobs(fit) - 1)
+# Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)
+gcd_approx <- rowSums(
+  (fit_est_change_approx %*% information_fit) * fit_est_change_approx
+)
+# Compare to exact computation
+fit_est_change <- est_change(fit_rerun)
+# Plot
+gcd_df <- data.frame(
+  gcd_exact = fit_est_change[ , "gcd"],
+  gcd_approx = gcd_approx
+)
+ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point() +
+  coord_fixed()
+```
+
+It seems that the approximation would underestimate the actual gCD, although the rank ordering is similar
+
+```{r cor-gcd}
+cor(gcd_df, method = "spearman")
+```
+
 
 ## Approximate Change in Fit
 
