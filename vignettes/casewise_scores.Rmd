@@ -138,11 +138,7 @@ fit_no1@loglik$loglik
 They are pretty close. To compute the change in chi-squared, however, the predicted loglikelihood of the saturated (h1) model is also needed. I am not sure whether `lavaan` can compute casewise likelihood for the saturated model, but this can be done manually:
 
 ```{r fit_h1}
-mod_h1 <-
-"
-m1 ~ iv1 + iv2
-dv ~ m1 + iv1 + iv2
-"
+mod_h1 <- lav_partable_unrestricted(fit)
 fit_h1 <- sem(mod_h1, dat)
 lli_h1 <- lavInspect(fit_h1, what = "loglik.casewise")
 ```
