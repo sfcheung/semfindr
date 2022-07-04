@@ -22,7 +22,7 @@
 #'
 #' Currently it only supports single-group models.
 #'
-#' @param rerun_out The output from [lavaan_rerun()].
+#' @param fit The output from [lavaan::lavaan()].
 #' @param parameters A character vector to specify the selected
 #'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
 #'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
