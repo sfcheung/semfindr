@@ -7,6 +7,8 @@
 est_change_approx(fit, parameters = NULL, case_id = NULL)
 }
 \arguments{
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.}
+
 \item{parameters}{A character vector to specify the selected
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
@@ -22,8 +24,6 @@ number of cases (the number of rows in the data in \code{fit}), then it
 is the vector of case identification values. If it is \code{NULL}, the
 default, then \code{case.idx} used by \code{lavaan} functions will be used
 as case identification values.}
-
-\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 }
 \value{
 A matrix with the number of columns equal to the number of
