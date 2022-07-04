@@ -69,43 +69,18 @@ dv ~ m1
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
+# Compute the approximated changes in parameter estimates if a case is removed
+out_approx <- est_change_raw_approx(fit)
+head(out_approx)
 # Fit the model n times. Each time with one case removed.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
 # Compute the changes in parameter estimates if a case is removed
 out <- est_change_raw(fit_rerun)
 # Results excluding a case, for the first few cases
 head(out)
-# Note that these are the differences in parameter estimates.
-
-# The parameter estimates from all cases
-(coef_all <- coef(fit))
-# The parameter estimates from manually deleting the first case
-fit_no_1 <- lavaan::sem(mod, dat[-1, ])
-(coef_no_1 <- coef(fit_no_1))
-# The differences
-coef_all - coef_no_1
-# The first row of `est_change_raw(fit_rerun)`
-round(out[1, ], 3)
-
-# Compute only the changes of the paths from iv1 and iv2 to m1
-out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
-# Results excluding a case, for the first few cases
-head(out2)
-# Note that only the changes in the selected paths are included.
-
-# Use standardized = TRUE to compare the differences in standardized solution
-out2_std <- est_change_raw(fit_rerun,
-                          c("m1 ~ iv1", "m1 ~ iv2"),
-                          standardized = TRUE)
-head(out2_std)
-(est_std_all <- parameterEstimates(fit,
-                 standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")])
-(est_std_no_1 <- parameterEstimates(fit_no_1,
-                 standardized = TRUE)[1:2, c("lhs", "op", "rhs", "std.all")])
-# The differences
-est_std_all$std.all - est_std_no_1$std.all
-# The first row of `out2_std`
-out2_std[1, ]
+# Compare the results
+plot(out_approx[, 1], out[, 1]); abline(a = 0, b = 1)
+plot(out_approx[, 5], out[, 5]); abline(a = 0, b = 1)
 
 }
 \author{
