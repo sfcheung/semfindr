@@ -29,3 +29,12 @@ test_that("Checked against known results", {
       )
   })
 
+set.seed(1314)
+fit_rerun <- lavaan_rerun(fit, to_rerun = 26:50)
+fit_est_change <- est_change_raw(fit_rerun)
+
+test_that("Exact and approximate results are similar", {
+    abs_diff <- abs(fit_est_change_approx2[26:50, ] -
+                    fit_est_change)
+    expect_lt(max(abs_diff), expected = .01)
+  })
