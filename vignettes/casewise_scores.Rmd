@@ -57,18 +57,24 @@ The second-order Taylor series expansion can be used to approximate the paramete
 
 $$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
 $$\hat \theta - \hat \theta_{(i)} = \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
-where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (not 100% sure whether this is needed, but is trivial in large samples).
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (not 100% sure whether this is needed, but is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807), and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
 
 ### Comparison
 
-Here is a comparison between the approximation using scores from `lavaan::lavScore()` and `semfindr::est_change_raw()`
+The approximation is implemented in the `semfindr::est_change_raw_approx()` functon:
+
+```{r fit_est_change_approx}
+fit_est_change_approx <- est_change_raw_approx(fit)
+head(fit_est_change_approx)
+lavScores(fit) %*% vcov(fit) *
+  nobs(fit) / (nobs(fit) - 1)
+```
+
+Here is a comparison between the approximation using `semfindr::est_change_raw_approx()` and `semfindr::est_change_raw()`
 
 ```{r compare-est-change}
 # From semfindr
 fit_est_change_raw <- est_change_raw(fit_rerun)
-# From scores
-fit_est_change_approx <- lavScores(fit) %*% vcov(fit) * 
-  nobs(fit) / (nobs(fit) - 1)
 # Plot the differences
 library(ggplot2)
 library(tidyr)
@@ -87,21 +93,31 @@ ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
 
 ### Generalized Cook's distance (gCD)
 
-We can use the approximate parameter change to approximate the gCD:
+We can use the approximate parameter change to approximate the gCD (see also Tanaka et al., 1991, equation 13, p. 3811):
 
 ```{r approx-gcd}
-# Hessian (inverse of covariance) with scale adjustment
-information_fit <- lavInspect(fit, what = "information") * (nobs(fit) - 1)
+# Information matrix (Hessian)
+information_fit <- lavInspect(fit, what = "information")
 # Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)
-gcd_approx <- rowSums(
+gcd_approx <- (nobs(fit) - 1) * rowSums(
   (fit_est_change_approx %*% information_fit) * fit_est_change_approx
 )
+```
+
+This is implemented in the `semfindr::est_change_approx()`:
+
+```{r est_change_approx-gcd}
+fit_est_change_approx <- est_change_approx(fit)
+head(fit_est_change_approx)
+```
+
+```{r compare-approx-gcd}
 # Compare to exact computation
 fit_est_change <- est_change(fit_rerun)
 # Plot
 gcd_df <- data.frame(
   gcd_exact = fit_est_change[ , "gcd"],
-  gcd_approx = gcd_approx
+  gcd_approx = fit_est_change_approx[ , "gcd_approx"]
 )
 ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
   geom_abline(intercept = 0, slope = 1) +
@@ -109,12 +125,11 @@ ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
   coord_fixed()
 ```
 
-It seems that the approximation would underestimate the actual gCD, although the rank ordering is similar
+It seems that the approximation would underestimate the actual gCD, although the rank ordering is similar. This is discussed also in Tanaka et al. (1991), who also proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
 
 ```{r cor-gcd}
 cor(gcd_df, method = "spearman")
 ```
-
 
 ## Approximate Change in Fit
 
@@ -135,37 +150,26 @@ fit_no1 <- sem(mod, dat[-1, ])
 fit_no1@loglik$loglik
 ```
 
-They are pretty close. To compute the change in chi-squared, however, the predicted loglikelihood of the saturated (h1) model is also needed. I am not sure whether `lavaan` can compute casewise likelihood for the saturated model, but this can be done manually:
-
-```{r fit_h1}
-mod_h1 <- lav_partable_unrestricted(fit)
-fit_h1 <- sem(mod_h1, dat)
-lli_h1 <- lavInspect(fit_h1, what = "loglik.casewise")
-```
-
-As the model chi-squared is the difference between -2 x h1 loglikelihood and -2 x loglikelihood of specified model, we can obtain the predicted chi-squared with an observation dropped as
+They are pretty close. To approximate the change in chi-squared, as well as other chi-squared based fit indices, we can use `semfindr::fit_measures_change_approx()` function:
 
 ```{r chisq_i_approx}
-ll_approx <- fit@loglik$loglik - lli  # predicted model ll
-ll_h1_approx <- fit_h1@loglik$loglik - lli_h1  # predicted h1 ll
-chisq_i_approx <- 2 * (ll_h1_approx - ll_approx)
+chisq_i_approx <- fit_measures_change_approx(fit)
 # Compare to the actual chisq when dropping observation 1
-c(predict = chisq_i_approx[1],
+c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
   actual = fitmeasures(fit_no1, "chisq"))
 ```
 
 ### Comparison
 
+Change in $\chi^2$
+
 ```{r plot-change-chisq}
-# Below is a shortcut as
-# chisq == -2 * (fit_h1@loglik$loglik - fit@loglik$loglik)
-chisq_change_i_approx <- 2 * (lli_h1 - lli)
-# From semfindr
+# Exact measure from semfindr
 out <- fit_measures_change(fit_rerun)
 # Plot
 chisq_change_df <- data.frame(
   chisq_change = out[ , "chisq"],
-  chisq_change_approx = chisq_change_i_approx
+  chisq_change_approx = chisq_i_approx[ , "chisq"]
 )
 ggplot(chisq_change_df, aes(x = chisq_change, y = chisq_change_approx)) +
   geom_abline(intercept = 0, slope = 1) +
@@ -173,4 +177,16 @@ ggplot(chisq_change_df, aes(x = chisq_change, y = chisq_change_approx)) +
   coord_fixed()
 ```
 
+Change in RMSEA
 
+```{r plot-change-rmsea}
+# Plot
+rmsea_change_df <- data.frame(
+  rmsea_change = out[ , "rmsea"],
+  rmsea_change_approx = chisq_i_approx[ , "rmsea"]
+)
+ggplot(rmsea_change_df, aes(x = rmsea_change, y = rmsea_change_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point() +
+  coord_fixed()
+```
