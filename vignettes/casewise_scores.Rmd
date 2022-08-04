@@ -1,9 +1,9 @@
 ---
-title: "Casewise Likelihood and Scores"
+title: "Approximate Case Influence Using Scores and Casewise Likelihood"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Casewise Likelihood and Scores}
+  %\VignetteIndexEntry{Approximate Case Influence}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+This vignette explains the computational shortcut implemented in `semfindr` to approximate the casewise influence. From my experience, the approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
 
 ```{r dat}
 library(semfindr)
@@ -45,19 +47,19 @@ if (file.exists("semfindr_fit_rerun.RDS")) {
 $$s_i(\theta_m) = \frac{\partial \ell_i(\theta_m)}{\partial \theta_m}$$
 for observation $i$, where $\ell_i(\theta)$ denotes the casewise loglikelihood function and $\theta_m$ is the $m$th model parameter.
 
-For example, 
+For example,
 
 ```{r lav-scores-head}
 head(lavScores(fit)[ , 1, drop = FALSE])
 ```
 
-indicates the derivative of the casewise loglikelihod with respect to the parameter `m1~iv1`. Because the sum of the scores is zero at the maximum likelihood estimate, $\hat \theta_m$, with the full sample (i.e., derivative of loglikelihood of the full data is 0), $- s_i(\theta_m)$ can be used as an estimate of the derivative of the loglikelihood at $\hat \theta_m$ **for the sample without observation $i$**. This information can be used to approximate the maximum likelihood estimate when case $i$ is dropped, denoted as $\hat \theta_{m(-i)}$
+indicates the partial derivative of the casewise loglikelihod with respect to the parameter `m1~iv1`. Because the sum of the partial derivatives across all observations is zero at the maximum likelihood estimate with the full sample ($\hat \theta_m$; i.e., derivative of loglikelihood of the full data is 0), $- s_i(\theta_m)$ can be used as an estimate of the partial derivative of the loglikelihood at $\hat \theta_m$ **for the sample without observation $i$**. This information can be used to approximate the maximum likelihood estimate for $\theta_m$ when case $i$ is dropped, denoted as $\hat \theta_{m(-i)}$
 
-The second-order Taylor series expansion can be used to approximate the parameter vector estimate with an observation deleted, $\hat \theta_{(-i)}$, as in the iterative [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization). Specifically, 
+The second-order Taylor series expansion can be used to approximate the parameter vector estimate with an observation deleted, $\hat \theta_{(-i)}$, as in the iterative [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization). Specifically,
 
 $$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
 $$\hat \theta - \hat \theta_{(i)} = \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
-where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (not 100% sure whether this is needed, but is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807), and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (not 100% sure whether this is needed, but it is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
 
 ### Comparison
 
@@ -66,8 +68,6 @@ The approximation is implemented in the `semfindr::est_change_raw_approx()` func
 ```{r fit_est_change_approx}
 fit_est_change_approx <- est_change_raw_approx(fit)
 head(fit_est_change_approx)
-lavScores(fit) %*% vcov(fit) *
-  nobs(fit) / (nobs(fit) - 1)
 ```
 
 Here is a comparison between the approximation using `semfindr::est_change_raw_approx()` and `semfindr::est_change_raw()`
@@ -78,10 +78,10 @@ fit_est_change_raw <- est_change_raw(fit_rerun)
 # Plot the differences
 library(ggplot2)
 library(tidyr)
-est_change_df <- 
+est_change_df <-
   pivot_longer(as_tibble(fit_est_change_raw), cols = 1:5,
                names_to = "param", values_to = "est_change") |>
-  cbind(est_change_approx = 
+  cbind(est_change_approx =
               pivot_longer(as_tibble(fit_est_change_approx),
                            cols = 1:5)$value)
 ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
@@ -90,6 +90,8 @@ ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
   facet_wrap(~ param) +
   coord_fixed()
 ```
+
+The results are pretty similar.
 
 ### Generalized Cook's distance (gCD)
 
@@ -104,7 +106,7 @@ gcd_approx <- (nobs(fit) - 1) * rowSums(
 )
 ```
 
-This is implemented in the `semfindr::est_change_approx()`:
+This is implemented in the `semfindr::est_change_approx()` function:
 
 ```{r est_change_approx-gcd}
 fit_est_change_approx <- est_change_approx(fit)
@@ -125,7 +127,7 @@ ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
   coord_fixed()
 ```
 
-It seems that the approximation would underestimate the actual gCD, although the rank ordering is similar. This is discussed also in Tanaka et al. (1991), who also proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
+It seems that the approximation would underestimate the actual gCD, although the rank ordering is almost identical. This is discussed also in Tanaka et al. (1991), who also proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
 
 ```{r cor-gcd}
 cor(gcd_df, method = "spearman")
@@ -133,7 +135,7 @@ cor(gcd_df, method = "spearman")
 
 ## Approximate Change in Fit
 
-The casewise loglikelihood in `lavaan` can approximate the change in loglikelihood when an observation is deleted:
+The casewise loglikelihood---the contribution to the likelihood function by an observation---can be computed in `lavaan`, which approximates the change in loglikelihood when an observation is deleted:
 
 ```{r lli}
 lli <- lavInspect(fit, what = "loglik.casewise")
@@ -150,7 +152,7 @@ fit_no1 <- sem(mod, dat[-1, ])
 fit_no1@loglik$loglik
 ```
 
-They are pretty close. To approximate the change in chi-squared, as well as other chi-squared based fit indices, we can use `semfindr::fit_measures_change_approx()` function:
+They are pretty close. To approximate the change in chi-squared, as well as other chi-squared-based fit indices, we can use the `semfindr::fit_measures_change_approx()` function:
 
 ```{r chisq_i_approx}
 chisq_i_approx <- fit_measures_change_approx(fit)
@@ -159,7 +161,7 @@ c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
   actual = fitmeasures(fit_no1, "chisq"))
 ```
 
-### Comparison
+### Comparing exact and approximated changes in fit indices
 
 Change in $\chi^2$
 
@@ -190,3 +192,11 @@ ggplot(rmsea_change_df, aes(x = rmsea_change, y = rmsea_change_approx)) +
   geom_point() +
   coord_fixed()
 ```
+
+The values aligned reasonably well along the 45-degree line.
+
+# References
+
+Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. http://conservancy.umn.edu/handle/11299/37076
+
+Tanaka, Y., Watadani, S., & Ho Moon, S. (1991). Influence in covariance structure analysis: With an application to confirmatory factor analysis. *Communications in Statistics - Theory and Methods, 20*(12), 3805–3821. https://doi.org/10.1080/03610929108830742
