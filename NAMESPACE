@@ -2,8 +2,11 @@
 
 S3method(print,lavaan_rerun)
 export(est_change)
+export(est_change_approx)
 export(est_change_raw)
+export(est_change_raw_approx)
 export(fit_measures_change)
+export(fit_measures_change_approx)
 export(gcd_gof_md_plot)
 export(gcd_gof_plot)
 export(gcd_plot)
