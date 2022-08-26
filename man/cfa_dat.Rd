@@ -14,9 +14,11 @@ cfa_dat
 A six-variable dataset with 100 cases.
 }
 \details{
-A Sample Model:\preformatted{`f1 =~  x1 + x2 + x3`
+A Sample Model:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
 `f2 =~  x4 + x5 + x6`
 `f1 ~~ f2`
-}
+}\if{html}{\out{</div>}}
 }
 \keyword{datasets}
