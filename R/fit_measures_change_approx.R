@@ -64,6 +64,7 @@
 #' head(out)
 #' # Compare the results
 #' plot(out_approx[, "chisq"], out)
+#' @importFrom methods .hasSlot
 #' @export
 
 fit_measures_change_approx <- function(fit,
