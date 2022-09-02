@@ -188,7 +188,7 @@ Implemented by Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.0011723133 -1.494495e-06  0.001792478 -0.017959380 -0.01829377</span>
 <span class="r-in"><span><span class="co"># Fit the model n times. Each time with one case removed.</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 2.45 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 2.6 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if ran in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the changes in parameter estimates if a case is removed</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span></span>
