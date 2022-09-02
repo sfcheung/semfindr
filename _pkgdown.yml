@@ -3,10 +3,6 @@ destination: docs
 url: https://sfcheung.github.io/semfindr/
 template:
   bootstrap: 5
-  bslib:
-    bg: "#FFFFFF"
-    fg: "#000000"
-    primary: "#FFFFFF"
 
 navbar:
   bg: light
