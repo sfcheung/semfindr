@@ -32,9 +32,14 @@
 print.lavaan_rerun <- function(x,
                           ...) {
     nrerun <- length(x$rerun)
+    i_converged <- sapply(x$converged, isTRUE)
+    n_converged <- sum(i_converged)
+    i_not_converged <- sapply(x$converged, isFALSE)
+    n_not_converged <- sum(i_not_converged)
     i_checked <- sapply(x$post_check, isTRUE)
     n_checked <- sum(i_checked)
-    n_failed <- nrerun - n_checked
+    i_failed <- sapply(x$post_check, inherits, "warning")
+    n_failed <- sum(i_failed)
     if (n_failed > 0) {
         failed_messages <- sapply(x$post_check[which(!i_checked)],
                               function(x) {
@@ -54,15 +59,33 @@ print.lavaan_rerun <- function(x,
         colnames(failed_messages_df) <- c("N", "Warning or error messages")
       }
     org_call <- x$call
+    i_valid <- i_converged & i_checked
+    n_valid <- sum(i_valid)
+    i_invalid <- !(i_converged) | !(i_checked)
+    n_invalid <- sum(i_invalid)
     cat("=== lavaan_rerun Output ===\n")
     cat("Call:\n")
     print(org_call)
     cat(paste0("Number of reruns: ", nrerun, "\n"))
+    cat(paste0("Number of reruns that converged (solution found): ",
+                n_converged, "\n"))
+    cat(paste0("Number of reruns that failed to converge (solution not found): ",
+                n_not_converged, "\n"))
     cat(paste0("Number of reruns that passed post.check of lavaan: ",
                 n_checked, "\n"))
     cat(paste0("Number of reruns that failed post.check of lavaan: ",
                 n_failed, "\n"))
+    cat(paste0("Number of reruns that both converged and passed post.check: ",
+               n_valid, "\n"))
+    cat(paste0("Number of reruns that either did not converge or failed post.check: ",
+               n_invalid, "\n"))
+    if (n_not_converged > 0) {
+        cat(paste0("Case(s) failed to converge:\n",
+                  paste(names(x$rerun)[i_not_converged], collapse = ","), "\n"))
+      }
     if (n_failed > 0) {
+        cat(paste0("Case(s) failed post.check:\n",
+                  paste(names(x$rerun)[i_failed], collapse = ","), "\n"))
         cat("Detail:\n")
         print(failed_messages_df)
       }

@@ -21,7 +21,11 @@
 #' @param parameters A character vector to specify the selected
 #'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
 #'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()]. If `NULL`, the
+#'  in the output of [lavaan::parameterEstimates()].
+#'  Supports specifying an operator to select all parameters with this
+#'  operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#'  both parameter names and operators.
+#'  If `NULL`, the
 #'  default, differences on all free parameters will be computed.
 #'
 #' @return A matrix with the number of columns equal to the number of
@@ -97,7 +101,8 @@ est_change <- function(rerun_out,
               )
   parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
   if (!is.null(parameters)) {
-    parameters_selected <- gsub(" ", "", parameters)
+    # parameters_selected <- gsub(" ", "", parameters)
+    parameters_selected <- est_names_selected(est0, parameters)
     if (!all(parameters_selected %in% parameters_names)) {
         stop(paste("Not all parameters can be found in the output.",
                    "Please check the parameters argument."))
@@ -143,7 +148,8 @@ est_change <- function(rerun_out,
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
-                  if (isTRUE(chk)) {
+                  chk2 <- lavaan::lavTech(x, "converged")
+                  if (isTRUE(chk) & isTRUE(chk2)) {
                       return(tmpfct(x, est = est,
                                     parameters_names = parameters_names,
                                     parameters_selected = parameters_selected)

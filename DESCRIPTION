@@ -1,12 +1,18 @@
 Package: semfindr
 Title: Diagnostic Tools in Structural Equation Modeling
-Version: 0.1.0.1
+Version: 0.1.0.9002
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
            role = c("aut", "cre"),
            email = "shufai.cheung@gmail.com",
-           comment = c(ORCID = "0000-0002-9871-9448")))
+           comment = c(ORCID = "0000-0002-9871-9448")),
+    person(given = "Mark Hok Chio",
+           family = "Lai",
+           role = c("aut"),
+           email = "marklhc@gmail.com ",
+           comment = c(ORCID = "0000-0002-9196-7406"))
+           )
 Description: Sensitivity analysis in structural
     equation modeling using change statistics and
     diagnostic plots.
@@ -17,20 +23,20 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
-Suggests: 
+RoxygenNote: 7.2.1
+Suggests:
     testthat (>= 3.0.0),
     parallel,
     knitr,
-    rmarkdown
-Imports: 
+    rmarkdown,
+    modi,
+    norm2
+Imports:
     lavaan,
     ggplot2,
     ggrepel,
     rlang,
     stats,
-    modi,
-    norm2,
     methods
 VignetteBuilder: knitr
 Config/testthat/parallel: true

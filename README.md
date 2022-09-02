@@ -1,3 +1,13 @@
+<!-- badges: start -->
+[![Lifecycle: stablel](https://img.shields.io/badge/lifecycle-stablel-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#stablel)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Code size](https://img.shields.io/github/languages/code-size/sfcheung/semfindr.svg)](https://github.com/sfcheung/semfindr)
+[![Last Commit at Master](https://img.shields.io/github/last-commit/sfcheung/semfindr.svg)](https://github.com/sfcheung/semfindr/commits/master)
+[![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+(Version 0.1.0.9002), updated on 2022-09-02, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+
 # semfindr
 
 A find(e)r of outliers and influential cases in structural equation modeling
@@ -15,7 +25,7 @@ cases selected based on some criteria (`vignette("selecting_cases")`), using
 using the output of `lavaan_rerun()`.
 
 The functions were designed to be flexible
-such that users can compute case influence measures on 
+such that users can compute case influence measures on
 
 - standardized parameter estimates and generalized Cook's distance for
   selected parameters;

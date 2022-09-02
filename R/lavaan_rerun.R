@@ -102,6 +102,13 @@
 #'   solution is admissible. If not `TRUE`, it is a warning message
 #'   issued by [lavaan::lavTech()].
 #'
+#' - `converged`: A vector of length equals to *n*. Each analysis was
+#'   checked by [lavaan::lavTech]`(x, "converged")`, `x` being the
+#'   `lavaan` results. The results of this test are stored in this
+#'   vector. If the value is `TRUE`, the estimation converged. If
+#'   not `TRUE`, then the estimation failed to converge if the corresponding
+#'   case is excluded.
+#'
 #' - `call`: The call to [lavaan_rerun()].
 #'
 #' - `selected`: A numeric vector of the row numbers of cases selected
@@ -249,7 +256,8 @@ lavaan_rerun <- function(fit,
   environment(gen_fct) <- parent.frame()
   rerun_i <- gen_fct(fit)
   rerun_test <- suppressWarnings(rerun_i(NULL))
-  if (!all.equal(unclass(coef(fit)), coef(rerun_test)[names(coef(fit))])) {
+  if (!isTRUE(all.equal(unclass(coef(fit)),
+                        coef(rerun_test)[names(coef(fit))]))) {
       stop("Something is wrong. The lavaan analysis cannot be rerun.")
     }
 
@@ -280,8 +288,8 @@ lavaan_rerun <- function(fit,
     }
 
   if (rt[[3]] > 60) {
-      message(paste0("The rerun took more than one minute.\n",
-                     "Consider saving the output to an external file.\n",
+      message(paste0("Note: The rerun took more than one minute. ",
+                     "Consider saving the output to an external file. ",
                      "E.g., can use saveRDS() to save the object."))
       utils::flush.console()
     }
@@ -294,15 +302,28 @@ lavaan_rerun <- function(fit,
                     })
   any_warning <- !all(sapply(post_check, isTRUE))
   if (any_warning) {
-      message(paste0("Some cases led to warnings if excluded.\n",
-                    "Please check the element 'post_check'\n",
+      message(paste0("Note: Some cases led to warnings if excluded. ",
+                    "Please check the element 'post_check' ",
                     "for cases with values other than `TRUE`."))
+      utils::flush.console()
+    }
+
+  # converged
+  converged <- sapply(out, function(x) {
+                      lavaan::lavTech(x, what = "converged")
+                    })
+  any_not_converged <- !all(sapply(post_check, isTRUE))
+  if (any_not_converged) {
+      message(paste0("Note: Some cases led to nonconvergence if excluded. ",
+                     "Please check the element 'converged' ",
+                     "for cases with values other than `TRUE`."))
       utils::flush.console()
     }
 
   out <- list(rerun = out,
               fit = fit,
               post_check = post_check,
+              converged = converged,
               call = call,
               selected = id_to_rerun)
   class(out) <- "lavaan_rerun"
@@ -310,9 +331,7 @@ lavaan_rerun <- function(fit,
 }
 
 gen_fct_old <- function(fit) {
-  # Need to use @call instead of lavInspect(fit, "call") to ensure
-  # the returned object is a call.
-  fit_call <- fit@call
+  fit_call <- as.call(lavaan::lavInspect(fit, "call"))
   fit_call2 <- fit_call
   for (i in seq_len(length(fit_call2))) {
       fit_call2[[i]] <- eval(fit_call[[i]])
@@ -330,10 +349,7 @@ gen_fct_old <- function(fit) {
 
 gen_fct <- function(fit) {
   fit_org <- eval(fit)
-  # data_full <- fit_org@Data@X[[1]]
   data_full <- lavaan::lavInspect(fit_org, "data")
-  # colnames(data_full) <- fit_org@Data@ov$name
-  colnames(data_full) <- lavaan::lavNames(fit_org)
   function(i = NULL) {
       if (is.null(i)) {
           return(lavaan::update(fit_org, data = data_full))

@@ -14,9 +14,11 @@ pa_dat2
 A four-variable dataset with 100 cases and potential influential cases
 }
 \details{
-A Sample Model:\preformatted{`m1 ~  iv1 + iv2`
+A Sample Model:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{`m1 ~  iv1 + iv2`
 `dv ~  m1`
-}
+}\if{html}{\out{</div>}}
 
 Has one or more influential case
 }

@@ -6,9 +6,7 @@
 \alias{semfindr-package}
 \title{semfindr: Diagnostic Tools in Structural Equation Modeling}
 \description{
-Sensitivity analysis in structural
-    equation modeling using change statistics and
-    diagnostic plots.
+Sensitivity analysis in structural equation modeling using change statistics and diagnostic plots.
 }
 \seealso{
 Useful links:
@@ -20,6 +18,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Shu Fai Cheung \email{shufai.cheung@gmail.com} (\href{https://orcid.org/0000-0002-9871-9448}{ORCID})
+
+Authors:
+\itemize{
+  \item Mark Hok Chio Lai \email{marklhc@gmail.com } (\href{https://orcid.org/0000-0002-9196-7406}{ORCID})
+}
 
 }
 \keyword{internal}

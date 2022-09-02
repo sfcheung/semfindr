@@ -1,0 +1,54 @@
+destination: docs
+
+url: https://sfcheung.github.io/semfindr/
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#FFFFFF"
+    fg: "#000000"
+    primary: "#FFFFFF"
+
+navbar:
+  bg: light
+
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - semfindr
+  - casewise_scores
+  - selecting_cases
+  - user_id
+
+reference:
+- title: Main Functions
+- contents:
+  - lavaan_rerun
+  - influence_stat
+- title: Parameter Estimates
+  desc: >
+    Case influence on parameter estimates
+- contents:
+  - est_change
+  - est_change_raw
+  - est_change_approx
+  - est_change_raw_approx
+- title: Fit Measures
+  desc:  >
+    Case influence of fit measures.
+- contents:
+  - fit_measures_change
+  - fit_measures_change_approx
+- title: Plots
+- contents:
+  - influence_plot
+- title: Others
+- contents:
+  - mahalanobis_predictors
+  - mahalanobis_rerun
+  - implied_scores
+  - print.lavaan_rerun
+  - lavaan_rerun_check
+- title: Datasets
+- contents:
+  - has_keyword("datasets")

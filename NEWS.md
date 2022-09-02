@@ -1,10 +1,13 @@
-# semfindr 0.1.0.1
+# semfindr 0.1.0.9002
 
-(Minor update. Will be merged to 0.1.1)
+(Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
 - Added `skip_all_checks` to `lavaan_rerun()`, allowing users
   to experiment `lavaan_rerun()` and other functions on
   models not officially supported.
+- Revised `est_change()` and `est_change_raw()` to support
+  the use of operators (e.g., `~`, `=~`) to select parameters.
+- Add badges and R CMD Check Action.
 
 # semfindr 0.1.0
 
@@ -18,7 +21,7 @@
 
 - Added a print method for the `lavaan_rerun()` class.
 
-- Added `mahalanobis_predictors()` to compute the 
+- Added `mahalanobis_predictors()` to compute the
 Mahalanobis distance using only the observed predictors.
 
 - Both `mahalanobis_predictors()` and

@@ -14,8 +14,10 @@ pa_dat
 A four-variable dataset with 100 cases
 }
 \details{
-A Sample Model:\preformatted{`m1 ~  iv1 + iv2`
+A Sample Model:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{`m1 ~  iv1 + iv2`
 `dv ~  m1`
-}
+}\if{html}{\out{</div>}}
 }
 \keyword{datasets}

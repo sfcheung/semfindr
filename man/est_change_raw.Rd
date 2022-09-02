@@ -12,7 +12,11 @@ est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
 \item{parameters}{A character vector to specify the selected
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
-in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the
+in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
+Supports specifying an operator to select all parameters with this
+operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
+both parameter names and operators.
+If \code{NULL}, the
 default, differences on all free parameters will be computed.}
 
 \item{standardized}{If \code{TRUE}, the changes in the full standardized
