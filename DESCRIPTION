@@ -30,7 +30,8 @@ Suggests:
     knitr,
     rmarkdown,
     modi,
-    norm2
+    norm2,
+    tidyr
 Imports:
     lavaan,
     ggplot2,
