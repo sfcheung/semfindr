@@ -77,13 +77,12 @@ Here is a comparison between the approximation using `semfindr::est_change_raw_a
 fit_est_change_raw <- est_change_raw(fit_rerun)
 # Plot the differences
 library(ggplot2)
-library(tidyr)
-est_change_df <-
-  pivot_longer(as_tibble(fit_est_change_raw), cols = 1:5,
-               names_to = "param", values_to = "est_change") |>
-  cbind(est_change_approx =
-              pivot_longer(as_tibble(fit_est_change_approx),
-                           cols = 1:5)$value)
+tmp1 <- as.vector(t(as.matrix(fit_est_change_raw)))
+tmp2 <- as.vector(t(as.matrix(fit_est_change_approx)))
+est_change_df <- data.frame(param = rep(colnames(fit_est_change_raw),
+                                        nrow(fit_est_change_raw)),
+                             est_change = tmp1,
+                             est_change_approx = tmp2)
 ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
   geom_abline(intercept = 0, slope = 1) +
   geom_point(size = 0.8, alpha = 0.5) +

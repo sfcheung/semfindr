@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Diagnostic Tools in Structural Equation Modeling
-Version: 0.1.0.9003
+Version: 0.1.0.9004
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
@@ -30,8 +30,7 @@ Suggests:
     knitr,
     rmarkdown,
     modi,
-    norm2,
-    tidyr
+    norm2
 Imports:
     lavaan,
     ggplot2,

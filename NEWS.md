@@ -1,4 +1,4 @@
-# semfindr 0.1.0.9003
+# semfindr 0.1.0.9004
 
 (Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
@@ -8,7 +8,6 @@
 - Revised `est_change()` and `est_change_raw()` to support
   the use of operators (e.g., `~`, `=~`) to select parameters.
 - Added badges and R CMD Check Action.
-- Added a package used in a vignette to `Suggests`.
 
 # semfindr 0.1.0
 
