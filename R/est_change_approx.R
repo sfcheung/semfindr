@@ -106,8 +106,10 @@ est_change_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
-  parameters_names <- parameters_names[est0$free > 0]
+  # parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
+  # parameters_names <- parameters_names[est0$free > 0]
+  parameters_names <- est_names_free(fit)
+
   if (!is.null(parameters)) {
     parameters_selected <- est_names_selected(est0, parameters)
     if (!all(parameters_selected %in% parameters_names)) {
@@ -117,12 +119,14 @@ est_change_approx <- function(fit,
     } else {
       parameters_selected <- parameters_names
     }
+  param_idx <- match(parameters_names, est_names_free(fit))
   x0 <- est_change_raw_approx(fit = fit, parameters = parameters, case_id = case_id)
-  s0 <- lavaan::lavScores(fit)[, parameters_selected, drop = FALSE]
-  v0 <- lavaan::vcov(fit)[parameters_selected, parameters_selected, drop = FALSE]
+  s0 <- lavaan::lavScores(fit)[, param_idx, drop = FALSE]
+  v0 <- lavaan::vcov(fit)[param_idx, param_idx, drop = FALSE]
   v1 <- diag(1 / sqrt(diag(v0)))
-  info0 <- lavaan::lavInspect(fit, what = "information")[parameters_selected, parameters_selected, drop = FALSE]
+  info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx, drop = FALSE]
   out0 <- x0 %*% v1 * n / (n - 1)
+  colnames(out0) <- parameters_names
   # gcd_approx <- rowSums((x0 * n) * (x0 %*% v0 / n))
   gcd_approx <- rowSums((s0 %*% v0 %*% info0 * n) * x0)
   out <- cbind(out0, gcd_approx)
