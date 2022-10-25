@@ -100,8 +100,7 @@ est_change_raw_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
-  parameters_names <- parameters_names[est0$free > 0]
+  parameters_names <- est_names_free(fit)
   if (!is.null(parameters)) {
     parameters_selected <- est_names_selected(est0, parameters)
     if (!all(parameters_selected %in% parameters_names)) {
@@ -113,6 +112,7 @@ est_change_raw_approx <- function(fit,
     }
   out0 <- lavaan::lavScores(fit) %*% vcov(fit) *
               n / (n - 1)
+  colnames(out0) <- parameters_names
   out <- out0[, parameters_selected, drop = FALSE]
   rownames(out) <- case_ids
   out

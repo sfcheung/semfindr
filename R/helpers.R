@@ -12,3 +12,10 @@ est_names_selected <- function(est, params) {
     out <- unique(c(out1, out2))
     out
   }
+
+est_names_free <- function(fit) {
+    ptable <- lavaan::parameterTable(fit)
+    # For using lhs-op-rhs
+    ptable$label <- ""
+    lavaan::lav_partable_labels(ptable, type = "free")
+  }
