@@ -35,7 +35,7 @@
 #'  Please see Pek and MacCallum (2011), Equation 7.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
 #'  *Multivariate Behavioral Research, 46*(2), 202–228.
@@ -99,15 +99,18 @@ est_change <- function(rerun_out,
               remove.nonfree = TRUE,
               output = "data.frame"
               )
-  parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
+  # parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
+  parameters_names <- names(stats::coef(fit0))
   if (!is.null(parameters)) {
     # parameters_selected <- gsub(" ", "", parameters)
-    parameters_selected <- est_names_selected(est0, parameters)
-    if (!all(parameters_selected %in% parameters_names)) {
-        stop(paste("Not all parameters can be found in the output.",
-                   "Please check the parameters argument."))
-      }
+    parameters_selected <- pars_id(parameters, fit = fit0)
+    # parameters_selected <- est_names_selected(est0, parameters)
+    # if (!all(parameters_selected %in% parameters_names)) {
+    #    stop(paste("Not all parameters can be found in the output.",
+    #               "Please check the parameters argument."))
+    #  }
     } else {
+      # TODO: Revise pars_id() to return the ids of freem.
       parameters_selected <- parameters_names
     }
   tmpfct <- function(x, est, parameters_names,
@@ -139,7 +142,7 @@ est_change <- function(rerun_out,
     esti_change_raw <- (est$est - esti_full$est)
     names(esti_change_raw) <- parameters_names
     esti_change_raw <- esti_change_raw[parameters_selected]
-    gcdi <- matrix(esti_change_raw, 1, k) %*% solve(vcovi_full) %*% 
+    gcdi <- matrix(esti_change_raw, 1, k) %*% solve(vcovi_full) %*%
             matrix(esti_change_raw, k, 1)
     outi <- c(esti_change, gcdi)
     names(outi) <- c(parameters_selected, "gcd")
