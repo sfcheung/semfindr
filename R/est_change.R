@@ -75,7 +75,7 @@
 #' # parameter estimates.
 #'
 #' @export
-#' @importMethodsFrom lavaan vcov
+#' @importMethodsFrom lavaan vcov coef
 
 est_change <- function(rerun_out,
                        parameters = NULL
@@ -86,21 +86,22 @@ est_change <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
-  est0   <- lavaan::parameterEstimates(
-              fit0,
-              se = FALSE,
-              zstat = FALSE,
-              pvalue = FALSE,
-              ci = FALSE,
-              standardized = FALSE,
-              fmi = FALSE,
-              cov.std = TRUE,
-              rsquare = FALSE,
-              remove.nonfree = TRUE,
-              output = "data.frame"
-              )
+  # est0   <- lavaan::parameterEstimates(
+  #             fit0,
+  #             se = FALSE,
+  #             zstat = FALSE,
+  #             pvalue = FALSE,
+  #             ci = FALSE,
+  #             standardized = FALSE,
+  #             fmi = FALSE,
+  #             cov.std = TRUE,
+  #             rsquare = FALSE,
+  #             remove.nonfree = TRUE,
+  #             output = "data.frame"
+  #             )
+  est0 <- lavaan::parameterTable(fit0)
   # parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
-  parameters_names <- names(stats::coef(fit0))
+  parameters_names <- names(coef(fit0))
   if (!is.null(parameters)) {
     # parameters_selected <- gsub(" ", "", parameters)
     parameters_selected <- pars_id(parameters, fit = fit0)
@@ -111,23 +112,24 @@ est_change <- function(rerun_out,
     #  }
     } else {
       # TODO: Revise pars_id() to return the ids of freem.
-      parameters_selected <- parameters_names
+      parameters_selected <- est0$free[est0$free > 0]
     }
   tmpfct <- function(x, est, parameters_names,
                              parameters_selected) {
-    esti_full <- lavaan::parameterEstimates(
-                  x,
-                  se = TRUE,
-                  zstat = FALSE,
-                  pvalue = FALSE,
-                  ci = FALSE,
-                  standardized = FALSE,
-                  fmi = FALSE,
-                  cov.std = TRUE,
-                  rsquare = FALSE,
-                  remove.nonfree = TRUE,
-                  output = "data.frame"
-                  )
+    # esti_full <- lavaan::parameterEstimates(
+    #               x,
+    #               se = TRUE,
+    #               zstat = FALSE,
+    #               pvalue = FALSE,
+    #               ci = FALSE,
+    #               standardized = FALSE,
+    #               fmi = FALSE,
+    #               cov.std = TRUE,
+    #               rsquare = FALSE,
+    #               remove.nonfree = TRUE,
+    #               output = "data.frame"
+    #               )
+    esti_full <- lavaan::parameterTable(x)
     esti_change <- (est$est - esti_full$est)/esti_full$se
     names(esti_change) <- parameters_names
     esti_change <- esti_change[parameters_selected]
