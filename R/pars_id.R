@@ -1,9 +1,11 @@
-#' @title Convert Parameter Syntax to Ids in the Parameter
-#' Vectors
+#' @title Convert Parameter Syntax to Ids
+#' or Row Numbers in the Parameter
+#' Vector or Table
 #'
 #' @description An internal function to convert a vector of
 #' parameters specified in lavaan syntax to the ids of them
-#' in the vector of free parameters.
+#' in the vector of free parameters or the row numbers
+#' in the parameter table.
 #'
 #' @details It uses [lavaan::lavaanify()] to parse the
 #' syntax strings. Multiple sample models is supported.
@@ -25,6 +27,11 @@
 #' in the model. Only parameters in `pars` that appear in
 #' this model will be considered.
 #'
+#' @param where Where the values are to be found. Can be
+#' "partable" (parameter table), "std" (standardized
+#' solution table), or "coef" (coefficient vector).
+#' Default is "coef".
+#'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @examples
@@ -34,10 +41,18 @@
 #' @noRd
 
 pars_id <- function(pars,
-                    fit) {
+                    fit,
+                    where = c("coef",
+                              "partable",
+                              "std")) {
+    where <- match.arg(where)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
     ptable <- lavaan::parameterTable(fit)
+    stable <- lavaan::standardizedSolution(fit,
+                                           se = FALSE)
+    ptable$rowid <- seq_len(nrow(ptable))
+    stable$rowid <- seq_len(nrow(stable))
     parspt <- tryCatch(lavaan::lavaanify(pars, ngroups = ngp),
                        error = function(e) e)
     if (inherits(parspt, "simpleError")) {
@@ -51,6 +66,11 @@ pars_id <- function(pars,
                      parspt2)[, mcol]
     parspt3 <- parspt3[parspt3$free > 0, ]
     parspt4 <- merge(parspt3[, -which(mcol == "free")], ptable)
-    out <- parspt4$free
+    if (where == "partable") {
+        out <- parspt4$rowid
+      }
+    if (where == "coef") {
+        out <- parspt4$free
+      }
     out
   }
