@@ -58,14 +58,27 @@ pt_ng <- parameterTable(fit_ng)
 pt_ng_eq <- parameterTable(fit_ng_eq)
 pt_gp <- parameterTable(fit_gp)
 
-test_that("pars_id", {
+test_that("pars_id: default, where = 'coef'", {
     expect_true(all(pars_id(pars1, fit_ng) %in% c(1, 3, 7)))
-    expect_error(pars_id(pars2, fit_ng))
-    expect_error(pars_id(pars3, fit_ng))
+    expect_identical(pars_id(pars2, fit_ng), numeric(0))
+    expect_identical(pars_id(pars3, fit_ng), numeric(0))
     expect_true(all(pars_id(pars1, fit_ng_eq) %in% c(1, 3, 7)))
-    expect_error(pars_id(pars2, fit_ng_eq))
-    expect_error(pars_id(pars3, fit_ng_eq))
+    expect_identical(pars_id(pars2, fit_ng_eq), numeric(0))
+    expect_identical(pars_id(pars3, fit_ng_eq), numeric(0))
     expect_true(all(pars_id(pars1, fit_gp) %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65)))
     expect_true(all(pars_id(pars2, fit_gp) %in% c(1, 3, 7, 30, 36, 59, 61, 65)))
     expect_true(all(pars_id(pars3, fit_gp) %in% c(1, 3, 30, 36, 59, 61)))
+  })
+
+
+test_that("pars_id: where = 'partable'", {
+    expect_true(all(pars_id(pars1, fit_ng, where = "partable") %in% which(pt_ng$free %in% c(1, 3, 7))))
+    expect_identical(pars_id(pars2, fit_ng, where = "partable"), numeric(0))
+    expect_identical(pars_id(pars3, fit_ng, where = "partable"), numeric(0))
+    expect_true(all(pars_id(pars1, fit_ng_eq, where = "partable") %in% which(pt_ng_eq$free %in% c(1, 3, 7))))
+    expect_identical(pars_id(pars2, fit_ng_eq, where = "partable"), numeric(0))
+    expect_identical(pars_id(pars3, fit_ng_eq, where = "partable"), numeric(0))
+    expect_true(all(pars_id(pars1, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65))))
+    expect_true(all(pars_id(pars2, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 7, 30, 36, 59, 61, 65))))
+    expect_true(all(pars_id(pars3, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 30, 36, 59, 61))))
   })

@@ -28,8 +28,8 @@
 #' this model will be considered.
 #'
 #' @param where Where the values are to be found. Can be
-#' "partable" (parameter table), "std" (standardized
-#' solution table), or "coef" (coefficient vector).
+#' "partable" (parameter table) or "coef"
+#' (coefficient vector).
 #' Default is "coef".
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
@@ -43,22 +43,19 @@
 pars_id <- function(pars,
                     fit,
                     where = c("coef",
-                              "partable",
-                              "std")) {
+                              "partable")) {
     where <- match.arg(where)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
     ptable <- lavaan::parameterTable(fit)
-    stable <- lavaan::standardizedSolution(fit,
-                                           se = FALSE)
     ptable$rowid <- seq_len(nrow(ptable))
-    stable$rowid <- seq_len(nrow(stable))
     parspt <- tryCatch(lavaan::lavaanify(pars, ngroups = ngp),
                        error = function(e) e)
     if (inherits(parspt, "simpleError")) {
-        stop(paste0("Error in parameter syntax. This is the lavaan error message:",
-                    "\n",
-                    parspt$message))
+        return(numeric(0))
+        # stop(paste0("Error in parameter syntax. This is the lavaan error message:",
+        #             "\n",
+        #             parspt$message))
       }
     parspt2 <- as.data.frame(lavaan::lavParseModelString(pars))
     mcol <- c("lhs", "op", "rhs", "group", "free")
