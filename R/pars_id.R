@@ -71,3 +71,45 @@ pars_id <- function(pars,
       }
     out
   }
+
+#' @title Get id based on lhs-op-rhs and group
+#'
+#' @noRd
+
+pars_id_lor <- function(pars,
+                        fits,
+                        where = c("coef",
+                                  "partable")) {
+
+  }
+
+#' @title Get id based on operator
+#' @noRd
+
+pars_id_op <- function(pars,
+                       fits,
+                       where = c("coef",
+                                 "partable")) {
+
+  }
+
+#' @title Get id based on wildcard
+#' @noRd
+
+pars_id_wild <- function(pars,
+                         fits,
+                         where = c("coef",
+                                   "partable")) {
+
+  }
+
+#' @title Get id for special parameters
+#' @noRd
+
+pars_id_special <- function(pars,
+                            fits,
+                            where = c("coef",
+                                      "partable")) {
+
+  }
+

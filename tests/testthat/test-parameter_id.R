@@ -58,6 +58,14 @@ pt_ng <- parameterTable(fit_ng)
 pt_ng_eq <- parameterTable(fit_ng_eq)
 pt_gp <- parameterTable(fit_gp)
 
+pl_ng <- lavaan::lav_partable_labels(pt_ng, type = "user")
+pl_ng_eq <- lavaan::lav_partable_labels(pt_ng_eq, type = "user")
+pl_gp <- lavaan::lav_partable_labels(pt_gp, type = "user")
+setdiff(names(coef(fit_ng)), pl_ng)
+setdiff(names(coef(fit_ng_eq)), pl_ng_eq)
+setdiff(names(coef(fit_gp)), pl_gp)
+setdiff(pl_gp, names(coef(fit_gp)))
+
 test_that("pars_id: default, where = 'coef'", {
     expect_true(all(pars_id(pars1, fit_ng) %in% c(1, 3, 7)))
     expect_identical(pars_id(pars2, fit_ng), numeric(0))
