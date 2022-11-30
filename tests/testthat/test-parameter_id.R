@@ -67,26 +67,42 @@ setdiff(names(coef(fit_gp)), pl_gp)
 setdiff(pl_gp, names(coef(fit_gp)))
 
 test_that("pars_id: default, where = 'coef'", {
-    expect_true(all(pars_id(pars1, fit_ng) %in% c(1, 3, 7)))
+    expect_true(all(pars_id(pars1, fit_ng) %in%
+                    c(1, 3, 7)))
     expect_identical(pars_id(pars2, fit_ng), numeric(0))
     expect_identical(pars_id(pars3, fit_ng), numeric(0))
-    expect_true(all(pars_id(pars1, fit_ng_eq) %in% c(1, 3, 7)))
+    expect_true(all(pars_id(pars1, fit_ng_eq) %in%
+                    c(1, 3, 7)))
     expect_identical(pars_id(pars2, fit_ng_eq), numeric(0))
     expect_identical(pars_id(pars3, fit_ng_eq), numeric(0))
-    expect_true(all(pars_id(pars1, fit_gp) %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65)))
-    expect_true(all(pars_id(pars2, fit_gp) %in% c(1, 3, 7, 30, 36, 59, 61, 65)))
-    expect_true(all(pars_id(pars3, fit_gp) %in% c(1, 3, 30, 36, 59, 61)))
+    expect_true(all(pars_id(pars1, fit_gp) %in%
+                    c(1, 3, 7, 30, 32, 36, 59, 61, 65)))
+    expect_true(all(pars_id(pars2, fit_gp) %in%
+                    c(1, 3, 7, 30, 36, 59, 61, 65)))
+    expect_true(all(pars_id(pars3, fit_gp) %in%
+                    c(1, 3, 30, 36, 59, 61)))
   })
 
 
 test_that("pars_id: where = 'partable'", {
-    expect_true(all(pars_id(pars1, fit_ng, where = "partable") %in% which(pt_ng$free %in% c(1, 3, 7))))
+    expect_true(all(pars_id(pars1, fit_ng, where = "partable") %in%
+                    which(pt_ng$free %in% c(1, 3, 7))))
     expect_identical(pars_id(pars2, fit_ng, where = "partable"), numeric(0))
     expect_identical(pars_id(pars3, fit_ng, where = "partable"), numeric(0))
-    expect_true(all(pars_id(pars1, fit_ng_eq, where = "partable") %in% which(pt_ng_eq$free %in% c(1, 3, 7))))
+    expect_true(all(pars_id(pars1, fit_ng_eq, where = "partable")
+                    %in% which(pt_ng_eq$free %in% c(1, 3, 7))))
     expect_identical(pars_id(pars2, fit_ng_eq, where = "partable"), numeric(0))
     expect_identical(pars_id(pars3, fit_ng_eq, where = "partable"), numeric(0))
-    expect_true(all(pars_id(pars1, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65))))
-    expect_true(all(pars_id(pars2, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 7, 30, 36, 59, 61, 65))))
-    expect_true(all(pars_id(pars3, fit_gp, where = "partable") %in% which(pt_gp$free %in% c(1, 3, 30, 36, 59, 61))))
+    expect_true(all(pars_id(pars1, fit_gp, where = "partable") %in%
+                    which(pt_gp$free %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65))))
+    expect_true(all(pars_id(pars2, fit_gp, where = "partable") %in%
+                    which(pt_gp$free %in% c(1, 3, 7, 30, 36, 59, 61, 65))))
+    expect_true(all(pars_id(pars3, fit_gp, where = "partable") %in%
+                    which(pt_gp$free %in% c(1, 3, 30, 36, 59, 61))))
   })
+
+# pars_id_lor
+
+pars1 <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
+pars2 <- c("f1 =~ x2", "f2 =~ x5.gp2", "f2 ~ f1", "f2 =~ x5.gp3")
+pars3 <- c("f1 =~ x2", "f2 =~ x5.gp2", "f2 =~ x5.gp3", "f2 ~ f1.gp1")

@@ -76,18 +76,71 @@ pars_id <- function(pars,
 #'
 #' @noRd
 
-pars_id_lor <- function(pars,
-                        fits,
+pars_id_lorg <- function(pars,
+                        fit,
                         where = c("coef",
                                   "partable")) {
+    where <- match.arg(where)
+    pfree <- lavaan::lavInspect(fit, "npar")
+    ngp <- lavaan::lavInspect(fit, "ngroups")
+    glabels <- lavaan::lavInspect(fit, "group.label")
+    ptable <- lavaan::parameterTable(fit)
+    ptable$rowid <- seq_len(nrow(ptable))
+    ptable$lavlabel <- lavaan::lav_partable_labels(ptable, type = "user")
+    pars_c <- sapply(pars, function(x) {
+                              gsub(x = x,
+                                   pattern = " ",
+                                   replacement = "",
+                                   fixed = TRUE)
+                            }, USE.NAMES = FALSE)
+    if (ngp > 1) {
+        lavlabel_gp <- get_g1(ptable$lavlabel)
+        ptable$lavlabel <- add_g1(ptable$lavlabel)
+        # pars w gp label (gX)
+        for (x in seq_along(glabels)) {
+            pars_c <- gsub(paste0("\\.", glabels[x], "$"), paste0(".g", x), pars_c)
+          }
+        x <- pars_c %in% lavlabel_gp
+        pars_c2 <- as.vector(sapply(pars_c[x],
+                                function(y) paste0(y, ".g", seq_len(ngp))))
+        pars_c <- c(pars_c[!x], pars_c2)
+      }
+    parspt4 <- ptable[ptable$lavlabel %in% pars_c, ]
+    parspt4 <- merge(parspt3[, -which(mcol == "free")], ptable)
+    if (where == "partable") {
+        out <- parspt4$rowid
+      }
+    if (where == "coef") {
+        out <- parspt4$free
+      }
+    out
+  }
 
+#' @title Find First Group Parameters
+#' @noRd
+
+get_g1 <- function(x) {
+    lavlabels <- x
+    a1 <- grepl("^.*\\.g2$", lavlabels)
+    lavlabels_ng <- gsub(".g2", "", lavlabels[a1])
+    a2 <- lavlabels %in% lavlabels_ng
+    lavlabels[a2]
+  }
+
+add_g1 <- function(x) {
+    lavlabels <- x
+    a1 <- grepl("^.*\\.g2$", lavlabels)
+    lavlabels_ng <- gsub(".g2", "", lavlabels[a1])
+    a2 <- lavlabels %in% lavlabels_ng
+    lavlabels[a2] <- paste0(lavlabels[a2], ".g1")
+    lavlabels
   }
 
 #' @title Get id based on operator
 #' @noRd
 
 pars_id_op <- function(pars,
-                       fits,
+                       fit,
                        where = c("coef",
                                  "partable")) {
 
@@ -107,7 +160,7 @@ pars_id_wild <- function(pars,
 #' @noRd
 
 pars_id_special <- function(pars,
-                            fits,
+                            fit,
                             where = c("coef",
                                       "partable")) {
 
