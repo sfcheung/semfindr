@@ -104,9 +104,12 @@ pars_id_lorg <- function(pars,
         pars_c2 <- as.vector(sapply(pars_c[x],
                                 function(y) paste0(y, ".g", seq_len(ngp))))
         pars_c <- c(pars_c[!x], pars_c2)
+      } else {
+        lavlabel_gp <- ptable$lavlabel
+        x <- pars_c %in% lavlabel_gp
+        pars_c <- pars_c[x]
       }
     parspt4 <- ptable[ptable$lavlabel %in% pars_c, ]
-    parspt4 <- merge(parspt3[, -which(mcol == "free")], ptable)
     if (where == "partable") {
         out <- parspt4$rowid
       }
@@ -119,22 +122,30 @@ pars_id_lorg <- function(pars,
 #' @title Find First Group Parameters
 #' @noRd
 
-get_g1 <- function(x) {
+fix_g1 <- function(x, action = c("get", "add")) {
+    action <- match.arg(action)
     lavlabels <- x
     a1 <- grepl("^.*\\.g2$", lavlabels)
     lavlabels_ng <- gsub(".g2", "", lavlabels[a1])
     a2 <- lavlabels %in% lavlabels_ng
-    lavlabels[a2]
+    if (action == "get") {
+        return(lavlabels[a2])
+      }
+    if (action == "add") {
+        lavlabels[a2] <- paste0(lavlabels[a2], ".g1")
+        return(lavlabels)
+      }
+    stop("Unknown action in fix_g1().")
   }
 
 add_g1 <- function(x) {
-    lavlabels <- x
-    a1 <- grepl("^.*\\.g2$", lavlabels)
-    lavlabels_ng <- gsub(".g2", "", lavlabels[a1])
-    a2 <- lavlabels %in% lavlabels_ng
-    lavlabels[a2] <- paste0(lavlabels[a2], ".g1")
-    lavlabels
+    fix_g1(x, action = "add")
   }
+
+get_g1 <- function(x) {
+    fix_g1(x, action = "get")
+  }
+
 
 #' @title Get id based on operator
 #' @noRd
