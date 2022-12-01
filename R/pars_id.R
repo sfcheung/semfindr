@@ -85,6 +85,8 @@ pars_id_lorg <- function(pars,
     ngp <- lavaan::lavInspect(fit, "ngroups")
     glabels <- lavaan::lavInspect(fit, "group.label")
     ptable <- lavaan::parameterTable(fit)
+    # Do not use user-supplied labels
+    ptable$label <- ""
     ptable$rowid <- seq_len(nrow(ptable))
     ptable$lavlabel <- lavaan::lav_partable_labels(ptable, type = "user")
     pars_c <- sapply(pars, function(x) {
