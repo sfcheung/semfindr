@@ -150,13 +150,82 @@ get_g1 <- function(x) {
 
 
 #' @title Get id based on operator
+#' # "=~": All "=~" in all groups
+#' # "=~.gp1": All "=~" in groups with labels "gp1"
 #' @noRd
 
 pars_id_op <- function(pars,
                        fit,
                        where = c("coef",
-                                 "partable")) {
+                                 "partable"),
+                       type = c("free", "all")) {
+    where <- match.arg(where)
+    type <- match.arg(type)
+    pfree <- lavaan::lavInspect(fit, "npar")
+    ngp <- lavaan::lavInspect(fit, "ngroups")
+    glabels <- lavaan::lavInspect(fit, "group.label")
+    ptable <- lavaan::parameterTable(fit)
+    # Do not use user-supplied labels
+    ptable$label <- ""
+    ptable$rowid <- seq_len(nrow(ptable))
+    ptable$lavlabel <- lavaan::lav_partable_labels(ptable, type = "user")
+    pars_c <- sapply(pars, function(x) {
+                              gsub(x = x,
+                                   pattern = " ",
+                                   replacement = "",
+                                   fixed = TRUE)
+                            }, USE.NAMES = FALSE)
+    # Extract operators in the table
+    pt_ops <- unique(ptable$op)
+    # Keep only operators
+    pars_c <- keep_ops(pars_c, pt_ops)
+    out0 <- integer(0)
+    if (ngp > 1) {
+        for (x in seq_along(pars_c)) {
+            tmp <- sapply(glabels, function(y) {
+                      grepl(paste0("\\.", y), pars_c[x])
+                    })
+            if (any(tmp)) {
+                gp_tmp <- which(tmp)
+                pt_tmp <- ptable[(ptable$group == gp_tmp) &
+                                 (ptable$op ==
+                                  gsub(pattern = paste0("\\.", glabels[gp_tmp]),
+                                       replacement = "",
+                                       x = pars_c[x])), ]
+                out0 <- c(out0, pt_tmp$rowid)
+              }
+          }
+      }
+    # For both operators without suffixes
+    # and models with only one group
+    op_selected <- intersect(pars_c, pt_ops)
+    if (length(op_selected) > 0) {
+        pt_tmp <- ptable[ptable$op %in% op_selected, ]
+        out0 <- c(out0, pt_tmp$rowid)
+      }
+    out0 <- sort(unique(out0))
+    tmp <- ptable[out0, ]
+    if (where == "partable") {
+        if (type == "free") {
+            out <- tmp[tmp$free > 0, "rowid"]
+          } else {
+            out <- tmp$rowid
+          }
+      }
+    if (where == "coef") {
+        out <- tmp[tmp$free > 0, "free"]
+      }
+    out
+  }
 
+#' @title Keep op only
+#' @noRd
+
+keep_ops <- function(pars, ops) {
+    tmp <- sapply(ops, function(x) {
+              which(grepl(glob2rx(paste0(x, "*")), pars))
+            })
+    unique(pars[unlist(tmp)])
   }
 
 #' @title Get id based on wildcard

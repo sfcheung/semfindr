@@ -149,3 +149,19 @@ test_that("pars_id_lorg: where = 'partable'", {
     expect_true(all(pars_id_lorg(pars3, fit_gp, where = "partable") %in%
                     which(pt_gp$free %in% c(1, 3, 30, 36, 59, 61))))
   })
+
+# pars_id_op
+
+pars1 <- c("f1 =~ x2", "f2 =~ x5", "=~", "f2 ~ f1")
+pars2 <- c("f1 =~ x2", "~~.gp2", "f2 =~ x5.gp2", "f2 ~ f1", "=~.gp1")
+pars3 <- c("f1 =~ x2", "~1", "f2 =~ x5.gp2", "~1.gp2", "f2 =~ x5.gp3", "f2 ~ f1.gp1")
+
+pars_id_op(pars1, fit_ng)
+pars_id_op(pars2, fit_ng)
+pars_id_op(pars3, fit_ng)
+pars_id_op(pars1, fit_ng_eq)
+pars_id_op(pars2, fit_ng_eq)
+pars_id_op(pars3, fit_ng_eq)
+pt_gp[pars_id_op(pars1, fit_gp, where = "partable"), ]
+pt_gp[pars_id_op(pars2, fit_gp, where = "partable"), ]
+pt_gp[pars_id_op(pars3, fit_gp, where = "partable"), ]
