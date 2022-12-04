@@ -156,12 +156,24 @@ pars1 <- c("f1 =~ x2", "f2 =~ x5", "=~", "f2 ~ f1")
 pars2 <- c("f1 =~ x2", "~~.gp2", "f2 =~ x5.gp2", "f2 ~ f1", "=~.gp1")
 pars3 <- c("f1 =~ x2", "~1", "f2 =~ x5.gp2", "~1.gp2", "f2 =~ x5.gp3", "f2 ~ f1.gp1")
 
+# coef
 pars_id_op(pars1, fit_ng)
 pars_id_op(pars2, fit_ng)
 pars_id_op(pars3, fit_ng)
 pars_id_op(pars1, fit_ng_eq)
 pars_id_op(pars2, fit_ng_eq)
 pars_id_op(pars3, fit_ng_eq)
-pt_gp[pars_id_op(pars1, fit_gp, where = "partable"), ]
-pt_gp[pars_id_op(pars2, fit_gp, where = "partable"), ]
-pt_gp[pars_id_op(pars3, fit_gp, where = "partable"), ]
+pt_gp[pars_id_op(pars1, fit_gp, where = "partable"), c("op", "group")]
+pt_gp[pars_id_op(pars2, fit_gp, where = "partable"), c("op", "group")]
+pt_gp[pars_id_op(pars3, fit_gp, where = "partable"), c("op", "group")]
+
+# partable
+pars_id_op(pars1, fit_ng, where = "partable")
+pars_id_op(pars2, fit_ng, where = "partable")
+pars_id_op(pars3, fit_ng, where = "partable")
+pars_id_op(pars1, fit_ng_eq, where = "partable")
+pars_id_op(pars2, fit_ng_eq, where = "partable")
+pars_id_op(pars3, fit_ng_eq, where = "partable")
+pt_gp[pars_id_op(pars1, fit_gp, where = "partable"), c("op", "group"), where = "partable"]
+pt_gp[pars_id_op(pars2, fit_gp, where = "partable"), c("op", "group"), where = "partable"]
+pt_gp[pars_id_op(pars3, fit_gp, where = "partable"), c("op", "group"), where = "partable"]
