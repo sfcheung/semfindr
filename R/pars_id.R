@@ -77,9 +77,9 @@ pars_id <- function(pars,
 #' @noRd
 
 pars_id_lorg <- function(pars,
-                        fit,
-                        where = c("coef",
-                                  "partable")) {
+                         fit,
+                         where = c("coef",
+                                   "partable")) {
     where <- match.arg(where)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
