@@ -58,6 +58,10 @@ pt_ng <- parameterTable(fit_ng)
 pt_ng_eq <- parameterTable(fit_ng_eq)
 pt_gp <- parameterTable(fit_gp)
 
+est_ng <- parameterEstimates(fit_ng, standardized = TRUE)
+est_ng_eq <- parameterEstimates(fit_ng_eq, standardized = TRUE)
+est_gp <- parameterEstimates(fit_gp, standardized = TRUE)
+
 pl_ng <- lavaan::lav_partable_labels(pt_ng, type = "user")
 pl_ng_eq <- lavaan::lav_partable_labels(pt_ng_eq, type = "user")
 pl_gp <- lavaan::lav_partable_labels(pt_gp, type = "user")
