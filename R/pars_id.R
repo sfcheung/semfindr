@@ -252,3 +252,37 @@ pars_id_special <- function(pars,
     # Placeholder
   }
 
+#' @title Convert ids to lhs-op-rhs-(group)
+#'
+#' @noRd
+
+pars_id_to_lorg <- function(pars_id,
+                         pars_source,
+                         type = c("free", "all")) {
+    type <- match.arg(type)
+    if (is.null(dim(pars_source))) {
+        is_coef <- TRUE
+        has_group <- FALSE
+      } else {
+        is_coef <- FALSE
+          if ("group" %in% colnames(pars_source)) {
+              has_group <- TRUE
+            } else {
+              has_group <- FALSE
+            }
+      }
+    if (is_coef) {
+        out <- names(pars_source)[pars_id]
+      } else {
+        pars_source_1 <- switch(type,
+                           free = pars_source[pars_source$free > 0, ],
+                           all = pars_source)
+        out <- pars_source_1[pars_id, ]
+        if (has_group) {
+            out <- out[, c("lhs", "op", "rhs", "group")]
+          } else {
+            out <- out[, c("lhs", "op", "rhs", )]
+          }
+      }
+    out
+  }
