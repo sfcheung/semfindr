@@ -235,7 +235,9 @@ pars_id_wild <- function(pars,
                          fits,
                          where = c("coef",
                                    "partable")) {
-
+    stop("No ready for use")
+    # ToDo
+    # Placeholder
   }
 
 #' @title Get id for special parameters
@@ -245,6 +247,8 @@ pars_id_special <- function(pars,
                             fit,
                             where = c("coef",
                                       "partable")) {
-
+    stop("No ready for use")
+    # ToDo
+    # Placeholder
   }
 
