@@ -53,6 +53,9 @@ fit_gp_eq@Model@eq.constraints
 pt_ng <- parameterTable(fit_ng)
 pt_ng_eq <- parameterTable(fit_ng_eq)
 pt_gp <- parameterTable(fit_gp)
+pt_gp_labelled <- pt_gp
+pt_gp_labelled$group <- lavInspect(fit_gp, "group.label")[pt_gp_labelled$group]
+
 
 est_ng <- parameterEstimates(fit_ng, standardized = TRUE)
 est_ng_eq <- parameterEstimates(fit_ng_eq, standardized = TRUE)
@@ -152,6 +155,57 @@ test_that("pars_id_lorg: where = 'partable'", {
     expect_true(all(pars_id_lorg(pars3, fit_gp, where = "partable") %in%
                     which(pt_gp$free %in% c(1, 3, 30, 36, 59, 61))))
   })
+
+test_that("pars_id_lorg and pars_id_to_lorg: where = 'partable'", {
+    tmp1 <- pars_id_lorg(pars1, fit_ng, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars1)))
+    tmp1 <- pars_id_lorg(pars2, fit_ng, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars2)))
+    tmp1 <- pars_id_lorg(pars3, fit_ng, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars3)))
+
+    tmp1 <- pars_id_lorg(pars1, fit_ng_eq, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng_eq, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars1)))
+    tmp1 <- pars_id_lorg(pars2, fit_ng_eq, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng_eq, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars2)))
+    tmp1 <- pars_id_lorg(pars3, fit_ng_eq, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_ng_eq, type = "all")
+    expect_true(all(paste0(tmp2$lhs, tmp2$op, tmp2$rhs) %in%
+                    gsub(" ", "", pars3)))
+
+    tmp1 <- pars_id_lorg(pars1, fit_gp, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_gp, type = "all")
+    tmp2$group <- lavInspect(fit_gp, "group.label")[tmp2$group]
+    expect_true(all(unique(paste0(tmp2$lhs, tmp2$op, tmp2$rhs)) %in%
+                    gsub(" ", "", pars1)))
+    tmp1 <- pars_id_lorg(pars2, fit_gp, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_gp, type = "all")
+    tmp2$group <- lavInspect(fit_gp, "group.label")[tmp2$group]
+    expect_true(any(gsub(" ", "", pars2) %in%
+                    unique(paste0(tmp2$lhs, tmp2$op, tmp2$rhs))))
+    expect_true(any(gsub(" ", "", pars2) %in%
+                  unique(paste0(tmp2$lhs, tmp2$op, tmp2$rhs, ".", tmp2$group))))
+    tmp1 <- pars_id_lorg(pars3, fit_gp, where = "partable")
+    tmp2 <- pars_id_to_lorg(tmp1, pt_gp, type = "all")
+    tmp2$group <- lavInspect(fit_gp, "group.label")[tmp2$group]
+    expect_true(any(gsub(" ", "", pars3) %in%
+                    unique(paste0(tmp2$lhs, tmp2$op, tmp2$rhs))))
+    expect_true(any(gsub(" ", "", pars3) %in%
+                  unique(paste0(tmp2$lhs, tmp2$op, tmp2$rhs, ".", tmp2$group))))
+
+  })
+
+
 
 # pars_id_op
 
