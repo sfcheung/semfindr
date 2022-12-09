@@ -257,8 +257,8 @@ pars_id_special <- function(pars,
 #' @noRd
 
 pars_id_to_lorg <- function(pars_id,
-                         pars_source,
-                         type = c("free", "all")) {
+                            pars_source,
+                            type = c("free", "all")) {
     type <- match.arg(type)
     if (is.null(dim(pars_source))) {
         is_coef <- TRUE
