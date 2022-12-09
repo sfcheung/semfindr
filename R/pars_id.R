@@ -32,6 +32,17 @@
 #' (coefficient vector).
 #' Default is "coef".
 #'
+#' @param free_only Wether only free parameters will be
+#' kept. Default is `TRUE`.
+#'
+#' @param type Whether the ids are based on the positions
+#' in the vector of
+#' free parameters ("free"), as in the output of `coef()`,
+#' or all parameters ("all") in the parameter table. Used
+#' only for parameters specified by operators and `where`
+#' is "partable".
+#' Default is "free".
+#'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @examples
@@ -43,7 +54,34 @@
 pars_id <- function(pars,
                     fit,
                     where = c("coef",
-                              "partable")) {
+                              "partable"),
+                    free_only = TRUE) {
+    where <- match.arg(where)
+    ids1 <- pars_id_lorg_mod(pars = pars,
+                             fit = fit,
+                             where = where,
+                             free_only = free_only)
+    ids2 <- pars_id_lorg(pars = pars,
+                         fit = fit,
+                         where = where,
+                         free_only = free_only)
+    ids3 <- pars_id_op(pars = pars,
+                       fit = fit,
+                       where = where,
+                       free_only = free_only)
+    out <- sort(unique(c(ids1, ids2, ids3)))
+    out
+  }
+
+#' @title Get id based on lhs-op-rhs, using c() modifiers
+#'
+#' @noRd
+
+pars_id_lorg_mod <- function(pars,
+                             fit,
+                             where = c("coef",
+                                       "partable"),
+                             free_only = TRUE) {
     where <- match.arg(where)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
@@ -53,24 +91,24 @@ pars_id <- function(pars,
                        error = function(e) e)
     if (inherits(parspt, "simpleError")) {
         return(numeric(0))
-        # stop(paste0("Error in parameter syntax. This is the lavaan error message:",
-        #             "\n",
-        #             parspt$message))
       }
     parspt2 <- as.data.frame(lavaan::lavParseModelString(pars))
     mcol <- c("lhs", "op", "rhs", "group", "free")
     parspt3 <- merge(parspt[, mcol],
                      parspt2)[, mcol]
-    parspt3 <- parspt3[parspt3$free > 0, ]
+    if (free_only) {
+        parspt3 <- parspt3[parspt3$free > 0, ]
+      }
     parspt4 <- merge(parspt3[, -which(mcol == "free")], ptable)
     if (where == "partable") {
         out <- parspt4$rowid
       }
     if (where == "coef") {
-        out <- parspt4$free
+        out <- parspt4[parspt4$free > 0, "free"]
       }
     out
   }
+
 
 #' @title Get id based on lhs-op-rhs and group
 #'
@@ -79,7 +117,8 @@ pars_id <- function(pars,
 pars_id_lorg <- function(pars,
                          fit,
                          where = c("coef",
-                                   "partable")) {
+                                   "partable"),
+                         free_only = TRUE) {
     where <- match.arg(where)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
@@ -113,10 +152,14 @@ pars_id_lorg <- function(pars,
       }
     parspt4 <- ptable[ptable$lavlabel %in% pars_c, ]
     if (where == "partable") {
-        out <- parspt4$rowid
+      if (free_only) {
+          out <- parspt4[parspt4$free > 0, "rowid"]
+        } else {
+          out <- parspt4$rowid
+        }
       }
     if (where == "coef") {
-        out <- parspt4$free
+        out <- parspt4[parspt4$free > 0, "free"]
       }
     out
   }
@@ -158,9 +201,8 @@ pars_id_op <- function(pars,
                        fit,
                        where = c("coef",
                                  "partable"),
-                       type = c("free", "all")) {
+                       free_only = TRUE) {
     where <- match.arg(where)
-    type <- match.arg(type)
     pfree <- lavaan::lavInspect(fit, "npar")
     ngp <- lavaan::lavInspect(fit, "ngroups")
     glabels <- lavaan::lavInspect(fit, "group.label")
@@ -206,7 +248,7 @@ pars_id_op <- function(pars,
     out0 <- sort(unique(out0))
     tmp <- ptable[out0, ]
     if (where == "partable") {
-        if (type == "free") {
+        if (free_only) {
             out <- tmp[tmp$free > 0, "rowid"]
           } else {
             out <- tmp$rowid
@@ -253,6 +295,11 @@ pars_id_special <- function(pars,
   }
 
 #' @title Convert ids to lhs-op-rhs-(group)
+#'
+#' @param type The meaning of the ids. If "free", they
+#' are the position in the vector of free parameters (i.e.,
+#' the output of of `coef()`). If "all", they are the
+#' row numbers in the parameter table.
 #'
 #' @noRd
 

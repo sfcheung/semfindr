@@ -76,12 +76,16 @@ pars3 <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5", "f2 ~ c(1, NA, 1) * f1")
 test_that("pars_id: default, where = 'coef'", {
     expect_true(all(pars_id(pars1, fit_ng) %in%
                     c(1, 3, 7)))
-    expect_identical(pars_id(pars2, fit_ng), numeric(0))
-    expect_identical(pars_id(pars3, fit_ng), numeric(0))
+    expect_true(all(pars_id(pars2, fit_ng) %in%
+                    c(1, 7)))
+    expect_true(all(pars_id(pars3, fit_ng) %in%
+                    c(1)))
     expect_true(all(pars_id(pars1, fit_ng_eq) %in%
                     c(1, 3, 7)))
-    expect_identical(pars_id(pars2, fit_ng_eq), numeric(0))
-    expect_identical(pars_id(pars3, fit_ng_eq), numeric(0))
+    expect_true(all(pars_id(pars2, fit_ng_eq) %in%
+                    c(1, 7)))
+    expect_true(all(pars_id(pars3, fit_ng_eq) %in%
+                    c(1)))
     expect_true(all(pars_id(pars1, fit_gp) %in%
                     c(1, 3, 7, 30, 32, 36, 59, 61, 65)))
     expect_true(all(pars_id(pars2, fit_gp) %in%
@@ -94,12 +98,16 @@ test_that("pars_id: default, where = 'coef'", {
 test_that("pars_id: where = 'partable'", {
     expect_true(all(pars_id(pars1, fit_ng, where = "partable") %in%
                     which(pt_ng$free %in% c(1, 3, 7))))
-    expect_identical(pars_id(pars2, fit_ng, where = "partable"), numeric(0))
-    expect_identical(pars_id(pars3, fit_ng, where = "partable"), numeric(0))
+    expect_true(all(pars_id(pars2, fit_ng, where = "partable") %in%
+                    which(pt_ng$free %in% c(1, 7))))
+    expect_true(all(pars_id(pars3, fit_ng, where = "partable") %in%
+                    which(pt_ng$free %in% c(1))))
     expect_true(all(pars_id(pars1, fit_ng_eq, where = "partable")
                     %in% which(pt_ng_eq$free %in% c(1, 3, 7))))
-    expect_identical(pars_id(pars2, fit_ng_eq, where = "partable"), numeric(0))
-    expect_identical(pars_id(pars3, fit_ng_eq, where = "partable"), numeric(0))
+    expect_true(all(pars_id(pars2, fit_ng_eq, where = "partable")
+                    %in% which(pt_ng_eq$free %in% c(1, 7))))
+    expect_true(all(pars_id(pars3, fit_ng_eq, where = "partable")
+                    %in% which(pt_ng_eq$free %in% c(1))))
     expect_true(all(pars_id(pars1, fit_gp, where = "partable") %in%
                     which(pt_gp$free %in% c(1, 3, 7, 30, 32, 36, 59, 61, 65))))
     expect_true(all(pars_id(pars2, fit_gp, where = "partable") %in%
@@ -275,38 +283,38 @@ test_that("pars_id_op: where = 'partable'", {
 
 test_that("pars_id_op: where = 'partable', type = 'all'", {
     expect_true(all.equal(pars_id_op(pars1, fit_ng, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           pt_ng[(pt_ng$free > -1) &
                                 (pt_ng$op == "=~"), "id"]))
     expect_true(all.equal(pars_id_op(pars2, fit_ng, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           integer(0)))
     expect_true(all.equal(pars_id_op(pars3, fit_ng, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           pt_ng[(pt_ng$free > -1) &
                                 (pt_ng$op == "~~"), "id"]))
     expect_true(all.equal(pars_id_op(pars1, fit_ng_eq, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           pt_ng[(pt_ng$free > -1) &
                                 (pt_ng$op == "=~"), "id"]))
     expect_true(all.equal(pars_id_op(pars2, fit_ng_eq, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           integer(0)))
     expect_true(all.equal(pars_id_op(pars3, fit_ng_eq, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           pt_ng[(pt_ng$free > -1) &
                                 (pt_ng$op == "~~"), "id"]))
     expect_true(all.equal(pars_id_op(pars1, fit_gp, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                           pt_gp[(pt_gp$free > -1) &
                                 (pt_gp$op == "=~"), "id"]))
     expect_true(all.equal(pars_id_op(pars2, fit_gp, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                   pt_gp[(pt_gp$free > -1) &
                         (((pt_gp$op == "=~") & (pt_gp$group == 2)) |
                           ((pt_gp$op == "~~") & (pt_gp$group == 1))), "id"]))
     expect_true(all.equal(pars_id_op(pars3, fit_gp, where = "partable",
-                                     type = "all"),
+                                     free_only = FALSE),
                   pt_gp[(pt_gp$free > -1) &
                         (((pt_gp$op == "~1") & (pt_gp$group == 1)) |
                         (pt_gp$op == "~~")), "id"]))
