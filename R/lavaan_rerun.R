@@ -56,7 +56,7 @@
 #' @param to_rerun The cases to be processed. If `case_id` is
 #'  specified, this should be a subset of `case_id`. If `case_id` is
 #'  not specified, then this should be a vector of integers indicating
-#'  the rows to te processed, as appeared in the data in `fit`.
+#'  the rows to te processed, as appeared in the data in `fit`. 
 #'  `to_rerun` cannot be used together with `md_top` or
 #'  `resid_md_top.`
 #' @param md_top The number of cases to be processed based on the
@@ -113,10 +113,10 @@
 #'
 #' - `selected`: A numeric vector of the row numbers of cases selected
 #'   in the analysis. Its length should be equal to the length of
-#'   `rerun`.
+#'   `rerun`. 
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#'
+#' 
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
@@ -138,7 +138,7 @@
 #' # Results by manually excluding the first case
 #' fit_01 <- lavaan::sem(mod, dat[-1, ])
 #' fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
-#'
+#' 
 #' @importMethodsFrom lavaan coef
 #' @export lavaan_rerun
 
@@ -180,13 +180,12 @@ lavaan_rerun <- function(fit,
           }
       }
     }
-  # n <- nrow(lavaan::lavInspect(fit, "data"))
-  n <- lavaan::lavInspect(fit, "ntotal")
+
+  n <- nrow(lavaan::lavInspect(fit, "data"))
 
   if (is.null(case_id)) {
       # Assume the model is a single-group model
-      case_ids <- unlist(unname(lavaan::lavInspect(fit, "case.idx",
-                                                   drop.list.single.group = FALSE)))
+      case_ids <- lavaan::lavInspect(fit, "case.idx")
     } else {
       if (length(case_id) != n) {
           stop("The length of case_id is not equal to the number of cases.")
@@ -204,9 +203,7 @@ lavaan_rerun <- function(fit,
   #     stop("resid_md_top does not support a model without mean structure.")
   #   }
 
-  if (!missing(resid_md_top) &&
-      !all(sapply(lavaan::lavInspect(fit, "patterns", drop.list.single.group = FALSE),
-                  function(x) nrow(x) == 1))) {
+  if (!missing(resid_md_top) & !all(lavaan::lavInspect(fit, "pattern") == 1) ) {
       stop("resid_md_top does not support analysis with missing data.")
     }
 
@@ -229,7 +226,7 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- order(case_md, decreasing = TRUE, na.last = NA)
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
-      case_md_selected <- case_md_selected[!is.na(case_md_selected)]
+      case_md_selected <- case_md_selected[!is.na(case_md_selected)] 
       to_rerun <- case_ids[case_md_selected]
     }
 
@@ -244,17 +241,15 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
-      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
+      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)] 
       to_rerun <- case_ids[fit_resid_md_selected]
     }
+
   if (!is.null(case_id)) {
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
     } else {
-      tmp <- lavaan::lavInspect(fit, "case.idx",
-                                drop.list.single.group = FALSE)
-      tmp <- sort(unname(unlist(tmp)))
-      case_ids <- tmp[to_rerun]
+      case_ids <- lavaan::lavInspect(fit, "case.idx")[to_rerun]
       id_to_rerun <- to_rerun
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
@@ -354,29 +349,8 @@ gen_fct_old <- function(fit) {
 
 gen_fct <- function(fit) {
   fit_org <- eval(fit)
-  # Reconstruct the dataset from lavaan
-  data_full0 <- lavaan::lavInspect(fit_org, "data", drop.list.single.group = FALSE)
-  data_full0 <- lapply(data_full0, as.data.frame)
-  if (lavaan::lavInspect(fit_org, "ngroups") > 0) {
-      var_gp <- lavaan::lavInspect(fit_org, "group")
-      lbl_gp <- lavaan::lavInspect(fit_org, "group.label")
-      data_full0 <- mapply(function(x, y) {
-                              x[, var_gp] <- y
-                              x},
-                           x = data_full0,
-                           y = lbl_gp,
-                           SIMPLIFY = FALSE)
-    }
-  case_id_full0 <- lavaan::lavInspect(fit_org, "case.idx", drop.list.single.group = FALSE)
-  data_full1 <- do.call(rbind, data_full0)
-  case_id_full <- do.call(c, case_id_full0)
-  # TODO: Find a better to reorder the rows.
-  data_full <- data_full1
-  data_full[case_id_full, ] <- data_full1
-  rm("data_full0")
-  rm("data_full1")
+  data_full <- lavaan::lavInspect(fit_org, "data")
   function(i = NULL) {
-      # TODO: Do not use update. Build a new lavaan object directly.
       if (is.null(i)) {
           return(lavaan::update(fit_org, data = data_full))
         } else {
