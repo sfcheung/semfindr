@@ -4,7 +4,7 @@ library(semfindr)
 
 #context("Test est_change_raw")
 
-mod <- 
+mod <-
 '
 iv1 ~~ iv2
 m1 ~ iv1 + iv2
@@ -24,9 +24,9 @@ est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
 est0_15 <- lavaan::parameterEstimates(fit0_15, standardized = TRUE)
 est_change_rerun_all <- est_change_raw(rerun_out)
 est_change_rerun_all_std <- est_change_raw(rerun_out, standardized = TRUE)
-est_change_rerun_all_paths <- est_change_raw(rerun_out, 
+est_change_rerun_all_paths <- est_change_raw(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
-est_change_rerun_all_paths_std <- est_change_raw(rerun_out, 
+est_change_rerun_all_paths_std <- est_change_raw(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"),
                                 standardized = TRUE)
 parameters_names <- gsub(" ", "", c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
@@ -46,29 +46,29 @@ k2 <- length(parameters_names)
 
 test_that("Compare raw change in unstandardized solution for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
-        est0_15$est_cha,  
+        est0_15$est_cha,
         est_change_rerun_all[15, ]
       )
   })
 
 test_that("Compare raw change in standardized solution for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
-        est0_15$est_std_cha,  
+        est0_15$est_std_cha,
         est_change_rerun_all_std[15, ]
       )
   })
 
 test_that("Compare raw change in unstandardized solution for an arbitrary case, with selected parameters", {
     expect_equal(ignore_attr = TRUE,
-        est0_15_all_paths,
-        est_change_rerun_all_paths[15, ]
+        sort(est0_15_all_paths),
+        sort(est_change_rerun_all_paths[15, ])
       )
   })
 
 test_that("Compare raw change in standardized solution for an arbitrary case, with selected parameters", {
     expect_equal(ignore_attr = TRUE,
-        est0_15_all_paths_std,
-        est_change_rerun_all_paths_std[15, ]
+        sort(est0_15_all_paths_std),
+        sort(est_change_rerun_all_paths_std[15, ])
       )
   })
 

@@ -60,15 +60,15 @@ test_that("Compare raw change in standardized solution for an arbitrary case", {
 
 test_that("Compare raw change in unstandardized solution for an arbitrary case, with selected parameters", {
     expect_equal(ignore_attr = TRUE,
-        est0_15_all_paths,
-        est_change_rerun_all_paths[15, ]
+        sort(est0_15_all_paths),
+        sort(est_change_rerun_all_paths[15, ])
       )
   })
 
 test_that("Compare raw change in standardized solution for an arbitrary case, with selected parameters", {
     expect_equal(ignore_attr = TRUE,
-        est0_15_all_paths_std,
-        est_change_rerun_all_paths_std[15, ]
+        sort(est0_15_all_paths_std),
+        sort(est_change_rerun_all_paths_std[15, ])
       )
   })
 
