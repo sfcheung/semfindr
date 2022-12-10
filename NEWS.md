@@ -1,4 +1,4 @@
-# semfindr 0.1.0.9005
+# semfindr 0.1.0.9006
 
 (Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
@@ -11,6 +11,10 @@
 - Updated `est_change()`, `est_change_raw()` and
   `est_change_approx()` to support models with labelled
   parameters. (0.1.0.9005)
+- Added `pars_id()` and `pars_id_to_lorg()` for converting
+  parameter specification to identification numbers (
+  positions in the vector of coefficients or row numbers
+  in the parameter tables).
 
 # semfindr 0.1.0
 
