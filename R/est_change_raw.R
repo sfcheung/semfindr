@@ -77,7 +77,7 @@
 #' # Note that only the changes in the selected paths are included.
 #'
 #' # Use standardized = TRUE to compare the differences in standardized solution
-#' out2_std <- est_change_raw(fit_rerun, 
+#' out2_std <- est_change_raw(fit_rerun,
 #'                           c("m1 ~ iv1", "m1 ~ iv2"),
 #'                           standardized = TRUE)
 #' head(out2_std)
@@ -132,39 +132,13 @@ est_change_raw <- function(rerun_out,
     } else {
       parameters_selected <- parameters_names
     }
-  tmpfct <- function(x, est, parameters_names,
-                             parameters_selected,
-                             standardized) {
-    esti_full <- lavaan::parameterEstimates(
-                  x,
-                  se = TRUE,
-                  zstat = FALSE,
-                  pvalue = FALSE,
-                  ci = FALSE,
-                  standardized = TRUE,
-                  fmi = FALSE,
-                  cov.std = TRUE,
-                  rsquare = FALSE,
-                  remove.nonfree = !standardized,
-                  output = "data.frame"
-                  )
-    if (standardized) {
-        esti_change <- (est$std.all - esti_full$std.all)
-      } else {
-        esti_change <- (est$est - esti_full$est)
-      }
-    names(esti_change) <- parameters_names
-    outi <- esti_change[parameters_selected]
-    names(outi) <- parameters_selected
-    outi
-  }
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected,
                                  standardized) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
                   chk2 <- lavaan::lavTech(x, "converged")
                   if (isTRUE(chk) & isTRUE(chk2)) {
-                      return(tmpfct(x, est = est,
+                      return(est_change_raw_i(x, est = est,
                                     parameters_names = parameters_names,
                                     parameters_selected = parameters_selected,
                                     standardized = standardized)
@@ -187,4 +161,36 @@ est_change_raw <- function(rerun_out,
   colnames(out) <- c(parameters_selected)
   rownames(out) <- case_ids
   out
+}
+
+# est_change_raw() for one fit object.
+#' @noRd
+
+est_change_raw_i <- function(x,
+                             est,
+                             parameters_names,
+                             parameters_selected,
+                             standardized) {
+  esti_full <- lavaan::parameterEstimates(
+                x,
+                se = TRUE,
+                zstat = FALSE,
+                pvalue = FALSE,
+                ci = FALSE,
+                standardized = TRUE,
+                fmi = FALSE,
+                cov.std = TRUE,
+                rsquare = FALSE,
+                remove.nonfree = !standardized,
+                output = "data.frame"
+                )
+  if (standardized) {
+      esti_change <- (est$std.all - esti_full$std.all)
+    } else {
+      esti_change <- (est$est - esti_full$est)
+    }
+  names(esti_change) <- parameters_names
+  outi <- esti_change[parameters_selected]
+  names(outi) <- parameters_selected
+  outi
 }
