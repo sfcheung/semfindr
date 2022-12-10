@@ -37,7 +37,8 @@ Imports:
     ggrepel,
     rlang,
     stats,
-    methods
+    methods,
+    utils
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 Config/testthat/edition: 3
