@@ -46,7 +46,7 @@ the parameters to be included.
 }
 \section{\code{lavaan} syntax}{
 For example, \code{"y ~ x"} denotes the regression coefficient
-regressin \code{y} on \code{x}. It uses \code{\link[lavaan:model.syntax]{lavaan::lavaanify()}} to
+regression \code{y} on \code{x}. It uses \code{\link[lavaan:model.syntax]{lavaan::lavaanify()}} to
 parse the syntax strings.
 }
 
@@ -54,39 +54,10 @@ parse the syntax strings.
 For example, \code{"~"} denotes all regression coefficients.
 }
 
-\section{Multisample model}{
-If a model has more than one groups, a specification
-specified as in a single sample model denotes the same
-parameters in all group.
-
-For example, \code{"f1 =~ x2"} denote the factor loading of
-\code{x2} on \code{f1} in all groups. \code{"~~"} denotes covariances
-and error covariances in all groups.
-
-There are two ways to select parameters only in selected
-groups. First, the syntax to fix parameter values
-can be used, with \code{NA} denoting parameters to be selected.
-
-For example, \code{"f2 =~ c(NA, 1, NA) * x5"} select the
-factor loadings of \code{x5} on \code{f2} in the first and third
-groups.
-
-Users can also add ".grouplabel" to a specification,
-\code{grouplabel} being the group label of a group (the one
-appears in \code{\link[=summary]{summary()}}, not the one of the form \code{".gp2"},
-\code{"gp3"}, etc.).
-
-For example, \code{"f2 =~ x5.Alpha"} denotes the factor loading
-of \code{x5} on \code{f2} in the group \code{"Alpha"}.
-}
-
 \examples{
 
 dat <- sem_dat
 set.seed(64264)
-dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
-                 nrow(dat),
-                 replace = TRUE)
 
 library(lavaan)
 sem_model <-
@@ -99,7 +70,6 @@ f3 ~   f2
 "
 
 fit_ng <- sem(sem_model, dat)
-fit_gp <- sem(sem_model, dat, group = "gp")
 
 pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
 tmp <- pars_id(pars, fit = fit_ng)
@@ -107,19 +77,6 @@ coef(fit_ng)[tmp]
 tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 parameterTable(fit_ng)[tmp, ]
 
-pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
-tmp <- pars_id(pars, fit = fit_gp)
-coef(fit_gp)[tmp]
-tmp <- pars_id(pars, fit = fit_gp, where = "partable")
-parameterTable(fit_gp)[tmp, ]
-
-pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
-tmp <- pars_id(pars2, fit = fit_gp)
-coef(fit_gp)[tmp]
-tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
-parameterTable(fit_gp)[tmp, ]
-# Note that group 1 is "Beta", not "Alpha"
-lavInspect(fit_gp, "group.label")
 
 }
 \author{

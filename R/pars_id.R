@@ -13,38 +13,12 @@
 #' # `lavaan` syntax
 #'
 #' For example, `"y ~ x"` denotes the regression coefficient
-#' regressin `y` on `x`. It uses [lavaan::lavaanify()] to
+#' regression `y` on `x`. It uses [lavaan::lavaanify()] to
 #' parse the syntax strings.
 #'
 #' # Operator
 #'
 #' For example, `"~"` denotes all regression coefficients.
-#'
-#' # Multisample model
-#'
-#' If a model has more than one groups, a specification
-#' specified as in a single sample model denotes the same
-#' parameters in all group.
-#'
-#' For example, `"f1 =~ x2"` denote the factor loading of
-#' `x2` on `f1` in all groups. `"~~"` denotes covariances
-#' and error covariances in all groups.
-#'
-#' There are two ways to select parameters only in selected
-#' groups. First, the syntax to fix parameter values
-#' can be used, with `NA` denoting parameters to be selected.
-#'
-#' For example, `"f2 =~ c(NA, 1, NA) * x5"` select the
-#' factor loadings of `x5` on `f2` in the first and third
-#' groups.
-#'
-#' Users can also add ".grouplabel" to a specification,
-#' `grouplabel` being the group label of a group (the one
-#' appears in [summary()], not the one of the form `".gp2"`,
-#' `"gp3"`, etc.).
-#'
-#' For example, `"f2 =~ x5.Alpha"` denotes the factor loading
-#' of `x5` on `f2` in the group `"Alpha"`.
 #'
 #' @return
 #' A numeric vector of the ids in the column "free" in the
@@ -78,9 +52,6 @@
 #'
 #' dat <- sem_dat
 #' set.seed(64264)
-#' dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
-#'                  nrow(dat),
-#'                  replace = TRUE)
 #'
 #' library(lavaan)
 #' sem_model <-
@@ -93,7 +64,6 @@
 #' "
 #'
 #' fit_ng <- sem(sem_model, dat)
-#' fit_gp <- sem(sem_model, dat, group = "gp")
 #'
 #' pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
 #' tmp <- pars_id(pars, fit = fit_ng)
@@ -101,19 +71,6 @@
 #' tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 #' parameterTable(fit_ng)[tmp, ]
 #'
-#' pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
-#' tmp <- pars_id(pars, fit = fit_gp)
-#' coef(fit_gp)[tmp]
-#' tmp <- pars_id(pars, fit = fit_gp, where = "partable")
-#' parameterTable(fit_gp)[tmp, ]
-#'
-#' pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
-#' tmp <- pars_id(pars2, fit = fit_gp)
-#' coef(fit_gp)[tmp]
-#' tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
-#' parameterTable(fit_gp)[tmp, ]
-#' # Note that group 1 is "Beta", not "Alpha"
-#' lavInspect(fit_gp, "group.label")
 #'
 #' @export
 
@@ -138,6 +95,81 @@ pars_id <- function(pars,
     out <- sort(unique(c(ids1, ids2, ids3)))
     out
   }
+
+# ###############
+# # To be added when other functions support
+# # multisample models
+# ###############
+#
+# # Details
+#
+# # Multisample model
+#
+# If a model has more than one groups, a specification
+# specified as in a single sample model denotes the same
+# parameters in all group.
+#
+# For example, `"f1 =~ x2"` denote the factor loading of
+# `x2` on `f1` in all groups. `"~~"` denotes covariances
+# and error covariances in all groups.
+#
+# There are two ways to select parameters only in selected
+# groups. First, the syntax to fix parameter values
+# can be used, with `NA` denoting parameters to be selected.
+#
+# For example, `"f2 =~ c(NA, 1, NA) * x5"` select the
+# factor loadings of `x5` on `f2` in the first and third
+# groups.
+#
+# Users can also add ".grouplabel" to a specification,
+# `grouplabel` being the group label of a group (the one
+# appears in [summary()], not the one of the form `".gp2"`,
+# `"gp3"`, etc.).
+#
+# For example, `"f2 =~ x5.Alpha"` denotes the factor loading
+# of `x5` on `f2` in the group `"Alpha"`.
+#
+# Example
+#
+# dat <- sem_dat
+# set.seed(64264)
+# dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
+#                  nrow(dat),
+#                  replace = TRUE)
+#
+# library(lavaan)
+# sem_model <-
+# "
+# f1 =~  x1 + x2 + x3
+# f2 =~  x4 + x5 + x6
+# f3 =~  x7 + x8 + x9
+# f2 ~   f1
+# f3 ~   f2
+# "
+#
+# fit_ng <- sem(sem_model, dat)
+# fit_gp <- sem(sem_model, dat, group = "gp")
+#
+# pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
+# tmp <- pars_id(pars, fit = fit_ng)
+# coef(fit_ng)[tmp]
+# tmp <- pars_id(pars, fit = fit_ng, where = "partable")
+# parameterTable(fit_ng)[tmp, ]
+#
+# pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
+# tmp <- pars_id(pars, fit = fit_gp)
+# coef(fit_gp)[tmp]
+# tmp <- pars_id(pars, fit = fit_gp, where = "partable")
+# parameterTable(fit_gp)[tmp, ]
+#
+# pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
+# tmp <- pars_id(pars2, fit = fit_gp)
+# coef(fit_gp)[tmp]
+# tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
+# parameterTable(fit_gp)[tmp, ]
+# # Note that group 1 is "Beta", not "Alpha"
+# lavInspect(fit_gp, "group.label")
+
 
 #' @title Get id based on lhs-op-rhs, using c() modifiers
 #'
@@ -400,9 +432,6 @@ pars_id_special <- function(pars,
 #' @examples
 #' dat <- sem_dat
 #' set.seed(64264)
-#' dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
-#'                  nrow(dat),
-#'                  replace = TRUE)
 #' library(lavaan)
 #' sem_model <-
 #' "
@@ -413,7 +442,6 @@ pars_id_special <- function(pars,
 #' f3 ~   f2
 #' "
 #' fit_ng <- sem(sem_model, dat)
-#' fit_gp <- sem(sem_model, dat, group = "gp")
 #'
 #' pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
 #' tmp <- pars_id(pars, fit = fit_ng)
@@ -421,20 +449,7 @@ pars_id_special <- function(pars,
 #' tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 #' pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_ng))
 #'
-#' pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
-#' tmp <- pars_id(pars, fit = fit_gp)
-#' pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
-#' tmp <- pars_id(pars, fit = fit_gp, where = "partable")
-#' pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
-#'
-#' parameterTable(fit_gp)[tmp, ]
-#' pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
-#' tmp <- pars_id(pars2, fit = fit_gp)
-#' pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
-#' tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
-#' pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
-#' # Note that group 1 is "Beta", not "Alpha"
-#' lavInspect(fit_gp, "group.label")
+
 #'
 #' @export
 
@@ -469,3 +484,31 @@ pars_id_to_lorg <- function(pars_id,
       }
     out
   }
+
+# ###############
+# # To be added when other functions support
+# # multisample models
+# ###############
+#
+# Example
+#
+# dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
+#                  nrow(dat),
+#                  replace = TRUE)
+#
+# fit_gp <- sem(sem_model, dat, group = "gp")
+#
+# pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
+# tmp <- pars_id(pars, fit = fit_gp)
+# pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
+# tmp <- pars_id(pars, fit = fit_gp, where = "partable")
+# pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
+#
+# parameterTable(fit_gp)[tmp, ]
+# pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
+# tmp <- pars_id(pars2, fit = fit_gp)
+# pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
+# tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
+# pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
+# # Note that group 1 is "Beta", not "Alpha"
+# lavInspect(fit_gp, "group.label")

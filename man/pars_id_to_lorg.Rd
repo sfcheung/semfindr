@@ -45,9 +45,6 @@ based on the ids.
 \examples{
 dat <- sem_dat
 set.seed(64264)
-dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
-                 nrow(dat),
-                 replace = TRUE)
 library(lavaan)
 sem_model <-
 "
@@ -58,7 +55,6 @@ f2 ~   f1
 f3 ~   f2
 "
 fit_ng <- sem(sem_model, dat)
-fit_gp <- sem(sem_model, dat, group = "gp")
 
 pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
 tmp <- pars_id(pars, fit = fit_ng)
@@ -66,19 +62,5 @@ pars_id_to_lorg(tmp, pars_source = coef(fit_ng))
 tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_ng))
 
-pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
-tmp <- pars_id(pars, fit = fit_gp)
-pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
-tmp <- pars_id(pars, fit = fit_gp, where = "partable")
-pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
-
-parameterTable(fit_gp)[tmp, ]
-pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
-tmp <- pars_id(pars2, fit = fit_gp)
-pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
-tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
-pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
-# Note that group 1 is "Beta", not "Alpha"
-lavInspect(fit_gp, "group.label")
 
 }
