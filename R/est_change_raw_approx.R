@@ -88,6 +88,9 @@ est_change_raw_approx <- function(fit,
   if (!inherits(fit, "lavaan")) {
       stop("The fit object is not a lavaan output.")
     }
+  if (lavaan::lavTech(fit, "ngroups") != 1) {
+      stop("Multisample models are not yet supported.")
+    }
   n <- lavaan::lavTech(fit, "nobs")
   if (is.null(case_id)) {
       # Assume the model is a single-group model
@@ -100,15 +103,17 @@ est_change_raw_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  parameters_names <- est_names_free(fit)
+  # Do not use user labels
+  est0$label <- ""
+  est0$lavlabel <- lavaan::lav_partable_labels(est0,
+                                               type = "user")
+  parameters_names <- est0[est0$free > 0, "lavlabel"]
   if (!is.null(parameters)) {
-    parameters_selected <- est_names_selected(est0, parameters)
-    if (!all(parameters_selected %in% parameters_names)) {
-        stop(paste("Not all parameters can be found in the output.",
-                   "Please check the parameters argument."))
-      }
+      parameters_selected <- pars_id(parameters,
+                                    fit = fit,
+                                    where = "coef")
     } else {
-      parameters_selected <- parameters_names
+      parameters_selected <- seq_len(length(parameters_names))
     }
   out0 <- lavaan::lavScores(fit) %*% vcov(fit) *
               n / (n - 1)
