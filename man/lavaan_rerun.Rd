@@ -13,7 +13,8 @@ lavaan_rerun(
   allow_inadmissible = FALSE,
   skip_all_checks = FALSE,
   parallel = FALSE,
-  makeCluster_args = list(spec = getOption("cl.cores", 2))
+  makeCluster_args = list(spec = getOption("cl.cores", 2)),
+  rerun_method = c("lavaan", "update")
 )
 }
 \arguments{
@@ -66,6 +67,11 @@ cores. Default is \code{FALSE}.}
 \code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is \verb{list(spec = getOption("cl.cores", 2)))}. If only the number of cores need to
 be specified, use \code{list(spec = x)}, where \code{x} is the number
 of cores to use.}
+
+\item{rerun_method}{How fit will be rerun. Default is
+\code{"lavaan"}. An alternative method is \code{"update"}. For
+internal use. If \code{"lavaan"} returns an error, try setting
+this argument to \code{"update"}.}
 }
 \value{
 A list with the following elements:

@@ -56,7 +56,7 @@
 #' @param to_rerun The cases to be processed. If `case_id` is
 #'  specified, this should be a subset of `case_id`. If `case_id` is
 #'  not specified, then this should be a vector of integers indicating
-#'  the rows to te processed, as appeared in the data in `fit`. 
+#'  the rows to te processed, as appeared in the data in `fit`.
 #'  `to_rerun` cannot be used together with `md_top` or
 #'  `resid_md_top.`
 #' @param md_top The number of cases to be processed based on the
@@ -87,6 +87,10 @@
 #'  getOption("cl.cores", 2)))`. If only the number of cores need to
 #'  be specified, use `list(spec = x)`, where `x` is the number
 #'  of cores to use.
+#' @param rerun_method How fit will be rerun. Default is
+#'  `"lavaan"`. An alternative method is `"update"`. For
+#'  internal use. If `"lavaan"` returns an error, try setting
+#'  this argument to `"update"`.
 #'
 #' @return
 #' A list with the following elements:
@@ -113,10 +117,10 @@
 #'
 #' - `selected`: A numeric vector of the row numbers of cases selected
 #'   in the analysis. Its length should be equal to the length of
-#'   `rerun`. 
+#'   `rerun`.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
@@ -138,7 +142,7 @@
 #' # Results by manually excluding the first case
 #' fit_01 <- lavaan::sem(mod, dat[-1, ])
 #' fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
-#' 
+#'
 #' @importMethodsFrom lavaan coef
 #' @export lavaan_rerun
 
@@ -151,12 +155,15 @@ lavaan_rerun <- function(fit,
                          skip_all_checks = FALSE,
                          parallel = FALSE,
                          makeCluster_args =
-                            list(spec = getOption("cl.cores", 2))
+                            list(spec = getOption("cl.cores", 2)),
+                         rerun_method = c("lavaan", "update")
                          ) {
   # Create the call
   # Create the boot function
   # Run it n times
   # Return the results
+
+  rerun_method <- match.arg(rerun_method)
 
   call <- match.call()
 
@@ -226,7 +233,7 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- order(case_md, decreasing = TRUE, na.last = NA)
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
-      case_md_selected <- case_md_selected[!is.na(case_md_selected)] 
+      case_md_selected <- case_md_selected[!is.na(case_md_selected)]
       to_rerun <- case_ids[case_md_selected]
     }
 
@@ -241,7 +248,7 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
-      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)] 
+      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
       to_rerun <- case_ids[fit_resid_md_selected]
     }
 
@@ -253,8 +260,13 @@ lavaan_rerun <- function(fit,
       id_to_rerun <- to_rerun
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
-  environment(gen_fct) <- parent.frame()
-  rerun_i <- gen_fct(fit)
+  if (rerun_method == "lavaan") {
+      rerun_i <- gen_fct_use_lavaan(fit)
+    }
+  if (rerun_method == "update") {
+      environment(gen_fct_use_update) <- parent.frame()
+      rerun_i <- gen_fct_use_update(fit)
+    }
   rerun_test <- suppressWarnings(rerun_i(NULL))
   if (!isTRUE(all.equal(unclass(coef(fit)),
                         coef(rerun_test)[names(coef(fit))]))) {
@@ -330,6 +342,25 @@ lavaan_rerun <- function(fit,
   out
 }
 
+gen_fct_use_lavaan <- function(fit) {
+  slot_opt <- fit@Options
+  slot_pat <- data.frame(fit@ParTable)
+  slot_pat$est <- NULL
+  slot_pat$start <- NULL
+  data_full <- lavaan::lavInspect(fit, "data")
+  function(i = NULL) {
+      if (is.null(i)) {
+          return(lavaan::lavaan(data = data_full,
+                                model = slot_pat,
+                                slotOptions = slot_opt))
+        } else {
+          return(lavaan::lavaan(data = data_full[-i, ],
+                                model = slot_pat,
+                                slotOptions = slot_opt))
+        }
+    }
+  }
+
 gen_fct_old <- function(fit) {
   fit_call <- as.call(lavaan::lavInspect(fit, "call"))
   fit_call2 <- fit_call
@@ -347,7 +378,7 @@ gen_fct_old <- function(fit) {
     }
   }
 
-gen_fct <- function(fit) {
+gen_fct_use_update <- function(fit) {
   fit_org <- eval(fit)
   data_full <- lavaan::lavInspect(fit_org, "data")
   function(i = NULL) {
