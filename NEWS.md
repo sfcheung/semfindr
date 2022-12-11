@@ -1,4 +1,4 @@
-# semfindr 0.1.0.9006
+# semfindr 0.1.0.9007
 
 (Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
@@ -14,7 +14,10 @@
 - Added `pars_id()` and `pars_id_to_lorg()` for converting
   parameter specification to identification numbers (
   positions in the vector of coefficients or row numbers
-  in the parameter tables).
+  in the parameter tables). (0.1.0.9006)
+- Updated `est_change_*` functions to use `pars_id()`
+  and `pars_id_to_lorg()`. (0.1.0.9007)
+
 
 # semfindr 0.1.0
 
