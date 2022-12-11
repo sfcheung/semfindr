@@ -1,4 +1,4 @@
-# semfindr 0.1.0.9007
+# semfindr 0.1.0.9008
 
 (Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
@@ -17,7 +17,8 @@
   in the parameter tables). (0.1.0.9006)
 - Updated `est_change_*` functions to use `pars_id()`
   and `pars_id_to_lorg()`. (0.1.0.9007)
-
+- Modified `lavaan_rerun()` to use `lavaan::lavaan()`
+  instead of `update()` as the default way to rerun. (0.1.0.9008).
 
 # semfindr 0.1.0
 
