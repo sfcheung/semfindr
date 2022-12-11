@@ -77,7 +77,7 @@
 #' # Note that only the changes in the selected paths are included.
 #'
 #' # Use standardized = TRUE to compare the differences in standardized solution
-#' out2_std <- est_change_raw(fit_rerun, 
+#' out2_std <- est_change_raw(fit_rerun,
 #'                           c("m1 ~ iv1", "m1 ~ iv2"),
 #'                           standardized = TRUE)
 #' head(out2_std)
@@ -108,36 +108,9 @@ est_change_raw <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
-  est0   <- lavaan::parameterEstimates(
-              fit0,
-              se = FALSE,
-              zstat = FALSE,
-              pvalue = FALSE,
-              ci = FALSE,
-              standardized = TRUE,
-              fmi = FALSE,
-              cov.std = TRUE,
-              rsquare = FALSE,
-              remove.nonfree = !standardized,
-              output = "data.frame"
-              )
-  parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
-  if (!is.null(parameters)) {
-    # parameters_selected <- gsub(" ", "", parameters)
-    parameters_selected <- est_names_selected(est0, parameters)
-    if (!all(parameters_selected %in% parameters_names)) {
-        stop(paste("Not all parameters can be found in the output.",
-                   "Please check the parameters argument."))
-      }
-    } else {
-      parameters_selected <- parameters_names
-    }
-  tmpfct <- function(x, est, parameters_names,
-                             parameters_selected,
-                             standardized) {
-    esti_full <- lavaan::parameterEstimates(
-                  x,
-                  se = TRUE,
+  estorg   <- lavaan::parameterEstimates(
+                  fit0,
+                  se = FALSE,
                   zstat = FALSE,
                   pvalue = FALSE,
                   ci = FALSE,
@@ -147,27 +120,45 @@ est_change_raw <- function(rerun_out,
                   rsquare = FALSE,
                   remove.nonfree = !standardized,
                   output = "data.frame"
-                  )
-    if (standardized) {
-        esti_change <- (est$std.all - esti_full$std.all)
-      } else {
-        esti_change <- (est$est - esti_full$est)
-      }
-    names(esti_change) <- parameters_names
-    outi <- esti_change[parameters_selected]
-    names(outi) <- parameters_selected
-    outi
-  }
+                )
+  estorg$est_id <- seq_len(nrow(estorg))
+  ngroups <- lavaan::lavTech(fit0, "ngroups")
+  if (ngroups == 1) estorg$group <- 1
+  estorg[estorg$op == ":=", "group"] <- 0
+  ptable <- lavaan::parameterTable(fit0)
+  ptable_cols <- c("lhs", "op", "rhs",
+                    "free", "id",
+                    "lavlabel")
+  # Do not use user labels
+  ptable$label <- ""
+  ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
+                                                 type = "user")
+  est0 <- merge(estorg, ptable[, ptable_cols])
+  est0 <- est0[order(est0$id), ]
+  parameters_names <- est0$lavlabel
+  if (!is.null(parameters)) {
+      tmp <- pars_id(parameters,
+                    fit = fit0,
+                    where = "partable",
+                    free_only = FALSE)
+      tmp2 <- pars_id_to_lorg(tmp,
+                              pars_source = ptable,
+                              type = "all")
+      tmp3 <- merge(estorg, tmp2)
+      parameters_selected <- tmp3$est_id
+    } else {
+      parameters_selected <- seq_len(length(parameters_names))
+    }
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected,
                                  standardized) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
                   chk2 <- lavaan::lavTech(x, "converged")
                   if (isTRUE(chk) & isTRUE(chk2)) {
-                      return(tmpfct(x, est = est,
-                                    parameters_names = parameters_names,
-                                    parameters_selected = parameters_selected,
-                                    standardized = standardized)
+                      return(est_change_raw_i(x, est = est,
+                              parameters_names = parameters_names,
+                              parameters_selected = parameters_selected,
+                              standardized = standardized)
                             )
                     } else {
                       return(rep(NA, length(parameters_selected)))
@@ -184,7 +175,39 @@ est_change_raw <- function(rerun_out,
     } else {
       out <- t(out)
     }
-  colnames(out) <- c(parameters_selected)
+  colnames(out) <- parameters_names[parameters_selected]
   rownames(out) <- case_ids
   out
+}
+
+# est_change_raw() for one fit object.
+#' @noRd
+
+est_change_raw_i <- function(x,
+                             est,
+                             parameters_names,
+                             parameters_selected,
+                             standardized) {
+  esti_full <- lavaan::parameterEstimates(
+                x,
+                se = TRUE,
+                zstat = FALSE,
+                pvalue = FALSE,
+                ci = FALSE,
+                standardized = TRUE,
+                fmi = FALSE,
+                cov.std = TRUE,
+                rsquare = FALSE,
+                remove.nonfree = !standardized,
+                output = "data.frame"
+                )
+  if (standardized) {
+      esti_change <- (est$std.all - esti_full$std.all)
+    } else {
+      esti_change <- (est$est - esti_full$est)
+    }
+  names(esti_change) <- parameters_names
+  outi <- esti_change[parameters_selected]
+  names(outi) <- parameters_selected
+  outi
 }

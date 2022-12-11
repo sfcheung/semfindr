@@ -1,0 +1,11 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/rocker-org/devcontainer-features/r-rig:1": {
+      "version": "release",
+      "vscodeRSupport": "lsp",
+      "devtools": true,
+      "vscDebugger": true
+    }
+  }
+}

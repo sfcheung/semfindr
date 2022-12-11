@@ -4,7 +4,7 @@ library(semfindr)
 
 #context("Test est_change")
 
-mod <- 
+mod <-
 '
 iv1 ~~ iv2
 m1 ~ iv1 + iv2
@@ -23,7 +23,7 @@ rerun_15 <- rerun_out$rerun[[15]]
 est0 <- lavaan::parameterEstimates(fit0)
 est0_15 <- lavaan::parameterEstimates(fit0_15)
 est_change_rerun_all <- est_change(rerun_out)
-est_change_rerun_all_paths <- est_change(rerun_out, 
+est_change_rerun_all_paths <- est_change(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
 parameters_names <- gsub(" ", "", c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
 
@@ -46,7 +46,7 @@ est_change_rerun_all[15, "gcd"]
 
 test_that("Compare standardized change for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
-        (est0$est - est0_15$est)/est0_15$se,  
+        (est0$est - est0_15$est)/est0_15$se,
         est_change_rerun_all[15, seq_len(k)]
       )
   })
@@ -54,7 +54,7 @@ test_that("Compare standardized change for an arbitrary case", {
 test_that("Compare standardized change for an arbitrary case, with selected parameters", {
     expect_equal(ignore_attr = TRUE,
         est0_15_all_paths,
-        est_change_rerun_all_paths[15, seq_len(k2)]
+        est_change_rerun_all_paths[15, parameters_names]
       )
   })
 

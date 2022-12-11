@@ -35,7 +35,7 @@
 #'  Please see Pek and MacCallum (2011), Equation 7.
 #'
 #' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
 #'  *Multivariate Behavioral Research, 46*(2), 202–228.
@@ -75,7 +75,7 @@
 #' # parameter estimates.
 #'
 #' @export
-#' @importMethodsFrom lavaan vcov
+#' @importMethodsFrom lavaan vcov coef
 
 est_change <- function(rerun_out,
                        parameters = NULL
@@ -86,7 +86,7 @@ est_change <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
-  est0   <- lavaan::parameterEstimates(
+  estorg   <- lavaan::parameterEstimates(
               fit0,
               se = FALSE,
               zstat = FALSE,
@@ -99,58 +99,30 @@ est_change <- function(rerun_out,
               remove.nonfree = TRUE,
               output = "data.frame"
               )
-  parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
+  ngroups <- lavaan::lavTech(fit0, "ngroups")
+  if (ngroups == 1) estorg$group <- 1
+  ptable <- lavaan::parameterTable(fit0)
+  ptable_cols <- c("lhs", "op", "rhs",
+                    "free", "label", "id",
+                    "lavlabel")
+  ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
+                                                 type = "user")
+  est0 <- merge(estorg, ptable[, ptable_cols])
+  est0 <- est0[order(est0$id), ]
+  parameters_names <- est0$lavlabel
   if (!is.null(parameters)) {
-    # parameters_selected <- gsub(" ", "", parameters)
-    parameters_selected <- est_names_selected(est0, parameters)
-    if (!all(parameters_selected %in% parameters_names)) {
-        stop(paste("Not all parameters can be found in the output.",
-                   "Please check the parameters argument."))
-      }
+      parameters_selected <- pars_id(parameters,
+                                    fit = fit0,
+                                    where = "coef")
     } else {
-      parameters_selected <- parameters_names
+      parameters_selected <- est0$free[est0$free > 0]
     }
-  tmpfct <- function(x, est, parameters_names,
-                             parameters_selected) {
-    esti_full <- lavaan::parameterEstimates(
-                  x,
-                  se = TRUE,
-                  zstat = FALSE,
-                  pvalue = FALSE,
-                  ci = FALSE,
-                  standardized = FALSE,
-                  fmi = FALSE,
-                  cov.std = TRUE,
-                  rsquare = FALSE,
-                  remove.nonfree = TRUE,
-                  output = "data.frame"
-                  )
-    esti_change <- (est$est - esti_full$est)/esti_full$se
-    names(esti_change) <- parameters_names
-    esti_change <- esti_change[parameters_selected]
-    vcovi_full <- vcov(x)
-    class(vcovi_full) <- "matrix"
-    vcovi_full_names <- colnames(vcovi_full)
-    q <- which(vcovi_full_names %in% est$label)
-    colnames(vcovi_full)[q] <- parameters_names[q]
-    rownames(vcovi_full)[q] <- parameters_names[q]
-    vcovi_full <- vcovi_full[parameters_selected, parameters_selected]
-    k <- length(esti_change)
-    esti_change_raw <- (est$est - esti_full$est)
-    names(esti_change_raw) <- parameters_names
-    esti_change_raw <- esti_change_raw[parameters_selected]
-    gcdi <- matrix(esti_change_raw, 1, k) %*% solve(vcovi_full) %*% 
-            matrix(esti_change_raw, k, 1)
-    outi <- c(esti_change, gcdi)
-    names(outi) <- c(parameters_selected, "gcd")
-    outi
-  }
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
                   chk2 <- lavaan::lavTech(x, "converged")
                   if (isTRUE(chk) & isTRUE(chk2)) {
-                      return(tmpfct(x, est = est,
+                      return(est_change_i(x, est = est,
                                     parameters_names = parameters_names,
                                     parameters_selected = parameters_selected)
                             )
@@ -165,7 +137,48 @@ est_change <- function(rerun_out,
   # No need to check the number of columns because it is always greater than one
 
   out <- t(out)
-  colnames(out) <- c(parameters_selected, "gcd")
+  colnames(out) <- c(parameters_names[parameters_selected], "gcd")
   rownames(out) <- case_ids
   out
+}
+
+# est_change() for one fit object
+#' @noRd
+
+est_change_i <- function(x,
+                         est,
+                         parameters_names,
+                         parameters_selected) {
+  esti_full <- lavaan::parameterEstimates(
+                x,
+                se = TRUE,
+                zstat = FALSE,
+                pvalue = FALSE,
+                ci = FALSE,
+                standardized = FALSE,
+                fmi = FALSE,
+                cov.std = TRUE,
+                rsquare = FALSE,
+                remove.nonfree = TRUE,
+                output = "data.frame"
+                )
+  esti_change <- (est$est - esti_full$est) / esti_full$se
+  names(esti_change) <- parameters_names
+  esti_change <- esti_change[parameters_selected]
+  vcovi_full <- vcov(x)
+  class(vcovi_full) <- "matrix"
+  vcovi_full_names <- colnames(vcovi_full)
+  q <- which(vcovi_full_names %in% est$label)
+  colnames(vcovi_full)[q] <- parameters_names[q]
+  rownames(vcovi_full)[q] <- parameters_names[q]
+  vcovi_full <- vcovi_full[parameters_selected, parameters_selected]
+  k <- length(esti_change)
+  esti_change_raw <- (est$est - esti_full$est)
+  names(esti_change_raw) <- parameters_names
+  esti_change_raw <- esti_change_raw[parameters_selected]
+  gcdi <- matrix(esti_change_raw, 1, k) %*% solve(vcovi_full) %*%
+          matrix(esti_change_raw, k, 1)
+  outi <- c(esti_change, gcdi)
+  names(outi) <- c(parameters_names[parameters_selected], "gcd")
+  outi
 }

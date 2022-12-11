@@ -94,6 +94,9 @@ est_change_approx <- function(fit,
   if (!inherits(fit, "lavaan")) {
       stop("The fit object is not a lavaan output.")
     }
+  if (lavaan::lavTech(fit, "ngroups") != 1) {
+      stop("Multisample models are not yet supported.")
+    }
   n <- lavaan::lavTech(fit, "nobs")
   if (is.null(case_id)) {
       # Assume the model is a single-group model
@@ -106,31 +109,30 @@ est_change_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  # parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
-  # parameters_names <- parameters_names[est0$free > 0]
-  parameters_names <- est_names_free(fit)
-
+  # Do not use user labels
+  est0$label <- ""
+  est0$lavlabel <- lavaan::lav_partable_labels(est0,
+                                               type = "user")
+  parameters_names <- est0[est0$free > 0, "lavlabel"]
   if (!is.null(parameters)) {
-    parameters_selected <- est_names_selected(est0, parameters)
-    if (!all(parameters_selected %in% parameters_names)) {
-        stop(paste("Not all parameters can be found in the output.",
-                  "Please check the parameters argument."))
-      }
+      parameters_selected <- pars_id(parameters,
+                                    fit = fit,
+                                    where = "coef")
     } else {
-      parameters_selected <- parameters_names
+      parameters_selected <- seq_len(length(parameters_names))
     }
-  param_idx <- match(parameters_names, est_names_free(fit))
+  param_idx <- parameters_selected
   x0 <- est_change_raw_approx(fit = fit, parameters = parameters, case_id = case_id)
   s0 <- lavaan::lavScores(fit)[, param_idx, drop = FALSE]
   v0 <- lavaan::vcov(fit)[param_idx, param_idx, drop = FALSE]
   v1 <- diag(1 / sqrt(diag(v0)))
   info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx, drop = FALSE]
   out0 <- x0 %*% v1 * n / (n - 1)
-  colnames(out0) <- parameters_names
+  colnames(out0) <- parameters_names[parameters_selected]
   # gcd_approx <- rowSums((x0 * n) * (x0 %*% v0 / n))
   gcd_approx <- rowSums((s0 %*% v0 %*% info0 * n) * x0)
   out <- cbind(out0, gcd_approx)
-  colnames(out) <- c(parameters_selected, "gcd_approx")
+  colnames(out) <- c(parameters_names[parameters_selected], "gcd_approx")
   rownames(out) <- case_ids
   out
 }

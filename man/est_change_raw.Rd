@@ -87,7 +87,7 @@ head(out2)
 # Note that only the changes in the selected paths are included.
 
 # Use standardized = TRUE to compare the differences in standardized solution
-out2_std <- est_change_raw(fit_rerun, 
+out2_std <- est_change_raw(fit_rerun,
                           c("m1 ~ iv1", "m1 ~ iv2"),
                           standardized = TRUE)
 head(out2_std)
