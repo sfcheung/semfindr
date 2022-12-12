@@ -2,6 +2,10 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
+# An SEM model with latent factors
+# Labelled: Some are labelled
+# User-defined parameters: At least one
+
 mod <-
 '
 f1 =~ x1 + x2 + x3

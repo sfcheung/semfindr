@@ -2,18 +2,21 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-#context("Test est_change_raw")
+# A path model
+# fixed.x: TRUE (default)
+# Labelled: Some are labelled
+# User-defined parameters: At least one
 
 mod <-
 '
-iv1 ~~ iv2
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a2 * b
 '
 
 dat <- pa_dat
 
-dat0 <- dat[1:50, ]
+dat0 <- dat[1:25, ]
 fit0 <- lavaan::sem(mod, dat0)
 fit0_15 <- lavaan::sem(mod, dat0[-15, ])
 
@@ -38,15 +41,24 @@ parameters_names <- gsub(" ", "", c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
 
 est0_15$par_names <- paste0(est0_15$lhs, est0_15$op, est0_15$rhs)
 
+parameters_labels <- est0_15$label[est0_15$par_names %in% parameters_names]
+parameters_labels <- ifelse(parameters_labels == "",
+                            parameters_names,
+                            parameters_labels)
+
 est0_15_all_paths <- est0_15[est0_15$par_names %in% parameters_names, "est_cha"]
 est0_15_all_paths_std <- est0_15[est0_15$par_names %in% parameters_names, "est_std_cha"]
 
-k <- nrow(est0)
+id_free <- !is.na(est0$z) | est0$op == ":="
+
+est0_free <- est0[id_free, ]
+est0_15_free <- est0_15[id_free, ]
+k <- nrow(est0_free)
 k2 <- length(parameters_names)
 
 test_that("Compare raw change in unstandardized solution for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
-        est0_15$est_cha,
+        est0_15_free$est_cha,
         est_change_rerun_all[15, ]
       )
   })
@@ -71,5 +83,4 @@ test_that("Compare raw change in standardized solution for an arbitrary case, wi
         sort(est_change_rerun_all_paths_std[15, ])
       )
   })
-
 
