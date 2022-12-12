@@ -77,14 +77,3 @@ test_that("Compare generalized Cook's distance for for an arbitrary case", {
         est_change_rerun_all[15, "gcd"]
       )
   })
-
-# Select by case ids:
-
-rerun_out2 <- lavaan_rerun(fit0, to_rerun = c(1, 3, 9, 15), parallel = FALSE)
-
-test_that("est_change: Select by case id", {
-    expect_equal(ignore_attr = TRUE,
-        sapply(c(1, 3, 9, 15), function(x) coef(rerun_out$rerun[[x]])),
-        sapply(1:4, function(x) coef(rerun_out2$rerun[[x]]))
-      )
-  })
