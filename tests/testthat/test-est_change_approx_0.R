@@ -2,13 +2,16 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-#context("Test est_change")
+# A path model
+# fixed.x: TRUE (default)
+# Labelled: Some are labelled
+# User-defined parameters: At least one
 
 mod <-
 '
-iv1 ~~ iv2
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a2 * b
 '
 
 dat <- pa_dat
