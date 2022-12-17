@@ -93,3 +93,44 @@ test_that("Check against known results", {
         gcd_approx
       )
   })
+
+
+# CFA model with selected loadings
+
+mod <-
+'
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f1 ~~ f2
+'
+
+dat <- cfa_dat
+
+dat0 <- dat[1:50, ]
+fit <- lavaan::cfa(mod, dat0)
+
+# From scores
+fit_est_change_approx <- lavScores(fit) %*% vcov(fit) *
+  nobs(fit) / (nobs(fit) - 1)
+fit_est_change_approx <- fit_est_change_approx[, 1:4]
+# Hessian (inverse of covariance) with scale adjustment
+information_fit <- lavInspect(fit, what = "information") * (nobs(fit) - 1)
+information_fit <- information_fit[1:4, 1:4]
+# Compare information_fit with vcov
+tmp1 <- solve(lavTech(fit, what = "information") * (nobs(fit)))
+tmp2 <- lavTech(fit, "vcov")
+tmp1 <- tmp1[1:4, 1:4]
+tmp2 <- tmp2[1:4, 1:4]
+# Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)
+gcd_approx <- rowSums(
+  (fit_est_change_approx %*% information_fit) * fit_est_change_approx
+)
+
+gcd_approx2 <- est_change_approx(fit, parameters = "=~")
+
+test_that("Check against known results", {
+    expect_equal(ignore_attr = TRUE,
+        gcd_approx2[, "gcd_approx"],
+        gcd_approx
+      )
+  })

@@ -129,8 +129,9 @@ est_change_approx <- function(fit,
   info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx, drop = FALSE]
   out0 <- x0 %*% v1 * n / (n - 1)
   colnames(out0) <- parameters_names[parameters_selected]
-  # gcd_approx <- rowSums((x0 * n) * (x0 %*% v0 / n))
-  gcd_approx <- rowSums((s0 %*% v0 %*% info0 * n) * x0)
+  gcd_approx <- rowSums(
+      (x0 %*% info0 * (n - 1)) * x0
+    )
   out <- cbind(out0, gcd_approx)
   colnames(out) <- c(parameters_names[parameters_selected], "gcd_approx")
   rownames(out) <- case_ids
