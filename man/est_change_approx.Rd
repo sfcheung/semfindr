@@ -60,8 +60,6 @@ Currently it only supports single-group models.
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
@@ -78,22 +76,27 @@ summary(fit)
 out_approx <- est_change_approx(fit)
 head(out_approx)
 
-# Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Fit the model several times. Each time with one case removed.
+# For illustration, do this only for the first 10 cases.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Compute the changes in chisq if a case is removed
 out <- est_change(fit_rerun)
 head(out)
 
 # Compare the results
-plot(out_approx[, 1], out[, 1]); abline(a = 0, b = 1)
-plot(out_approx[, 2], out[, 2]); abline(a = 0, b = 1)
-plot(out_approx[, 3], out[, 3]); abline(a = 0, b = 1)
-plot(out_approx[, "gcd_approx"], out[, "gcd"])
+plot(out_approx[1:10, 1], out[, 1])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, 2], out[, 2])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, 3], out[, 3])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, "gcd_approx"], out[, "gcd"])
 abline(a = 0, b = 1)
 
 # A CFA model
 
-dat <- cfa_dat[1:50, ]
+dat <- cfa_dat
 mod <-
 "
 f1 =~  x1 + x2 + x3
@@ -112,7 +115,7 @@ head(out_approx)
 
 # A latent variable model
 
-dat <- sem_dat[1:50, ]
+dat <- sem_dat
 mod <-
 "
 f1 =~  x1 + x2 + x3
