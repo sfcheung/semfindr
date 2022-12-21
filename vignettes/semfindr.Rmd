@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 # Purpose
@@ -19,10 +20,15 @@ knitr::opts_chunk$set(
 The `semfindr` package contains functions for doing structural
 equation modeling (SEM) diagnostics, such as identifying
 influential cases and computing various diagnostic measures.
-This is an implementation of sensitivity analysis proposed by
-Pek and MacCallum (2011), with some plots based on similar
-plots available in the `car` package by Fox and
-Weisberg (2019).
+This document illustrates how to use it to implement the
+leave-one-out approach for casewise sensitivity analysis presented
+by  Pek and MacCallum (2011), with some plots based on similar
+plots available in the `car` package by Fox and Weisberg (2019).
+
+For the approximate case influence approach that does not
+require refitting the model, please refer to  the
+vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
+(`vignette("casewise_scores")`).
 
 # Workflow
 
@@ -108,7 +114,7 @@ implied scores of outcome variables. See the help
 page of `semfindr::lavaan_rerun()` or
 `vignette("selecting_cases")` for the details.
 
-If this process is slow, we can save the results by 
+If this process is slow, we can save the results by
 `base::saveRDS()` such that we can load it for analysis later.
 
 # Diagnostic Functions
@@ -421,7 +427,7 @@ Cook, R. D. (1977). Detection of influential observation in linear regression.
 *Technometrics, 19*(1), 15–18.
 
 Fox J., & Weisberg, S. (2019). *An R companion to applied regression*
-(3rd Edition). Sage. https://socialsciences.mcmaster.ca/jfox/Books/Companion/. 
+(3rd Edition). Sage. https://socialsciences.mcmaster.ca/jfox/Books/Companion/.
 
 Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 *Proceedings of the National Institute of Science of India*, 2, 49–55.

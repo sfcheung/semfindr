@@ -6,7 +6,7 @@
 \alias{semfindr-package}
 \title{semfindr: Diagnostic Tools in Structural Equation Modeling}
 \description{
-Sensitivity analysis in structural equation modeling using change statistics and diagnostic plots.
+Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis (Pek & MacCallum, 2011) and approximate casewies influence by scores and casewise likelihood.
 }
 \seealso{
 Useful links:
