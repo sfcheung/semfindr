@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Diagnostic Tools in Structural Equation Modeling
-Version: 0.1.0.9010
+Version: 0.1.0.9011
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
