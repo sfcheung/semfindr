@@ -37,8 +37,10 @@
 #' # The model
 #' mod <-
 #' "
-#' m1 ~ iv1 + iv2
-#' dv ~ m1
+#' m1 ~ a1 * iv1 +  a2 * iv2
+#' dv ~ b * m1
+#' a1b := a1 * b
+#' a2b := a2 * b
 #' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
