@@ -42,12 +42,13 @@
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
-#' # For illustration only, select only the first 50 cases
 #' # The model
 #' mod <-
 #' "
-#' m1 ~ iv1 + iv2
-#' dv ~ m1
+#' m1 ~ a1 * iv1 + a2 * iv2
+#' dv ~ b * m1
+#' a1b := a1 * b
+#' a2b := a2 * b
 #' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
@@ -56,14 +57,67 @@
 #' # Approximated changes
 #' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
 #' head(out_approx)
-#' # Fit the model n times. Each time with one case removed.
-#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#' # Fit the model several times. Each time with one case removed.
+#' # For illustration, do this only for four selected cases
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:10)
 #' # Compute the changes in chisq if a case is removed
 #' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 #' # Results excluding a case, for the first few cases
 #' head(out)
 #' # Compare the results
-#' plot(out_approx[, "chisq"], out)
+#' plot(out_approx[1:10, "chisq"], out)
+#'
+#' # A CFA model
+#'
+#' dat <- cfa_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f1 ~~ f2
+#' "
+#' # Fit the model
+#' fit <- lavaan::cfa(mod, dat)
+#'
+#' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
+#' head(out_approx)
+#'
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:10)
+#' # Compute the changes in chisq if a case is removed
+#' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+#' # Results excluding a case, for the first few cases
+#' head(out)
+#' # Compare the results
+#' plot(out_approx[1:10, "chisq"], out)
+#'
+#' # A latent variable model#'
+#' dat <- sem_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f3 =~  x7 + x8 + x9
+#' f2 ~   a * f1
+#' f3 ~   b * f2
+#' ab := a * b
+#' "
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#'
+#' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
+#' head(out_approx)
+#'
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:10)
+#' # Compute the changes in chisq if a case is removed
+#' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+#' # Results excluding a case, for the first few cases
+#' head(out)
+#' # Compare the results
+#' plot(out_approx[1:10, "chisq"], out)
+#'
 #' @importFrom methods .hasSlot
 #' @export
 

@@ -60,13 +60,13 @@ Currently it only supports single-group models.
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
@@ -76,17 +76,65 @@ summary(fit)
 out_approx <- est_change_approx(fit)
 head(out_approx)
 
-# Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Fit the model several times. Each time with one case removed.
+# For illustration, do this only for the first 10 cases.
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Compute the changes in chisq if a case is removed
 out <- est_change(fit_rerun)
 head(out)
 
 # Compare the results
-plot(out_approx[, 1], out[, 1]); abline(a = 0, b = 1)
-plot(out_approx[, 2], out[, 2]); abline(a = 0, b = 1)
-plot(out_approx[, 3], out[, 3]); abline(a = 0, b = 1)
-plot(out_approx[, "gcd_approx"], out[, "gcd"]); abline(a = 0, b = 1)
+plot(out_approx[1:10, 1], out[, 1])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, 2], out[, 2])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, 3], out[, 3])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, "gcd_approx"], out[, "gcd"])
+abline(a = 0, b = 1)
+
+# A CFA model
+
+dat <- cfa_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f1 ~~ f2
+"
+# Fit the model
+fit <- lavaan::cfa(mod, dat)
+summary(fit)
+
+# Approximated standardized changes and gCD
+# Compute gCD only for free loadings
+out_approx <- est_change_approx(fit,
+                                parameters = "=~")
+head(out_approx)
+
+# A latent variable model
+
+dat <- sem_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~   a * f1
+f3 ~   b * f2
+ab := a * b
+"
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+
+# Approximated standardized changes and gCD
+# Compute gCD only for structural paths
+out_approx <- est_change_approx(fit,
+                                parameters = "~")
+head(out_approx)
+
 
 
 }

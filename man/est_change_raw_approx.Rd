@@ -58,13 +58,13 @@ Currently it only supports single-group models.
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
@@ -72,15 +72,56 @@ summary(fit)
 # Compute the approximated changes in parameter estimates if a case is removed
 out_approx <- est_change_raw_approx(fit)
 head(out_approx)
-# Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# Fit the model several times. Each time with one case removed.
+# For illustration, do this only for 10 selected cases
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Compute the changes in parameter estimates if a case is removed
 out <- est_change_raw(fit_rerun)
-# Results excluding a case, for the first few cases
-head(out)
+out
 # Compare the results
-plot(out_approx[, 1], out[, 1]); abline(a = 0, b = 1)
-plot(out_approx[, 5], out[, 5]); abline(a = 0, b = 1)
+plot(out_approx[1:10, 1], out[, 1])
+abline(a = 0, b = 1)
+plot(out_approx[1:10, 5], out[, 5])
+abline(a = 0, b = 1)
+
+# A CFA model
+dat <- cfa_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f1 ~~ f2
+"
+# Fit the model
+fit <- lavaan::cfa(mod, dat)
+summary(fit)
+# Compute the approximated changes in parameter estimates if a case is removed
+# Compute changes for free loadings only
+out_approx <- est_change_raw_approx(fit,
+                                    parameters = "=~")
+head(out_approx)
+
+# A latent variable model
+dat <- sem_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~   a * f1
+f3 ~   b * f2
+ab := a * b
+"
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+# Compute the approximated changes in parameter estimates if a case is removed
+# Compute changes for structural paths only
+out_approx <- est_change_raw_approx(fit,
+                                    parameters = c("~"))
+head(out_approx)
+
 
 }
 \author{

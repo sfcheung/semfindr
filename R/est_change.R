@@ -44,35 +44,80 @@
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
-#' # For illustration only, select only the first 50 cases
-#' dat <- dat[1:50, ]
 #' # The model
 #' mod <-
 #' "
-#' m1 ~ iv1 + iv2
-#' dv ~ m1
+#' m1 ~ a1 * iv1 + a2 * iv2
+#' dv ~ b * m1
+#' a1b := a1 * b
+#' a2b := a2 * b
 #' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' # Fit the model n times. Each time with one case removed.
-#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#' # Fit the model several times. Each time with one case removed.
+#' # For illustration, do this only for four selected cases
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = c(2, 4, 7, 9))
 #' # Compute the changes in chisq if a case is removed
 #' out <- est_change(fit_rerun)
-#' # Results excluding a case, for the first few cases
-#' head(out)
+#' # Results excluding a case
+#' out
 #' # Note that these are the differences divided by the standard errors
 #' # The rightmost column, `gcd`, contains the
 #' # generalized Cook's distances (Pek & MacCallum, 2011).
-#' head(out[, "gcd", drop = FALSE])
+#' out[, "gcd", drop = FALSE]
 #'
 #' # Compute the changes for the paths from iv1 and iv2 to m1
 #' out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
-#' # Results excluding a case, for the first few cases
-#' head(out2)
+#' # Results excluding a case
+#' out2
 #' # Note that only the changes in the selected parameters are included.
 #' # The generalized Cook's distance is computed only from the selected
 #' # parameter estimates.
+#'
+#' # A CFA model
+#'
+#' dat <- cfa_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f1 ~~ f2
+#' "
+#' # Fit the model
+#' fit <- lavaan::cfa(mod, dat)
+#'
+#' # Examine four selected cases
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = c(2, 3, 5, 7))
+#' # Compute the changes in parameter estimates if a case is removed
+#' # For free loadings only
+#' out <- est_change(fit_rerun, parameters = "=~")
+#' out
+#'
+#' # A latent variable model
+#'
+#' dat <- sem_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f3 =~  x7 + x8 + x9
+#' f2 ~   a * f1
+#' f3 ~   b * f2
+#' ab := a * b
+#' "
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#'
+#' # Examine four selected cases
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = c(2, 3, 5, 7))
+#' # Compute the changes in parameter estimates if a case is removed
+#' # For structural paths only
+#' out <- est_change(fit_rerun, parameters = "~")
+#' out
 #'
 #' @export
 #' @importMethodsFrom lavaan vcov coef
