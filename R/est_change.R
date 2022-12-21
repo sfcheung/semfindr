@@ -66,15 +66,18 @@
 #' # Note that these are the differences divided by the standard errors
 #' # The rightmost column, `gcd`, contains the
 #' # generalized Cook's distances (Pek & MacCallum, 2011).
-#' out[, "gcd", drop = FALSE]#'
+#' out[, "gcd", drop = FALSE]
+#'
 #' # Compute the changes for the paths from iv1 and iv2 to m1
 #' out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 #' # Results excluding a case
 #' out2
 #' # Note that only the changes in the selected parameters are included.
 #' # The generalized Cook's distance is computed only from the selected
-#' # parameter estimates.#'
-#' # A CFA model#'
+#' # parameter estimates.
+#'
+#' # A CFA model
+#'
 #' dat <- cfa_dat
 #' mod <-
 #' "
@@ -83,15 +86,18 @@
 #' f1 ~~ f2
 #' "
 #' # Fit the model
-#' fit <- lavaan::cfa(mod, dat)#'
+#' fit <- lavaan::cfa(mod, dat)
+#'
 #' # Examine four selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = c(2, 3, 5, 7))
 #' # Compute the changes in parameter estimates if a case is removed
 #' # For free loadings only
 #' out <- est_change(fit_rerun, parameters = "=~")
-#' out#'
-#' # A latent variable model#'
+#' out
+#'
+#' # A latent variable model
+#'
 #' dat <- sem_dat
 #' mod <-
 #' "
@@ -103,7 +109,8 @@
 #' ab := a * b
 #' "
 #' # Fit the model
-#' fit <- lavaan::sem(mod, dat)#'
+#' fit <- lavaan::sem(mod, dat)
+#'
 #' # Examine four selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = c(2, 3, 5, 7))
