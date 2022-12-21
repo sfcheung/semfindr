@@ -1,4 +1,4 @@
-# semfindr 0.1.0.9009
+# semfindr 0.1.0.9010
 
 (Work-In-Progress. Cumulated updates to be included in 0.1.1)
 
@@ -20,6 +20,7 @@
 - Modified `lavaan_rerun()` to use `lavaan::lavaan()`
   instead of `update()` as the default way to rerun. (0.1.0.9008).
 - Updated some of the tests. (0.1.0.9009)
+- Added more examples. (0.1.0.9010)
 
 # semfindr 0.1.0
 
