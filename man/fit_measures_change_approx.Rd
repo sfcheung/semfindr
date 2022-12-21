@@ -74,13 +74,13 @@ head(out_approx)
 # Fit the model several times. Each time with one case removed.
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
-                          to_rerun = 1:10)
+                          to_rerun = 1:5)
 # Compute the changes in chisq if a case is removed
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
 # Compare the results
-plot(out_approx[1:10, "chisq"], out)
+plot(out_approx[1:5, "chisq"], out)
 
 # A CFA model
 
@@ -98,13 +98,13 @@ out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
 head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
-                          to_rerun = 1:10)
+                          to_rerun = 1:5)
 # Compute the changes in chisq if a case is removed
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
 # Compare the results
-plot(out_approx[1:10, "chisq"], out)
+plot(out_approx[1:5, "chisq"], out)
 
 # A latent variable model#'
 dat <- sem_dat
@@ -124,13 +124,13 @@ out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
 head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
-                          to_rerun = 1:10)
+                          to_rerun = 1:5)
 # Compute the changes in chisq if a case is removed
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
 # Compare the results
-plot(out_approx[1:10, "chisq"], out)
+plot(out_approx[1:5, "chisq"], out)
 
 }
 \author{
