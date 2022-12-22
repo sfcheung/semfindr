@@ -126,23 +126,57 @@ gcd_plot(out, largest_gcd = 3)
 md_plot(out, largest_md = 3)
 
 # Plot changes in model chi-square against generalized Cook's distance.
-# Label the 3 cases largest changes in magnitude.
-# Label the 3 cases with largest generalized Cook's distance.
+# Label the 3 cases with the largest changes in magnitude.
+# Label the 3 cases with the largest generalized Cook's distance.
 gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
              largest_fit_measure = 3)
 
 # Plot changes in model chi-square against Mahalanobis distance.
 # Size of bubble determined by generalized Cook's distance.
-# Label the 3 cases largest changes in magnitude.
-# Label the 3 cases with largest Mahalanobis distance.
-# Label the 3 cases with largest generalized Cook's distance.
-#
+# Label the 3 cases with the largest changes in magnitude.
+# Label the 3 cases with the largest Mahalanobis distance.
+# Label the 3 cases with the largest generalized Cook's distance.
+
 gcd_gof_md_plot(out, fit_measure = "chisq",
                      largest_gcd = 3,
                      largest_fit_measure = 3,
                      largest_md = 3,
                      circle_size = 10)
 
+# Use the approximate method that does not require refitting the model
+
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+out <- influence_stat(fit)
+head(out)
+
+# Plot approximate generalized Cook's distance.
+# Label the 3 cases with the largest distances.
+gcd_plot(out, largest_gcd = 3)
+
+# Plot Mahalanobis distance.
+# Label the 3 cases with the largest distances.
+md_plot(out, largest_md = 3)
+
+# Plot approximate changes in model chi-square against
+# approximate generalized Cook's distance.
+# Label the 3 cases with the largest approximate changes in magnitude.
+# Label the 3 cases with the largest approximate generalized Cook's distance.
+gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+             largest_fit_measure = 3)
+
+# Plot approximate changes in model chi-square against Mahalanobis distance.
+# Size of bubble determined by approximate generalized Cook's distance.
+# Label the 3 cases with the largest approximate changes in magnitude.
+# Label the 3 cases with the largest Mahalanobis distance.
+# Label the 3 cases with the largest approximate generalized Cook's distance.
+
+gcd_gof_md_plot(out, fit_measure = "chisq",
+                     largest_gcd = 3,
+                     largest_fit_measure = 3,
+                     largest_md = 3,
+                     circle_size = 10)
 
 }
 \references{
