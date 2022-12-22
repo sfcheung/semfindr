@@ -150,6 +150,9 @@ influence_stat <- function(
       attr(out, "fit") <- switch(rerun_out_type,
                                  lavaan_rerun = rerun_out$fit,
                                  lavaan = rerun_out)
+      attr(out, "method") <- switch(rerun_out_type,
+                                 lavaan_rerun = "rerun",
+                                 lavaan = "approx")
     }
   out
 }
