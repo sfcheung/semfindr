@@ -8,11 +8,21 @@
 #'  without this case. Users can request measures of extremeness (only
 #'  Mahalanobis distance is available for now).
 #'
+#' If `rerun_out` is the output of [lavaan_rerun()], it will use the
+#' leave-one-out approach.
 #' Measures are computed by [est_change()] and [fit_measures_change()].
+#'
+#' If `rerun_out` is the output of [lavaan::lavaan()] or its wrappers
+#' (e.g., [lavaan::cfa()] or [lavaan::sem()]), it will use the
+#' approximate approach.
+#' Measures are computed by [est_change_approx()] and
+#' [fit_measures_change_approx()].
 #'
 #' Currently it only works for single-group models.
 #'
-#' @param rerun_out The output from [lavaan_rerun()].
+#' @param rerun_out The output from [lavaan_rerun()], or the output
+#'  of [lavaan::lavaan()] or its wrappers (e.g., [lavaan::cfa()]
+#'  and [lavaan::sem()]).
 #' @param fit_measures The argument `fit.measures` used in
 #'  [lavaan::fitMeasures]. Default is
 #'  `c("chisq", "cfi", "rmsea", "tli")`.
@@ -79,22 +89,36 @@ influence_stat <- function(
                        keep_fit = TRUE
                        ) {
   if (missing(rerun_out)) {
-      stop("No lavaan_rerun output supplied.")
+      stop("No output supplied.")
+    }
+  if (!(inherits(rerun_out, "lavaan_rerun") ||inherits(rerun_out, "lavaan") )) {
+      stop("rerun_out is neither the output of lavaan_rerun or lavaan.")
+    }
+  if (inherits(rerun_out, "lavaan_rerun")) {
+      rerun_out_type <- "lavaan_rerun"
+    }
+  if (inherits(rerun_out, "lavaan")) {
+      rerun_out_type <- "lavaan"
     }
   if (!isFALSE(fit_measures)) {
-      fm <- fit_measures_change(rerun_out,
-                                fit_measures = fit_measures,
-                                baseline_model = baseline_model
-                                )
+      fm <- switch(rerun_out_type,
+                   lavaan_rerun = fit_measures_change(rerun_out,
+                                    fit_measures = fit_measures,
+                                    baseline_model = baseline_model),
+                   lavaan =  fit_measures_change_approx(rerun_out,
+                                    fit_measures = fit_measures,
+                                    baseline_model = baseline_model))
       fm_names <- rownames(fm)
     } else {
       fm <- NULL
       fm_names <- NULL
     }
   if (!isFALSE(parameters)) {
-      es <- est_change(rerun_out,
-                                parameters = parameters
-                                )
+      es <- switch(rerun_out_type,
+                   lavaan_rerun = est_change(rerun_out,
+                                    parameters = parameters),
+                   lavaan =  est_change_approx(rerun_out,
+                                    parameters = parameters))
       es_names <- rownames(es)
     } else {
       es <- NULL
@@ -123,7 +147,9 @@ influence_stat <- function(
       stop("No statistics are requested. Something is wrong.")
     }
   if (keep_fit) {
-      attr(out, "fit") <- rerun_out$fit
+      attr(out, "fit") <- switch(rerun_out_type,
+                                 lavaan_rerun = rerun_out$fit,
+                                 lavaan = rerun_out)
     }
   out
 }
