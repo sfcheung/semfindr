@@ -74,23 +74,57 @@
 #' md_plot(out, largest_md = 3)
 #'
 #' # Plot changes in model chi-square against generalized Cook's distance.
-#' # Label the 3 cases largest changes in magnitude.
-#' # Label the 3 cases with largest generalized Cook's distance.
+#' # Label the 3 cases with the largest changes in magnitude.
+#' # Label the 3 cases with the largest generalized Cook's distance.
 #' gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
 #'              largest_fit_measure = 3)
 #'
 #' # Plot changes in model chi-square against Mahalanobis distance.
 #' # Size of bubble determined by generalized Cook's distance.
-#' # Label the 3 cases largest changes in magnitude.
-#' # Label the 3 cases with largest Mahalanobis distance.
-#' # Label the 3 cases with largest generalized Cook's distance.
-#' #
+#' # Label the 3 cases with the largest changes in magnitude.
+#' # Label the 3 cases with the largest Mahalanobis distance.
+#' # Label the 3 cases with the largest generalized Cook's distance.
+#'
 #' gcd_gof_md_plot(out, fit_measure = "chisq",
 #'                      largest_gcd = 3,
 #'                      largest_fit_measure = 3,
 #'                      largest_md = 3,
 #'                      circle_size = 10)
 #'
+#' # Use the approximate method that does not require refitting the model
+#'
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#' summary(fit)
+#' out <- influence_stat(fit)
+#' head(out)
+#'
+#' # Plot approximate generalized Cook's distance.
+#' # Label the 3 cases with the largest distances.
+#' gcd_plot(out, largest_gcd = 3)
+#'
+#' # Plot Mahalanobis distance.
+#' # Label the 3 cases with the largest distances.
+#' md_plot(out, largest_md = 3)
+#'
+#' # Plot approximate changes in model chi-square against
+#' # approximate generalized Cook's distance.
+#' # Label the 3 cases with the largest approximate changes in magnitude.
+#' # Label the 3 cases with the largest approximate generalized Cook's distance.
+#' gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+#'              largest_fit_measure = 3)
+#'
+#' # Plot approximate changes in model chi-square against Mahalanobis distance.
+#' # Size of bubble determined by approximate generalized Cook's distance.
+#' # Label the 3 cases with the largest approximate changes in magnitude.
+#' # Label the 3 cases with the largest Mahalanobis distance.
+#' # Label the 3 cases with the largest approximate generalized Cook's distance.
+#'
+#' gcd_gof_md_plot(out, fit_measure = "chisq",
+#'                      largest_gcd = 3,
+#'                      largest_fit_measure = 3,
+#'                      largest_md = 3,
+#'                      circle_size = 10)
 #'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
@@ -120,17 +154,23 @@ gcd_plot <- function(
                     influence_out,
                     stringsAsFactors = FALSE,
                     check.names = FALSE)
-
+  method <- attr(influence_out, "method")
+  if (method == "approx") {
+      dat$gcd <- dat$gcd_approx
+      gcd_label <- "Approximate Generalized Cook's Distance"
+    } else {
+      gcd_label <- "Generalized Cook's Distance"
+    }
   p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$gcd)) +
          ggplot2::geom_point() +
-         ggplot2::labs(title = "Generalized Cook's Distance") +
+         ggplot2::labs(title = gcd_label) +
          ggplot2::geom_segment(
                     ggplot2::aes(xend = .data$row_id,
                                  yend = 0),
                                  size = 1,
                                  lineend = "butt") +
          ggplot2::xlab("Row Number") +
-         ggplot2::ylab("Generalized Cook's Distance")
+         ggplot2::ylab(gcd_label)
 
   if (is.numeric(cutoff_gcd)) {
       p <- p + ggplot2::geom_hline(yintercept = cutoff_gcd,
@@ -248,14 +288,24 @@ gcd_gof_plot <- function(
                     check.names = FALSE)
   dat$fm <- dat[, fit_measure]
 
+  method <- attr(influence_out, "method")
+  if (method == "approx") {
+      dat$gcd <- dat$gcd_approx
+      gcd_label <- "Approximate Generalized Cook's Distance"
+      change_label <- "Approximate Change in Test Statistics"
+    } else {
+      gcd_label <- "Generalized Cook's Distance"
+      change_label <- "Change in Test Statistics"
+    }
+
   p <- ggplot2::ggplot(dat, ggplot2::aes(.data$gcd, .data$fm)) +
          ggplot2::geom_point() +
          ggplot2::labs(title =
-            "Change in Test Statistics against Generalized Cook's Distance") +
+            paste0(change_label, " against\n", gcd_label)) +
          ggplot2::geom_hline(yintercept = 0,
                              linetype = "solid") +
-         ggplot2::xlab("Generalized Cook's Distance") +
-         ggplot2::ylab("Change in Test Statistics")
+         ggplot2::xlab(gcd_label) +
+         ggplot2::ylab(change_label)
 
   if (is.numeric(cutoff_fit_measure)) {
       p <- p +  ggplot2::geom_hline(yintercept = cutoff_fit_measure,
@@ -336,17 +386,30 @@ gcd_gof_md_plot <- function(
     }
   dat$fm <- dat[, fit_measure]
 
+  method <- attr(influence_out, "method")
+  if (method == "approx") {
+      dat$gcd <- dat$gcd_approx
+      gcd_label <- "Approximate Generalized Cook's Distance"
+      gcd_label_short <- "Approx. gCD"
+      change_label <- "Approximate Change in Test Statistics"
+    } else {
+      gcd_label <- "Generalized Cook's Distance"
+      gcd_label_short <- "gCD"
+      change_label <- "Change in Test Statistics"
+    }
+
   p <- ggplot2::ggplot(dat, ggplot2::aes(.data$md, .data$fm)) +
          ggplot2::geom_point(ggplot2::aes(size = .data$gcd),
                              shape = 21,
                              alpha = .50,
                              fill = "white") +
-         ggplot2::scale_size_area(name = "gCD", max_size = circle_size) +
+         ggplot2::scale_size_area(name = gcd_label_short,
+                                  max_size = circle_size) +
          ggplot2::labs(title =
-            paste0("Change in Test Statistics against Mahalanobis Distance,\n",
-                   "Generalized Cook's Distance as the Size")) +
+            paste0(change_label, " against Mahalanobis Distance,\n",
+                   gcd_label, " as the Size")) +
          ggplot2::xlab("Mahalanobis Distance") +
-         ggplot2::ylab("Change in Test Statistics")
+         ggplot2::ylab(change_label)
 
   if (is.numeric(cutoff_fit_measure)) {
       p <- p +  ggplot2::geom_hline(yintercept = cutoff_fit_measure,

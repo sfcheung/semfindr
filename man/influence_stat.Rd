@@ -14,7 +14,9 @@ influence_stat(
 )
 }
 \arguments{
-\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}, or the output
+of \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g., \code{\link[lavaan:cfa]{lavaan::cfa()}}
+and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{fit_measures}{The argument \code{fit.measures} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
@@ -54,7 +56,15 @@ in the estimates of selected parameters and fit measures with and
 without this case. Users can request measures of extremeness (only
 Mahalanobis distance is available for now).
 
+If \code{rerun_out} is the output of \code{\link[=lavaan_rerun]{lavaan_rerun()}}, it will use the
+leave-one-out approach.
 Measures are computed by \code{\link[=est_change]{est_change()}} and \code{\link[=fit_measures_change]{fit_measures_change()}}.
+
+If \code{rerun_out} is the output of \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers
+(e.g., \code{\link[lavaan:cfa]{lavaan::cfa()}} or \code{\link[lavaan:sem]{lavaan::sem()}}), it will use the
+approximate approach.
+Measures are computed by \code{\link[=est_change_approx]{est_change_approx()}} and
+\code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}}.
 
 Currently it only works for single-group models.
 }
