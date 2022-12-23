@@ -10,12 +10,9 @@ pars_id(pars, fit, where = c("coef", "partable"), free_only = TRUE)
 }
 \arguments{
 \item{pars}{A character vector of parameters specified
-in lavaan syntax, e.g., \code{"y ~ x"} and \code{f1 =~ x3}. For
-multisample models, if only the parameters in some groups
-are needed, use the modifier for labeling parameters and
-use \code{NA} to denote parameters to be requested. E.g.,
-\code{f1 =~ c(NA, 0, NA, NA) * x2} denotes the loadings of
-\code{x2} on \code{f1} in the first, third, and fourth groups.}
+in lavaan syntax, e.g., \code{"y ~ x"} and \code{f1 =~ x3}. Can
+mix specific parameters with operators. See the Details
+section.}
 
 \item{fit}{A \code{lavaan}-class object. This object is used
 to determine the number of groups and the parameters
@@ -43,17 +40,22 @@ in the parameter table.
 \details{
 It supports the following ways to specify
 the parameters to be included.
-}
-\section{\code{lavaan} syntax}{
-For example, \code{"y ~ x"} denotes the regression coefficient
+\itemize{
+\item \code{lavaan} syntax
+\itemize{
+\item For example, \code{"y ~ x"} denotes the regression coefficient
 regression \code{y} on \code{x}. It uses \code{\link[lavaan:model.syntax]{lavaan::lavaanify()}} to
 parse the syntax strings.
 }
-
-\section{Operator}{
-For example, \code{"~"} denotes all regression coefficients.
+\item Operator
+\itemize{
+\item For example, \code{"~"} denotes all regression coefficients.
+}
 }
 
+It is used by function such as \code{\link[=est_change]{est_change()}} and
+\code{\link[=fit_measures_change]{fit_measures_change()}}.
+}
 \examples{
 
 dat <- sem_dat

@@ -1,15 +1,18 @@
-#' @title Case Influence on Parameter Estimates (Approximated)
+#' @title Case Influence on Parameter Estimates (Approximate)
 #'
-#' @description Gets a [lavaan::lavaan()] output and estimates the
-#'  changes in selected parameters for each case.
+#' @description Gets a [lavaan::lavaan()] output and computes the
+#' approximate changes in selected parameters for each case.
 #'
 #' @details For each case, [est_change_raw_approx()] computes the
-#'  approximated differences
-#'  in the estimates of selected parameters with and without this
-#'  case: (estimate with all case) - (estimate without this case). The
-#'  change is the raw change, either for the standardized or
-#'  unstandardized solution. The change is *not* divided by standard
-#'  error.
+#' approximate differences
+#' in the estimates of selected parameters with and without this
+#' case: (estimate with all case) - (estimate without this case). The
+#' change is the approximate raw change. The change is *not* divided by
+#' the standard error of an estimate (hance "raw" in the function name).
+#'
+#' If the value of a case is positive, including the case increases an estimate.
+#'
+#' If the value of a case is negative, including the case decreases an estimate.
 #'
 #' The model is not refitted. Therefore, the result is only an
 #' approximation of that of [est_change_raw()]. However, this
@@ -20,34 +23,46 @@
 #' leave-one-out sensitivity analysis using [lavaan_rerun()] and
 #' [est_change_raw()].
 #'
+#' Unlike [est_change_raw()], it does not yet support computing the
+#' changes for the standardized solution.
+#'
+#' For the technical details, please refer to the vignette
+#' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
+#'
 #' Currently it only supports single-group models.
 #'
-#' @param fit The output from [lavaan::lavaan()].
+#' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
+#' [lavaan::cfa()] and [lavaan::sem()]).
+#'
 #' @param parameters A character vector to specify the selected
-#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
-#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()].
-#'  Supports specifying an operator to select all parameters with this
-#'  operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
-#'  both parameter names and operators.
-#'  If `NULL`, the
-#'  default, differences on all free parameters will be computed.
+#' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#' in the output of [lavaan::parameterEstimates()].
+#' Supports specifying an operator to select all parameters with this
+#' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#' both parameter names and operators. More details can be found
+#' in the help of [pars_id()].
+#' If omitted or `NULL`, the
+#' default, changes on all free parameters will be computed.
+#'
 #' @param case_id If it is a character vector of length equals to the
-#'  number of cases (the number of rows in the data in `fit`), then it
-#'  is the vector of case identification values. If it is `NULL`, the
-#'  default, then `case.idx` used by `lavaan` functions will be used
-#'  as case identification values.
+#' number of cases (the number of rows in the data in `fit`), then it
+#' is the vector of case identification values. If it is `NULL`, the
+#' default, then `case.idx` used by `lavaan` functions will be used
+#' as case identification values.
 #'
 #' @return A matrix with the number of columns equals to the number of
-#'  requested parameters, and the number of rows equals to the number
-#'  of cases. The row names are case identification values. The
-#'  elements are the raw differences.
+#' requested parameters, and the number of rows equals to the number
+#' of cases. The row names are case identification values. The
+#' elements are the raw differences.
 #'
 #'
 #' @examples
 #' library(lavaan)
+#'
+#' # A path model
+#'
 #' dat <- pa_dat
-#' # The model
 #' mod <-
 #' "
 #' m1 ~ a1 * iv1 + a2 * iv2
@@ -58,7 +73,7 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' # Compute the approximated changes in parameter estimates if a case is removed
+#' # Compute the approximate changes in parameter estimates if a case is removed
 #' out_approx <- est_change_raw_approx(fit)
 #' head(out_approx)
 #' # Fit the model several times. Each time with one case removed.
@@ -85,7 +100,7 @@
 #' # Fit the model
 #' fit <- lavaan::cfa(mod, dat)
 #' summary(fit)
-#' # Compute the approximated changes in parameter estimates if a case is removed
+#' # Compute the approximate changes in parameter estimates if a case is removed
 #' # Compute changes for free loadings only
 #' out_approx <- est_change_raw_approx(fit,
 #'                                     parameters = "=~")
@@ -105,7 +120,7 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' # Compute the approximated changes in parameter estimates if a case is removed
+#' # Compute the approximate changes in parameter estimates if a case is removed
 #' # Compute changes for structural paths only
 #' out_approx <- est_change_raw_approx(fit,
 #'                                     parameters = c("~"))
@@ -113,16 +128,15 @@
 #'
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
-#'         Implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
+#' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #'
 #' @export
 #' @importMethodsFrom lavaan vcov
 
 est_change_raw_approx <- function(fit,
-                            parameters = NULL,
-                            case_id = NULL
-                            ) {
+                                  parameters = NULL,
+                                  case_id = NULL) {
   if (missing(fit)) {
       stop("No lavaan output supplied.")
     }

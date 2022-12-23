@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun_check.R
 \name{lavaan_rerun_check}
 \alias{lavaan_rerun_check}
-\title{Compatibility Check}
+\title{Compatibility Check for 'lavaan_rerun'}
 \usage{
 lavaan_rerun_check(fit, print_messages = TRUE)
 }
@@ -22,8 +22,8 @@ number, the value of this number without the negative sign is the
 number of tests failed.
 }
 \description{
-Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and checks whether it is
-supported.
+Gets a 'lavaan' output and checks whether it is
+supported by \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \details{
 This function is not supposed to be used by users. It is
@@ -51,5 +51,5 @@ lavaan_rerun_check(fit05)
 
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

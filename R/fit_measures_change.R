@@ -1,40 +1,54 @@
 #' @title Case Influence on Fit Measures
 #'
-#' @description Gets a [lavaan_rerun()] output and computes the change
-#'  in selected fit measures if a case is deleted
+#' @description Gets a [lavaan_rerun()] output and computes the changes
+#' in selected fit measures if a case is deleted
 #'
 #' @details For each case, [fit_measures_change()] computes the
-#'  differences in selected fit measures with and without this case.
+#' differences in selected fit measures with and without this case:
+#' (fit measure with all case) - (fit measure without this case).
+#'
+#' If the value of a case is positive, including the case increases an estimate.
+#'
+#' If the value of a case is negative, including the case decreases an estimate.
+#'
+#' Note that an increase is an improvement in fit for
+#' goodness of fit measures such as CFI and TLI, but a decrease
+#' is an improvement in fit for badness of fit measures such as
+#' RMSEA and model chi-square.
 #'
 #' If the analysis is not admissible or does not converge when a case
-#'  is deleted, `NA`s will be turned for the differences of this
-#'  case.
+#' is deleted, `NA`s will be turned for the differences of this
+#' case.
 #'
 #' Currently it only supports single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
+#'
 #' @param fit_measures The argument `fit.measures` used in
-#'  [lavaan::fitMeasures]. Default is
-#'  `c("chisq", "cfi", "rmsea", "tli")`.
+#' [lavaan::fitMeasures]. Default is
+#' `c("chisq", "cfi", "rmsea", "tli")`.
+#'
 #' @param baseline_model The argument `baseline.model` used in
-#'  [lavaan::fitMeasures]. Default is `NULL`.
+#' [lavaan::fitMeasures]. Default is `NULL`.
 #'
 #' @return A matrix with the number of columns equals to the number of
-#'  requested fit measures, and the number of rows equals to the number
-#'  of cases. The row names are the case identification values used in
-#'  [lavaan_rerun()].
+#' requested fit measures, and the number of rows equals to the number
+#' of cases. The row names are the case identification values used in
+#' [lavaan_rerun()].
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
-#'  in structural equation models: Cases and their influence.
-#'  *Multivariate Behavioral Research, 46*(2), 202–228.
-#'  doi:10.1080/00273171.2011.561068
+#' in structural equation models: Cases and their influence.
+#' *Multivariate Behavioral Research, 46*(2), 202-228.
+#' doi:10.1080/00273171.2011.561068
 #'
 #' @examples
 #' library(lavaan)
+#'
+#' # A path model
+#'
 #' dat <- pa_dat
-#' # The model
 #' mod <-
 #' "
 #' m1 ~ a1 * iv1 + a2 * iv2
@@ -85,7 +99,8 @@
 #' chisq_all - chisq_no_1
 #' out[1, ]
 #'
-#' # A latent variable model#'
+#' # A latent variable model
+#'
 #' dat <- sem_dat
 #' mod <-
 #' "
@@ -112,9 +127,11 @@
 #' @export
 
 fit_measures_change <- function(rerun_out,
-                         fit_measures = c("chisq", "cfi", "rmsea", "tli"),
-                         baseline_model = NULL
-                         ) {
+                                fit_measures = c("chisq",
+                                                 "cfi",
+                                                 "rmsea",
+                                                 "tli"),
+                                baseline_model = NULL) {
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_rerun.R
 \name{mahalanobis_rerun}
 \alias{mahalanobis_rerun}
-\title{Mahalanobis Distance (All Observed Variables)}
+\title{Mahalanobis Distance on All Observed Variables}
 \usage{
 mahalanobis_rerun(
   fit,
@@ -111,8 +111,8 @@ mahalanobis_rerun(fit_rerun)
 \references{
 Mahalanobis, P. C. (1936). On the generalized distance
 in statistics. \emph{Proceedings of the National Institute of Science
-of India, 2}, 49–55.
+of India, 2}, 49-55.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

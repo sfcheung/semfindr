@@ -1,50 +1,58 @@
 #' @title Standardized Case Influence on Parameter Estimates
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the
-#'  standardized changes in selected parameters for each case.
+#' standardized changes in selected parameters for each case.
 #'
 #' @details For each case, [est_change()] computes the differences in
-#'  the estimates of selected parameters with and without this case:
-#'  (estimate with all case) - (estimate without this case). The
-#'  differences are standardized by dividing the raw differences by
-#'  their standard errors (Pek & MacCallum, 2011).
+#' the estimates of selected parameters with and without this case:
+#' (estimate with all case) - (estimate without this case). The
+#' differences are standardized by dividing the raw differences by
+#' their standard errors (Pek & MacCallum, 2011).
+#'
+#' If the value of a case is positive, including the case increases an estimate.
+#'
+#' If the value of a case is negative, including the case decreases an estimate.
 #'
 #' If the analysis is not admissible or does not converge when a case
-#'  is deleted, `NA`s will be turned for this case on the differences.
+#' is deleted, `NA`s will be turned for this case on the differences.
 #'
 #' Unlike [est_change_raw()], [est_change()] does not support
-#'  computing the standardized changes of standardized estimates.
+#' computing the standardized changes of standardized estimates.
 #'
 #' Currently it only supports single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
+#'
 #' @param parameters A character vector to specify the selected
-#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
-#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()].
-#'  Supports specifying an operator to select all parameters with this
-#'  operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
-#'  both parameter names and operators.
-#'  If `NULL`, the
-#'  default, differences on all free parameters will be computed.
+#' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#' in the output of [lavaan::parameterEstimates()].
+#' Supports specifying an operator to select all parameters with this
+#' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#' both parameter names and operators. More details can be found
+#' in the help of [pars_id()].
+#' If omitted or `NULL`, the
+#' default, changes on all free parameters will be computed.
 #'
 #' @return A matrix with the number of columns equal to the number of
-#'  requested parameters, and the number of rows equal to the number
-#'  of cases. The row names are the case identification values used in
-#'  [lavaan_rerun()]. The elements are the standardized difference.
-#'  Please see Pek and MacCallum (2011), Equation 7.
+#' requested parameters, and the number of rows equal to the number
+#' of cases. The row names are the case identification values used in
+#' [lavaan_rerun()]. The elements are the standardized difference.
+#' Please see Pek and MacCallum (2011), Equation 7.
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
-#'  in structural equation models: Cases and their influence.
-#'  *Multivariate Behavioral Research, 46*(2), 202–228.
-#'  doi:10.1080/00273171.2011.561068
+#' in structural equation models: Cases and their influence.
+#' *Multivariate Behavioral Research, 46*(2), 202-228.
+#' doi:10.1080/00273171.2011.561068
 #'
 #' @examples
 #' library(lavaan)
+#'
+#' # A path model
+#'
 #' dat <- pa_dat
-#' # The model
 #' mod <-
 #' "
 #' m1 ~ a1 * iv1 + a2 * iv2
@@ -123,8 +131,7 @@
 #' @importMethodsFrom lavaan vcov coef
 
 est_change <- function(rerun_out,
-                       parameters = NULL
-                       ) {
+                       parameters = NULL) {
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }

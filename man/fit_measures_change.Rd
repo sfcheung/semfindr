@@ -27,12 +27,22 @@ of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the change
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
 in selected fit measures if a case is deleted
 }
 \details{
 For each case, \code{\link[=fit_measures_change]{fit_measures_change()}} computes the
-differences in selected fit measures with and without this case.
+differences in selected fit measures with and without this case:
+(fit measure with all case) - (fit measure without this case).
+
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
+
+Note that an increase is an improvement in fit for
+goodness of fit measures such as CFI and TLI, but a decrease
+is an improvement in fit for badness of fit measures such as
+RMSEA and model chi-square.
 
 If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for the differences of this
@@ -42,8 +52,10 @@ Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -94,7 +106,8 @@ fit_01 <- lavaan::sem(mod, dat[-1, ])
 chisq_all - chisq_no_1
 out[1, ]
 
-# A latent variable model#'
+# A latent variable model
+
 dat <- sem_dat
 mod <-
 "
@@ -122,9 +135,9 @@ out[1, ]
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
-\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
 doi:10.1080/00273171.2011.561068
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

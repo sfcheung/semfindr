@@ -2,12 +2,13 @@
 % Please edit documentation in R/est_change_approx.R
 \name{est_change_approx}
 \alias{est_change_approx}
-\title{Standardized Case Influence on Parameter Estimates (Approximated)}
+\title{Standardized Case Influence on Parameter Estimates (Approximate)}
 \usage{
 est_change_approx(fit, parameters = NULL, case_id = NULL)
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g.,
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{parameters}{A character vector to specify the selected
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
@@ -15,9 +16,10 @@ parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
 Supports specifying an operator to select all parameters with this
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
-both parameter names and operators.
-If \code{NULL}, the
-default, differences on all free parameters will be computed.}
+both parameter names and operators. More details can be found
+in the help of \code{\link[=pars_id]{pars_id()}}.
+If omitted or \code{NULL}, the
+default, changes on all free parameters will be computed.}
 
 \item{case_id}{If it is a character vector of length equals to the
 number of cases (the number of rows in the data in \code{fit}), then it
@@ -29,19 +31,23 @@ as case identification values.}
 A matrix with the number of columns equal to the number of
 requested parameters, and the number of rows equal to the number
 of cases. The row names are the case identification values used in
-\code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized differences.
 Please see Pek and MacCallum (2011), Equation 7.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
-standardized changes in selected parameters for each case.
+approximate standardized changes in selected parameters for each case.
 }
 \details{
 For each case, \code{\link[=est_change_approx]{est_change_approx()}} computes the
-approximated differences in the estimates of selected parameters
+approximate differences in the estimates of selected parameters
 with and without this case: (estimate with all case) - (estimate
 without this case). The differences are standardized by dividing
-the approximated raw differences by their standard errors.
+the approximate raw differences by their standard errors.
+
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
 
 The model is not refitted. Therefore, the result is only an
 approximation of that of \code{\link[=est_change]{est_change()}}. However, this
@@ -49,18 +55,23 @@ approximation is useful for identifying potentially influential
 cases when the sample size is very large or the model takes a long
 time to fit. This function can be used to identify potentially
 influential cases quickly and then select them to conduct the
-leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and
-\code{\link[=est_change_raw]{est_change_raw()}}.
+leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and then
+\code{\link[=est_change]{est_change()}}.
 
-This function also computes the approximated generalized Cook's
+This function also computes the approximate generalized Cook's
 distance (gCD). To avoid confusion, it is labelled \code{gcd_approx}.
+
+For the technical details, please refer to the vignette
+on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
 Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -72,7 +83,7 @@ a2b := a2 * b
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 
-# Approximated standardized changes and gcd
+# Approximate standardized changes and gCD
 out_approx <- est_change_approx(fit)
 head(out_approx)
 
@@ -107,7 +118,7 @@ f1 ~~ f2
 fit <- lavaan::cfa(mod, dat)
 summary(fit)
 
-# Approximated standardized changes and gCD
+# Approximate standardized changes and gCD
 # Compute gCD only for free loadings
 out_approx <- est_change_approx(fit,
                                 parameters = "=~")
@@ -129,7 +140,7 @@ ab := a * b
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 
-# Approximated standardized changes and gCD
+# Approximate standardized changes and gCD
 # Compute gCD only for structural paths
 out_approx <- est_change_approx(fit,
                                 parameters = "~")
@@ -140,5 +151,5 @@ head(out_approx)
 }
 \author{
 Idea by Mark Hok Chio Lai \url{https://orcid.org/0000-0002-9196-7406},
-Implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
+implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

@@ -1,13 +1,17 @@
-#' @title Standardized Case Influence on Parameter Estimates (Approximated)
+#' @title Standardized Case Influence on Parameter Estimates (Approximate)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
-#'  standardized changes in selected parameters for each case.
+#' approximate standardized changes in selected parameters for each case.
 #'
 #' @details For each case, [est_change_approx()] computes the
-#'  approximated differences in the estimates of selected parameters
-#'  with and without this case: (estimate with all case) - (estimate
-#'  without this case). The differences are standardized by dividing
-#'  the approximated raw differences by their standard errors.
+#' approximate differences in the estimates of selected parameters
+#' with and without this case: (estimate with all case) - (estimate
+#' without this case). The differences are standardized by dividing
+#' the approximate raw differences by their standard errors.
+#'
+#' If the value of a case is positive, including the case increases an estimate.
+#'
+#' If the value of a case is negative, including the case decreases an estimate.
 #'
 #' The model is not refitted. Therefore, the result is only an
 #' approximation of that of [est_change()]. However, this
@@ -15,44 +19,53 @@
 #' cases when the sample size is very large or the model takes a long
 #' time to fit. This function can be used to identify potentially
 #' influential cases quickly and then select them to conduct the
-#' leave-one-out sensitivity analysis using [lavaan_rerun()] and
-#' [est_change_raw()].
+#' leave-one-out sensitivity analysis using [lavaan_rerun()] and then
+#' [est_change()].
 #'
-#' This function also computes the approximated generalized Cook's
+#' This function also computes the approximate generalized Cook's
 #' distance (gCD). To avoid confusion, it is labelled `gcd_approx`.
+#'
+#' For the technical details, please refer to the vignette
+#' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 #'
 #' Currently it only supports single-group models.
 #'
-#' @param fit The output from [lavaan::lavaan()].
+#' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
+#' [lavaan::cfa()] and [lavaan::sem()]).
+#'
 #' @param parameters A character vector to specify the selected
-#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
-#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()].
-#'  Supports specifying an operator to select all parameters with this
-#'  operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
-#'  both parameter names and operators.
-#'  If `NULL`, the
-#'  default, differences on all free parameters will be computed.
+#' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#' in the output of [lavaan::parameterEstimates()].
+#' Supports specifying an operator to select all parameters with this
+#' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#' both parameter names and operators. More details can be found
+#' in the help of [pars_id()].
+#' If omitted or `NULL`, the
+#' default, changes on all free parameters will be computed.
+#'
 #' @param case_id If it is a character vector of length equals to the
-#'  number of cases (the number of rows in the data in `fit`), then it
-#'  is the vector of case identification values. If it is `NULL`, the
-#'  default, then `case.idx` used by `lavaan` functions will be used
-#'  as case identification values.
+#' number of cases (the number of rows in the data in `fit`), then it
+#' is the vector of case identification values. If it is `NULL`, the
+#' default, then `case.idx` used by `lavaan` functions will be used
+#' as case identification values.
 #'
 #' @return A matrix with the number of columns equal to the number of
-#'  requested parameters, and the number of rows equal to the number
-#'  of cases. The row names are the case identification values used in
-#'  [lavaan_rerun()]. The elements are the standardized difference.
-#'  Please see Pek and MacCallum (2011), Equation 7.
+#' requested parameters, and the number of rows equal to the number
+#' of cases. The row names are the case identification values used in
+#' [lavaan_rerun()]. The elements are the standardized differences.
+#' Please see Pek and MacCallum (2011), Equation 7.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
-#'         Implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
+#' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #'
 #' @examples
 #' library(lavaan)
+#'
+#' # A path model
+#'
 #' dat <- pa_dat
-#' # The model
 #' mod <-
 #' "
 #' m1 ~ a1 * iv1 + a2 * iv2
@@ -64,7 +77,7 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #'
-#' # Approximated standardized changes and gcd
+#' # Approximate standardized changes and gCD
 #' out_approx <- est_change_approx(fit)
 #' head(out_approx)
 #'
@@ -99,7 +112,7 @@
 #' fit <- lavaan::cfa(mod, dat)
 #' summary(fit)
 #'
-#' # Approximated standardized changes and gCD
+#' # Approximate standardized changes and gCD
 #' # Compute gCD only for free loadings
 #' out_approx <- est_change_approx(fit,
 #'                                 parameters = "=~")
@@ -121,7 +134,7 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #'
-#' # Approximated standardized changes and gCD
+#' # Approximate standardized changes and gCD
 #' # Compute gCD only for structural paths
 #' out_approx <- est_change_approx(fit,
 #'                                 parameters = "~")
@@ -170,11 +183,13 @@ est_change_approx <- function(fit,
       parameters_selected <- seq_len(length(parameters_names))
     }
   param_idx <- parameters_selected
-  x0 <- est_change_raw_approx(fit = fit, parameters = parameters, case_id = case_id)
+  x0 <- est_change_raw_approx(fit = fit,
+                              parameters = parameters, case_id = case_id)
   s0 <- lavaan::lavScores(fit)[, param_idx, drop = FALSE]
   v0 <- lavaan::vcov(fit)[param_idx, param_idx, drop = FALSE]
   v1 <- diag(1 / sqrt(diag(v0)))
-  info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx, drop = FALSE]
+  info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx,
+                                                         drop = FALSE]
   out0 <- x0 %*% v1 * n / (n - 1)
   colnames(out0) <- parameters_names[parameters_selected]
   gcd_approx <- rowSums(

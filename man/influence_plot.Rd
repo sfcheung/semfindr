@@ -6,7 +6,7 @@
 \alias{md_plot}
 \alias{gcd_gof_plot}
 \alias{gcd_gof_md_plot}
-\title{Various Plots of Influence Measures}
+\title{Plots of Influence Measures}
 \usage{
 gcd_plot(influence_out, cutoff_gcd = NULL, largest_gcd = 1)
 
@@ -42,12 +42,14 @@ gcd_gof_md_plot(
 \arguments{
 \item{influence_out}{The output from \code{\link[=influence_stat]{influence_stat()}}.}
 
-\item{cutoff_gcd}{Cases with generalized Cook's distance larger
+\item{cutoff_gcd}{Cases with generalized Cook's distance or
+approximate generalized Cook's distance larger
 than this value will be labeled. Default is \code{NULL}. If \code{NULL}, no
 cutoff line will be drawn.}
 
 \item{largest_gcd}{The number of cases with the largest generalized
-Cook's distance to be labelled. Default is 1. If not an integer, it
+Cook's distance or approximate generalized Cook's distance
+to be labelled. Default is 1. If not an integer, it
 will be rounded to the nearest integer.}
 
 \item{cutoff_md}{Cases with Mahalanobis distance larger than this
@@ -92,11 +94,25 @@ statistics.
 }
 \details{
 The output of \code{\link[=influence_stat]{influence_stat()}} is simply a matrix.
-Therefore, this function will work for any matrix provided. Row
+Therefore, these functions will work for any matrix provided. Row
 number will be used on the x-axis if applicable. However, case
 identification values in the output from \code{\link[=influence_stat]{influence_stat()}} will
 be used for labeling individual cases.
 }
+\section{Functions}{
+\itemize{
+\item \code{gcd_plot()}: Index plot of generalized Cook's distance.
+
+\item \code{md_plot()}: Index plot of Mahalanobis distance.
+
+\item \code{gcd_gof_plot()}: Plot the case influence of the selected fit
+measure against generalized Cook's distance.
+
+\item \code{gcd_gof_md_plot()}: Bubble plot of the case influence of the selected
+fit measure against Mahalanobis distance, with the size of a bubble
+determined by generalized Cook's distance.
+
+}}
 \examples{
 library(lavaan)
 dat <- pa_dat
@@ -189,5 +205,5 @@ doi:10.1080/00273171.2011.561068
 \code{\link[=influence_stat]{influence_stat()}}.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }
