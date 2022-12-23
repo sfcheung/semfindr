@@ -3,9 +3,18 @@
 \docType{data}
 \name{cfa_dat}
 \alias{cfa_dat}
-\title{Sample data set for a CFA model}
+\title{Sample Data: A CFA Model}
 \format{
-An object of class \code{data.frame} with 100 rows and 6 columns.
+A data frame with 100 rows
+and 6 variables:
+\describe{
+\item{x1}{Indicator. Numeric.}
+\item{x2}{Indicator. Numeric.}
+\item{x3}{Indicator. Numeric.}
+\item{x4}{Indicator. Numeric.}
+\item{x5}{Indicator. Numeric.}
+\item{x6}{Indicator. Numeric.}
+}
 }
 \usage{
 cfa_dat
@@ -13,12 +22,15 @@ cfa_dat
 \description{
 A six-variable dataset with 100 cases.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
-`f2 =~  x4 + x5 + x6`
-`f1 ~~ f2`
-}\if{html}{\out{</div>}}
+\examples{
+library(lavaan)
+data(cfa_dat)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+"
+fit <- cfa(mod, cfa_dat)
+summary(fit)
 }
 \keyword{datasets}

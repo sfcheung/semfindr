@@ -3,26 +3,46 @@
 \docType{data}
 \name{sem_dat2}
 \alias{sem_dat2}
-\title{Sample data set for a structural equation model with an influential case}
+\title{Sample Data: A Latent Variable Structural Model
+With an Influential Case}
 \format{
-An object of class \code{data.frame} with 100 rows and 10 columns.
+A data frame with 200 rows
+and 10 variables:
+\describe{
+\item{case_id}{Case ID. Character.}
+\item{x1}{Indicator. Numeric.}
+\item{x2}{Indicator. Numeric.}
+\item{x3}{Indicator. Numeric.}
+\item{x4}{Indicator. Numeric.}
+\item{x5}{Indicator. Numeric.}
+\item{x6}{Indicator. Numeric.}
+\item{x7}{Indicator. Numeric.}
+\item{x8}{Indicator. Numeric.}
+\item{x9}{Indicator. Numeric.}
+}
 }
 \usage{
 sem_dat2
 }
 \description{
-A nine-variable dataset with 100 cases and potential influential cases
+A ten-variable dataset with 200 cases, with
+one influential case.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
-`f2 =~  x4 + x5 + x6`
-`f3 =~  x7 + x8 + x9`
-`f2 ~   f1`
-`f3 ~   f2`
-}\if{html}{\out{</div>}}
-
-Has one or more influential case
+\examples{
+library(lavaan)
+data(sem_dat2)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~ a * f1
+f3 ~ b * f2
+ab := a * b
+"
+fit <- sem(mod, sem_dat2)
+summary(fit)
+inf_out <- influence_stat(fit)
+gcd_plot(inf_out)
 }
 \keyword{datasets}
