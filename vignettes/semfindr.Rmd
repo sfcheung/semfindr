@@ -22,18 +22,15 @@ equation modeling (SEM) diagnostics, such as identifying
 influential cases and computing various diagnostic measures.
 This document illustrates how to use `semfindr` to do casewise sensitivity
 analysis: Assessing the influence of a case on parameter estimates
-and model fit measures. It supports two approaches:
+and model fit measures.
+
+It supports two approaches:
 the leave-one-out approach presented
 by Pek and MacCallum (2011), and the approximate approach
 that approximate the influence without refitting a model.
 It can generate some plots based on similar
 plots available in the `car` package by Fox and Weisberg (2019)
 to assess the sensitivity analysis.
-
-For the approximate case influence approach that does not
-require refitting the model, please refer to  the
-vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
-(`vignette("casewise_scores")`).
 
 # Leave-One-Out Approach
 
@@ -59,16 +56,16 @@ this workflow:
 4. Any case influence statistics can then computed without
    the need to repeat Step 2.
 
-Users can do as many diagnostic analysis as they
+Users can do as much diagnostic analysis as they
 want without repeating the time consuming refitting step.
 Step 2 can also be conducted without the need to decide
 in advance the influence statistics to compute. Some
-statistics, such as generalized Cook's distance is a
-function of the parameters selected and the parameters to
-examine may depends on the results of other statistics
+statistics, such as generalized Cook's distance, is a
+function of the parameters selected, and the parameters to
+examine may depend on the results of other statistics
 and so may change during the analysis.
 
-The following sections illustrates how to use some of the
+The following sections illustrates how to use the
 major functions.
 
 ## Fitting the Target Model
@@ -127,23 +124,26 @@ fit_rerun <- lavaan_rerun(fit)
 ```
 
 This example takes about 4 to 8 seconds. For larger samples
-or more complicated models, `semfindr::lavaan_rerun()` supports
+or more complicated models, `lavaan_rerun()` supports
 parallel processing by setting `parallel` to `TRUE`.
 
-`semfindr::lavaan_rerun()` also supports selecting cases based
-on Mahalanobis distance on all variables in the model or on
-implied scores of outcome variables. See the help
-page of `semfindr::lavaan_rerun()` or
+`lavaan_rerun()` also supports selecting cases using
+the Mahalanobis distance on all variables in the model or on
+the implied scores of outcome variables. See the help
+page of `lavaan_rerun()` or
 `vignette("selecting_cases", package = "semfindr")` for details.
 
 If this process is slow, we can save the results by
-`base::saveRDS()` such that we can load it for analysis later.
+`base::saveRDS()` such that we can load it for sensitivity
+analysis later, without the need to repeat this step in each
+R session.
 
 ## Diagnostic Functions
 
 ### Standardized Changes in Parameter Estimates
 
-One intuitive measure is to compute the changes in parameter
+One intuitive way to assess casewise influence is to compute
+the changes in parameter
 estimates if a case is included, with the changes standardized
 by their standard errors (Pek & MacCallum, 2011, Equation 7):
 
@@ -163,9 +163,11 @@ first case. The estimates of this path with and without
 the first case are `r round(coef(fit)["m1~iv1"], 3)` and
 `r round(coef(fit_no1)["m1~iv1"], 3)`, respectively. The estimate
 of this path is larger when this case is included than when
-this case is excluded.
+this case is excluded. (Recall that
+`r round(fit_est_change[1, "m1~iv1"], 3)` is the change
+standardized by the standard error of the estimate).
 
-`semfindr::est_change()` also computes the generalized Cook's
+`est_change()` also computes the generalized Cook's
 distance (Cook, 1977; Pek & MacCallum, 2011, Equation 6),
 *gCD* (labelled in lowercase in the output as `gcd`),
 using the parameters examined. *gCD* is
@@ -215,16 +217,16 @@ fit_est_change_paths_only <- est_change(fit_rerun,
 i_top5_gcd_paths <- i[1:5]
 ```
 
-As shown in this example, although the
+Although the
 `r as.integer(i_top5_gcd_overall[1])`th case has the
-largest gCD based on all parameters, the
+largest *gCD* based on all parameters, the
 `r as.integer(i_top5_gcd_paths[1])`th case has the
-largest gCD based on regression paths only. Therefore,
-when examining gCD, it is better to compute it only for parameters
+largest *gCD* based on regression paths only. Therefore,
+when examining *gCD*, it is better to compute it only for parameters
 that are theoretically important.
 
 See the help
-page of `semfindr::est_change()` for further information.
+page of `est_change()` for further information.
 
 ### Raw Changes in Parameter Estimates
 
@@ -233,7 +235,7 @@ to interpret. If the original units are interpretable,
 we can compute the *raw* changes, that is, the changes
 in parameter estimates if a case is included, not
 standardized by their standard errors. This can be done
-by `semfindr::est_change_raw()`:
+by `est_change_raw()`:
 
 ```{r}
 fit_est_change_raw <- est_change_raw(fit_rerun)
@@ -252,7 +254,7 @@ estimate with the 43rd case excluded. The raw changes is
 `r round(coef(fit_no43)["m1~iv1"], 3)` or
 `r round(fit_est_change_raw[43, "m1~iv1"], 3)`.
 
-If desired, `semfindr::est_change_raw()` can also compute the changes
+If desired, `est_change_raw()` can also compute the changes
 in parameters in the *standardized solution*:
 
 ```{r}
@@ -283,14 +285,14 @@ the 43rd cases are
 and
 `r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)`,
 respectively. The
-estimate of the standardized coefficients from `iv1` to `m1`
+estimate of the standardized coefficient from `iv1` to `m1`
 is smaller than the estimate with the 43rd
 case removed. The raw changes of standardized estimate is
 `r round(standardizedSolution(fit, se = FALSE)[1, ][, 4], 3)` -
 `r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)` or
 `r round(fit_est_change_raw_std[43, "m1~iv1"], 3)`.
 
-`semfindr::est_change_raw()` also supports computing the changes
+`est_change_raw()` also supports computing the changes
 for selected parameters:
 
 ```{r}
@@ -313,13 +315,13 @@ fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
 
 
 See the help
-page of `semfindr::est_change_raw()` for further information.
+page of `est_change_raw()` for further information.
 
 ### Mahalanobis Distance
 
 One commonly used measure for identifying outliers is
 Mahalanobis distance (Mahalanobis, 1936; Pek & MacCallum,
-2011, Equation 9). `semfindr::mahalanobis_rerun()` can be
+2011, Equation 9). `mahalanobis_rerun()` can be
 used to compute the Mahalanobis distance of each case on
 all the variables used in the target model:
 
@@ -334,14 +336,17 @@ Therefore, if time allows,
 influence measures should be examined to avoid overlooking
 cases that are not extreme but are influential.
 
+See the help
+page of `mahalanobis_rerun()` for further information.
+
 ### Changes in Fit Measures
 
-Another set of intuitive measures of influence is to compute
-measures of model fit with a case deleted and compute
-the changes. This can
-be done by `semfindr::fit_measures_change()`, which simply
+Another intuitive measure of influence is to compute
+the difference in a measure of model fit between the analysis
+with a case included and that with the case excluded. This can
+be done by `fit_measures_change()`, which simply
 gets any fit measures supported by `lavaan::fitMeasures()`
-from the results from `semfindr::lavaan_rerun`:
+from the results from `lavaan_rerun`:
 
 ```{r}
 fit_mc <- fit_measures_change(fit_rerun,
@@ -364,13 +369,22 @@ yields a CFI smaller than when this case is exclude,
 and the difference is `r abs(round(fit_mc[43, "cfi"], 3))`.
 
 The argument `fit_measures` is passed to `lavaan::fitMeasures()`
-to specify the measures to be computed.
+to specify the measures to be computed. The default values are
+`c("chisq", "cfi", "tli", "rmsea")`. Therefore, this argument can be omitted
+if they are the desired measures of fit:
+
+```{r eval = FALSE}
+fit_mc <- fit_measures_change(fit_rerun)
+```
+
+See the help
+page of `fit_measures_change()` for further information.
 
 ### An All-In-One-Function
 
-We can also use `semfindr::influence_stat()` to compute the previous
-measures. It calls `semfindr::fit_measures_change()`, `semfindr::est_change()`,
-and `semfindr::mahalanobis_rerun()` (if requested) and then merges
+We can also use `influence_stat()` to compute the previous
+measures. It calls `fit_measures_change()`, `est_change()`,
+and `mahalanobis_rerun()` (if requested) and then merges
 their results into one matrix:
 
 ```{r}
@@ -378,22 +392,22 @@ fit_influence <- influence_stat(fit_rerun)
 round(fit_influence[i_top5, ], 3)
 ```
 
-One major use of `semfindr::influence_stat()` is to provide information
+One major use of `influence_stat()` is to provide information
 for the diagnostic plots introduced below.
 
 ## Diagnostic Plots
 
 `semfindr` provides several functions to generate diagnostic
-plots. All these functions accepts an output of
-`semfindr::influence_stat()`
+plots. All these functions accept an output of
+`influence_stat()`
 and returns a `ggplot2` plot, which can be further customized
 if desired by other `ggplot2` functions.
 
 ### Generalized Cook's Distance
 
-To visualize the *gCD*, we can plot an index plot with cases
+To visualize the *gCDs* of cases, we can plot an index plot with cases
 on the horizontal axis and the *gCD* on the vertical axis
-using `semfindr:gcd_plot()`:
+using `gcd_plot()`:
 
 ```{r}
 gcd_plot(fit_influence,
@@ -406,12 +420,12 @@ has the largest *gCD* (based on all free parameters).
 `largest_gcd` controls the number of cases with the largest
 `gcd` to be labelled. The default is 1.
 
-More options of `semfindr::gcd_plot()` can be found on its help page.
+More options of `gcd_plot()` can be found on its help page.
 
 ### Mahalanobis Distance
 
 An index plot can be computed on the
-Mahalanobis distance given by `semfindr::influence_stat()`:
+Mahalanobis distance given by `influence_stat()`:
 
 ```{r}
 md_plot(fit_influence,
@@ -426,15 +440,14 @@ not influential cases when assessed by *gCD*.
 high Mahalanobis distance on all the variables in the
 fitted model will be labelled. The default is 1.
 
-More options for `semfindr::md_plot()` can be found from its help
+More options for `md_plot()` can be found on its help
 page.
 
 ### Change in Fit Measure vs. Generalized Cook's Distance
 
-To examine how the overall change in parameter estimates
-measured by *gCD* relates to a selected measure of model
+To examine how *gCD* relates to a selected measure of model
 fit
-(`gof`), `semfindr::gcd_gof_plot()` can be used:
+(`gof`), `gcd_gof_plot()` can be used:
 
 ```{r}
 gcd_gof_plot(fit_influence,
@@ -449,12 +462,12 @@ the number of cases with largest *absolute* change in
 the selected measure of model fit to be labelled.
 The default is 1 for both arguments.
 
-More options of `semfindr::gcd_gof_plot()` can be found from its help
+More options of `gcd_gof_plot()` can be found on its help
 page.
 
 ### Bubble Plot
 
-The function `semfindr::gcd_gof_md_plot()` can be used to plot a
+The function `gcd_gof_md_plot()` can be used to plot a
 bubble plot
 of a selected measure of model fit against Mahalanobis distance,
 with the bubble size determined by generalized Cook's distance.
@@ -477,7 +490,7 @@ controls the number of cases with highest absolute values
 one the these measures to be labelled. Their default values
 are 1.
 
-More options of `semfindr::gcd_gof_md_plot()` can be found
+More options of `gcd_gof_md_plot()` can be found
 from its help page.
 
 # Approximate Approach
@@ -504,13 +517,18 @@ will be illustrated here. Please refer to the previous section
 on the meanings of the influence statistics. The major
 difference is, all functions for the approximate approach
 use the output of `lavaan` directly. There is no need to use
-`semfindr::lavaan_rerun()`.
+`lavaan_rerun()`.
+
+For the technical details on the approximate approach,
+please refer to the
+vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
+(`vignette("casewise_scores", package = "semfindr")`).
 
 ## Diagnostic Functions
 
 ### Approximate Standardized Changes in Parameter Estimates
 
-The function `semfindr::est_change_approx()` can be used to
+The function `est_change_approx()` can be used to
 compute the approximate standardized change. The first argument
 is the output of `lavaan`:
 
@@ -522,9 +540,9 @@ round(head(fit_est_change_approx), 3)
 The column `gcd_approx` indicates that the *gCD* is only
 an approximate value.
 
-Like `semfindr::est_change()`, it also supports computing the
+Like `est_change()`, it also supports computing the
 approximate *gCD* based on selected parameters. For example,
-this compute the *gCD* based only on regression coefficients:
+the following computes the *gCD* based on regression coefficients only:
 
 ```{r}
 fit_est_change_approx_paths <- est_change_approx(fit,
@@ -533,12 +551,12 @@ round(head(fit_est_change_approx_paths), 3)
 ```
 
 See the help
-page of `semfindr::est_change_approx()` for further information.
+page of `est_change_approx()` for further information.
 
 ### Approximate Raw Changes in Parameter Estimates
 
-The function `semfindr::est_change_raw_approx()` computes
-the approximate raw change of parameter estimates, not
+The function `est_change_raw_approx()` computes
+the approximate raw changes of parameter estimates, not
 standardized by their standard errors. The first argument
 is the output of `lavaan`:
 
@@ -547,16 +565,16 @@ fit_est_change_raw_approx <- est_change_raw_approx(fit)
 round(fit_est_change_raw_approx[i_top5, ], 3)
 ```
 
-Unlike `semfindr::est_change_raw()`, `semfindr::est_change_raw_approx()`
+Unlike `est_change_raw()`, `est_change_raw_approx()`
 does not support raw changes in the standardized solution.
 
 See the help
-page of `semfindr::est_change_raw_approx()` for further information.
+page of `est_change_raw_approx()` for further information.
 
 ### Mahalanobis Distance
 
-The function `semfindr::mahalanobis_rerun()` actually does not
-need to the leave-one-out approach. Therefore, it can also be
+The function `mahalanobis_rerun()` actually does not
+need the leave-one-out approach. Therefore, it can also be
 used in the approximate approach by setting the first argument
 to the output of `lavaan`:
 
@@ -566,11 +584,11 @@ round(fit_md[i_top5, , drop = FALSE], 3)
 ```
 
 The results are the same whether the output of `lavaan` or
-`semfindr::lavaan_reun()` is used.
+`lavaan_reun()` is used.
 
 ### Approximate Changes in Fit Measures
 
-The function `semfindr::fit_measures_change_approx()` computes
+The function `fit_measures_change_approx()` computes
 the approximate changes in selected fit measures. The first
 argument is the output of `lavaan`:
 
@@ -580,15 +598,23 @@ fit_mc_approx <- fit_measures_change_approx(fit,
 round(fit_mc_approx[1:5, ], 3)
 ```
 
+These measures are the default values. Therefore, if only these four measures
+are needed, the following will also work:
+
+```{r eval = FALSE}
+fit_mc_approx <- fit_measures_change_approx(fit)
+```
+
+
 See the help
-page of `semfindr::fit_measures_change_approx()` for further information.
+page of `fit_measures_change_approx()` for further information.
 
 ### An All-In-One-Function
 
-The all-in-one function `semfindr::influence_stat()` can also be used
+The all-in-one function `influence_stat()` can also be used
 to compute approximate influence statistics by calling
-`semfindr::fit_measures_change_approx()` and `semfindr::est_change_approx()`.
-This can be done by simply by using the output of `lavaan` as the
+`fit_measures_change_approx()` and `est_change_approx()`.
+This can be done simply by using the output of `lavaan` as the
 first argument:
 
 ```{r}
@@ -596,12 +622,15 @@ fit_influence_approx <- influence_stat(fit)
 round(fit_influence_approx[1:5, ], 3)
 ```
 
+See the help
+page of `influence_stat()` for further information.
+
 ## Diagnostic Plots
 
 All the diagnostic plot functions can also be used to visualize
 case influence statistics based of the approximate approach.
 The method used will be determined by the output of
-`semfindr::influence_stat()` and users use them in exactly the same
+`influence_stat()` and users use them in exactly the same
 way as for the leave-one-out approach. Therefore, only sample
 code is presented below, using the output of `influence_stat()`
 based on the approximate approach generated in the previous section.
@@ -648,13 +677,13 @@ gcd_gof_md_plot(fit_influence_approx,
 
 # Final Remarks
 
-The example above use row numbers to identify cases. If users
+The examples above use row numbers to identify cases. If users
 have meaningful case IDs, they can be used to label case (
-see `vignette("user_id")`). If users want to refit the model
+see `vignette("user_id", package = "semfindr")`). If users want to refit the model
 only with selected cases removed one-by-one,
-`semfindr::lavaan_rerun()` supports various methods to
+`lavaan_rerun()` supports various methods to
 examine only selected cases (see
-`vignette("selecting_cases")`).
+`vignette("selecting_cases", package = "semfindr")`).
 
 Last, all the plot functions return `ggplot` graph objects.
 Users can further modify them to suit their needs.
