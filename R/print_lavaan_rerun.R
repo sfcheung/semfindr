@@ -1,13 +1,14 @@
-#' @title Print Method for lavaan_rerun
+#' @title Print Method for 'lavaan_rerun'
 #'
-#' @description Prints the results of lavaan_rerun
+#' @description Prints the results of [lavaan_rerun()].
 #'
 #' @return NULL
 #'
 #' @param x The output of [lavaan_rerun()].
+#'
 #' @param ... Other arguments. They will be ignored.
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @examples
 #' library(lavaan)

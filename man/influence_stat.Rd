@@ -14,7 +14,9 @@ influence_stat(
 )
 }
 \arguments{
-\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
+\item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}, or the output
+of \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g., \code{\link[lavaan:cfa]{lavaan::cfa()}}
+and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{fit_measures}{The argument \code{fit.measures} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
@@ -26,8 +28,13 @@ influence_stat(
 \item{parameters}{A character vector to specify the selected
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
-in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}. If \code{NULL}, the
-default, differences on all free parameters will be computed.}
+in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
+Supports specifying an operator to select all parameters with this
+operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
+both parameter names and operators. More details can be found
+in the help of \code{\link[=pars_id]{pars_id()}}.
+If omitted or \code{NULL}, the
+default, changes on all free parameters will be computed.}
 
 \item{mahalanobis}{If \code{TRUE}, it will call \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} to
 compute the Mahalanobis distance. Default is \code{TRUE}.}
@@ -42,7 +49,8 @@ A matrix with the number of columns equals to the number of
 requested statistics, and the number of rows equals to the number of
 cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the help pages of \code{\link[=est_change]{est_change()}} and
-\code{\link[=fit_measures_change]{fit_measures_change()}} for details.
+\code{\link[=fit_measures_change]{fit_measures_change()}} (or \code{\link[=est_change_approx]{est_change_approx()}} and
+\code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} for details.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
@@ -51,42 +59,66 @@ in selected parameters and fit measures for each case.
 \details{
 For each case, \code{\link[=influence_stat]{influence_stat()}} computes the differences
 in the estimates of selected parameters and fit measures with and
-without this case. Users can request measures of extremeness (only
+without this case. Users can also request a measure of extremeness (only
 Mahalanobis distance is available for now).
 
+If \code{rerun_out} is the output of \code{\link[=lavaan_rerun]{lavaan_rerun()}}, it will use the
+leave-one-out approach.
 Measures are computed by \code{\link[=est_change]{est_change()}} and \code{\link[=fit_measures_change]{fit_measures_change()}}.
+
+If \code{rerun_out} is the output of \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers
+(e.g., \code{\link[lavaan:cfa]{lavaan::cfa()}} or \code{\link[lavaan:sem]{lavaan::sem()}}), it will use the
+approximate approach.
+Measures are computed by \code{\link[=est_change_approx]{est_change_approx()}} and
+\code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}}.
+
+If Mahalanobis distance is requested, it is computed by
+\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}.
+
+Please refer to the help pages of the above functions on
+the technical details.
 
 Currently it only works for single-group models.
 }
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
+
+## Leave-One-Out Approach
+
 # Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# For illustration, do this only for selected cases
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Get all default influence stats
 out <- influence_stat(fit_rerun)
 head(out)
+
+## Approximate Approach
+
+out_approx <- influence_stat(fit)
+head(out_approx)
 
 }
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 models: Cases and their influence. \emph{Multivariate Behavioral Research,
-46}(2), 202–228. doi:10.1080/00273171.2011.561068
+46}(2), 202-228. doi:10.1080/00273171.2011.561068
 }
 \seealso{
 \code{\link[=fit_measures_change]{fit_measures_change()}}, \code{\link[=est_change]{est_change()}}, and \code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

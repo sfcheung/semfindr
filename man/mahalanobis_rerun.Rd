@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_rerun.R
 \name{mahalanobis_rerun}
 \alias{mahalanobis_rerun}
-\title{Mahalanobis Distance (All Observed Variables)}
+\title{Mahalanobis Distance on All Observed Variables}
 \usage{
 mahalanobis_rerun(
   fit,
@@ -47,19 +47,21 @@ Currently it only support single-group models.
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 # Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# For illustration, do this only for selected cases
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Compute the Mahalanobis distance for each case
 out <- mahalanobis_rerun(fit_rerun)
 # Results excluding a case, for the first few cases
@@ -69,12 +71,48 @@ md1 <- stats::mahalanobis(dat, colMeans(dat), stats::cov(dat))
 # Compare the results
 head(md1)
 
+# A CFA model
+
+dat <- cfa_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f1 ~~ f2
+"
+# Fit the model
+fit <- lavaan::cfa(mod, dat)
+
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
+mahalanobis_rerun(fit_rerun)
+
+# A latent variable model
+
+dat <- sem_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~   a * f1
+f3 ~   b * f2
+ab := a * b
+"
+# Fit the model
+fit <- lavaan::cfa(mod, dat)
+
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
+mahalanobis_rerun(fit_rerun)
+
+
 }
 \references{
 Mahalanobis, P. C. (1936). On the generalized distance
 in statistics. \emph{Proceedings of the National Institute of Science
-of India, 2}, 49–55.
+of India, 2}, 49-55.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

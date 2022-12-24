@@ -1,95 +1,109 @@
-#' @title Rerun a `lavaan` Analysis (Leaving-One-Out-Each-Time)
+#' @title Rerun a 'lavaan' Analysis Using the Leaving-One-Out Approach
 #'
 #' @description [lavaan_rerun()] reruns a `lavaan` analysis several
 #' times, each time with one case removed.
 #'
 #' @details [lavaan_rerun()] gets an [lavaan::lavaan()] output and
-#'  reruns the analysis *n* times, using the same arguments and
-#'  options in the output, *n* equals to the number of cases. In each
-#'  run, one case will be removed.
+#' reruns the analysis *n0* times, using the same arguments and
+#' options in the output, *n0* equals to the number of cases selected,
+#' by default all cases in the analysis. In each
+#' run, one case will be removed.
 #'
 #' Optionally, users can rerun the analysis with only selected cases
-#'  removed. These cases can be specified by case IDs, by Mahalanobis
-#'  distance computed from all variables used in the model, or by
-#'  Mahalanobis distance computed from the residuals (observed score -
-#'  implied scores) of observed outcome variables. See the help on the
-#'  arguments `to_rerun`, `md_top`, and `resid_md_top`.
+#' removed. These cases can be specified by case IDs, by Mahalanobis
+#' distance computed from all variables used in the model, or by
+#' Mahalanobis distance computed from the residuals (observed score -
+#' implied scores) of observed outcome variables. See the help on the
+#' arguments `to_rerun`, `md_top`, and `resid_md_top`.
 #'
 #' It is not recommended to use Mahalanobis distance computed from all
-#'  variables, especially for models with observed variables as
-#'  predictors (Pek & MacCallum, 2011). Cases that are extreme on
-#'  predictors may not be influential on the results. Nevertheless,
-#'  this distance is reported in some SEM programs and so this option
-#'  is provided.
+#' variables, especially for models with observed variables as
+#' predictors (Pek & MacCallum, 2011). Cases that are extreme on
+#' predictors may not be influential on the parameter estimates.
+#' Nevertheless,
+#' this distance is reported in some SEM programs and so this option
+#' is provided.
 #'
 #' Mahalanobis distance based on residuals are supported for models
-#'  with no latent factors. The implied scores are computed by
-#'  [implied_scores()].
+#' with no latent factors. The implied scores are computed by
+#' [implied_scores()].
 #'
 #' If the sample size is large, it is recommended to use parallel
-#'  processing. However, due to the nature of the [update()] method
-#'  for [lavaan::lavaan-class] object, it is possible that parallel
-#'  processing will fail. If this is the case, try to use serial
-#'  processing, by simply remove the argument `parallel` or set it to
-#'  `FALSE`.
+#' processing. However, it is possible that parallel
+#' processing will fail. If this is the case, try to use serial
+#' processing, by simply removing the argument `parallel` or set it to
+#' `FALSE`.
 #'
 #' Many other functions in [semfindr] use the output from
-#'  [lavaan_rerun()]. Instead of running the *n* analyses every time, do
-#'  this step once and then users can compute whatever influence
-#'  statistics they want quickly.
+#' [lavaan_rerun()]. Instead of running the *n* analyses every time, do
+#' this step once and then users can compute whatever influence
+#' statistics they want quickly.
 #'
 #' If the analysis took a few minutes to run due to the large number
-#'  of cases or the long processing time in fitting the model, it is
-#'  recommended to save the output to an external file (e.g., by
-#'  [base::saveRDS()]).
+#' of cases or the long processing time in fitting the model, it is
+#' recommended to save the output to an external file (e.g., by
+#' [base::saveRDS()]).
 #'
 #' Currently [lavaan_rerun()] only supports single-group models.
 #'
-#' @param fit The output from [lavaan::lavaan()], such as
-#'  [lavaan::cfa()] and [lavaan::sem()].
+#' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
+#' [lavaan::cfa()] and [lavaan::sem()]).
+#'
 #' @param case_id If it is a character vector of length equals to the
-#'  number of cases (the number of rows in the data in `fit`), then it
-#'  is the vector of case identification values. If it is `NULL`, the
-#'  default, then `case.idx` used by `lavaan` functions will be used
-#'  as case identification values. The case identification values will
-#'  be used to name the list of *n* output.
+#' number of cases (the number of rows in the data in `fit`), then it
+#' is the vector of case identification values. If it is `NULL`, the
+#' default, then `case.idx` used by `lavaan` functions will be used
+#' as case identification values. The case identification values will
+#' be used to name the list of *n* output.
+#'
 #' @param to_rerun The cases to be processed. If `case_id` is
-#'  specified, this should be a subset of `case_id`. If `case_id` is
-#'  not specified, then this should be a vector of integers indicating
-#'  the rows to te processed, as appeared in the data in `fit`. 
-#'  `to_rerun` cannot be used together with `md_top` or
-#'  `resid_md_top.`
+#' specified, this should be a subset of `case_id`. If `case_id` is
+#' not specified, then this should be a vector of integers indicating
+#' the rows to te processed, as appeared in the data in `fit`.
+#' `to_rerun` cannot be used together with `md_top` or
+#' `resid_md_top.`
+#'
 #' @param md_top The number of cases to be processed based on the
-#'  Mahalanobis distance computed on all observed variables used in
-#'  the model. The cases will be ranked from the largest to the
-#'  smallest distance, and the top `md_top` case(s) will be processed.
-#'  `md_top` cannot be used together with `to_rerun` or
-#'  `resid_md_top.`
+#' Mahalanobis distance computed on all observed variables used in
+#' the model. The cases will be ranked from the largest to the
+#' smallest distance, and the top `md_top` case(s) will be processed.
+#' `md_top` cannot be used together with `to_rerun` or
+#' `resid_md_top.`
+#'
 #' @param resid_md_top The number of cases to be processed based on
-#'  the Mahalanobis distance computed from the residuals of outcome
-#'  variables. The cases will be ranked from the largest to the
-#'  smallest distance, and the top `resid_md_top` case(s) will be
-#'  processed. `resid_md_top` cannot be used together with `to_rerun`
-#'  or `md_top.`
+#' the Mahalanobis distance computed from the residuals of outcome
+#' variables. The cases will be ranked from the largest to the
+#' smallest distance, and the top `resid_md_top` case(s) will be
+#' processed. `resid_md_top` cannot be used together with `to_rerun`
+#' or `md_top.`
+#'
 #' @param allow_inadmissible If `TRUE`, accepts a fit object with
-#'  inadmissible results (i.e., `post.check` from
-#'  [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
+#' inadmissible results (i.e., `post.check` from
+#' [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
+#'
 #' @param skip_all_checks If `TRUE`, skips all checks and allow
-#'  users to run this function on any object of `lavaan` class.
-#'  For users to experiment this and other functions on models
-#'  not officially supported. Default is `FALSE`.
+#' users to run this function on any object of `lavaan` class.
+#' For users to experiment this and other functions on models
+#' not officially supported. Default is `FALSE`.
+#'
 #' @param parallel Whether parallel will be used. If `TRUE`, will use
-#'  functions in the `parallel` package to rerun the analysis.
-#'  Currently, only support `"snow"` type clusters using local CPU
-#'  cores. Default is `FALSE`.
+#' functions in the `parallel` package to rerun the analysis.
+#' Currently, only support `"snow"` type clusters using local CPU
+#' cores. Default is `FALSE`.
+#'
 #' @param makeCluster_args A named list of arguments to be passed to
-#'  [parallel::makeCluster()]. Default is `list(spec =
-#'  getOption("cl.cores", 2)))`. If only the number of cores need to
-#'  be specified, use `list(spec = x)`, where `x` is the number
-#'  of cores to use.
+#' [parallel::makeCluster()]. Default is `list(spec =
+#' getOption("cl.cores", 2)))`. If only the number of cores need to
+#' be specified, use `list(spec = x)`, where `x` is the number
+#' of cores to use.
+#'
+#' @param rerun_method How fit will be rerun. Default is
+#' `"lavaan"`. An alternative method is `"update"`. For
+#' internal use. If `"lavaan"` returns an error, try setting
+#' this argument to `"update"`.
 #'
 #' @return
-#' A list with the following elements:
+#' A `lavaan_rerun`-class object, which is a list with the following elements:
 #'
 #' - `rerun`: The *n* `lavaan` output objects.
 #'
@@ -113,10 +127,10 @@
 #'
 #' - `selected`: A numeric vector of the row numbers of cases selected
 #'   in the analysis. Its length should be equal to the length of
-#'   `rerun`. 
+#'   `rerun`.
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
-#' 
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
+#'
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
@@ -138,7 +152,7 @@
 #' # Results by manually excluding the first case
 #' fit_01 <- lavaan::sem(mod, dat[-1, ])
 #' fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
-#' 
+#'
 #' @importMethodsFrom lavaan coef
 #' @export lavaan_rerun
 
@@ -151,12 +165,15 @@ lavaan_rerun <- function(fit,
                          skip_all_checks = FALSE,
                          parallel = FALSE,
                          makeCluster_args =
-                            list(spec = getOption("cl.cores", 2))
+                            list(spec = getOption("cl.cores", 2)),
+                         rerun_method = c("lavaan", "update")
                          ) {
   # Create the call
   # Create the boot function
   # Run it n times
   # Return the results
+
+  rerun_method <- match.arg(rerun_method)
 
   call <- match.call()
 
@@ -203,7 +220,7 @@ lavaan_rerun <- function(fit,
   #     stop("resid_md_top does not support a model without mean structure.")
   #   }
 
-  if (!missing(resid_md_top) & !all(lavaan::lavInspect(fit, "pattern") == 1) ) {
+  if (!missing(resid_md_top) && !all(lavaan::lavInspect(fit, "pattern") == 1)) {
       stop("resid_md_top does not support analysis with missing data.")
     }
 
@@ -226,7 +243,7 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- order(case_md, decreasing = TRUE, na.last = NA)
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
-      case_md_selected <- case_md_selected[!is.na(case_md_selected)] 
+      case_md_selected <- case_md_selected[!is.na(case_md_selected)]
       to_rerun <- case_ids[case_md_selected]
     }
 
@@ -241,7 +258,7 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
-      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)] 
+      fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
       to_rerun <- case_ids[fit_resid_md_selected]
     }
 
@@ -253,15 +270,20 @@ lavaan_rerun <- function(fit,
       id_to_rerun <- to_rerun
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
-  environment(gen_fct) <- parent.frame()
-  rerun_i <- gen_fct(fit)
+  if (rerun_method == "lavaan") {
+      rerun_i <- gen_fct_use_lavaan(fit)
+    }
+  if (rerun_method == "update") {
+      environment(gen_fct_use_update) <- parent.frame()
+      rerun_i <- gen_fct_use_update(fit)
+    }
   rerun_test <- suppressWarnings(rerun_i(NULL))
   if (!isTRUE(all.equal(unclass(coef(fit)),
                         coef(rerun_test)[names(coef(fit))]))) {
       stop("Something is wrong. The lavaan analysis cannot be rerun.")
     }
 
-  if (parallel & requireNamespace("parallel", quietly = TRUE)) {
+  if (parallel && requireNamespace("parallel", quietly = TRUE)) {
       pkgs <- .packages()
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
@@ -330,6 +352,25 @@ lavaan_rerun <- function(fit,
   out
 }
 
+gen_fct_use_lavaan <- function(fit) {
+  slot_opt <- fit@Options
+  slot_pat <- data.frame(fit@ParTable)
+  slot_pat$est <- NULL
+  slot_pat$start <- NULL
+  data_full <- lavaan::lavInspect(fit, "data")
+  function(i = NULL) {
+      if (is.null(i)) {
+          return(lavaan::lavaan(data = data_full,
+                                model = slot_pat,
+                                slotOptions = slot_opt))
+        } else {
+          return(lavaan::lavaan(data = data_full[-i, ],
+                                model = slot_pat,
+                                slotOptions = slot_opt))
+        }
+    }
+  }
+
 gen_fct_old <- function(fit) {
   fit_call <- as.call(lavaan::lavInspect(fit, "call"))
   fit_call2 <- fit_call
@@ -347,7 +388,7 @@ gen_fct_old <- function(fit) {
     }
   }
 
-gen_fct <- function(fit) {
+gen_fct_use_update <- function(fit) {
   fit_org <- eval(fit)
   data_full <- lavaan::lavInspect(fit_org, "data")
   function(i = NULL) {

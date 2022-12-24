@@ -13,9 +13,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-This vignette explains the computational shortcut implemented in `semfindr` to approximate the casewise influence. From my experience, the approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
+This vignette explains the computational shortcut implemented in `semfindr` to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
 
 ```{r dat}
 library(semfindr)
@@ -43,7 +44,7 @@ if (file.exists("semfindr_fit_rerun.RDS")) {
 
 ## Using Scores to Approximate Case Influence
 
-`lavaan` provides the handy `lavScores()` functions to evaluate
+`lavaan` provides the handy `lavScores()` function to evaluate
 $$s_i(\theta_m) = \frac{\partial \ell_i(\theta_m)}{\partial \theta_m}$$
 for observation $i$, where $\ell_i(\theta)$ denotes the casewise loglikelihood function and $\theta_m$ is the $m$th model parameter.
 
@@ -53,17 +54,17 @@ For example,
 head(lavScores(fit)[ , 1, drop = FALSE])
 ```
 
-indicates the partial derivative of the casewise loglikelihod with respect to the parameter `m1~iv1`. Because the sum of the partial derivatives across all observations is zero at the maximum likelihood estimate with the full sample ($\hat \theta_m$; i.e., derivative of loglikelihood of the full data is 0), $- s_i(\theta_m)$ can be used as an estimate of the partial derivative of the loglikelihood at $\hat \theta_m$ **for the sample without observation $i$**. This information can be used to approximate the maximum likelihood estimate for $\theta_m$ when case $i$ is dropped, denoted as $\hat \theta_{m(-i)}$
+indicates the partial derivative of the casewise loglikelihod with respect to the parameter `m1~iv1`. Because the sum of the partial derivatives across all observations is zero at the maximum likelihood estimate with the full sample ($\hat \theta_m$; i.e., the derivative of loglikelihood of the full data is 0), $- s_i(\theta_m)$ can be used as an estimate of the partial derivative of the loglikelihood at $\hat \theta_m$ **for the sample without observation $i$**. This information can be used to approximate the maximum likelihood estimate for $\theta_m$ when case $i$ is dropped, denoted as $\hat \theta_{m(-i)}$
 
 The second-order Taylor series expansion can be used to approximate the parameter vector estimate with an observation deleted, $\hat \theta_{(-i)}$, as in the iterative [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization). Specifically,
 
 $$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
-$$\hat \theta - \hat \theta_{(i)} = \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
-where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (not 100% sure whether this is needed, but it is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
+$$\hat \theta - \hat \theta_{(i)} \approx \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
 
 ### Comparison
 
-The approximation is implemented in the `semfindr::est_change_raw_approx()` functon:
+The approximation is implemented in the `est_change_raw_approx()` function:
 
 ```{r fit_est_change_approx}
 fit_est_change_approx <- est_change_raw_approx(fit)
@@ -77,13 +78,12 @@ Here is a comparison between the approximation using `semfindr::est_change_raw_a
 fit_est_change_raw <- est_change_raw(fit_rerun)
 # Plot the differences
 library(ggplot2)
-library(tidyr)
-est_change_df <-
-  pivot_longer(as_tibble(fit_est_change_raw), cols = 1:5,
-               names_to = "param", values_to = "est_change") |>
-  cbind(est_change_approx =
-              pivot_longer(as_tibble(fit_est_change_approx),
-                           cols = 1:5)$value)
+tmp1 <- as.vector(t(as.matrix(fit_est_change_raw)))
+tmp2 <- as.vector(t(as.matrix(fit_est_change_approx)))
+est_change_df <- data.frame(param = rep(colnames(fit_est_change_raw),
+                                        nrow(fit_est_change_raw)),
+                             est_change = tmp1,
+                             est_change_approx = tmp2)
 ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
   geom_abline(intercept = 0, slope = 1) +
   geom_point(size = 0.8, alpha = 0.5) +
@@ -93,9 +93,9 @@ ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
 
 The results are pretty similar.
 
-### Generalized Cook's distance (gCD)
+### Generalized Cook's distance (*gCD*)
 
-We can use the approximate parameter change to approximate the gCD (see also Tanaka et al., 1991, equation 13, p. 3811):
+We can use the approximate parameter changes to approximate the *gCD* (see also Tanaka et al., 1991, equation 13, p. 3811):
 
 ```{r approx-gcd}
 # Information matrix (Hessian)
@@ -106,7 +106,7 @@ gcd_approx <- (nobs(fit) - 1) * rowSums(
 )
 ```
 
-This is implemented in the `semfindr::est_change_approx()` function:
+This is implemented in the `est_change_approx()` function:
 
 ```{r est_change_approx-gcd}
 fit_est_change_approx <- est_change_approx(fit)
@@ -127,7 +127,7 @@ ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
   coord_fixed()
 ```
 
-It seems that the approximation would underestimate the actual gCD, although the rank ordering is almost identical. This is discussed also in Tanaka et al. (1991), who also proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
+The approximation tend to  underestimate the actual *gCD* but the rank ordering is almost identical. This is discussed also in Tanaka et al. (1991), who proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
 
 ```{r cor-gcd}
 cor(gcd_df, method = "spearman")
@@ -142,7 +142,7 @@ lli <- lavInspect(fit, what = "loglik.casewise")
 head(lli)
 ```
 
-Here, $\ell(\hat \theta)$ will drop 2.78 when observation 1 is deleted. This should approximate $\ell(\hat \theta_{(-i)})$ as long as $\hat \theta_{(-i)}$ is not too different from $\hat \theta$. Here's a comparison:
+Here, $\ell(\hat \theta)$ will drop `r abs(round(lli[1], 2))` when observation 1 is deleted. This should approximate $\ell(\hat \theta_{(-i)})$ as long as $\hat \theta_{(-i)}$ is not too different from $\hat \theta$. Here's a comparison:
 
 ```{r compare-lli}
 # Predicted ll without observation 1
@@ -152,7 +152,7 @@ fit_no1 <- sem(mod, dat[-1, ])
 fit_no1@loglik$loglik
 ```
 
-They are pretty close. To approximate the change in chi-squared, as well as other chi-squared-based fit indices, we can use the `semfindr::fit_measures_change_approx()` function:
+They are pretty close. To approximate the change in $\chi^2$, as well as other $\chi^2$-based fit indices, we can use the `fit_measures_change_approx()` function:
 
 ```{r chisq_i_approx}
 chisq_i_approx <- fit_measures_change_approx(fit)
@@ -161,7 +161,7 @@ c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
   actual = fitmeasures(fit_no1, "chisq"))
 ```
 
-### Comparing exact and approximated changes in fit indices
+### Comparing exact and approximate changes in fit indices
 
 Change in $\chi^2$
 

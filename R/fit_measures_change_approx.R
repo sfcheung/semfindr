@@ -1,12 +1,22 @@
-#' @title Case Influence on Fit Measures (Approximated)
+#' @title Case Influence on Fit Measures (Approximate)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
-#'  approximated change
-#'  in selected fit measures if a case is deleted
+#' approximate change
+#' in selected fit measures if a case is deleted.
 #'
 #' @details For each case, [fit_measures_change_approx()] computes the
-#'  approximated differences in selected fit measures with and
-#'  without this case.
+#' approximate differences in selected fit measures with and
+#' without this case:
+#' (fit measure with all case) - (fit measure without this case).
+#'
+#' If the value of a case is positive, including the case increases an estimate.
+#'
+#' If the value of a case is negative, including the case decreases an estimate.
+#'
+#' Note that an increase is an improvement in fit for
+#' goodness of fit measures such as CFI and TLI, but a decrease
+#' is an improvement in fit for badness of fit measures such as
+#' RMSEA and model chi-square.
 #'
 #' The model is not refitted. Therefore, the result is only an
 #' approximation of that of [fit_measures_change()]. However, this
@@ -17,61 +27,130 @@
 #' leave-one-out sensitivity analysis using [lavaan_rerun()] and
 #' [fit_measures_change()].
 #'
+#' For the technical details, please refer to the vignette
+#' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
+#'
 #' Currently it only supports single-group models.
 #'
-#' @param fit The output from [lavaan::lavaan()].
+#' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
+#' [lavaan::cfa()] and [lavaan::sem()]).
+#'
 #' @param fit_measures The argument `fit.measures` used in
-#'  [lavaan::fitMeasures]. Default is
-#'  `c("chisq", "cfi", "rmsea", "tli")`.
+#' [lavaan::fitMeasures]. Default is
+#' `c("chisq", "cfi", "rmsea", "tli")`.
+#'
 #' @param baseline_model The argument `baseline.model` used in
-#'  [lavaan::fitMeasures]. Default is `NULL`.
+#' [lavaan::fitMeasures]. Default is `NULL`.
+#'
 #' @param case_id If it is a character vector of length equals to the
-#'  number of cases (the number of rows in the data in `fit`), then it
-#'  is the vector of case identification values. If it is `NULL`, the
-#'  default, then `case.idx` used by `lavaan` functions will be used
-#'  as case identification values.
+#' number of cases (the number of rows in the data in `fit`), then it
+#' is the vector of case identification values. If it is `NULL`, the
+#' default, then `case.idx` used by `lavaan` functions will be used
+#' as case identification values.
 #'
 #' @return A matrix with the number of columns equals to the number of
-#'  requested fit measures, and the number of rows equals to the number
-#'  of cases. The row names are case identification values.
+#' requested fit measures, and the number of rows equals to the number
+#' of cases. The row names are case identification values.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
-#'         Implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
+#' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #'
 #' @examples
 #' library(lavaan)
+#'
+#' # A path model
+#'
 #' dat <- pa_dat
-#' # For illustration only, select only the first 50 cases
-#' # The model
 #' mod <-
 #' "
-#' m1 ~ iv1 + iv2
-#' dv ~ m1
+#' m1 ~ a1 * iv1 + a2 * iv2
+#' dv ~ b * m1
+#' a1b := a1 * b
+#' a2b := a2 * b
 #' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #'
-#' # Approximated changes
+#' # Approximate changes
 #' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
 #' head(out_approx)
-#' # Fit the model n times. Each time with one case removed.
-#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#' # Fit the model several times. Each time with one case removed.
+#' # For illustration, do this only for four selected cases
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:5)
 #' # Compute the changes in chisq if a case is removed
 #' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 #' # Results excluding a case, for the first few cases
 #' head(out)
 #' # Compare the results
-#' plot(out_approx[, "chisq"], out)
+#' plot(out_approx[1:5, "chisq"], out)
+#' abline(a = 0, b = 1)
+#'
+#' # A CFA model
+#'
+#' dat <- cfa_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f1 ~~ f2
+#' "
+#' # Fit the model
+#' fit <- lavaan::cfa(mod, dat)
+#'
+#' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
+#' head(out_approx)
+#'
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:5)
+#' # Compute the changes in chisq if a case is removed
+#' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+#' # Results excluding a case, for the first few cases
+#' head(out)
+#' # Compare the results
+#' plot(out_approx[1:5, "chisq"], out)
+#' abline(a = 0, b = 1)
+#'
+#' # A latent variable model
+#'
+#' dat <- sem_dat
+#' mod <-
+#' "
+#' f1 =~  x1 + x2 + x3
+#' f2 =~  x4 + x5 + x6
+#' f3 =~  x7 + x8 + x9
+#' f2 ~   a * f1
+#' f3 ~   b * f2
+#' ab := a * b
+#' "
+#' # Fit the model
+#' fit <- lavaan::sem(mod, dat)
+#'
+#' out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
+#' head(out_approx)
+#'
+#' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+#'                           to_rerun = 1:5)
+#' # Compute the changes in chisq if a case is removed
+#' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+#' # Results excluding a case, for the first few cases
+#' head(out)
+#' # Compare the results
+#' plot(out_approx[1:5, "chisq"], out)
+#' abline(a = 0, b = 1)
+#'
 #' @importFrom methods .hasSlot
 #' @export
 
 fit_measures_change_approx <- function(fit,
-                         fit_measures = c("chisq", "cfi", "rmsea", "tli"),
-                         baseline_model = NULL,
-                         case_id = NULL
-                         ) {
+                                       fit_measures = c("chisq",
+                                                        "cfi",
+                                                        "rmsea",
+                                                        "tli"),
+                                       baseline_model = NULL,
+                                       case_id = NULL) {
     if (length(fit_measures) == 0) stop("No measure is requested.")
     if (missing(fit)) {
         stop("No lavaan output supplied.")

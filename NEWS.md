@@ -1,14 +1,29 @@
-# semfindr 0.1.0.9003
+# semfindr 0.1.1
 
-(Work-In-Progress. Cumulated updates to be included in 0.1.1)
-
+- First public release.
 - Added `skip_all_checks` to `lavaan_rerun()`, allowing users
   to experiment `lavaan_rerun()` and other functions on
   models not officially supported.
 - Revised `est_change()` and `est_change_raw()` to support
   the use of operators (e.g., `~`, `=~`) to select parameters.
 - Added badges and R CMD Check Action.
-- Added a package used in a vignette to `Suggests`.
+- Updated `est_change()`, `est_change_raw()` and
+  `est_change_approx()` to support models with labelled
+  parameters. (0.1.0.9005)
+- Added `pars_id()` and `pars_id_to_lorg()` for converting
+  parameter specification to identification numbers (
+  positions in the vector of coefficients or row numbers
+  in the parameter tables). (0.1.0.9006)
+- Updated `est_change_*` functions to use `pars_id()`
+  and `pars_id_to_lorg()`. (0.1.0.9007)
+- Modified `lavaan_rerun()` to use `lavaan::lavaan()`
+  instead of `update()` as the default way to rerun. (0.1.0.9008).
+- Updated some of the tests. (0.1.0.9009)
+- Added more examples. (0.1.0.9010)
+- Updated documentation (e.g., README and DESCRIPTION). (0.1.0.9011)
+- Updated `influence_stat()` and the plot functions to support
+  the approximate approach. (0.1.0.9012)
+- Updated documentation.
 
 # semfindr 0.1.0
 
@@ -36,10 +51,10 @@ variables in a path model.
 
 # semfindr 0.0.3
 
-- Use `lavaan::update()` in lavaan_rerun. This is more
+- Used `lavaan::update()` in lavaan_rerun. This is more
   reliable than recreating the call.
 
-- Add `implied_scores()`. It supports only single-group
+- Added `implied_scores()`. It supports only single-group
   path analysis models for now.
 
 # semfindr 0.0.2

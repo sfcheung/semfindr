@@ -27,12 +27,22 @@ of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \description{
-Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the change
+Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
 in selected fit measures if a case is deleted
 }
 \details{
 For each case, \code{\link[=fit_measures_change]{fit_measures_change()}} computes the
-differences in selected fit measures with and without this case.
+differences in selected fit measures with and without this case:
+(fit measure with all case) - (fit measure without this case).
+
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
+
+Note that an increase is an improvement in fit for
+goodness of fit measures such as CFI and TLI, but a decrease
+is an improvement in fit for badness of fit measures such as
+RMSEA and model chi-square.
 
 If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for the differences of this
@@ -42,20 +52,24 @@ Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
-# The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 # Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# For illustration, do this only for four selected cases
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Compute the changes in chisq if a case is removed
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
@@ -69,13 +83,61 @@ fit_01 <- lavaan::sem(mod, dat[-1, ])
 chisq_all - chisq_no_1
 # Compare to the result from the fit_measures_change
 out[1, ]
+
+# A CFA model
+
+dat <- cfa_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f1 ~~ f2
+"
+# Fit the model
+fit <- lavaan::cfa(mod, dat)
+
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
+out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+head(out)
+(chisq_all <- fitMeasures(fit, c("chisq")))
+fit_01 <- lavaan::sem(mod, dat[-1, ])
+(chisq_no_1 <- fitMeasures(fit_01, c("chisq")))
+chisq_all - chisq_no_1
+out[1, ]
+
+# A latent variable model
+
+dat <- sem_dat
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~   a * f1
+f3 ~   b * f2
+ab := a * b
+"
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
+out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
+head(out)
+(chisq_all <- fitMeasures(fit, c("chisq")))
+fit_01 <- lavaan::sem(mod, dat[-1, ])
+(chisq_no_1 <- fitMeasures(fit_01, c("chisq")))
+chisq_all - chisq_no_1
+out[1, ]
+
 }
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
-\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
 doi:10.1080/00273171.2011.561068
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

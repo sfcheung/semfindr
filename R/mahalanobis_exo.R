@@ -1,33 +1,34 @@
-#' @title Mahalanobis Distance (Observed Predictors)
+#' @title Mahalanobis Distance On Observed Predictors
 #'
 #' @description Gets a [lavaan_rerun()] or [lavaan::lavaan()] output
-#'  and computes the Mahalanobis distance for each case using only the
-#'  observed predictors.
+#' and computes the Mahalanobis distance for each case using only the
+#' observed predictors.
 #'
 #' @details For each case, [mahalanobis_predictors()] computes the
-#'  Mahalanobis distance of each case on the observed predictors.
+#' Mahalanobis distance of each case on the observed predictors.
 #'
 #' If there are no missing values, [stats::mahalanobis()] will be used
-#'  to compute the Mahalanobis distance.
+#' to compute the Mahalanobis distance.
 #'
 #' If there are missing values on the observed predictors, the means
-#'  and variance-covariance matrices will be estimated by maximum
-#'  likelihood using [norm2::emNorm()]. The estimates will be passed
-#'  to [modi::MDmiss()] to compute the Mahalanobis distance.
+#' and variance-covariance matrices will be estimated by maximum
+#' likelihood using [norm2::emNorm()]. The estimates will be passed
+#' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
 #' Currently this function only supports single-group models.
 #'
 #' @param fit It can be the output from `lavaan`, such as
-#'  [lavaan::cfa()] and [lavaan::sem()], or the output from
-#'  [lavaan_rerun()].
+#' [lavaan::cfa()] and [lavaan::sem()], or the output from
+#' [lavaan_rerun()].
+#'
 #' @param emNorm_arg A list of argument for [norm2::emNorm()].
-#'  Default is `list(estimate.worst = FALSE, criterion = 1e-6)`.
-#'  Ignored if there is no missing data on the observed
-#'  predictors.
+#' Default is `list(estimate.worst = FALSE, criterion = 1e-6)`.
+#' Ignored if there is no missing data on the observed
+#' predictors.
 #'
 #' @return A one-column matrix (a column vector) of the Mahalanobis
-#'  distance for each case. The number of rows equals to the number of
-#'  cases in the data stored in the fit object.
+#' distance for each case. The number of rows equals to the number of
+#' cases in the data stored in the fit object.
 #'
 #' @examples
 #' library(lavaan)
@@ -37,8 +38,10 @@
 #' # The model
 #' mod <-
 #' "
-#' m1 ~ iv1 + iv2
-#' dv ~ m1
+#' m1 ~ a1 * iv1 +  a2 * iv2
+#' dv ~ b * m1
+#' a1b := a1 * b
+#' a2b := a2 * b
 #' "
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
@@ -47,17 +50,17 @@
 #' md_predictors <- mahalanobis_predictors(fit)
 #' md_predictors
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @references
 #'
 #' Béguin, C., & Hulliger, B. (2004). Multivariate outlier detection in
 #' incomplete survey data: The epidemic algorithm and transformed rank
 #' correlations. *Journal of the Royal Statistical Society: Series A
-#' (Statistics in Society)*, 167(2), 275–294.
+#' (Statistics in Society)*, 167(2), 275-294.
 #'
 #' Mahalanobis, P. C. (1936). On the generalized distance in statistics.
-#' *Proceedings of the National Institute of Science of India, 2*, 49–55.
+#' *Proceedings of the National Institute of Science of India, 2*, 49-55.
 #'
 #' Schafer, J.L. (1997) *Analysis of incomplete multivariate data*.
 #' Chapman & Hall/CRC Press.
@@ -65,12 +68,12 @@
 #' @export
 
 mahalanobis_predictors <- function(fit,
-                            emNorm_arg = list(estimate.worst = FALSE,
-                                              criterion = 1e-6)) {
+                                   emNorm_arg = list(estimate.worst = FALSE,
+                                                     criterion = 1e-6)) {
   if (missing(fit)) {
       stop("No fit object supplied.")
     }
-  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+  if (!inherits(fit, "lavaan") && !inherits(fit, "lavaan_rerun")) {
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {

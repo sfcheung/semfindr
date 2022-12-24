@@ -6,7 +6,7 @@
 \alias{md_plot}
 \alias{gcd_gof_plot}
 \alias{gcd_gof_md_plot}
-\title{Various Plots of Influence Measures}
+\title{Plots of Influence Measures}
 \usage{
 gcd_plot(influence_out, cutoff_gcd = NULL, largest_gcd = 1)
 
@@ -42,12 +42,14 @@ gcd_gof_md_plot(
 \arguments{
 \item{influence_out}{The output from \code{\link[=influence_stat]{influence_stat()}}.}
 
-\item{cutoff_gcd}{Cases with generalized Cook's distance larger
+\item{cutoff_gcd}{Cases with generalized Cook's distance or
+approximate generalized Cook's distance larger
 than this value will be labeled. Default is \code{NULL}. If \code{NULL}, no
 cutoff line will be drawn.}
 
 \item{largest_gcd}{The number of cases with the largest generalized
-Cook's distance to be labelled. Default is 1. If not an integer, it
+Cook's distance or approximate generalized Cook's distance
+to be labelled. Default is 1. If not an integer, it
 will be rounded to the nearest integer.}
 
 \item{cutoff_md}{Cases with Mahalanobis distance larger than this
@@ -92,27 +94,43 @@ statistics.
 }
 \details{
 The output of \code{\link[=influence_stat]{influence_stat()}} is simply a matrix.
-Therefore, this function will work for any matrix provided. Row
+Therefore, these functions will work for any matrix provided. Row
 number will be used on the x-axis if applicable. However, case
 identification values in the output from \code{\link[=influence_stat]{influence_stat()}} will
 be used for labeling individual cases.
 }
+\section{Functions}{
+\itemize{
+\item \code{gcd_plot()}: Index plot of generalized Cook's distance.
+
+\item \code{md_plot()}: Index plot of Mahalanobis distance.
+
+\item \code{gcd_gof_plot()}: Plot the case influence of the selected fit
+measure against generalized Cook's distance.
+
+\item \code{gcd_gof_md_plot()}: Bubble plot of the case influence of the selected
+fit measure against Mahalanobis distance, with the size of a bubble
+determined by generalized Cook's distance.
+
+}}
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
-dat <- dat[1:50, ]
 # The model
 mod <-
 "
-m1 ~ iv1 + iv2
-dv ~ m1
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
 "
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 # Fit the model n times. Each time with one case removed.
-fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+# For illustration, do this only for selected cases
+fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
+                          to_rerun = 1:10)
 # Get all default influence stats
 out <- influence_stat(fit_rerun)
 head(out)
@@ -124,23 +142,57 @@ gcd_plot(out, largest_gcd = 3)
 md_plot(out, largest_md = 3)
 
 # Plot changes in model chi-square against generalized Cook's distance.
-# Label the 3 cases largest changes in magnitude.
-# Label the 3 cases with largest generalized Cook's distance.
+# Label the 3 cases with the largest changes in magnitude.
+# Label the 3 cases with the largest generalized Cook's distance.
 gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
              largest_fit_measure = 3)
 
 # Plot changes in model chi-square against Mahalanobis distance.
 # Size of bubble determined by generalized Cook's distance.
-# Label the 3 cases largest changes in magnitude.
-# Label the 3 cases with largest Mahalanobis distance.
-# Label the 3 cases with largest generalized Cook's distance.
-#
+# Label the 3 cases with the largest changes in magnitude.
+# Label the 3 cases with the largest Mahalanobis distance.
+# Label the 3 cases with the largest generalized Cook's distance.
+
 gcd_gof_md_plot(out, fit_measure = "chisq",
                      largest_gcd = 3,
                      largest_fit_measure = 3,
                      largest_md = 3,
                      circle_size = 10)
 
+# Use the approximate method that does not require refitting the model
+
+# Fit the model
+fit <- lavaan::sem(mod, dat)
+summary(fit)
+out <- influence_stat(fit)
+head(out)
+
+# Plot approximate generalized Cook's distance.
+# Label the 3 cases with the largest distances.
+gcd_plot(out, largest_gcd = 3)
+
+# Plot Mahalanobis distance.
+# Label the 3 cases with the largest distances.
+md_plot(out, largest_md = 3)
+
+# Plot approximate changes in model chi-square against
+# approximate generalized Cook's distance.
+# Label the 3 cases with the largest approximate changes in magnitude.
+# Label the 3 cases with the largest approximate generalized Cook's distance.
+gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+             largest_fit_measure = 3)
+
+# Plot approximate changes in model chi-square against Mahalanobis distance.
+# Size of bubble determined by approximate generalized Cook's distance.
+# Label the 3 cases with the largest approximate changes in magnitude.
+# Label the 3 cases with the largest Mahalanobis distance.
+# Label the 3 cases with the largest approximate generalized Cook's distance.
+
+gcd_gof_md_plot(out, fit_measure = "chisq",
+                     largest_gcd = 3,
+                     largest_fit_measure = 3,
+                     largest_md = 3,
+                     circle_size = 10)
 
 }
 \references{
@@ -153,5 +205,5 @@ doi:10.1080/00273171.2011.561068
 \code{\link[=influence_stat]{influence_stat()}}.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

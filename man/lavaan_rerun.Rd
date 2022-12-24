@@ -2,7 +2,7 @@
 % Please edit documentation in R/lavaan_rerun.R
 \name{lavaan_rerun}
 \alias{lavaan_rerun}
-\title{Rerun a \code{lavaan} Analysis (Leaving-One-Out-Each-Time)}
+\title{Rerun a 'lavaan' Analysis Using the Leaving-One-Out Approach}
 \usage{
 lavaan_rerun(
   fit,
@@ -13,12 +13,13 @@ lavaan_rerun(
   allow_inadmissible = FALSE,
   skip_all_checks = FALSE,
   parallel = FALSE,
-  makeCluster_args = list(spec = getOption("cl.cores", 2))
+  makeCluster_args = list(spec = getOption("cl.cores", 2)),
+  rerun_method = c("lavaan", "update")
 )
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as
-\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g.,
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{case_id}{If it is a character vector of length equals to the
 number of cases (the number of rows in the data in \code{fit}), then it
@@ -66,9 +67,14 @@ cores. Default is \code{FALSE}.}
 \code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is \verb{list(spec = getOption("cl.cores", 2)))}. If only the number of cores need to
 be specified, use \code{list(spec = x)}, where \code{x} is the number
 of cores to use.}
+
+\item{rerun_method}{How fit will be rerun. Default is
+\code{"lavaan"}. An alternative method is \code{"update"}. For
+internal use. If \code{"lavaan"} returns an error, try setting
+this argument to \code{"update"}.}
 }
 \value{
-A list with the following elements:
+A \code{lavaan_rerun}-class object, which is a list with the following elements:
 \itemize{
 \item \code{rerun}: The \emph{n} \code{lavaan} output objects.
 \item \code{fit}: The original output from \code{lavaan}.
@@ -96,8 +102,9 @@ times, each time with one case removed.
 }
 \details{
 \code{\link[=lavaan_rerun]{lavaan_rerun()}} gets an \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and
-reruns the analysis \emph{n} times, using the same arguments and
-options in the output, \emph{n} equals to the number of cases. In each
+reruns the analysis \emph{n0} times, using the same arguments and
+options in the output, \emph{n0} equals to the number of cases selected,
+by default all cases in the analysis. In each
 run, one case will be removed.
 
 Optionally, users can rerun the analysis with only selected cases
@@ -110,7 +117,8 @@ arguments \code{to_rerun}, \code{md_top}, and \code{resid_md_top}.
 It is not recommended to use Mahalanobis distance computed from all
 variables, especially for models with observed variables as
 predictors (Pek & MacCallum, 2011). Cases that are extreme on
-predictors may not be influential on the results. Nevertheless,
+predictors may not be influential on the parameter estimates.
+Nevertheless,
 this distance is reported in some SEM programs and so this option
 is provided.
 
@@ -119,10 +127,9 @@ with no latent factors. The implied scores are computed by
 \code{\link[=implied_scores]{implied_scores()}}.
 
 If the sample size is large, it is recommended to use parallel
-processing. However, due to the nature of the \code{\link[=update]{update()}} method
-for \link[lavaan:lavaan-class]{lavaan::lavaan} object, it is possible that parallel
+processing. However, it is possible that parallel
 processing will fail. If this is the case, try to use serial
-processing, by simply remove the argument \code{parallel} or set it to
+processing, by simply removing the argument \code{parallel} or set it to
 \code{FALSE}.
 
 Many other functions in \link{semfindr} use the output from
@@ -161,5 +168,5 @@ fitMeasures(fit_01, c("chisq", "cfi", "tli", "rmsea"))
 
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }
