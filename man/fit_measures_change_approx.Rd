@@ -2,7 +2,7 @@
 % Please edit documentation in R/fit_measures_change_approx.R
 \name{fit_measures_change_approx}
 \alias{fit_measures_change_approx}
-\title{Case Influence on Fit Measures (Approximated)}
+\title{Case Influence on Fit Measures (Approximate)}
 \usage{
 fit_measures_change_approx(
   fit,
@@ -12,7 +12,8 @@ fit_measures_change_approx(
 )
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g.,
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{fit_measures}{The argument \code{fit.measures} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
@@ -34,13 +35,23 @@ of cases. The row names are case identification values.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
-approximated change
-in selected fit measures if a case is deleted
+approximate change
+in selected fit measures if a case is deleted.
 }
 \details{
 For each case, \code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} computes the
-approximated differences in selected fit measures with and
-without this case.
+approximate differences in selected fit measures with and
+without this case:
+(fit measure with all case) - (fit measure without this case).
+
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
+
+Note that an increase is an improvement in fit for
+goodness of fit measures such as CFI and TLI, but a decrease
+is an improvement in fit for badness of fit measures such as
+RMSEA and model chi-square.
 
 The model is not refitted. Therefore, the result is only an
 approximation of that of \code{\link[=fit_measures_change]{fit_measures_change()}}. However, this
@@ -51,12 +62,17 @@ influential cases quickly and then select them to conduct the
 leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and
 \code{\link[=fit_measures_change]{fit_measures_change()}}.
 
+For the technical details, please refer to the vignette
+on this approach: \code{vignette("casewise_scores", package = "semfindr")}
+
 Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -68,7 +84,7 @@ a2b := a2 * b
 fit <- lavaan::sem(mod, dat)
 summary(fit)
 
-# Approximated changes
+# Approximate changes
 out_approx <- fit_measures_change_approx(fit, fit_measures = "chisq")
 head(out_approx)
 # Fit the model several times. Each time with one case removed.
@@ -81,6 +97,7 @@ out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)
+abline(a = 0, b = 1)
 
 # A CFA model
 
@@ -105,8 +122,10 @@ out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)
+abline(a = 0, b = 1)
 
-# A latent variable model#'
+# A latent variable model
+
 dat <- sem_dat
 mod <-
 "
@@ -131,9 +150,10 @@ out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)
+abline(a = 0, b = 1)
 
 }
 \author{
 Idea by Mark Hok Chio Lai \url{https://orcid.org/0000-0002-9196-7406},
-Implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
+implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

@@ -3,23 +3,38 @@
 \docType{data}
 \name{pa_dat2}
 \alias{pa_dat2}
-\title{Sample data set for a path model with an influential case}
+\title{Sample Data: A Path Model with an Influential Case}
 \format{
-An object of class \code{data.frame} with 100 rows and 5 columns.
+A data frame with 100 rows
+and 5 variables:
+\describe{
+\item{case_id}{Case ID. Character.}
+\item{iv1}{Predictor. Numeric.}
+\item{iv2}{Predictor. Numeric.}
+\item{m1}{Mediator. Numeric.}
+\item{dv}{Outcome variable. Numeric.}
+}
 }
 \usage{
 pa_dat2
 }
 \description{
-A four-variable dataset with 100 cases and potential influential cases
+A four-variable dataset with 100 cases, with
+one influential case.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`m1 ~  iv1 + iv2`
-`dv ~  m1`
-}\if{html}{\out{</div>}}
-
-Has one or more influential case
+\examples{
+library(lavaan)
+data(pa_dat2)
+mod <-
+"
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
+"
+fit <- sem(mod, pa_dat2)
+summary(fit)
+inf_out <- influence_stat(fit)
+gcd_plot(inf_out)
 }
 \keyword{datasets}

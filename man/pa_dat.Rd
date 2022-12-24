@@ -3,21 +3,34 @@
 \docType{data}
 \name{pa_dat}
 \alias{pa_dat}
-\title{Sample data set for a path model}
+\title{Sample Data: A Path Model}
 \format{
-An object of class \code{data.frame} with 100 rows and 4 columns.
+A data frame with 100 rows
+and 5 variables:
+\describe{
+\item{m1}{Mediator. Numeric.}
+\item{dv}{Outcome variable. Numeric.}
+\item{iv1}{Predictor. Numeric.}
+\item{iv2}{Predictor. Numeric.}
+}
 }
 \usage{
 pa_dat
 }
 \description{
-A four-variable dataset with 100 cases
+A four-variable dataset with 100 cases.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`m1 ~  iv1 + iv2`
-`dv ~  m1`
-}\if{html}{\out{</div>}}
+\examples{
+library(lavaan)
+data(pa_dat)
+mod <-
+"
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1b := a1 * b
+a2b := a2 * b
+"
+fit <- sem(mod, pa_dat)
+summary(fit)
 }
 \keyword{datasets}

@@ -1,21 +1,22 @@
-#' @title Implied Scores of Observed Outcome Variable
+#' @title Implied Scores of Observed Outcome Variables
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
-#' implied scores.
+#' implied scores of observed outcome variables.
 #'
-#' @details The implied scores for each observed outcome variable are
-#'  simply computed in the same way the predicted scores in a linear
-#'  regression model are computed.
+#' @details The implied scores for each observed outcome variable
+#' (the `y`-variables or the endogenous variables) are
+#' simply computed in the same way the predicted scores in a linear
+#' regression model are computed.
 #'
 #' Currently it supports only single-group path analysis models with only
-#'  observed variables.
+#' observed variables.
 #'
 #' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()]
-#'  and [lavaan::sem()].
+#' and [lavaan::sem()].
 #'
 #' @return A matrix of the implied scores.
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @examples
 #' library(lavaan)
@@ -156,25 +157,25 @@ implied_scores <- function(fit) {
     check_summary <- vector(mode = "character")
     if (!check_implied_cov_yy) {
         check_summary <- c(check_summary,
-            "Implied covariances matrix of Y variables cannot be reproduced.")
+            "Implied covariances matrix of y variables cannot be reproduced.")
     }
     if (!check_implied_cov_xx) {
         check_summary <- c(check_summary,
-            "Implied covariances matrix of X variables cannot be reproduced.")
+            "Implied covariances matrix of x variables cannot be reproduced.")
     }
     if (!check_implied_cov_xy) {
         check_summary <- c(check_summary,
-        "Implied covariances matrix of X vs. Y variables cannot be reproduced.")
+        "Implied covariances matrix of x vs. y variables cannot be reproduced.")
     }
     if (lavaan::lavInspect(fit, "meanstructure")) {
         if (!check_implied_mean_y) {
             check_summary <- c(check_summary,
-                "Implied means of Y variables cannot be reproduced.")
+                "Implied means of y-variables cannot be reproduced.")
         }
-      } 
+      }
     if (!check_rsquare) {
         check_summary <- c(check_summary,
-            "Implied R-sauares of Y variables cannot be reproduced.")
+            "Implied R-squares of y-variables cannot be reproduced.")
     }
 
     if (length(check_summary) > 0) {

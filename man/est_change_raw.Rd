@@ -15,14 +15,15 @@ parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
 Supports specifying an operator to select all parameters with this
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
-both parameter names and operators.
-If \code{NULL}, the
-default, differences on all free parameters will be computed.}
+both parameter names and operators. More details can be found
+in the help of \code{\link[=pars_id]{pars_id()}}.
+If omitted or \code{NULL}, the
+default, changes on all free parameters will be computed.}
 
 \item{standardized}{If \code{TRUE}, the changes in the full standardized
 solution is returned (\code{type} = \code{std.all} in
 \code{\link[lavaan:standardizedSolution]{lavaan::standardizedSolution()}}). Otherwise, the changes in the
-unstandardized solution is returned. Default is \code{FALSE}.}
+unstandardized solution are returned. Default is \code{FALSE}.}
 }
 \value{
 A matrix with the number of columns equals to the number of
@@ -42,6 +43,10 @@ change is the raw change, either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard
 error.
 
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
+
 If the analysis is not admissible or did not converge when a case
 is deleted, \code{NA}s will be returned for this case on the
 differences.
@@ -50,8 +55,10 @@ Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -158,9 +165,9 @@ out_std
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
-\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
 doi:10.1080/00273171.2011.561068
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

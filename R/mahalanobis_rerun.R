@@ -1,36 +1,37 @@
-#' @title Mahalanobis Distance (All Observed Variables)
+#' @title Mahalanobis Distance on All Observed Variables
 #'
 #' @description Computes the Mahalanobis distance for each case on all
-#'  observed variables in a model.
+#' observed variables in a model.
 #'
 #' @details [mahalanobis_rerun()] gets a [lavaan_rerun()] or
-#'  [lavaan::lavaan()] output and computes the Mahalanobis distance for
-#'  each case on all observed variables.
+#' [lavaan::lavaan()] output and computes the Mahalanobis distance for
+#' each case on all observed variables.
 #'
 #' If there are no missing values, [stats::mahalanobis()] will be used
-#'  to compute the Mahalanobis distance.
+#' to compute the Mahalanobis distance.
 #'
 #' If there are missing values on the observed predictors, the means
-#'  and variance-covariance matrices will be estimated by maximum
-#'  likelihood using [norm2::emNorm()]. The estimates will be passed
-#'  to [modi::MDmiss()] to compute the Mahalanobis distance.
+#' and variance-covariance matrices will be estimated by maximum
+#' likelihood using [norm2::emNorm()]. The estimates will be passed
+#' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
 #' Currently it only support single-group models.
 #'
 #' @param fit It can be the output from `lavaan`, such as
-#'  [lavaan::cfa()] and [lavaan::sem()], or the output from
-#'  [lavaan_rerun()].
+#' [lavaan::cfa()] and [lavaan::sem()], or the output from
+#' [lavaan_rerun()].
+#'
 #' @param emNorm_arg A list of argument for
-#'  [norm2::emNorm()]. Default is
-#'  `list(estimate.worst = FALSE, criterion = 1e-6)`.
-#'  Ignored if there is no missing data on the exogenous observed
-#'  variables.
+#' [norm2::emNorm()]. Default is
+#' `list(estimate.worst = FALSE, criterion = 1e-6)`.
+#' Ignored if there is no missing data on the exogenous observed
+#' variables.
 #'
 #' @return A one-column matrix (a column vector) of the Mahalanobis
 #' distance for each case. The row names are the case identification
 #' values used in [lavaan_rerun()].
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @examples
 #' library(lavaan)
@@ -97,7 +98,7 @@
 #'
 #' @references Mahalanobis, P. C. (1936). On the generalized distance
 #'  in statistics. *Proceedings of the National Institute of Science
-#'  of India, 2*, 49–55.
+#'  of India, 2*, 49-55.
 #'
 #' @export
 
@@ -108,7 +109,7 @@ mahalanobis_rerun <- function(fit,
   if (missing(fit)) {
       stop("No fit object supplied.")
     }
-  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+  if (!inherits(fit, "lavaan") && !inherits(fit, "lavaan_rerun")) {
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {
@@ -137,7 +138,7 @@ mahalanobis_rerun <- function(fit,
   if (missing(fit)) {
       stop("No fit object supplied.")
     }
-  if (!inherits(fit, "lavaan") & !inherits(fit, "lavaan_rerun")) {
+  if (!inherits(fit, "lavaan") && !inherits(fit, "lavaan_rerun")) {
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {

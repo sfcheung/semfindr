@@ -2,7 +2,7 @@
 % Please edit documentation in R/mahalanobis_exo.R
 \name{mahalanobis_predictors}
 \alias{mahalanobis_predictors}
-\title{Mahalanobis Distance (Observed Predictors)}
+\title{Mahalanobis Distance On Observed Predictors}
 \usage{
 mahalanobis_predictors(
   fit,
@@ -68,14 +68,14 @@ md_predictors
 Béguin, C., & Hulliger, B. (2004). Multivariate outlier detection in
 incomplete survey data: The epidemic algorithm and transformed rank
 correlations. \emph{Journal of the Royal Statistical Society: Series A
-(Statistics in Society)}, 167(2), 275–294.
+(Statistics in Society)}, 167(2), 275-294.
 
 Mahalanobis, P. C. (1936). On the generalized distance in statistics.
-\emph{Proceedings of the National Institute of Science of India, 2}, 49–55.
+\emph{Proceedings of the National Institute of Science of India, 2}, 49-55.
 
 Schafer, J.L. (1997) \emph{Analysis of incomplete multivariate data}.
 Chapman & Hall/CRC Press.
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

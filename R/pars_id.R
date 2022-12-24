@@ -10,27 +10,27 @@
 #' @details It supports the following ways to specify
 #' the parameters to be included.
 #'
-#' # `lavaan` syntax
+#' - `lavaan` syntax
 #'
-#' For example, `"y ~ x"` denotes the regression coefficient
-#' regression `y` on `x`. It uses [lavaan::lavaanify()] to
-#' parse the syntax strings.
+#'   - For example, `"y ~ x"` denotes the regression coefficient
+#'     regression `y` on `x`. It uses [lavaan::lavaanify()] to
+#'     parse the syntax strings.
 #'
-#' # Operator
+#' - Operator
 #'
-#' For example, `"~"` denotes all regression coefficients.
+#'   - For example, `"~"` denotes all regression coefficients.
+#'
+#' It is used by function such as [est_change()] and
+#' [fit_measures_change()].
 #'
 #' @return
 #' A numeric vector of the ids in the column "free" in the
 #' parameter table of the fit object.
 #'
 #' @param pars A character vector of parameters specified
-#' in lavaan syntax, e.g., `"y ~ x"` and `f1 =~ x3`. For
-#' multisample models, if only the parameters in some groups
-#' are needed, use the modifier for labeling parameters and
-#' use `NA` to denote parameters to be requested. E.g.,
-#' `f1 =~ c(NA, 0, NA, NA) * x2` denotes the loadings of
-#' `x2` on `f1` in the first, third, and fourth groups.
+#' in lavaan syntax, e.g., `"y ~ x"` and `f1 =~ x3`. Can
+#' mix specific parameters with operators. See the Details
+#' section.
 #'
 #' @param fit A `lavaan`-class object. This object is used
 #' to determine the number of groups and the parameters
@@ -44,7 +44,6 @@
 #'
 #' @param free_only Wether only free parameters will be
 #' kept. Default is `TRUE`.
-#'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -129,6 +128,13 @@ pars_id <- function(pars,
 # For example, `"f2 =~ x5.Alpha"` denotes the factor loading
 # of `x5` on `f2` in the group `"Alpha"`.
 #
+# @param pars A character vector of parameters specified
+# in lavaan syntax, e.g., `"y ~ x"` and `f1 =~ x3`. For
+# multisample models, if only the parameters in some groups
+# are needed, use the modifier for labeling parameters and
+# use `NA` to denote parameters to be requested. E.g.,
+# `f1 =~ c(NA, 0, NA, NA) * x2` denotes the loadings of
+# `x2` on `f1` in the first, third, and fourth groups.
 # Example
 #
 # dat <- sem_dat

@@ -2,7 +2,7 @@
 % Please edit documentation in R/implied_scores.R
 \name{implied_scores}
 \alias{implied_scores}
-\title{Implied Scores of Observed Outcome Variable}
+\title{Implied Scores of Observed Outcome Variables}
 \usage{
 implied_scores(fit)
 }
@@ -15,10 +15,11 @@ A matrix of the implied scores.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
-implied scores.
+implied scores of observed outcome variables.
 }
 \details{
-The implied scores for each observed outcome variable are
+The implied scores for each observed outcome variable
+(the \code{y}-variables or the endogenous variables) are
 simply computed in the same way the predicted scores in a linear
 regression model are computed.
 
@@ -47,5 +48,5 @@ head(fit_implied_scores)
 
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

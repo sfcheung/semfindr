@@ -3,24 +3,41 @@
 \docType{data}
 \name{sem_dat}
 \alias{sem_dat}
-\title{Sample data set for a structural equation model}
+\title{Sample Data: A Latent Variable Structural Model}
 \format{
-An object of class \code{data.frame} with 200 rows and 9 columns.
+A data frame with 200 rows
+and 9 variables:
+\describe{
+\item{x1}{Indicator. Numeric.}
+\item{x2}{Indicator. Numeric.}
+\item{x3}{Indicator. Numeric.}
+\item{x4}{Indicator. Numeric.}
+\item{x5}{Indicator. Numeric.}
+\item{x6}{Indicator. Numeric.}
+\item{x7}{Indicator. Numeric.}
+\item{x8}{Indicator. Numeric.}
+\item{x9}{Indicator. Numeric.}
+}
 }
 \usage{
 sem_dat
 }
 \description{
-A nine-variable dataset with 100 cases.
+A nine-variable dataset with 200 cases.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
-`f2 =~  x4 + x5 + x6`
-`f3 =~  x7 + x8 + x9`
-`f2 ~   f1`
-`f3 ~   f2`
-}\if{html}{\out{</div>}}
+\examples{
+library(lavaan)
+data(sem_dat)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~ a * f1
+f3 ~ b * f2
+ab := a * b
+"
+fit <- sem(mod, sem_dat)
+summary(fit)
 }
 \keyword{datasets}

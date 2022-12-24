@@ -1,5 +1,5 @@
 ---
-title: "Selecting Cases In Rerun"
+title: "Selecting Cases In lavaan_rerun"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Selecting Cases In Rerun}
@@ -17,8 +17,13 @@ knitr::opts_chunk$set(
 Instead of refitting the model *n* times, once
 with each case removed, it is possible to use some criteria
 to select cases to be included in the analysis. This is useful
-when the speed to fit the model is slow and/or the sample
-size is very large.
+when the time to fit a model is long and/or the sample
+size is large. This can also be used together with the
+approximate approach: Use the approximate approach to
+identify potentially influential case and then compute the
+exact influence statistics for these cases. See
+`vignette("casewise_scores", package = "semfindr")` for
+further information on the the approximate approach.
 
 The sample data set `pa_dat` will be used for illustration:
 
@@ -34,7 +39,7 @@ The following model is fitted to the data set:
 
 ```{r}
 library(lavaan)
-mod <- 
+mod <-
 "
 iv1 ~~ iv2
 m1 ~ iv1 + iv2
@@ -49,7 +54,7 @@ Suppose, for some reasons, users want to refit a model
 only with selected rows removed. For example, only
 rows 1, 4, 15, and 18 should be selected. This can be
 done using
-the argument `to_rerun` of `semfindr::lavaan_rerun()`:
+the argument `to_rerun` of `lavaan_rerun()`:
 
 ```{r}
 rerun_out <- lavaan_rerun(fit,
@@ -91,8 +96,9 @@ residuals. This is possible only for models with observed
 variables only (i.e., path models). This is analogous to
 selecting cases based on their residuals in a multiple
 regression model. A path model can have more than one
-endogenous variables. The residuals of a case on all
-endogenous variables will be computed, and the Mahalanobis
+endogenous variable. The residuals of a case on all
+endogenous variables will be computed (by `implied_scores()`),
+and the Mahalanobis
 distance will be computed using these residuals.
 
 This is done using the argument `resid_md_top`. Users specify
@@ -151,12 +157,12 @@ Therefore, this method should be used with caution.
 
 # Final Remarks
 
-If feasible, it is recommended to refit a model once for 
+If feasible, it is recommended to refit a model once for
 each case, such that the influential of all cases can be
 considered together. The methods above are included when
 the processing time is slow and so only selected cases are
 to be explored. For the final model(s),
-`semfindr::lavaan_rerun()` using
+`lavaan_rerun()` using
 all cases are recommended, to serve as a final check on the
 sensitivity of the results to individual cases.
 

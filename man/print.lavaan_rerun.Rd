@@ -2,7 +2,7 @@
 % Please edit documentation in R/print_lavaan_rerun.R
 \name{print.lavaan_rerun}
 \alias{print.lavaan_rerun}
-\title{Print Method for lavaan_rerun}
+\title{Print Method for 'lavaan_rerun'}
 \usage{
 \method{print}{lavaan_rerun}(x, ...)
 }
@@ -12,7 +12,7 @@
 \item{...}{Other arguments. They will be ignored.}
 }
 \description{
-Prints the results of lavaan_rerun
+Prints the results of \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
 }
 \examples{
 library(lavaan)
@@ -34,5 +34,5 @@ fit_rerun
 
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}
 }

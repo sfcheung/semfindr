@@ -3,23 +3,41 @@
 \docType{data}
 \name{cfa_dat_heywood}
 \alias{cfa_dat_heywood}
-\title{Sample data set for a structural equation model with a negative variance}
+\title{Sample Data: A CFA Model with a Heywood Case}
 \format{
-An object of class \code{data.frame} with 60 rows and 6 columns.
+A data frame with 60 rows
+and 6 variables:
+\describe{
+\item{x1}{Indicator. Numeric.}
+\item{x2}{Indicator. Numeric.}
+\item{x3}{Indicator. Numeric.}
+\item{x4}{Indicator. Numeric.}
+\item{x5}{Indicator. Numeric.}
+\item{x6}{Indicator. Numeric.}
+}
 }
 \usage{
 cfa_dat_heywood
 }
 \description{
-A six-variable dataset with 60 cases that has a case that, if not removed,
-will result in a negative variance in the solution
+A six-variable dataset with 60 cases, with
+one case resulting in negative variance if not removed.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
-`f2 =~  x4 + x5 + x6`
-`f1 ~~ f2`
-}\if{html}{\out{</div>}}
+\examples{
+library(lavaan)
+data(cfa_dat_heywood)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+"
+# The following will result in a warning
+fit <- cfa(mod, cfa_dat_heywood)
+# One variance is negative
+parameterEstimates(fit, output = "text")
+# Fit the model with the first case removed
+fit_no_case_1 <- cfa(mod, cfa_dat_heywood[-1, ])
+# Results admissible
+parameterEstimates(fit_no_case_1, output = "text")
 }
 \keyword{datasets}

@@ -3,24 +3,38 @@
 \docType{data}
 \name{cfa_dat2}
 \alias{cfa_dat2}
-\title{Sample data set for a CFA model with an influential case}
+\title{Sample Data: A CFA Model with an Influential Case}
 \format{
-An object of class \code{data.frame} with 100 rows and 7 columns.
+A data frame with 100 rows
+and 7 variables:
+\describe{
+\item{case_id}{Case ID. Character.}
+\item{x1}{Indicator. Numeric.}
+\item{x2}{Indicator. Numeric.}
+\item{x3}{Indicator. Numeric.}
+\item{x4}{Indicator. Numeric.}
+\item{x5}{Indicator. Numeric.}
+\item{x6}{Indicator. Numeric.}
+}
 }
 \usage{
 cfa_dat2
 }
 \description{
-A six-variable dataset with 100 cases and potential influential cases
+A six-variable dataset with 100 cases, with
+one influential case.
 }
-\details{
-A Sample Model:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{`f1 =~  x1 + x2 + x3`
-`f2 =~  x4 + x5 + x6`
-`f1 ~~ f2`
-}\if{html}{\out{</div>}}
-
-Has one or more influential case
+\examples{
+library(lavaan)
+data(cfa_dat2)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+"
+fit <- cfa(mod, cfa_dat2)
+summary(fit)
+inf_out <- influence_stat(fit)
+gcd_plot(inf_out)
 }
 \keyword{datasets}

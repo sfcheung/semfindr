@@ -2,12 +2,13 @@
 % Please edit documentation in R/est_change_raw_approx.R
 \name{est_change_raw_approx}
 \alias{est_change_raw_approx}
-\title{Case Influence on Parameter Estimates (Approximated)}
+\title{Case Influence on Parameter Estimates (Approximate)}
 \usage{
 est_change_raw_approx(fit, parameters = NULL, case_id = NULL)
 }
 \arguments{
-\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}.}
+\item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}} or its wrappers (e.g.,
+\code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}).}
 
 \item{parameters}{A character vector to specify the selected
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
@@ -15,9 +16,10 @@ parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
 Supports specifying an operator to select all parameters with this
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
-both parameter names and operators.
-If \code{NULL}, the
-default, differences on all free parameters will be computed.}
+both parameter names and operators. More details can be found
+in the help of \code{\link[=pars_id]{pars_id()}}.
+If omitted or \code{NULL}, the
+default, changes on all free parameters will be computed.}
 
 \item{case_id}{If it is a character vector of length equals to the
 number of cases (the number of rows in the data in \code{fit}), then it
@@ -32,17 +34,20 @@ of cases. The row names are case identification values. The
 elements are the raw differences.
 }
 \description{
-Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and estimates the
-changes in selected parameters for each case.
+Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
+approximate changes in selected parameters for each case.
 }
 \details{
 For each case, \code{\link[=est_change_raw_approx]{est_change_raw_approx()}} computes the
-approximated differences
+approximate differences
 in the estimates of selected parameters with and without this
 case: (estimate with all case) - (estimate without this case). The
-change is the raw change, either for the standardized or
-unstandardized solution. The change is \emph{not} divided by standard
-error.
+change is the approximate raw change. The change is \emph{not} divided by
+the standard error of an estimate (hance "raw" in the function name).
+
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
 
 The model is not refitted. Therefore, the result is only an
 approximation of that of \code{\link[=est_change_raw]{est_change_raw()}}. However, this
@@ -53,12 +58,20 @@ influential cases quickly and then select them to conduct the
 leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and
 \code{\link[=est_change_raw]{est_change_raw()}}.
 
+Unlike \code{\link[=est_change_raw]{est_change_raw()}}, it does not yet support computing the
+changes for the standardized solution.
+
+For the technical details, please refer to the vignette
+on this approach: \code{vignette("casewise_scores", package = "semfindr")}
+
 Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -69,7 +82,7 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-# Compute the approximated changes in parameter estimates if a case is removed
+# Compute the approximate changes in parameter estimates if a case is removed
 out_approx <- est_change_raw_approx(fit)
 head(out_approx)
 # Fit the model several times. Each time with one case removed.
@@ -96,7 +109,7 @@ f1 ~~ f2
 # Fit the model
 fit <- lavaan::cfa(mod, dat)
 summary(fit)
-# Compute the approximated changes in parameter estimates if a case is removed
+# Compute the approximate changes in parameter estimates if a case is removed
 # Compute changes for free loadings only
 out_approx <- est_change_raw_approx(fit,
                                     parameters = "=~")
@@ -116,7 +129,7 @@ ab := a * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-# Compute the approximated changes in parameter estimates if a case is removed
+# Compute the approximate changes in parameter estimates if a case is removed
 # Compute changes for structural paths only
 out_approx <- est_change_raw_approx(fit,
                                     parameters = c("~"))
@@ -126,5 +139,5 @@ head(out_approx)
 }
 \author{
 Idea by Mark Hok Chio Lai \url{https://orcid.org/0000-0002-9196-7406},
-Implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
+implemented by Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }

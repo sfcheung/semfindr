@@ -1,12 +1,12 @@
 #' @title Case Influence Measures
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the changes
-#'  in selected parameters and fit measures for each case.
+#' in selected parameters and fit measures for each case.
 #'
 #' @details For each case, [influence_stat()] computes the differences
-#'  in the estimates of selected parameters and fit measures with and
-#'  without this case. Users can request measures of extremeness (only
-#'  Mahalanobis distance is available for now).
+#' in the estimates of selected parameters and fit measures with and
+#' without this case. Users can also request a measure of extremeness (only
+#' Mahalanobis distance is available for now).
 #'
 #' If `rerun_out` is the output of [lavaan_rerun()], it will use the
 #' leave-one-out approach.
@@ -18,35 +18,52 @@
 #' Measures are computed by [est_change_approx()] and
 #' [fit_measures_change_approx()].
 #'
+#' If Mahalanobis distance is requested, it is computed by
+#' [mahalanobis_rerun()].
+#'
+#' Please refer to the help pages of the above functions on
+#' the technical details.
+#'
 #' Currently it only works for single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()], or the output
-#'  of [lavaan::lavaan()] or its wrappers (e.g., [lavaan::cfa()]
-#'  and [lavaan::sem()]).
+#' of [lavaan::lavaan()] or its wrappers (e.g., [lavaan::cfa()]
+#' and [lavaan::sem()]).
+#'
 #' @param fit_measures The argument `fit.measures` used in
-#'  [lavaan::fitMeasures]. Default is
-#'  `c("chisq", "cfi", "rmsea", "tli")`.
+#' [lavaan::fitMeasures]. Default is
+#' `c("chisq", "cfi", "rmsea", "tli")`.
+#'
 #' @param baseline_model The argument `baseline.model` used in
-#'  [lavaan::fitMeasures]. Default is `NULL`.
+#' [lavaan::fitMeasures]. Default is `NULL`.
+#'
 #' @param parameters A character vector to specify the selected
-#'  parameters. Each parameter is named as in `lavaan` syntax, e.g.,
-#'  `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
-#'  in the output of [lavaan::parameterEstimates()]. If `NULL`, the
-#'  default, differences on all free parameters will be computed.
+#' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
+#' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
+#' in the output of [lavaan::parameterEstimates()].
+#' Supports specifying an operator to select all parameters with this
+#' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
+#' both parameter names and operators. More details can be found
+#' in the help of [pars_id()].
+#' If omitted or `NULL`, the
+#' default, changes on all free parameters will be computed.
+
 #' @param mahalanobis If `TRUE`, it will call [mahalanobis_rerun()] to
-#'  compute the Mahalanobis distance. Default is `TRUE`.
+#' compute the Mahalanobis distance. Default is `TRUE`.
+#'
 #' @param keep_fit If `TRUE`, it will keep the original `lavaan` output
-#'  using the full sample as an attribute to the output. It can be used
-#'  by other functions to extract necessary information. Default is
-#'  `TRUE`.
+#' using the full sample as an attribute to the output. It can be used
+#' by other functions to extract necessary information. Default is
+#' `TRUE`.
 #'
 #' @return A matrix with the number of columns equals to the number of
-#'  requested statistics, and the number of rows equals to the number of
-#'  cases. The row names are the case identification values used in
-#'  [lavaan_rerun()]. Please refer to the help pages of [est_change()] and
-#'  [fit_measures_change()] for details.
+#' requested statistics, and the number of rows equals to the number of
+#' cases. The row names are the case identification values used in
+#' [lavaan_rerun()]. Please refer to the help pages of [est_change()] and
+#' [fit_measures_change()] (or [est_change_approx()] and
+#' [fit_measures_change_approx()] for details.
 #'
-#' @author Shu Fai Cheung (shufai.cheung@gmail.com)
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @examples
 #' library(lavaan)
@@ -62,6 +79,9 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
+#'
+#' ## Leave-One-Out Approach
+#'
 #' # Fit the model n times. Each time with one case removed.
 #' # For illustration, do this only for selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
@@ -70,28 +90,31 @@
 #' out <- influence_stat(fit_rerun)
 #' head(out)
 #'
+#' ## Approximate Approach
+#'
+#' out_approx <- influence_stat(fit)
+#' head(out_approx)
+#'
 #' @references
 #' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-#'  models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202–228. doi:10.1080/00273171.2011.561068
+#' models: Cases and their influence. *Multivariate Behavioral Research,
+#'  46*(2), 202-228. doi:10.1080/00273171.2011.561068
 #'
 #' @seealso [fit_measures_change()], [est_change()], and [mahalanobis_rerun()].
 #'
 #' @export
 
 
-influence_stat <- function(
-                       rerun_out,
-                       fit_measures = c("chisq", "cfi", "rmsea", "tli"),
-                       baseline_model = NULL,
-                       parameters = NULL,
-                       mahalanobis = TRUE,
-                       keep_fit = TRUE
-                       ) {
+influence_stat <- function(rerun_out,
+                           fit_measures = c("chisq", "cfi", "rmsea", "tli"),
+                           baseline_model = NULL,
+                           parameters = NULL,
+                           mahalanobis = TRUE,
+                           keep_fit = TRUE) {
   if (missing(rerun_out)) {
       stop("No output supplied.")
     }
-  if (!(inherits(rerun_out, "lavaan_rerun") ||inherits(rerun_out, "lavaan") )) {
+  if (!(inherits(rerun_out, "lavaan_rerun") || inherits(rerun_out, "lavaan"))) {
       stop("rerun_out is neither the output of lavaan_rerun or lavaan.")
     }
   if (inherits(rerun_out, "lavaan_rerun")) {

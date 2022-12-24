@@ -1,7 +1,6 @@
-# semfindr 0.1.0.9012
+# semfindr 0.1.1
 
-(Work-In-Progress. Cumulated updates to be included in 0.1.1)
-
+- First public release.
 - Added `skip_all_checks` to `lavaan_rerun()`, allowing users
   to experiment `lavaan_rerun()` and other functions on
   models not officially supported.
@@ -23,7 +22,8 @@
 - Added more examples. (0.1.0.9010)
 - Updated documentation (e.g., README and DESCRIPTION). (0.1.0.9011)
 - Updated `influence_stat()` and the plot functions to support
-  teh approximate approach. (0.1.0.9012)
+  the approximate approach. (0.1.0.9012)
+- Updated documentation.
 
 # semfindr 0.1.0
 
@@ -51,10 +51,10 @@ variables in a path model.
 
 # semfindr 0.0.3
 
-- Use `lavaan::update()` in lavaan_rerun. This is more
+- Used `lavaan::update()` in lavaan_rerun. This is more
   reliable than recreating the call.
 
-- Add `implied_scores()`. It supports only single-group
+- Added `implied_scores()`. It supports only single-group
   path analysis models for now.
 
 # semfindr 0.0.2

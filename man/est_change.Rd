@@ -15,9 +15,10 @@ parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
 Supports specifying an operator to select all parameters with this
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
-both parameter names and operators.
-If \code{NULL}, the
-default, differences on all free parameters will be computed.}
+both parameter names and operators. More details can be found
+in the help of \code{\link[=pars_id]{pars_id()}}.
+If omitted or \code{NULL}, the
+default, changes on all free parameters will be computed.}
 }
 \value{
 A matrix with the number of columns equal to the number of
@@ -37,6 +38,10 @@ the estimates of selected parameters with and without this case:
 differences are standardized by dividing the raw differences by
 their standard errors (Pek & MacCallum, 2011).
 
+If the value of a case is positive, including the case increases an estimate.
+
+If the value of a case is negative, including the case decreases an estimate.
+
 If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for this case on the differences.
 
@@ -47,8 +52,10 @@ Currently it only supports single-group models.
 }
 \examples{
 library(lavaan)
+
+# A path model
+
 dat <- pa_dat
-# The model
 mod <-
 "
 m1 ~ a1 * iv1 + a2 * iv2
@@ -127,9 +134,9 @@ out
 \references{
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
-\emph{Multivariate Behavioral Research, 46}(2), 202–228.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
 doi:10.1080/00273171.2011.561068
 }
 \author{
-Shu Fai Cheung (shufai.cheung@gmail.com)
+Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}.
 }
