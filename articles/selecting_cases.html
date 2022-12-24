@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="semfindr">
-<title>Selecting Cases In Rerun • semfindr</title>
+<title>Selecting Cases In lavaan_rerun • semfindr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Selecting Cases In Rerun">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Selecting Cases In lavaan_rerun">
 <meta property="og:description" content="semfindr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
-    <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
     <a class="dropdown-item" href="../articles/user_id.html">Use Case IDs</a>
   </div>
 </li>
@@ -73,9 +73,10 @@
 
 
 
-<script src="selecting_cases_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Selecting Cases In Rerun</h1>
+      <img src="" class="logo" alt=""><h1>Selecting Cases In lavaan_rerun</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/HEAD/vignettes/selecting_cases.Rmd" class="external-link"><code>vignettes/selecting_cases.Rmd</code></a></small>
@@ -84,8 +85,17 @@
 
     
     
-<p>Instead of refitting the model <em>n</em> times, once with each case removed, it is possible to use some criteria to select cases to be included in the analysis. This is useful when the speed to fit the model is slow and/or the sample size is very large.</p>
-<p>The sample data set <code>pa_dat</code> will be used for illustration:</p>
+<p>Instead of refitting the model <em>n</em> times, once with each case
+removed, it is possible to use some criteria to select cases to be
+included in the analysis. This is useful when the time to fit a model is
+long and/or the sample size is large. This can also be used together
+with the approximate approach: Use the approximate approach to identify
+potentially influential case and then compute the exact influence
+statistics for these cases. See
+<code><a href="../articles/casewise_scores.html">vignette("casewise_scores", package = "semfindr")</a></code> for
+further information on the the approximate approach.</p>
+<p>The sample data set <code>pa_dat</code> will be used for
+illustration:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span></span>
@@ -104,7 +114,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; This is lavaan 0.6-12</span></span>
 <span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> </span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
 <span><span class="st">iv1 ~~ iv2</span></span>
 <span><span class="st">m1 ~ iv1 + iv2</span></span>
@@ -114,11 +124,14 @@
 <div class="section level2">
 <h2 id="row-numbers-or-case-ids">Row Numbers or Case IDs<a class="anchor" aria-label="anchor" href="#row-numbers-or-case-ids"></a>
 </h2>
-<p>Suppose, for some reasons, users want to refit a model only with selected rows removed. For example, only rows 1, 4, 15, and 18 should be selected. This can be done using the argument <code>to_rerun</code> of <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code>:</p>
+<p>Suppose, for some reasons, users want to refit a model only with
+selected rows removed. For example, only rows 1, 4, 15, and 18 should be
+selected. This can be done using the argument <code>to_rerun</code> of
+<code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.58 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.38 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if ran in parallel.</span></span></code></pre></div>
 <p>Only four reruns in the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -139,7 +152,8 @@
 <span><span class="co">#&gt; 4     0.006 -0.024 -0.003  0.022 -0.051 -0.044   -0.056   -0.070 0.014</span></span>
 <span><span class="co">#&gt; 15    0.008  0.001  0.003 -0.009 -0.070 -0.061   -0.070   -0.058 0.017</span></span>
 <span><span class="co">#&gt; 18   -0.023 -0.273  0.035  0.101  0.260 -0.046    0.043   -0.067 0.163</span></span></code></pre></div>
-<p>If user supplied case IDs are used, then the value of <code>to_rerun</code> should be a vector of these case IDs:</p>
+<p>If user supplied case IDs are used, then the value of
+<code>to_rerun</code> should be a vector of these case IDs:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
@@ -147,9 +161,10 @@
 <span>                                       <span class="st">"case4"</span>,</span>
 <span>                                       <span class="st">"case15"</span>,</span>
 <span>                                       <span class="st">"case18"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.58 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.38 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if ran in parallel.</span></span></code></pre></div>
-<p>Only four reruns in the output. User supplied case IDs are used in the output:</p>
+<p>Only four reruns in the output. User supplied case IDs are used in
+the output:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span></span>
 <span><span class="co">#&gt; === lavaan_rerun Output ===</span></span>
@@ -173,13 +188,22 @@
 <div class="section level2">
 <h2 id="mahalanobis-distance-on-residuals">Mahalanobis Distance on Residuals<a class="anchor" aria-label="anchor" href="#mahalanobis-distance-on-residuals"></a>
 </h2>
-<p>Users can select cases using their rankings on the Mahalanobis distance computed using the regression-based residuals. This is possible only for models with observed variables only (i.e., path models). This is analogous to selecting cases based on their residuals in a multiple regression model. A path model can have more than one endogenous variables. The residuals of a case on all endogenous variables will be computed, and the Mahalanobis distance will be computed using these residuals.</p>
-<p>This is done using the argument <code>resid_md_top</code>. Users specify the top <em>x</em> cases on this distance to be selected for refitting a model.</p>
+<p>Users can select cases using their rankings on the Mahalanobis
+distance computed using the regression-based residuals. This is possible
+only for models with observed variables only (i.e., path models). This
+is analogous to selecting cases based on their residuals in a multiple
+regression model. A path model can have more than one endogenous
+variable. The residuals of a case on all endogenous variables will be
+computed (by <code><a href="../reference/implied_scores.html">implied_scores()</a></code>), and the Mahalanobis
+distance will be computed using these residuals.</p>
+<p>This is done using the argument <code>resid_md_top</code>. Users
+specify the top <em>x</em> cases on this distance to be selected for
+refitting a model.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          resid_md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.72 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.47 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if ran in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -201,17 +225,24 @@
 <span><span class="co">#&gt; case61    0.004 -0.007 -0.021 -0.153  0.350 -0.031   -0.070   -0.070 0.157</span></span>
 <span><span class="co">#&gt; case85   -0.066 -0.174  0.216 -0.119  0.335 -0.052   -0.031   -0.011 0.214</span></span>
 <span><span class="co">#&gt; case65    0.133  0.152  0.191  0.363  0.076  0.161    0.000    0.046 0.241</span></span></code></pre></div>
-<p>Note that selecting cases by this method <em>can</em> miss some influential cases. As in multiple regression, a case that is influential on the results needs not be a case that is poorly predicted by the exogenous variables. Therefore, this method should be used with caution.</p>
+<p>Note that selecting cases by this method <em>can</em> miss some
+influential cases. As in multiple regression, a case that is influential
+on the results needs not be a case that is poorly predicted by the
+exogenous variables. Therefore, this method should be used with
+caution.</p>
 </div>
 <div class="section level2">
 <h2 id="mahalanobis-distance-on-all-variables">Mahalanobis Distance on All Variables<a class="anchor" aria-label="anchor" href="#mahalanobis-distance-on-all-variables"></a>
 </h2>
-<p>Users can select cases using their rankings on the Mahalanobis distance computed using all observed variables. This is done using the argument <code>md_top</code>. Users specify the top <em>x</em> cases on this distance to be selected for refitting a model.</p>
+<p>Users can select cases using their rankings on the Mahalanobis
+distance computed using all observed variables. This is done using the
+argument <code>md_top</code>. Users specify the top <em>x</em> cases on
+this distance to be selected for refitting a model.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.72 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.47 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if ran in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -233,17 +264,31 @@
 <span><span class="co">#&gt; case87   -0.419 -0.011  0.019  0.101 -0.070  0.000    0.096    0.457 0.413</span></span>
 <span><span class="co">#&gt; case43    0.236 -0.403 -0.263 -0.135  0.223  0.120    0.195    0.030 0.407</span></span>
 <span><span class="co">#&gt; case51   -0.130  0.421 -0.057  0.094  0.089 -0.044    0.525   -0.056 0.492</span></span></code></pre></div>
-<p>Note that selecting cases by this method <em>can</em> miss some influential cases (Pek &amp; MacCallum, 2011). Unlike multiple regression, this distance is not a measure of leverage. For a path model, this distance used distances from the centroid on <em>all</em> observed variables, including exogenous variables and endogenous variables. For a model with latent factors, this distance is affected by both residuals and values predicted by the latent factors. Therefore, this method should be used with caution.</p>
+<p>Note that selecting cases by this method <em>can</em> miss some
+influential cases (Pek &amp; MacCallum, 2011). Unlike multiple
+regression, this distance is not a measure of leverage. For a path
+model, this distance used distances from the centroid on <em>all</em>
+observed variables, including exogenous variables and endogenous
+variables. For a model with latent factors, this distance is affected by
+both residuals and values predicted by the latent factors. Therefore,
+this method should be used with caution.</p>
 </div>
 <div class="section level2">
 <h2 id="final-remarks">Final Remarks<a class="anchor" aria-label="anchor" href="#final-remarks"></a>
 </h2>
-<p>If feasible, it is recommended to refit a model once for each case, such that the influential of all cases can be considered together. The methods above are included when the processing time is slow and so only selected cases are to be explored. For the final model(s), <code><a href="../reference/lavaan_rerun.html">semfindr::lavaan_rerun()</a></code> using all cases are recommended, to serve as a final check on the sensitivity of the results to individual cases.</p>
+<p>If feasible, it is recommended to refit a model once for each case,
+such that the influential of all cases can be considered together. The
+methods above are included when the processing time is slow and so only
+selected cases are to be explored. For the final model(s),
+<code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> using all cases are recommended, to serve as
+a final check on the sensitivity of the results to individual cases.</p>
 </div>
 <div class="section level2">
 <h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
-<p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. <em>Multivariate Behavioral Research, 46</em>(2), 202–228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
+<p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in
+structural equation models: Cases and their influence. <em>Multivariate
+Behavioral Research, 46</em>(2), 202–228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -258,7 +303,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

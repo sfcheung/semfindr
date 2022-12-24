@@ -5,18 +5,20 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Sensitivity analysis in structural
-    equation modeling using change statistics and
-    diagnostic plots.">
-<title>Diagnostic Tools in Structural Equation Modeling • semfindr</title>
+<meta name="description" content="Sensitivity analysis in structural equation modeling using
+    influence measures and diagnostic plots. Support leave-one-out casewise
+    sensitivity analysis (Pek &amp; MacCallum, 2011) and approximate casewies
+    influence by scores and casewise likelihood.">
+<title>Influential Cases in Structural Equation Modeling • semfindr</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Diagnostic Tools in Structural Equation Modeling">
-<meta property="og:description" content="Sensitivity analysis in structural
-    equation modeling using change statistics and
-    diagnostic plots.">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Influential Cases in Structural Equation Modeling">
+<meta property="og:description" content="Sensitivity analysis in structural equation modeling using
+    influence measures and diagnostic plots. Support leave-one-out casewise
+    sensitivity analysis (Pek &amp; MacCallum, 2011) and approximate casewies
+    influence by scores and casewise likelihood.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -30,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +51,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
-    <a class="dropdown-item" href="articles/selecting_cases.html">Selecting Cases In Rerun</a>
+    <a class="dropdown-item" href="articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
     <a class="dropdown-item" href="articles/user_id.html">Use Case IDs</a>
   </div>
 </li>
@@ -76,35 +78,52 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p>(Version 0.1.0.9003), updated on 2022-09-02, <a href="https://sfcheung.github.io/semfindr/news/index.html">release history</a>)</p>
+<p>(Version 0.1.1), updated on 2022-12-24, <a href="https://sfcheung.github.io/semfindr/news/index.html">release history</a>)</p>
 <div class="section level1">
 <div class="page-header"><h1 id="semfindr">semfindr<a class="anchor" aria-label="anchor" href="#semfindr"></a>
 </h1></div>
-<p>A find(e)r of outliers and influential cases in structural equation modeling through sensitivity analysis presented by Jek and MacCallum (2011).</p>
-<p>Unlike other similar packages, the workflow adopted in this package separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures.</p>
+<p>A find(e)r of influential cases in structural equation modeling based mainly on the sensitivity analysis procedures presented by Pek and MacCallum (2011).</p>
+<p>This package supports two approaches: leave-one-out analysis and approximate case influence.</p>
+<div class="section level2">
+<h2 id="leave-one-out-analysis">Leave-One-Out Analysis<a class="anchor" aria-label="anchor" href="#leave-one-out-analysis"></a>
+</h2>
+<p>This approach examines the influence of each case by refitting a model with this case removed.</p>
+<p>Unlike other similar packages, the workflow adopted in semfindr separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures.</p>
 <ul>
-<li>Users first do the leave-one-out analysis for all cases, or cases selected based on some criteria (<code><a href="articles/selecting_cases.html">vignette("selecting_cases")</a></code>), using <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</li>
-<li>Users can then compute various case influence measures using the output of <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</li>
+<li><p>Users first do the leave-one-out model fitting for all cases, or cases selected based on some criteria (<code><a href="articles/selecting_cases.html">vignette("selecting_cases", package = "semfindr")</a></code>), using <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</p></li>
+<li><p>Users then compute case influence measures using the output of <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</p></li>
 </ul>
-<p>The functions were designed to be flexible such that users can compute case influence measures on</p>
+<p>This approaches avoids unnecessarily refitting the models for each set of influence measures, and also allows analyzing only probable influential cases when the model takes a long time to fit.</p>
+<p>The functions were designed to be flexible such that users can compute case influence measures such as</p>
 <ul>
 <li>standardized parameter estimates and generalized Cook’s distance for selected parameters;</li>
-<li>raw or standardized estimates;</li>
-<li>on any fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code>.</li>
+<li>changes in raw or standardized estimates of parameters;</li>
+<li>changes in fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code>.</li>
 </ul>
-<p>This package also supports various plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in the Quick Start (<code><a href="articles/semfindr.html">vignette("semfindr")</a></code>).</p>
+<p>This package can also be generate plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in <em>Quick Start</em> (<code><a href="articles/semfindr.html">vignette("semfindr", package = "semfindr")</a></code>).</p>
+</div>
+<div class="section level2">
+<h2 id="approximate-case-influence">Approximate Case Influence<a class="anchor" aria-label="anchor" href="#approximate-case-influence"></a>
+</h2>
+<p>This approach computes the approximate influence of each case using <em>casewise</em> <em>scores</em> and <em>casewise</em> <em>likelihood</em>. This method is efficient because it does not requires refitting the model for each case. However, it can only approximate the influence, unlike the leave-one-out approach, which produce exact influence. This approach can be used when the number of cases is very large and/or the model takes a long time to fit. Technical details can be found in the vignette <em>Approximate Case Influence Using Scores and Casewise Likelihood</em> (<code><a href="articles/casewise_scores.html">vignette("casewise_scores", package = "semfindr")</a></code>).</p>
+</div>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p>The latest version can be installed by <code>remotes::install_github</code>:</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sfcheung/semfindr"</span><span class="op">)</span></span></code></pre>
-<p>You can learn more about this package at the <a href="https://sfcheung.github.io/semfindr/">Github page</a> of this package and the <a href="https://sfcheung.github.io/semfindr/articles/semfindr.html">Quick Start</a>.</p>
+<p>The latest developmental version can be installed by <code>remotes::install_github</code>:</p>
+<pre class="{r}"><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sfcheung/semfindr"</span><span class="op">)</span></span></code></pre>
+<p>You can learn more about this package at the <a href="https://sfcheung.github.io/semfindr/">Github page</a> of this package and Quick Start (<code><a href="articles/semfindr.html">vignette("semfindr", package = "semfindr")</a></code>).</p>
 </div>
 <div class="section level1">
 <h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h1>
-<p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. <em>Multivariate Behavioral Research, 46</em>(2), 202–228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
+<p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. <em>Multivariate Behavioral Research, 46</em>(2), 202-228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
+</div>
+<div class="section level1">
+<h1 id="comments-suggestions-and-bug-reports">Comments, Suggestions, and Bug Reports<a class="anchor" aria-label="anchor" href="#comments-suggestions-and-bug-reports"></a>
+</h1>
+<p>Please post your comments, suggestions, and bug reports as issues at <a href="https://github.com/sfcheung/semptools/issues" class="external-link">GitHub</a>, or contact the maintainer by email. Thanks in advance for trying out <code>semfindr</code>.</p>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
@@ -161,7 +180,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>
