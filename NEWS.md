@@ -1,3 +1,7 @@
+# semfindr 0.1.1.1
+
+- Added DOI of Pek and MacCallum in the DESCRIPTION. (0.1.1.1)
+
 # semfindr 0.1.1
 
 - First public release.
