@@ -45,6 +45,7 @@ reference:
   - implied_scores
   - print.lavaan_rerun
   - lavaan_rerun_check
+  - approx_check
   - pars_id
   - pars_id_to_lorg
 - title: Datasets

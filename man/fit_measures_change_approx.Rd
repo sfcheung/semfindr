@@ -8,7 +8,9 @@ fit_measures_change_approx(
   fit,
   fit_measures = c("chisq", "cfi", "rmsea", "tli"),
   baseline_model = NULL,
-  case_id = NULL
+  case_id = NULL,
+  allow_inadmissible = FALSE,
+  skip_all_checks = FALSE
 )
 }
 \arguments{
@@ -27,6 +29,15 @@ number of cases (the number of rows in the data in \code{fit}), then it
 is the vector of case identification values. If it is \code{NULL}, the
 default, then \code{case.idx} used by \code{lavaan} functions will be used
 as case identification values.}
+
+\item{allow_inadmissible}{If \code{TRUE}, accepts a fit object with
+inadmissible results (i.e., \code{post.check} from
+\code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
+
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allow
+users to run this function on any object of \code{lavaan} class.
+For users to experiment this and other functions on models
+not officially supported. Default is \code{FALSE}.}
 }
 \value{
 A matrix with the number of columns equals to the number of

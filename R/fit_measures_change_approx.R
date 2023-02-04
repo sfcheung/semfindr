@@ -48,6 +48,15 @@
 #' default, then `case.idx` used by `lavaan` functions will be used
 #' as case identification values.
 #'
+#' @param allow_inadmissible If `TRUE`, accepts a fit object with
+#' inadmissible results (i.e., `post.check` from
+#' [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
+#'
+#' @param skip_all_checks If `TRUE`, skips all checks and allow
+#' users to run this function on any object of `lavaan` class.
+#' For users to experiment this and other functions on models
+#' not officially supported. Default is `FALSE`.
+#'
 #' @return A matrix with the number of columns equals to the number of
 #' requested fit measures, and the number of rows equals to the number
 #' of cases. The row names are case identification values.
@@ -150,7 +159,10 @@ fit_measures_change_approx <- function(fit,
                                                         "rmsea",
                                                         "tli"),
                                        baseline_model = NULL,
-                                       case_id = NULL) {
+                                       case_id = NULL,
+                                       allow_inadmissible = FALSE,
+                                       skip_all_checks = FALSE
+                                       ) {
     if (length(fit_measures) == 0) stop("No measure is requested.")
     if (missing(fit)) {
         stop("No lavaan output supplied.")
@@ -158,6 +170,20 @@ fit_measures_change_approx <- function(fit,
     if (!inherits(fit, "lavaan")) {
         stop("The fit object is not a lavaan output.")
       }
+
+    if (!skip_all_checks) {
+      check_out <- approx_check(fit, print_messages = FALSE)
+
+      if (check_out != 0) {
+          if ((check_out == -1) &&
+              !(suppressWarnings(lavaan::lavInspect(fit, "post.check"))) &&
+              allow_inadmissible) {
+            } else {
+              stop(attr(check_out, "info"))
+            }
+        }
+      }
+
     n <- lavaan::lavTech(fit, "nobs")
     if (is.null(case_id)) {
         # Assume the model is a single-group model
