@@ -50,6 +50,64 @@
 #' @param circle_size The size of the largest circle when the size
 #' of a circle is controlled by a statistic.
 #'
+#' @param point_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_point()] to modify how
+#' to draw the points. Default is
+#' `list()` and internal default
+#' settings will be used.
+#'
+#' @param vline_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_segment()] to modify how
+#' to draw the line for each case
+#' in the index plot. Default is
+#' `list()` and internal default
+#' settings will be used.
+#'
+#' @param hline_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_hline()] to modify how
+#' to draw the horizontal line for zero
+#' case influence. Default is `list()`
+#' and internal default settings will be
+#' used.
+#'
+#' @param cutoff_line_aes A named list
+#' of arguments to be passed to
+#' [ggplot2::geom_vline()] or
+#' [ggplot2::geom_hline()] to modify how
+#' to draw the line for user cutoff
+#' value. Default is `list()`
+#' and internal default settings will be
+#' used.
+#'
+#' @param cutoff_line_gcd_aes Similar
+#' to `cutoff_line_aes` but control
+#' the line for the cutoff value of
+#' *gCD*.
+#'
+#' @param cutoff_line_fit_measures_aes
+#' Similar
+#' to `cutoff_line_aes` but control
+#' the line for the cutoff value of
+#' the selected fit measure.
+#'
+#' @param cutoff_line_md_aes
+#' Similar
+#' to `cutoff_line_aes` but control
+#' the line for the cutoff value of
+#' the Mahalanobis distance.
+#'
+#' @param case_label_aes A named list of
+#' arguments to be passed to
+#' [ggrepel::geom_label_repel()] to
+#' modify how to draw the labels for
+#' cases marked (based on arguments
+#' such as `cutoff_gcd` or `largest_gcd`).
+#' Default is `list()` and internal
+#' default settings will be used.
+#'
 #' @return A [ggplot2] plot. Plotted by default. If assigned to a variable
 #' or called inside a function, it will not be plotted. Use [plot()] to
 #' plot it.
@@ -152,10 +210,28 @@ NULL
 
 gcd_plot <- function(influence_out,
                      cutoff_gcd = NULL,
-                     largest_gcd = 1) {
+                     largest_gcd = 1,
+                     point_aes = list(),
+                     vline_aes = list(),
+                     cutoff_line_aes = list(),
+                     case_label_aes = list()
+                     ) {
   if (missing(influence_out)) {
       stop("No influence_stat output supplied.")
     }
+
+  point_aes <- utils::modifyList(list(),
+                                 point_aes)
+
+  vline_aes <- utils::modifyList(list(linewidth = 1,
+                                      lineend = "butt"),
+                                  vline_aes)
+  # The following part should never be changed by users.
+  vline_aes <- utils::modifyList(vline_aes,
+                                  list(mapping = ggplot2::aes(
+                                            xend = .data[["row_id"]],
+                                            yend = 0)))
+
   case_ids <- rownames(influence_out)
   row_id   <- seq_len(nrow(influence_out))
   dat <- data.frame(row_id = row_id,
@@ -170,20 +246,20 @@ gcd_plot <- function(influence_out,
     } else {
       gcd_label <- "Generalized Cook's Distance"
     }
-  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$gcd)) +
-         ggplot2::geom_point() +
-         ggplot2::labs(title = gcd_label) +
-         ggplot2::geom_segment(
-                    ggplot2::aes(xend = .data$row_id,
-                                 yend = 0),
-                                 size = 1,
-                                 lineend = "butt") +
-         ggplot2::xlab("Row Number") +
+  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$gcd))
+  p <- p + do.call(ggplot2::geom_point, point_aes)
+  p <- p + ggplot2::labs(title = gcd_label)
+  p <- p + do.call(ggplot2::geom_segment, vline_aes)
+  p <- p + ggplot2::xlab("Row Number") +
          ggplot2::ylab(gcd_label)
 
   if (is.numeric(cutoff_gcd)) {
-      p <- p + ggplot2::geom_hline(yintercept = cutoff_gcd,
-                                   linetype = "dashed")
+      cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                                cutoff_line_aes)
+      # The following part should never be changed by users.
+      cutoff_line_aes <- utils::modifyList(cutoff_line_aes,
+                                    list(yintercept = cutoff_gcd))
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes)
       c_gcd_cut <- cutoff_gcd
     } else {
       c_gcd_cut <- Inf
@@ -196,10 +272,17 @@ gcd_plot <- function(influence_out,
       m_gcd_cut <- Inf
     }
   label_gcd <- (dat$gcd >= c_gcd_cut) | (dat$gcd >= m_gcd_cut)
-  p <- p + ggrepel::geom_label_repel(
-              data = dat[label_gcd, ],
-              ggplot2::aes(.data$row_id, .data$gcd, label = .data$case_id),
-              position = ggplot2::position_dodge(.5))
+
+  case_label_aes <- utils::modifyList(list(position = ggplot2::position_dodge(.5)),
+                                  case_label_aes)
+  # The following part should never be changed by users.
+  case_label_aes <- utils::modifyList(case_label_aes,
+                        list(data = dat[label_gcd, ],
+                             mapping = ggplot2::aes(
+                                x = .data[["row_id"]],
+                                y = .data[["gcd"]],
+                                label = .data[["case_id"]])))
+  p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
   p
 }
 
@@ -210,7 +293,12 @@ gcd_plot <- function(influence_out,
 md_plot <- function(influence_out,
                     cutoff_md = FALSE,
                     cutoff_md_qchisq = .975,
-                    largest_md = 1) {
+                    largest_md = 1,
+                    point_aes = list(),
+                    vline_aes = list(),
+                    cutoff_line_aes = list(),
+                    case_label_aes = list()
+                    ) {
   if (missing(influence_out)) {
       stop("No influence_stat output supplied.")
     }
@@ -218,6 +306,19 @@ md_plot <- function(influence_out,
       stop(paste("The original lavaan output is not in the attributes.",
                  "Was subsetting used to get influence_out?"))
     }
+
+  point_aes <- utils::modifyList(list(),
+                                  point_aes)
+
+  vline_aes <- utils::modifyList(list(linewidth = 1,
+                                      lineend = "butt"),
+                                  vline_aes)
+  # The following part should never be changed by users.
+  vline_aes <- utils::modifyList(vline_aes,
+                                  list(mapping = ggplot2::aes(
+                                            xend = .data[["row_id"]],
+                                            yend = 0)))
+
   fit0 <- attr(influence_out, "fit")
   case_ids <- rownames(influence_out)
   row_id   <- seq_len(nrow(influence_out))
@@ -230,14 +331,10 @@ md_plot <- function(influence_out,
       stop("All cases have no value on Mahalanobis distance (md).")
     }
 
-  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$md)) +
-         ggplot2::geom_point() +
-         ggplot2::geom_segment(
-                    ggplot2::aes(xend = .data$row_id,
-                                 yend = 0),
-                                 size = 1,
-                                 lineend = "butt") +
-         ggplot2::labs(title = "Mahalanobis Distance") +
+  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$md))
+  p <- p + do.call(ggplot2::geom_point, point_aes)
+  p <- p + do.call(ggplot2::geom_segment, vline_aes)
+  p <- p + ggplot2::labs(title = "Mahalanobis Distance") +
          ggplot2::xlab("Row Number") +
          ggplot2::ylab("Mahalanobis Distance")
 
@@ -257,14 +354,25 @@ md_plot <- function(influence_out,
       m_md_cut <- Inf
     }
   if (is.numeric(c_md_cut) && c_md_cut < Inf) {
-    p <- p + ggplot2::geom_hline(yintercept = c_md_cut,
-                             linetype = "dashed")
+      cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                                cutoff_line_aes)
+      # The following part should never be changed by users.
+      cutoff_line_aes <- utils::modifyList(cutoff_line_aes,
+                                    list(yintercept = c_md_cut))
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes)
     }
   label_md <- (dat$md >= c_md_cut) | (dat$md >= m_md_cut)
-  p <- p + ggrepel::geom_label_repel(
-              data = dat[label_md, ],
-              ggplot2::aes(.data$row_id, .data$md, label = .data$case_id),
-              position = ggplot2::position_dodge(.5))
+
+  case_label_aes <- utils::modifyList(list(position = ggplot2::position_dodge(.5)),
+                                  case_label_aes)
+  # The following part should never be changed by users.
+  case_label_aes <- utils::modifyList(case_label_aes,
+                        list(data = dat[label_md, ],
+                             mapping = ggplot2::aes(
+                                x = .data[["row_id"]],
+                                y = .data[["md"]],
+                                label = .data[["case_id"]])))
+  p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
   p
 }
 
@@ -278,7 +386,13 @@ gcd_gof_plot <- function(influence_out,
                          cutoff_gcd = NULL,
                          cutoff_fit_measure = NULL,
                          largest_gcd = 1,
-                         largest_fit_measure = 1) {
+                         largest_fit_measure = 1,
+                         point_aes = list(),
+                         hline_aes = list(),
+                         cutoff_line_gcd_aes = list(),
+                         cutoff_line_fit_measures_aes = list(),
+                         case_label_aes = list()
+                         ) {
   if (missing(influence_out)) {
       stop("No influence_stat output supplied.")
     }
@@ -304,20 +418,33 @@ gcd_gof_plot <- function(influence_out,
       change_label <- "Change in Fit Measure"
     }
 
-  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$gcd, .data$fm)) +
-         ggplot2::geom_point() +
-         ggplot2::labs(title =
-            paste0(change_label, " against\n", gcd_label)) +
-         ggplot2::geom_hline(yintercept = 0,
-                             linetype = "solid") +
-         ggplot2::xlab(gcd_label) +
-         ggplot2::ylab(change_label)
+  point_aes <- utils::modifyList(list(),
+                                 point_aes)
+
+  hline_aes <- utils::modifyList(list(linetype = "solid"),
+                                  hline_aes)
+  # The following part should never be changed by users.
+  hline_aes <- utils::modifyList(hline_aes,
+                                  list(yintercept = 0))
+
+  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$gcd, .data$fm))
+  p <- p + do.call(ggplot2::geom_point, point_aes)
+  p <- p + ggplot2::labs(title =
+            paste0(change_label, " against\n", gcd_label))
+  p <- p + do.call(ggplot2::geom_hline, hline_aes)
+  p <- p + ggplot2::xlab(gcd_label) +
+           ggplot2::ylab(change_label)
 
   if (is.numeric(cutoff_fit_measure)) {
-      p <- p +  ggplot2::geom_hline(yintercept = cutoff_fit_measure,
-                               linetype = "dashed") +
-                ggplot2::geom_hline(yintercept = -1 * cutoff_fit_measure,
-                                 linetype = "dashed")
+      cutoff_line_fit_measures_aes <- utils::modifyList(list(linetype = "dashed"),
+                                    cutoff_line_fit_measures_aes)
+      # The following part should never be changed by users.
+      cutoff_line_fit_measures_aes1 <- utils::modifyList(cutoff_line_fit_measures_aes,
+                                    list(yintercept = cutoff_fit_measure))
+      cutoff_line_fit_measures_aes2 <- utils::modifyList(cutoff_line_fit_measures_aes,
+                                    list(yintercept = -cutoff_fit_measure))
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_fit_measures_aes1)
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_fit_measures_aes2)
       c_fm_cut <- abs(cutoff_fit_measure)
     } else {
       c_fm_cut <- Inf
@@ -332,8 +459,12 @@ gcd_gof_plot <- function(influence_out,
   label_fm <- (abs(dat$fm) >= c_fm_cut) | (abs(dat$fm) >= m_fm_cut)
 
   if (is.numeric(cutoff_gcd)) {
-      p <- p + ggplot2::geom_vline(xintercept = cutoff_gcd,
-                                   linetype = "dashed")
+      cutoff_line_gcd_aes <- utils::modifyList(list(linetype = "dashed"),
+                                    cutoff_line_gcd_aes)
+      # The following part should never be changed by users.
+      cutoff_line_gcd_aes <- utils::modifyList(cutoff_line_gcd_aes,
+                                    list(xintercept = cutoff_gcd))
+      p <- p + do.call(ggplot2::geom_vline, cutoff_line_gcd_aes)
       c_gcd_cut <- cutoff_gcd
     } else {
       c_gcd_cut <- Inf
@@ -347,9 +478,17 @@ gcd_gof_plot <- function(influence_out,
     }
   label_gcd <- (dat$gcd >= c_gcd_cut) | (dat$gcd >= m_gcd_cut)
 
-  p <- p + ggrepel::geom_label_repel(
-              data = dat[label_gcd | label_fm, ],
-              ggplot2::aes(.data$gcd, .data$fm, label = .data$case_id))
+  case_label_aes <- utils::modifyList(list(),
+                                  case_label_aes)
+  # The following part should never be changed by users.
+  case_label_aes <- utils::modifyList(case_label_aes,
+                        list(data = dat[label_gcd | label_fm, ],
+                             mapping = ggplot2::aes(
+                                x = .data[["gcd"]],
+                                y = .data[["fm"]],
+                                label = .data[["case_id"]])))
+  p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
+
   p
 }
 
@@ -368,7 +507,14 @@ gcd_gof_md_plot <- function(influence_out,
                             cutoff_gcd = NULL,
                             largest_gcd = 1,
                             largest_md = 1,
-                            largest_fit_measure = 1) {
+                            largest_fit_measure = 1,
+                            point_aes = list(),
+                            hline_aes = list(),
+                            cutoff_line_md_aes = list(),
+                            cutoff_line_gcd_aes = list(),
+                            cutoff_line_fit_measures_aes = list(),
+                            case_label_aes = list()
+                            ) {
   if (missing(influence_out)) {
       stop("No influence_stat output supplied.")
     }
@@ -404,12 +550,24 @@ gcd_gof_md_plot <- function(influence_out,
       change_label <- "Change in Fit Measure"
     }
 
-  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$md, .data$fm)) +
-         ggplot2::geom_point(ggplot2::aes(size = .data$gcd),
-                             shape = 21,
-                             alpha = .50,
-                             fill = "white") +
-         ggplot2::scale_size_area(name = gcd_label_short,
+  point_aes <- utils::modifyList(list(shape = 21,
+                                      alpha = .50,
+                                      fill = "white"),
+                                 point_aes)
+  # The following part should never be changed by users.
+  point_aes <- utils::modifyList(point_aes,
+                        list(mapping = ggplot2::aes(size = .data[["gcd"]])))
+
+  hline_aes <- utils::modifyList(list(linetype = "solid"),
+                                  hline_aes)
+  # The following part should never be changed by users.
+  hline_aes <- utils::modifyList(hline_aes,
+                                  list(yintercept = 0))
+
+  p <- ggplot2::ggplot(dat, ggplot2::aes(.data$md, .data$fm))
+  p <- p + do.call(ggplot2::geom_point, point_aes)
+  p <- p + do.call(ggplot2::geom_hline, hline_aes)
+  p <- p + ggplot2::scale_size_area(name = gcd_label_short,
                                   max_size = circle_size) +
          ggplot2::labs(title =
             paste0(change_label, " against Mahalanobis Distance,\n",
@@ -418,10 +576,15 @@ gcd_gof_md_plot <- function(influence_out,
          ggplot2::ylab(change_label)
 
   if (is.numeric(cutoff_fit_measure)) {
-      p <- p +  ggplot2::geom_hline(yintercept = cutoff_fit_measure,
-                               linetype = "dashed") +
-                ggplot2::geom_hline(yintercept = -1 * cutoff_fit_measure,
-                                 linetype = "dashed")
+      cutoff_line_fit_measures_aes <- utils::modifyList(list(linetype = "dashed"),
+                                    cutoff_line_fit_measures_aes)
+      # The following part should never be changed by users.
+      cutoff_line_fit_measures_aes1 <- utils::modifyList(cutoff_line_fit_measures_aes,
+                                    list(yintercept = cutoff_fit_measure))
+      cutoff_line_fit_measures_aes2 <- utils::modifyList(cutoff_line_fit_measures_aes,
+                                    list(yintercept = -cutoff_fit_measure))
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_fit_measures_aes1)
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_fit_measures_aes2)
       c_fm_cut <- abs(cutoff_fit_measure)
     } else {
       c_fm_cut <- Inf
@@ -451,14 +614,16 @@ gcd_gof_md_plot <- function(influence_out,
       m_md_cut <- Inf
     }
   if (is.numeric(c_md_cut) && c_md_cut < Inf) {
-  p <- p + ggplot2::geom_vline(xintercept = c_md_cut,
-                             linetype = "dashed")
+      cutoff_line_md_aes <- utils::modifyList(list(linetype = "dashed"),
+                                    cutoff_line_md_aes)
+      # The following part should never be changed by users.
+      cutoff_line_md_aes <- utils::modifyList(cutoff_line_md_aes,
+                                    list(xintercept = c_md_cut))
+      p <- p + do.call(ggplot2::geom_vline, cutoff_line_md_aes)
     }
   label_md <- (dat$md >= c_md_cut) | (dat$md >= m_md_cut)
 
   if (is.numeric(cutoff_gcd)) {
-      p <- p + ggplot2::geom_hline(yintercept = cutoff_gcd,
-                                   linetype = "dashed")
       c_gcd_cut <- cutoff_gcd
     } else {
       c_gcd_cut <- Inf
@@ -472,9 +637,15 @@ gcd_gof_md_plot <- function(influence_out,
     }
   label_gcd <- (dat$gcd >= c_gcd_cut) | (dat$gcd >= m_gcd_cut)
 
-  p <- p + ggrepel::geom_label_repel(
-              data = dat[label_fm | label_md | label_gcd, ],
-              ggplot2::aes(.data$md, .data$fm, label = .data$case_id))
-
+  case_label_aes <- utils::modifyList(list(),
+                                  case_label_aes)
+  # The following part should never be changed by users.
+  case_label_aes <- utils::modifyList(case_label_aes,
+                        list(data = dat[label_fm | label_md | label_gcd, ],
+                             mapping = ggplot2::aes(
+                                x = .data[["md"]],
+                                y = .data[["fm"]],
+                                label = .data[["case_id"]])))
+  p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
   p
 }
