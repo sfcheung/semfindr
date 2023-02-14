@@ -1,6 +1,6 @@
 #' @title Rerun a 'lavaan' Analysis Using the Leaving-One-Out Approach
 #'
-#' @description [lavaan_rerun()] reruns a `lavaan` analysis several
+#' @description Reruns a `lavaan` analysis several
 #' times, each time with one case removed.
 #'
 #' @details [lavaan_rerun()] gets an [lavaan::lavaan()] output and

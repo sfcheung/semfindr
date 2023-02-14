@@ -1,7 +1,8 @@
 #' @title Standardized Case Influence on Parameter Estimates (Approximate)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
-#' approximate standardized changes in selected parameters for each case.
+#' approximate standardized changes in selected parameters for each case
+#' if included.
 #'
 #' @details For each case, [est_change_approx()] computes the
 #' approximate differences in the estimates of selected parameters
@@ -59,11 +60,13 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix with the number of columns equal to the number of
-#' requested parameters, and the number of rows equal to the number
+#' @return A matrix. The number of columns is equal to the number of
+#' requested parameters plus one, the last column being the
+#' approximate generalized Cook's
+#' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
-#' [lavaan_rerun()]. The elements are the standardized differences.
-#' Please see Pek and MacCallum (2011), Equation 7.
+#' [lavaan_rerun()]. The elements are approximate standardized
+#' differences.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
 #' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.

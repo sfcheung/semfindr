@@ -1,7 +1,7 @@
 #' @title Case Influence on Fit Measures
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the changes
-#' in selected fit measures if a case is deleted
+#' in selected fit measures if a case is included.
 #'
 #' @details For each case, [fit_measures_change()] computes the
 #' differences in selected fit measures with and without this case:

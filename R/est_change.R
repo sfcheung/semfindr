@@ -1,7 +1,8 @@
 #' @title Standardized Case Influence on Parameter Estimates
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the
-#' standardized changes in selected parameters for each case.
+#' standardized changes in selected parameters for each case
+#' if included.
 #'
 #' @details For each case, [est_change()] computes the differences in
 #' the estimates of selected parameters with and without this case:
@@ -34,8 +35,10 @@
 #' If omitted or `NULL`, the
 #' default, changes on all free parameters will be computed.
 #'
-#' @return A matrix with the number of columns equal to the number of
-#' requested parameters, and the number of rows equal to the number
+#' @return A matrix. The number of columns is equal to the number of
+#' requested parameters plus one, the last column being the
+#' approximate generalized Cook's
+#' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. The elements are the standardized difference.
 #' Please see Pek and MacCallum (2011), Equation 7.

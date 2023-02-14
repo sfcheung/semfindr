@@ -1,7 +1,8 @@
 #' @title Case Influence on Parameter Estimates (Approximate)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
-#' approximate changes in selected parameters for each case.
+#' approximate changes in selected parameters for each case
+#' if included.
 #'
 #' @details For each case, [est_change_raw_approx()] computes the
 #' approximate differences

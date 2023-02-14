@@ -1,7 +1,7 @@
 #' @title Case Influence on Parameter Estimates
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the
-#' changes in selected parameters for each case.
+#' changes in selected parameters for each case if included.
 #'
 #' @details For each case, [est_change_raw()] computes the differences
 #' in the estimates of selected parameters with and without this

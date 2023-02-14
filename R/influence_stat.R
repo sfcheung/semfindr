@@ -1,7 +1,7 @@
 #' @title Case Influence Measures
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the changes
-#' in selected parameters and fit measures for each case.
+#' in selected parameters and fit measures for each case if included.
 #'
 #' @details For each case, [influence_stat()] computes the differences
 #' in the estimates of selected parameters and fit measures with and

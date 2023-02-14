@@ -2,7 +2,7 @@
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
 #' approximate change
-#' in selected fit measures if a case is deleted.
+#' in selected fit measures if a case is included.
 #'
 #' @details For each case, [fit_measures_change_approx()] computes the
 #' approximate differences in selected fit measures with and

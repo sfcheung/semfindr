@@ -1,6 +1,6 @@
 #' @title Plots of Influence Measures
 #'
-#' @description Gets a [influence_stat()] output and plots selected
+#' @description Gets an [influence_stat()] output and plots selected
 #' statistics.
 #'
 #' @details The output of [influence_stat()] is simply a matrix.
