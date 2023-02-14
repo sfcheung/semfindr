@@ -1,8 +1,11 @@
-# semfindr 0.1.1.2
+# semfindr 0.1.1.3
 
 - Added DOI of Pek and MacCallum in the DESCRIPTION. (0.1.1.1)
 - Added `approx_check()` to check whether the input object
   is supported by the approximate method. (0.1.1.2)
+- Added `est_change_plot()` and `est_change_gcd_plot()`,
+  diagnostic plots for casewise influence on
+  parameter estimates. (0.1.1.3)
 
 # semfindr 0.1.1
 

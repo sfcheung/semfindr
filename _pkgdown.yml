@@ -38,6 +38,7 @@ reference:
 - title: Plots
 - contents:
   - influence_plot
+  - est_change_plot
 - title: Others
 - contents:
   - mahalanobis_predictors
