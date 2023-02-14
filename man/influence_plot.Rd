@@ -8,13 +8,25 @@
 \alias{gcd_gof_md_plot}
 \title{Plots of Influence Measures}
 \usage{
-gcd_plot(influence_out, cutoff_gcd = NULL, largest_gcd = 1)
+gcd_plot(
+  influence_out,
+  cutoff_gcd = NULL,
+  largest_gcd = 1,
+  point_aes = list(),
+  vline_aes = list(),
+  cutoff_line_aes = list(),
+  case_label_aes = list()
+)
 
 md_plot(
   influence_out,
   cutoff_md = FALSE,
   cutoff_md_qchisq = 0.975,
-  largest_md = 1
+  largest_md = 1,
+  point_aes = list(),
+  vline_aes = list(),
+  cutoff_line_aes = list(),
+  case_label_aes = list()
 )
 
 gcd_gof_plot(
@@ -23,7 +35,12 @@ gcd_gof_plot(
   cutoff_gcd = NULL,
   cutoff_fit_measure = NULL,
   largest_gcd = 1,
-  largest_fit_measure = 1
+  largest_fit_measure = 1,
+  point_aes = list(),
+  hline_aes = list(),
+  cutoff_line_gcd_aes = list(),
+  cutoff_line_fit_measures_aes = list(),
+  case_label_aes = list()
 )
 
 gcd_gof_md_plot(
@@ -36,7 +53,13 @@ gcd_gof_md_plot(
   cutoff_gcd = NULL,
   largest_gcd = 1,
   largest_md = 1,
-  largest_fit_measure = 1
+  largest_fit_measure = 1,
+  point_aes = list(),
+  hline_aes = list(),
+  cutoff_line_md_aes = list(),
+  cutoff_line_gcd_aes = list(),
+  cutoff_line_fit_measures_aes = list(),
+  case_label_aes = list()
 )
 }
 \arguments{
@@ -51,6 +74,39 @@ cutoff line will be drawn.}
 Cook's distance or approximate generalized Cook's distance
 to be labelled. Default is 1. If not an integer, it
 will be rounded to the nearest integer.}
+
+\item{point_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}} to modify how
+to draw the points. Default is
+\code{list()} and internal default
+settings will be used.}
+
+\item{vline_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}} to modify how
+to draw the line for each case
+in the index plot. Default is
+\code{list()} and internal default
+settings will be used.}
+
+\item{cutoff_line_aes}{A named list
+of arguments to be passed to
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_vline()}} or
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} to modify how
+to draw the line for user cutoff
+value. Default is \code{list()}
+and internal default settings will be
+used.}
+
+\item{case_label_aes}{A named list of
+arguments to be passed to
+\code{\link[ggrepel:geom_text_repel]{ggrepel::geom_label_repel()}} to
+modify how to draw the labels for
+cases marked (based on arguments
+such as \code{cutoff_gcd} or \code{largest_gcd}).
+Default is \code{list()} and internal
+default settings will be used.}
 
 \item{cutoff_md}{Cases with Mahalanobis distance larger than this
 value will be labeled. If it is \code{TRUE}, the (\code{cutoff_md_qchisq} x
@@ -80,8 +136,31 @@ selected fit measure change in magnitude to be labelled. Default is
 \item If not an integer, it will be rounded to the nearest integer.
 }}
 
+\item{hline_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} to modify how
+to draw the horizontal line for zero
+case influence. Default is \code{list()}
+and internal default settings will be
+used.}
+
+\item{cutoff_line_gcd_aes}{Similar
+to \code{cutoff_line_aes} but control
+the line for the cutoff value of
+\emph{gCD}.}
+
+\item{cutoff_line_fit_measures_aes}{Similar
+to \code{cutoff_line_aes} but control
+the line for the cutoff value of
+the selected fit measure.}
+
 \item{circle_size}{The size of the largest circle when the size
 of a circle is controlled by a statistic.}
+
+\item{cutoff_line_md_aes}{Similar
+to \code{cutoff_line_aes} but control
+the line for the cutoff value of
+the Mahalanobis distance.}
 }
 \value{
 A \link{ggplot2} plot. Plotted by default. If assigned to a variable
