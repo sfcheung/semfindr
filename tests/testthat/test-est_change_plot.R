@@ -78,7 +78,7 @@ est_change_gcd_plot(fit_est_change_approx, parameters = params)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, cutoff_gcd = .1)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, cutoff_gcd = .2)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5)
-est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5, cutoff_gcd = .3, circle_size = 15)
+est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5, cutoff_gcd = .3)
 
 # CFA model with selected loadings
 
@@ -101,5 +101,5 @@ est_change_gcd_plot(fit_est_change_approx, parameters = params)
 est_change_gcd_plot(fit_est_change_approx, parameters = "=~", cutoff_gcd = 1)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, cutoff_gcd = .2)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5)
-est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5, cutoff_gcd = .3, circle_size = 15)
+est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5, cutoff_gcd = .3)
 

@@ -6,14 +6,31 @@
 \title{Plots of Case Influence on
 Parameter Estimates}
 \usage{
-est_change_plot(change, parameters, cutoff_change = NULL, largest_change = 1)
+est_change_plot(
+  change,
+  parameters,
+  cutoff_change = NULL,
+  largest_change = 1,
+  title = TRUE,
+  point_aes = list(),
+  vline_aes = list(),
+  hline_aes = list(),
+  cutoff_line_aes = list(),
+  case_label_aes = list(),
+  wrap_aes = list()
+)
 
 est_change_gcd_plot(
   change,
   parameters,
   cutoff_gcd = NULL,
   largest_gcd = 1,
-  circle_size = 10
+  title = TRUE,
+  point_aes = list(),
+  hline_aes = list(),
+  cutoff_line_aes = list(),
+  case_label_aes = list(),
+  wrap_aes = list()
 )
 }
 \arguments{
@@ -54,6 +71,65 @@ changes to be labelled. Default is
 rounded to the nearest integer.
 }}
 
+\item{title}{If \code{TRUE}, the default,
+a default title will be added to
+the plot. If it is a string, it will
+be used as the title. If \code{FALSE},
+no title will be added to the plot.}
+
+\item{point_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}} to modify how
+to draw the points. Default is
+\code{list()} and internal default
+settings will be used.}
+
+\item{vline_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_segment]{ggplot2::geom_segment()}} to modify how
+to draw the line for each case
+in the index plot by
+\code{\link[=est_change_plot]{est_change_plot()}}. Default is
+\code{list()} and internal default
+settings will be used.}
+
+\item{hline_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} to modify how
+to draw the horizontal line for zero
+case influence. Default is \code{list()}
+and internal default settings will be
+used.}
+
+\item{cutoff_line_aes}{A named list
+of arguments to be passed to
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} in
+\code{\link[=est_change_plot]{est_change_plot()}} or
+\code{\link[ggplot2:geom_abline]{ggplot2::geom_vline()}} in
+\code{\link[=est_change_gcd_plot]{est_change_gcd_plot()}} to modify how
+to draw the line for user cutoff
+value (\code{cutoff_change} or
+\code{cutoff_gcd}). Default is \code{list()}
+and internal default settings will be
+used.}
+
+\item{case_label_aes}{A named list of
+arguments to be passed to
+\code{\link[ggrepel:geom_text_repel]{ggrepel::geom_label_repel()}} to
+modify how to draw the labels for
+cases marked (based on
+\code{cutoff_change}, \code{cutoff_gcd},
+\code{largest_change}, or \code{largest_gcd}).
+Default is \code{list()} and internal
+default settings will be used.}
+
+\item{wrap_aes}{A named list of
+arguments to be passed to
+\code{\link[ggplot2:facet_wrap]{ggplot2::facet_wrap()}} to modify how
+the plots are organized. Default is
+\code{list()} and internal default
+settings will be used.}
+
 \item{cutoff_gcd}{Cases with
 generalized Cook's distance or
 approximate generalized Cook's
@@ -68,10 +144,6 @@ generalized Cook's distance to be
 labelled. Default is 1. If not an
 integer, it will be rounded to the
 nearest integer.}
-
-\item{circle_size}{The size of the
-largest circle when the size of a
-circle is controlled by a statistic.}
 }
 \value{
 A \link{ggplot2} plot. Plotted by
@@ -100,10 +172,12 @@ are stored as row names.
 }
 \section{Functions}{
 \itemize{
-\item \code{est_change_plot()}: Index plot of case influence on parameters.
+\item \code{est_change_plot()}: Index
+plot of case influence on parameters.
 
-\item \code{est_change_gcd_plot()}: Plot case influence against
-generalized Cook's distance.
+\item \code{est_change_gcd_plot()}: Plot case
+influence on parameter estimates
+against generalized Cook's distance.
 
 }}
 \examples{
@@ -127,6 +201,11 @@ summary(fit)
 # Compute approximate case influence on parameters estimates
 out <- est_change_approx(fit)
 
+# Plot case influence for all regression coefficients
+est_change_plot(out,
+                parameters = "~",
+                largest_change = 2)
+
 # Plot case influence against approximated gCD for all
 # regression coefficients
 # Label top 5 cases with largest approximated gCD
@@ -146,8 +225,10 @@ Behavioral Research, 46}(2),
 doi:10.1080/00273171.2011.561068
 }
 \seealso{
-\code{\link[=est_change]{est_change()}}, \code{\link[=est_change_raw]{est_change_raw()}},
-\code{\link[=est_change_approx]{est_change_approx()}}, and \code{\link[=est_change_raw_approx]{est_change_raw_approx()}}.
+\code{\link[=est_change]{est_change()}},
+\code{\link[=est_change_raw]{est_change_raw()}},
+\code{\link[=est_change_approx]{est_change_approx()}}, and
+\code{\link[=est_change_raw_approx]{est_change_raw_approx()}}.
 }
 \author{
 Shu Fai Cheung

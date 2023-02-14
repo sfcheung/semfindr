@@ -69,9 +69,64 @@
 #' integer, it will be rounded to the
 #' nearest integer.
 #'
-#' @param circle_size The size of the
-#' largest circle when the size of a
-#' circle is controlled by a statistic.
+#' @param title If `TRUE`, the default,
+#' a default title will be added to
+#' the plot. If it is a string, it will
+#' be used as the title. If `FALSE`,
+#' no title will be added to the plot.
+#'
+#' @param point_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_point()] to modify how
+#' to draw the points. Default is
+#' `list()` and internal default
+#' settings will be used.
+#'
+#' @param vline_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_segment()] to modify how
+#' to draw the line for each case
+#' in the index plot by
+#' [est_change_plot()]. Default is
+#' `list()` and internal default
+#' settings will be used.
+#'
+#' @param hline_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::geom_hline()] to modify how
+#' to draw the horizontal line for zero
+#' case influence. Default is `list()`
+#' and internal default settings will be
+#' used.
+#'
+#' @param cutoff_line_aes A named list
+#' of arguments to be passed to
+#' [ggplot2::geom_hline()] in
+#' [est_change_plot()] or
+#' [ggplot2::geom_vline()] in
+#' [est_change_gcd_plot()] to modify how
+#' to draw the line for user cutoff
+#' value (`cutoff_change` or
+#' `cutoff_gcd`). Default is `list()`
+#' and internal default settings will be
+#' used.
+#'
+#' @param case_label_aes A named list of
+#' arguments to be passed to
+#' [ggrepel::geom_label_repel()] to
+#' modify how to draw the labels for
+#' cases marked (based on
+#' `cutoff_change`, `cutoff_gcd`,
+#' `largest_change`, or `largest_gcd`).
+#' Default is `list()` and internal
+#' default settings will be used.
+#'
+#' @param wrap_aes A named list of
+#' arguments to be passed to
+#' [ggplot2::facet_wrap()] to modify how
+#' the plots are organized. Default is
+#' `list()` and internal default
+#' settings will be used.
 #'
 #' @return A [ggplot2] plot. Plotted by
 #' default. If assigned to a variable or
@@ -102,6 +157,11 @@
 #' # Compute approximate case influence on parameters estimates
 #' out <- est_change_approx(fit)
 #'
+#' # Plot case influence for all regression coefficients
+#' est_change_plot(out,
+#'                 parameters = "~",
+#'                 largest_change = 2)
+#'
 #' # Plot case influence against approximated gCD for all
 #' # regression coefficients
 #' # Label top 5 cases with largest approximated gCD
@@ -118,48 +178,81 @@
 #'  202-228.
 #'  doi:10.1080/00273171.2011.561068
 #'
-#' @seealso [est_change()], [est_change_raw()],
-#' [est_change_approx()], and [est_change_raw_approx()].
+#' @seealso [est_change()],
+#' [est_change_raw()],
+#' [est_change_approx()], and
+#' [est_change_raw_approx()].
 #'
 #' @name est_change_plot
 NULL
 
 #' @importFrom rlang .data
-#' @describeIn est_change_plot Index plot of case influence on parameters.
+#' @describeIn est_change_plot Index
+#' plot of case influence on parameters.
 #' @export
 
 est_change_plot <- function(change,
                             parameters,
                             cutoff_change = NULL,
-                            largest_change = 1) {
+                            largest_change = 1,
+                            title = TRUE,
+                            point_aes = list(),
+                            vline_aes = list(),
+                            hline_aes = list(),
+                            cutoff_line_aes = list(),
+                            case_label_aes = list(),
+                            wrap_aes = list()
+                            ) {
+
+    point_aes <- utils::modifyList(list(shape = 21,
+                                        color = "black",
+                                        fill = "grey",
+                                        alpha = .75,
+                                        size = 1),
+                                   point_aes)
+
+    vline_aes <- utils::modifyList(list(linewidth = .5,
+                                        lineend = "butt"),
+                                   vline_aes)
+    # The following part should never be changed by users.
+    vline_aes <- utils::modifyList(vline_aes,
+                                   list(mapping = ggplot2::aes(
+                                              xend = .data[["row_id"]],
+                                              yend = 0)))
+
+    hline_aes <- utils::modifyList(list(linetype = "solid",
+                                        color = "grey"),
+                                   hline_aes)
+    # The following part should never be changed by users.
+    hline_aes <- utils::modifyList(hline_aes,
+                                   list(yintercept = 0))
+
     parameters <- params_selected(change = change,
                                   parameters = parameters)
-    x1 <- cbind(change, gcd = NA)
-    x0 <- est_to_long(x1)
+    # x1 <- cbind(change, gcd = NA)
+    x0 <- est_to_long(change)
     if (!missing(parameters)) {
         x0 <- x0[x0$param %in% parameters, ]
       }
     x0$gcd <- NULL
     x0$row_id <- as.integer(seq_len(nrow(change)))
     p <- ggplot2::ggplot(data = x0, ggplot2::aes(x = .data[["row_id"]],
-                                                 y = .data[["change"]])) +
-          ggplot2::geom_point() +
-          # ggplot2::labs(title = gcd_label) +
-          ggplot2::geom_segment(
-                      ggplot2::aes(xend = .data[["row_id"]],
-                                   yend = 0),
-                                   linewidth = 1,
-                                   lineend = "butt") +
-          ggplot2::geom_hline(yintercept = 0,
-                              linetype = "solid",
-                              color = "grey") +
-          ggplot2::xlab("Row ID") +
-          ggplot2::ylab("Change")
+                                                 y = .data[["change"]]))
+    p <- p + do.call(ggplot2::geom_point, point_aes)
+    p <- p + do.call(ggplot2::geom_segment, vline_aes)
+    p <- p + do.call(ggplot2::geom_hline, hline_aes)
+    p <- p + ggplot2::xlab("Row ID") +
+             ggplot2::ylab("Change")
     if (is.numeric(cutoff_change)) {
-        p <- p + ggplot2::geom_hline(yintercept = cutoff_change,
-                                    linetype = "dashed")
-        p <- p + ggplot2::geom_hline(yintercept = -1 * cutoff_change,
-                                    linetype = "dashed")
+        cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                                  cutoff_line_aes)
+        # The following part should never be changed by users.
+        cutoff_line_aes1 <- utils::modifyList(cutoff_line_aes,
+                                      list(yintercept = cutoff_change))
+        cutoff_line_aes2 <- utils::modifyList(cutoff_line_aes,
+                                      list(yintercept = -cutoff_change))
+        p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes1)
+        p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes2)
         c_change_i <- abs(x0$change) >= cutoff_change
       } else {
         c_change_i <- rep(FALSE, nrow(x0))
@@ -180,30 +273,74 @@ est_change_plot <- function(change,
         m_change_i <- rep(FALSE, nrow(x0))
       }
     label_i <- c_change_i | m_change_i
-    p <- p + ggrepel::geom_label_repel(
-                data = x0[label_i, ],
-                ggplot2::aes(x = .data[["row_id"]],
-                             y = .data[["change"]],
-                             label = .data[["case"]]),
-                # position = ggplot2::position_dodge(.25),
-                min.segment.length = 0)
-    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[["param"]]),
-                        ncol = 1,
-                        scales = "free_y",
-                        strip.position = "left")
+
+    case_label_aes <- utils::modifyList(list(min.segment.length = 0),
+                                   case_label_aes)
+    # The following part should never be changed by users.
+    case_label_aes <- utils::modifyList(case_label_aes,
+                          list(data = x0[label_i, ],
+                               mapping = ggplot2::aes(
+                                  x = .data[["row_id"]],
+                                  y = .data[["change"]],
+                                  label = .data[["case"]])))
+    p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
+
+    wrap_aes <- utils::modifyList(list(ncol = 1,
+                                       scales = "free_y",
+                                       strip.position = "left"),
+                                   wrap_aes)
+    # The following part should never be changed by users.
+    wrap_aes <- utils::modifyList(wrap_aes,
+                          list(facets = ggplot2::vars(.data[["param"]])))
+
+    p <- p + do.call(ggplot2::facet_wrap, wrap_aes)
+    if (is.logical(title)) {
+        if (title) {
+            plot_title <- "Case Influence on Parameter Estimates"
+          }
+      } else if (is.character(title)) {
+            plot_title <- title
+      } else {
+        plot_title <- character(0)
+      }
+    if (length(plot_title) > 0) {
+        p <- p + ggplot2::labs(title = plot_title)
+      }
     p
   }
 
 #' @importFrom rlang .data
-#' @describeIn est_change_plot Plot case influence against
-#' generalized Cook's distance.
+#' @describeIn est_change_plot Plot case
+#' influence on parameter estimates
+#' against generalized Cook's distance.
 #' @export
 
 est_change_gcd_plot <- function(change,
                                 parameters,
                                 cutoff_gcd = NULL,
                                 largest_gcd = 1,
-                                circle_size = 10) {
+                                title = TRUE,
+                                point_aes = list(),
+                                hline_aes = list(),
+                                cutoff_line_aes = list(),
+                                case_label_aes = list(),
+                                wrap_aes = list()
+                                ) {
+    point_aes <- utils::modifyList(list(shape = 21,
+                                        color = "black",
+                                        fill = "grey",
+                                        alpha = .75,
+                                        size = 1),
+                                   point_aes)
+
+    hline_aes <- utils::modifyList(list(linetype = "solid",
+                                        color = "black",
+                                        linewidth = .5),
+                                   hline_aes)
+    # The following part should never be changed by users.
+    hline_aes <- utils::modifyList(hline_aes,
+                                   list(yintercept = 0))
+
     parameters <- params_selected(change = change,
                                   parameters = parameters)
     gcd_name <- gcd_method(change)
@@ -217,13 +354,17 @@ est_change_gcd_plot <- function(change,
       }
     p <- ggplot2::ggplot(data = x0,
                 ggplot2::aes(x = .data[[gcd_name]],
-                             y = .data[["change"]])) +
-          ggplot2::geom_point(ggplot2::aes(size = .data[[gcd_name]]),
-                              shape = 1) +
-          ggplot2::geom_hline(yintercept = 0)
+                             y = .data[["change"]]))
+    p <- p + do.call(ggplot2::geom_point, point_aes)
+    p <- p + do.call(ggplot2::geom_hline, hline_aes)
+
     if (is.numeric(cutoff_gcd)) {
-        p <- p + ggplot2::geom_vline(xintercept = cutoff_gcd,
-                                     linetype = "dashed")
+        cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                      cutoff_line_aes)
+        # The following part should never be changed by users.
+        cutoff_line_aes <- utils::modifyList(cutoff_line_aes,
+                                      list(xintercept = cutoff_gcd))
+        p <- p + do.call(ggplot2::geom_vline, cutoff_line_aes)
         c_gcd_cut <- cutoff_gcd
       } else {
         c_gcd_cut <- Inf
@@ -240,22 +381,44 @@ est_change_gcd_plot <- function(change,
       }
     label_gcd <- (x0[[gcd_name]] >= c_gcd_cut) |
                  (x0[[gcd_name]] >= m_gcd_cut)
-    p <- p + ggrepel::geom_label_repel(
-                data = x0[label_gcd, ],
-                ggplot2::aes(x = .data[[gcd_name]],
-                             y = .data[["change"]],
-                             label = .data[["case"]]),
-                # position = ggplot2::position_dodge(.25),
-                min.segment.length = 0)
-    p <- p + ggplot2::facet_wrap(ggplot2::vars(.data[["param"]]),
-                        ncol = 1,
-                        scales = "free_x",
-                        strip.position = "left")
-    p <- p + ggplot2::scale_size_area(name = gcd_name_short,
-                                      max_size = circle_size)
+
+    case_label_aes <- utils::modifyList(list(min.segment.length = 0),
+                                   case_label_aes)
+    # The following part should never be changed by users.
+    case_label_aes <- utils::modifyList(case_label_aes,
+                          list(data = x0[label_gcd, ],
+                               mapping = ggplot2::aes(
+                                  x = .data[[gcd_name]],
+                                  y = .data[["change"]],
+                                  label = .data[["case"]])))
+    p <- p + do.call(ggrepel::geom_label_repel, case_label_aes)
+
+    wrap_aes <- utils::modifyList(list(ncol = 1,
+                                       scales = "free_y",
+                                       strip.position = "left"),
+                                   wrap_aes)
+    # The following part should never be changed by users.
+    wrap_aes <- utils::modifyList(wrap_aes,
+                          list(facets = ggplot2::vars(.data[["param"]])))
+    p <- p + do.call(ggplot2::facet_wrap, wrap_aes)
+
     p <- p + ggplot2::xlab(switch(gcd_name,
               gcd = "Generalized Cook's Distance",
               gcd_approx = "Generalized Cook's Distance (Approximated)"))
+    if (is.logical(title)) {
+        if (title) {
+            plot_title <- switch(gcd_name,
+              gcd = "Case Influence on Parameter Estimates Against gCD",
+              gcd_approx = "Case Influence on Parameter Estimates Against Approximated gCD")
+          }
+      } else if (is.character(title)) {
+            plot_title <- title
+      } else {
+        plot_title <- character(0)
+      }
+    if (length(plot_title) > 0) {
+        p <- p + ggplot2::labs(title = plot_title)
+      }
     p
   }
 
@@ -278,7 +441,12 @@ gcd_method <- function(x,
 #' @noRd
 
 est_to_long <- function(x) {
-    gcd_name <- gcd_method(x)
+    gcd_name <- tryCatch(gcd_method(x),
+                         error = function(e) e)
+    if (inherits(gcd_name, "error")) {
+        x <- cbind(x, gcd = NA)
+        gcd_name <- "gcd"
+      }
     tmp <- which(colnames(x) == gcd_name)
     x0 <- x[, -tmp]
     out <- data.frame(change = as.vector(x0))
@@ -295,6 +463,8 @@ est_to_long <- function(x) {
 #' @noRd
 
 params_selected <- function(change, parameters) {
+    # Does not yet support selecting parameters from a sample
+    # in mulitsample models.
     pnames <- gsub(" ", "", colnames(change), fixed = TRUE)
     pnames <- setdiff(pnames, c("gcd", "gcd_approx"))
     if (missing(parameters)) {
