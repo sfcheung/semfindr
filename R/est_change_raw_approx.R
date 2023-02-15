@@ -83,14 +83,18 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' # Compute the approximate changes in parameter estimates if a case is removed
+#' # Compute the approximate changes in parameter estimates if a case is included
+#' # vs. if this case is excluded.
+#' # That is, the approximate case influence on parameter estimates.
 #' out_approx <- est_change_raw_approx(fit)
 #' head(out_approx)
 #' # Fit the model several times. Each time with one case removed.
 #' # For illustration, do this only for 10 selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = 1:10)
-#' # Compute the changes in parameter estimates if a case is removed
+#' # Compute the changes in parameter estimates if a case is included
+#' # vs. if this case is excluded.
+#' # That is, the case influence on the parameter estimates.
 #' out <- est_change_raw(fit_rerun)
 #' out
 #' # Compare the results
@@ -110,8 +114,10 @@
 #' # Fit the model
 #' fit <- lavaan::cfa(mod, dat)
 #' summary(fit)
-#' # Compute the approximate changes in parameter estimates if a case is removed
-#' # Compute changes for free loadings only
+#' # Compute the approximate changes in parameter estimates if a case is included
+#' # vs. if this case is excluded.
+#' # That is, approximate case influence on parameter estimates.
+#' # Compute changes for free loadings only.
 #' out_approx <- est_change_raw_approx(fit,
 #'                                     parameters = "=~")
 #' head(out_approx)
@@ -130,7 +136,9 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
-#' # Compute the approximate changes in parameter estimates if a case is removed
+#' # Compute the approximate changes in parameter estimates if a case is included
+#' # vs. if this case is excluded.
+#' # That is, the approximate case influence on parameter estimates.
 #' # Compute changes for structural paths only
 #' out_approx <- est_change_raw_approx(fit,
 #'                                     parameters = c("~"))
