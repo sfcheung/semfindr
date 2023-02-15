@@ -16,7 +16,7 @@ Authors@R: c(
 Description: Sensitivity analysis in structural equation modeling using
     influence measures and diagnostic plots. Support leave-one-out casewise
     sensitivity analysis presented by Pek and MacCallum (2011)
-    <doi:10.1080/00273171.2011.561068> and approximate casewies influence
+    <doi:10.1080/00273171.2011.561068> and approximate casewise influence
     using scores and casewise likelihood.
 URL: https://sfcheung.github.io/semfindr/
 BugReports: https://github.com/sfcheung/semfindr/issues

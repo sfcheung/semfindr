@@ -196,6 +196,6 @@ The values aligned reasonably well along the 45-degree line.
 
 # References
 
-Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. http://conservancy.umn.edu/handle/11299/37076
+Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. https://conservancy.umn.edu/handle/11299/37076
 
 Tanaka, Y., Watadani, S., & Ho Moon, S. (1991). Influence in covariance structure analysis: With an application to confirmatory factor analysis. *Communications in Statistics - Theory and Methods, 20*(12), 3805–3821. https://doi.org/10.1080/03610929108830742
