@@ -12,7 +12,7 @@ supported by lavaan_rerun()."><!-- mathjax --><script src="https://cdnjs.cloudfl
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,12 +115,12 @@ it is supported. If not, messages will be printed to indicate why.</p>
 <span class="r-in"><span><span class="va">dat</span><span class="op">$</span><span class="va">gp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gp1"</span>, <span class="st">"gp2"</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_gp</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit01</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># If supported, returns a zero</span></span></span>
+<span class="r-in"><span><span class="co"># If supported, returns a zero.</span></span></span>
 <span class="r-in"><span><span class="fu">lavaan_rerun_check</span><span class="op">(</span><span class="va">fit01</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit05</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span>, group <span class="op">=</span> <span class="st">"gp"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># If not supported, returns a negative number</span></span></span>
+<span class="r-in"><span><span class="co"># If not supported, returns a negative number.</span></span></span>
 <span class="r-in"><span><span class="fu">lavaan_rerun_check</span><span class="op">(</span><span class="va">fit05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"info")</span>

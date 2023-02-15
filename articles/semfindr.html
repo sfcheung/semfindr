@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,10 +95,10 @@ document illustrates how to use <code>semfindr</code> to do casewise
 sensitivity analysis: Assessing the influence of a case on parameter
 estimates and model fit measures.</p>
 <p>It supports two approaches: the leave-one-out approach presented by
-Pek and MacCallum (2011), and the approximate approach that approximate
-the influence without refitting a model. It can generate some plots
-based on similar plots available in the <code>car</code> package by Fox
-and Weisberg (2019) to assess the sensitivity analysis.</p>
+Pek and MacCallum (2011), and the approximate approach that approximates
+the influence of a case without refitting a model. It can generate some
+plots based on similar plots available in the <code>car</code> package
+by Fox and Weisberg (2019) for casewise sensitivity analysis.</p>
 </div>
 <div class="section level2">
 <h2 id="leave-one-out-approach">Leave-One-Out Approach<a class="anchor" aria-label="anchor" href="#leave-one-out-approach"></a>
@@ -160,12 +160,12 @@ two predictors, one mediator, and one outcome variable:</p>
 <p>We fit the model by <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">lavaan::sem()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-12</span></span>
+<span><span class="co">#&gt; This is lavaan 0.6-14</span></span>
 <span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="rerun-n-times-steps-1-to-3">Rerun <em>n</em> Times (Steps 1 to 3)<a class="anchor" aria-label="anchor" href="#rerun-n-times-steps-1-to-3"></a>
+<h3 id="rerun-n-times-step-1-to-step-3">Rerun <em>n</em> Times (Step 1 to Step 3)<a class="anchor" aria-label="anchor" href="#rerun-n-times-step-1-to-step-3"></a>
 </h3>
 <p>We refit the model 100 times, each time with one case removed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -174,14 +174,13 @@ two predictors, one mediator, and one outcome variable:</p>
 complicated models, <code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> supports parallel
 processing by setting <code>parallel</code> to <code>TRUE</code>.</p>
 <p><code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> also supports selecting cases using the
-Mahalanobis distance on all variables in the model or on the implied
-scores of outcome variables. See the help page of
-<code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> or
-<code><a href="../articles/selecting_cases.html">vignette("selecting_cases", package = "semfindr")</a></code> for
+Mahalanobis distance on all variables in the model or on the residuals
+of outcome variables. See the help page of <code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code>
+or <code><a href="../articles/selecting_cases.html">vignette("selecting_cases", package = "semfindr")</a></code> for
 details.</p>
-<p>If this process is slow, we can save the results by
-<code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">base::saveRDS()</a></code> such that we can load it for sensitivity
-analysis later, without the need to repeat this step in each R
+<p>If this process is slow, users can save the results by
+<code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">base::saveRDS()</a></code> such that users can load it for sensitivity
+analysis later, without the need to repeat these steps in each R
 session.</p>
 </div>
 <div class="section level3">
@@ -190,8 +189,8 @@ session.</p>
 <div class="section level4">
 <h4 id="standardized-changes-in-parameter-estimates">Standardized Changes in Parameter Estimates<a class="anchor" aria-label="anchor" href="#standardized-changes-in-parameter-estimates"></a>
 </h4>
-<p>One intuitive way to assess casewise influence is to compute the
-changes in parameter estimates if a case is included, with the changes
+<p>One intuitive way to assess case influence is to compute the changes
+in parameter estimates if a case is included, with the changes
 standardized by their standard errors (Pek &amp; MacCallum, 2011,
 Equation 7):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -268,10 +267,10 @@ information.</p>
 <h4 id="raw-changes-in-parameter-estimates">Raw Changes in Parameter Estimates<a class="anchor" aria-label="anchor" href="#raw-changes-in-parameter-estimates"></a>
 </h4>
 <p>The standardized changes in parameter may not be easy to interpret.
-If the original units are interpretable, we can compute the <em>raw</em>
-changes, that is, the changes in parameter estimates if a case is
-included, not standardized by their standard errors. This can be done by
-<code><a href="../reference/est_change_raw.html">est_change_raw()</a></code>:</p>
+If the original units are interpretable, users can compute the
+<em>raw</em> changes, that is, the changes in parameter estimates if a
+case is included, not standardized by their standard errors. This can be
+done by <code><a href="../reference/est_change_raw.html">est_change_raw()</a></code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
@@ -367,11 +366,11 @@ information.</p>
 <div class="section level4">
 <h4 id="changes-in-fit-measures">Changes in Fit Measures<a class="anchor" aria-label="anchor" href="#changes-in-fit-measures"></a>
 </h4>
-<p>Another intuitive measure of influence is to compute the difference
-in a measure of model fit between the analysis with a case included and
-that with the case excluded. This can be done by
-<code><a href="../reference/fit_measures_change.html">fit_measures_change()</a></code>, which simply gets any fit measures
-supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code> from the results from
+<p>Another intuitive measure of influence is the difference in a measure
+of model fit between the analysis with a case included and that with the
+case excluded. This can be done by <code><a href="../reference/fit_measures_change.html">fit_measures_change()</a></code>,
+which simply gets any fit measures supported by
+<code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code> from the results from
 <code>lavaan_rerun</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change.html">fit_measures_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
@@ -510,6 +509,65 @@ values are 1.</p>
 <p>More options of <code><a href="../reference/influence_plot.html">gcd_gof_md_plot()</a></code> can be found from its
 help page.</p>
 </div>
+<div class="section level4">
+<h4 id="index-plot-of-standardized-or-raw-changes-in-parameter-estimates">Index Plot of Standardized or Raw Changes in Parameter
+Estimates<a class="anchor" aria-label="anchor" href="#index-plot-of-standardized-or-raw-changes-in-parameter-estimates"></a>
+</h4>
+<p>The function <code><a href="../reference/est_change_plot.html">est_change_plot()</a></code> can be used to plot an
+index plot of standardized or raw changes using the output of
+<code><a href="../reference/est_change.html">est_change()</a></code> or <code><a href="../reference/est_change_raw.html">est_change_raw()</a></code>.</p>
+<p>For example, using the output generated by <code><a href="../reference/est_change.html">est_change()</a></code>
+above, it can generate an index plot for each parameter:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<p><code>largest_change</code> controls the number of cases with the
+largest change to be labelled. The default is 1. The cases to be
+labelled is determined separately for each parameter.</p>
+<p>The function also supports plotting the changes only for selected
+parameters, using <code>parameters</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change</span>,</span>
+<span>                parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
+<p>It can also plot the raw changes. For example:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change_raw</span>,</span>
+<span>                parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-29-1.png" width="700"></p>
+<p>More options of <code><a href="../reference/est_change_plot.html">est_change_plot()</a></code> can be found on its
+help page.</p>
+</div>
+<div class="section level4">
+<h4 id="standardized-changes-against-gcd">Standardized Changes Against <em>gCD</em><a class="anchor" aria-label="anchor" href="#standardized-changes-against-gcd"></a>
+</h4>
+<p>The function <code><a href="../reference/est_change_plot.html">est_change_gcd_plot()</a></code> can be used to plot,
+for each selected parameter, casewise standardized changes using the
+output of <code><a href="../reference/est_change.html">est_change()</a></code> against <em>gCD</em>.</p>
+<p>For example, using the output generated by <code><a href="../reference/est_change.html">est_change()</a></code>
+above, it can generate an index plot for each parameter:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_gcd_plot</a></span><span class="op">(</span><span class="va">fit_est_change</span>,</span>
+<span>                    largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><code>largest_gcd</code> controls the number of cases with the
+largest <em>gCD</em> to be labelled. The default is 1.</p>
+<p>The function also supports plotting the changes only for selected
+parameters, using <code>parameters</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_gcd_plot</a></span><span class="op">(</span><span class="va">fit_est_change</span>,</span>
+<span>                    parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                    largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-31-1.png" width="700"></p>
+<p>It does not support plotting the raw changes against <em>gCD</em>
+because <em>gCD</em> is not computed by
+<code><a href="../reference/est_change_raw.html">est_change_raw()</a></code>.</p>
+<p>More options of <code><a href="../reference/est_change_plot.html">est_change_gcd_plot()</a></code> can be found on
+its help page.</p>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -518,7 +576,7 @@ help page.</p>
 <p>The leave-one-out approach is exact because the model is fitted
 twice, with and without the target case. However, this can be time
 consuming for some models and datasets. The <code>semfindr</code>
-package also support the approximate approach that uses casewise scores
+package also supports the approximate approach that uses casewise scores
 (from <code><a href="https://rdrr.io/pkg/lavaan/man/estfun.html" class="external-link">lavaan::lavScores()</a></code>) and casewise likelihood to
 approximate the influence of a case <em>without</em> refitting a model.
 This approach is not exact but is much faster than the leave-one-out
@@ -546,7 +604,7 @@ Likelihood</em>
 <p>The function <code><a href="../reference/est_change_approx.html">est_change_approx()</a></code> can be used to compute
 the approximate standardized change. The first argument is the output of
 <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_approx.html">est_change_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv gcd_approx</span></span>
@@ -562,7 +620,7 @@ only an approximate value.</p>
 approximate <em>gCD</em> based on selected parameters. For example, the
 following computes the <em>gCD</em> based on regression coefficients
 only:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_approx.html">est_change_approx</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                                                 parameters <span class="op">=</span> <span class="st">"~"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_est_change_approx_paths</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
@@ -583,7 +641,7 @@ information.</p>
 approximate raw changes of parameter estimates, not standardized by
 their standard errors. The first argument is the output of
 <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_raw_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw_approx.html">est_change_raw_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw_approx</span><span class="op">[</span><span class="va">i_top5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv</span></span>
@@ -605,7 +663,7 @@ information.</p>
 the leave-one-out approach. Therefore, it can also be used in the
 approximate approach by setting the first argument to the output of
 <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mahalanobis_rerun.html">mahalanobis_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_md</span><span class="op">[</span><span class="va">i_top5</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        md</span></span>
@@ -623,7 +681,7 @@ approximate approach by setting the first argument to the output of
 <p>The function <code><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx()</a></code> computes the
 approximate changes in selected fit measures. The first argument is the
 output of <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mc_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                   fit_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chisq"</span>, <span class="st">"cfi"</span>, <span class="st">"tli"</span>, <span class="st">"rmsea"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_mc_approx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
@@ -635,7 +693,7 @@ output of <code>lavaan</code>:</p>
 <span><span class="co">#&gt; 5  0.097  0.000  0.001  0.001</span></span></code></pre></div>
 <p>These measures are the default values. Therefore, if only these four
 measures are needed, the following will also work:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mc_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <p>See the help page of <code><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx()</a></code> for
 further information.</p>
@@ -643,12 +701,12 @@ further information.</p>
 <div class="section level4">
 <h4 id="an-all-in-one-function-1">An All-In-One-Function<a class="anchor" aria-label="anchor" href="#an-all-in-one-function-1"></a>
 </h4>
-<p>The all-in-one function <code><a href="../reference/influence_stat.html">influence_stat()</a></code> can also be
-used to compute approximate influence statistics by calling
+<p>The all-in-one function <code><a href="../reference/influence_stat.html">influence_stat()</a></code> can be used to
+compute approximate influence statistics by calling
 <code><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx()</a></code> and
 <code><a href="../reference/est_change_approx.html">est_change_approx()</a></code>. This can be done simply by using the
 output of <code>lavaan</code> as the first argument:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_influence_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_influence_approx</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    chisq    cfi  rmsea    tli m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv gcd_approx</span></span>
@@ -672,28 +730,31 @@ information.</p>
 </h3>
 <p>All the diagnostic plot functions can also be used to visualize case
 influence statistics based of the approximate approach. The method used
-will be determined by the output of <code><a href="../reference/influence_stat.html">influence_stat()</a></code> and
-users use them in exactly the same way as for the leave-one-out
-approach. Therefore, only sample code is presented below, using the
-output of <code><a href="../reference/influence_stat.html">influence_stat()</a></code> based on the approximate
-approach generated in the previous section.</p>
+will be determined by the output of <code><a href="../reference/influence_stat.html">influence_stat()</a></code>,
+<code><a href="../reference/est_change_approx.html">est_change_approx()</a></code>, and
+<code><a href="../reference/est_change_raw_approx.html">est_change_raw_approx()</a></code> and users use them in exactly the
+same way as for the leave-one-out approach. Therefore, only sample code
+is presented below, using the output of <code><a href="../reference/influence_stat.html">influence_stat()</a></code>,
+<code><a href="../reference/est_change_approx.html">est_change_approx()</a></code>, and
+<code><a href="../reference/est_change_raw_approx.html">est_change_raw_approx()</a></code> based on the approximate approach
+generated in the previous section.</p>
 <p>Note that all the plots noted in the titles and axis labels that the
 statistics are approximate values.</p>
 <div class="section level4">
 <h4 id="approximate-generalized-cooks-distance">Approximate Generalized Cook’s Distance<a class="anchor" aria-label="anchor" href="#approximate-generalized-cooks-distance"></a>
 </h4>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">fit_influence_approx</span>,</span>
 <span>         largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="mahalanobis-distance-3">Mahalanobis Distance<a class="anchor" aria-label="anchor" href="#mahalanobis-distance-3"></a>
 </h4>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">md_plot</a></span><span class="op">(</span><span class="va">fit_influence_approx</span>,</span>
 <span>        largest_md <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-35-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>This plot is the same for both the leave-one-out approach and the
 approximate approach.</p>
 </div>
@@ -701,24 +762,59 @@ approximate approach.</p>
 <h4 id="approximate-change-in-fit-measure-vs--approximate-generalized-cooks-distance">Approximate Change in Fit Measure vs. Approximate Generalized Cook’s
 Distance<a class="anchor" aria-label="anchor" href="#approximate-change-in-fit-measure-vs--approximate-generalized-cooks-distance"></a>
 </h4>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_gof_plot</a></span><span class="op">(</span><span class="va">fit_influence_approx</span>,</span>
 <span>             fit_measure <span class="op">=</span> <span class="st">"rmsea"</span>,</span>
 <span>             largest_gcd <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>             largest_fit_measure <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-36-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="bubble-plot-1">Bubble Plot<a class="anchor" aria-label="anchor" href="#bubble-plot-1"></a>
 </h4>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_gof_md_plot</a></span><span class="op">(</span><span class="va">fit_influence_approx</span>,</span>
 <span>                fit_measure <span class="op">=</span> <span class="st">"rmsea"</span>,</span>
 <span>                largest_gcd <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                largest_fit_measure <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                largest_md <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                circle_size <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semfindr_files/figure-html/unnamed-chunk-37-1.png" width="700"></p>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="index-plot-of-standardized-or-raw-changes-in-parameter-estimates-1">Index Plot of Standardized or Raw Changes in Parameter
+Estimates<a class="anchor" aria-label="anchor" href="#index-plot-of-standardized-or-raw-changes-in-parameter-estimates-1"></a>
+</h4>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span>,</span>
+<span>                parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-44-1.png" width="700"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_plot</a></span><span class="op">(</span><span class="va">fit_est_change_raw_approx</span>,</span>
+<span>                parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                largest_change <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+</div>
+<div class="section level4">
+<h4 id="standardized-changes-against-gcd-1">Standardized Changes Against <em>gCD</em><a class="anchor" aria-label="anchor" href="#standardized-changes-against-gcd-1"></a>
+</h4>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_gcd_plot</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span>,</span>
+<span>                    largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-46-1.png" width="700"></p>
+<p>Note <code>largest_gcd</code> controls the number of cases with the
+largest <em>approximated</em> <em>gCD</em> to be labelled. The default
+is 1.</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/est_change_plot.html">est_change_gcd_plot</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span>,</span>
+<span>                    parameters <span class="op">=</span> <span class="st">"~"</span>,</span>
+<span>                    largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semfindr_files/figure-html/unnamed-chunk-47-1.png" width="700"></p>
 </div>
 </div>
 </div>
@@ -733,21 +829,24 @@ to refit the model only with selected cases removed one-by-one,
 selected cases (see
 <code><a href="../articles/selecting_cases.html">vignette("selecting_cases", package = "semfindr")</a></code>).</p>
 <p>Last, all the plot functions return <code>ggplot</code> graph
-objects. Users can further modify them to suit their needs.</p>
+objects. Users can further modify them to suit their needs. They also
+have <code>*_aes</code> arguments that can be used to customize the plot
+generated. Please see their help pages on how to use these
+arguments.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Cook, R. D. (1977). Detection of influential observation in linear
-regression. <em>Technometrics, 19</em>(1), 15–18.</p>
+regression. <em>Technometrics, 19</em>(1), 15-18.</p>
 <p>Fox J., &amp; Weisberg, S. (2019). <em>An R companion to applied
 regression</em> (3rd Edition). Sage. <a href="https://socialsciences.mcmaster.ca/jfox/Books/Companion/" class="external-link uri">https://socialsciences.mcmaster.ca/jfox/Books/Companion/</a>.</p>
 <p>Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 <em>Proceedings of the National Institute of Science of India</em>, 2,
-49–55.</p>
+49-55.</p>
 <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in
 structural equation models: Cases and their influence. <em>Multivariate
-Behavioral Research, 46</em>(2), 202–228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
+Behavioral Research, 46</em>(2), 202-228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

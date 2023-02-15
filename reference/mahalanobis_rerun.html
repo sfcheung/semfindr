@@ -12,7 +12,7 @@ observed variables in a model."><!-- mathjax --><script src="https://cdnjs.cloud
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,7 @@ to compute the Mahalanobis distance.</p>
 and variance-covariance matrices will be estimated by maximum
 likelihood using <code><a href="https://rdrr.io/pkg/norm2/man/emNorm.html" class="external-link">norm2::emNorm()</a></code>. The estimates will be passed
 to <code><a href="https://rdrr.io/pkg/modi/man/MDmiss.html" class="external-link">modi::MDmiss()</a></code> to compute the Mahalanobis distance.</p>
-<p>Currently it only support single-group models.</p>
+<p>Currently it only supports single-group models.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -134,7 +134,7 @@ of India, 2</em>, 49-55.</p>
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6-12 ended normally after 1 iterations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 1 iteration</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -173,11 +173,11 @@ of India, 2</em>, 49-55.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     a2b               0.270    0.075    3.581    0.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># Fit the model n times. Each time with one case removed.</span></span></span>
-<span class="r-in"><span><span class="co"># For illustration, do this only for selected cases</span></span></span>
+<span class="r-in"><span><span class="co"># For illustration, do this only for selected cases.</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.37 second(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if ran in parallel.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.45 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the Mahalanobis distance for each case</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">mahalanobis_rerun</span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Results excluding a case, for the first few cases</span></span></span>
@@ -189,7 +189,7 @@ of India, 2</em>, 49-55.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 1.0653437</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 1.9803351</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.2875484</span>
-<span class="r-in"><span><span class="co"># Compute the Mahalanobis distance using stats::mahalanobis</span></span></span>
+<span class="r-in"><span><span class="co"># Compute the Mahalanobis distance using stats::mahalanobis()</span></span></span>
 <span class="r-in"><span><span class="va">md1</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html" class="external-link">mahalanobis</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Compare the results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">md1</span><span class="op">)</span></span></span>
@@ -209,8 +209,8 @@ of India, 2</em>, 49-55.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.43 second(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if ran in parallel.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.56 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="fu">mahalanobis_rerun</span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   8.178201</span>
@@ -241,8 +241,8 @@ of India, 2</em>, 49-55.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.51 second(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if ran in parallel.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.69 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="fu">mahalanobis_rerun</span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           md</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  13.332152</span>

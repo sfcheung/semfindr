@@ -31,6 +31,9 @@
     <loc>https://sfcheung.github.io/semfindr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/approx_check.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/semfindr/reference/cfa_dat.html</loc>
   </url>
   <url>
@@ -44,6 +47,9 @@
   </url>
   <url>
     <loc>https://sfcheung.github.io/semfindr/reference/est_change_approx.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/est_change_plot.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/semfindr/reference/est_change_raw.html</loc>

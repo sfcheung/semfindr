@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,12 @@
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p><code>x</code> is returned invisibly. Called for its side effect.</p>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" class="external-link">https://orcid.org/0000-0002-9871-9448</a></p>
     </div>
@@ -96,7 +102,7 @@
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6-12 ended normally after 1 iterations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 1 iteration</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -131,8 +137,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># Fit the model n times. Each time with one case removed.</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 1.85 second(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if ran in parallel.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 2.35 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="va">fit_rerun</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> === lavaan_rerun Output ===</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
