@@ -304,7 +304,7 @@ lavaan_rerun <- function(fit,
       time_expected <-  length(id_to_rerun) * fit_total_time[[1]]
       message(paste0("The expected CPU time is ", round(time_expected, 2),
                     " second(s).\n",
-                    "Could be faster if ran in parallel."))
+                    "Could be faster if run in parallel."))
       utils::flush.console()
       rt <- system.time(out <- suppressWarnings(lapply(id_to_rerun, rerun_i)))
     }
