@@ -13,7 +13,7 @@ est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
-Supports specifying an operator to select all parameters with this
+Supports specifying an operator to select all parameters with these
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
 both parameter names and operators. More details can be found
 in the help of \code{\link[=pars_id]{pars_id()}}.
@@ -33,15 +33,21 @@ of cases. The row names are the case identification values used in
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
-changes in selected parameters for each case.
+changes in selected parameters for each case if included.
 }
 \details{
 For each case, \code{\link[=est_change_raw]{est_change_raw()}} computes the differences
 in the estimates of selected parameters with and without this
-case: (estimate with all case) - (estimate without this case). The
+case:
+
+(Estimate with all case) - (Estimate without this case).
+
+The
 change is the raw change, either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard
 error.
+This is a measure of the influence of a case on the parameter
+estimates if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -69,11 +75,13 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 
-# Fit the model n times. Each time with one case removed.
+# Fit the model n times. Each time with one case is removed.
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(3, 5, 7, 8))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 out <- est_change_raw(fit_rerun)
 # Results excluding a case
 out
@@ -124,7 +132,9 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 # For free loadings only
 out <- est_change_raw(fit_rerun, parameters = "=~")
 out
@@ -151,7 +161,9 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 # For structural paths only
 out <- est_change_raw(fit_rerun, parameters = "~")
 out

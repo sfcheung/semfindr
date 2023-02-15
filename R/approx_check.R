@@ -1,10 +1,11 @@
-#' @title Compatibility Check for 'lavaan_rerun'
+#' @title Compatibility Check for the '_approx' Functions
 #'
 #' @description Gets a 'lavaan' output and checks whether it is
-#' supported by [lavaan_rerun()].
+#' supported by the functions using the approximate approach.
 #'
 #' @details This function is not supposed to be used by users. It is
-#' called by [lavaan_rerun()] to see if the analysis being passed to
+#' called by functions such as [est_change_approx()] to see if the
+#' analysis passed to
 #' it is supported. If not, messages will be printed to indicate why.
 #'
 #' @param fit The output from `lavaan`, such as [lavaan::cfa()] and
@@ -15,7 +16,7 @@
 #' as an attribute. Default is `TRUE`.
 #'
 #' @return A single-element vector. If confirmed to be supported, will
-#' return 0. If not confirmed be support but may still work, return 1.
+#' return 0. If not confirmed to be support but may still work, return 1.
 #' If confirmed to be not yet supported, will return a negative
 #' number, the value of this number without the negative sign is the
 #' number of tests failed.
@@ -34,17 +35,17 @@
 #' dat$gp <- rep(c("gp1", "gp2"), length.out = nrow(dat_gp))
 #'
 #' fit01 <- lavaan::sem(mod, dat)
-#' # If supported, returns a zero.
-#' lavaan_rerun_check(fit01)
+#' # If supported, returns a zero
+#' approx_check(fit01)
 #'
 #' fit05 <- lavaan::cfa(mod, dat, group = "gp")
-#' # If not supported, returns a negative number.
-#' lavaan_rerun_check(fit05)
+#' # If not supported, returns a negative number
+#' approx_check(fit05)
 #'
 #'@export
 
-lavaan_rerun_check <- function(fit,
-                               print_messages = TRUE) {
+approx_check <- function(fit,
+                         print_messages = TRUE) {
 
     p_table <- lavaan::parameterTable(fit)
 
@@ -62,10 +63,9 @@ lavaan_rerun_check <- function(fit,
     sem_max_nclusters <- max(unlist(lavaan::lavInspect(fit, "nclusters")))
     sem_data <- tryCatch(lavaan::lavInspect(fit, "data"), error = function(e) e)
 
-    # `lavaan_rerun` does not concern what estimation method was used
-    # `lavaan_rerun` does not concern the SE method
-    # `lavaan_rerun` does not concern the robust method used, if any
-    # `lavaan_rerun` does not concern the method for missing data
+    # `_approx` functions are developed for ML estimators only.
+    # `_approx` functions are developed for ML normal theory SEs only.
+    # `_approx` functions should work with FIML.
 
     model_formative_factor <- "<~" %in% p_table$op
     model_multilevel <- (sem_nlevels > 1)
@@ -112,6 +112,16 @@ lavaan_rerun_check <- function(fit,
           msg <- c(msg,
                 paste("Raw data cannot be retrieved. Only a model fitted to",
                         "raw data is supported."))
+      }
+
+    if (!((sem_estimator == "ML") &&
+          (sem_se == "standard") &&
+          (sem_test == "standard"))) {
+          out <- ifelse(out >= 0, -1, out - 1)
+          msg <- c(msg,
+                paste("The approximation method is tested only for",
+                        "models fitted by ML, with normal theory standard errors",
+                        "and normal theory chi-square test requested."))
       }
 
     attr(out, "info") <- msg

@@ -6,7 +6,7 @@
 \alias{semfindr-package}
 \title{semfindr: Influential Cases in Structural Equation Modeling}
 \description{
-Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis (Pek & MacCallum, 2011) and approximate casewies influence by scores and casewise likelihood.
+Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) \doi{10.1080/00273171.2011.561068} and approximate casewies influence using scores and casewise likelihood.
 }
 \seealso{
 Useful links:

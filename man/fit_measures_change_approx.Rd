@@ -8,7 +8,9 @@ fit_measures_change_approx(
   fit,
   fit_measures = c("chisq", "cfi", "rmsea", "tli"),
   baseline_model = NULL,
-  case_id = NULL
+  case_id = NULL,
+  allow_inadmissible = FALSE,
+  skip_all_checks = FALSE
 )
 }
 \arguments{
@@ -27,6 +29,15 @@ number of cases (the number of rows in the data in \code{fit}), then it
 is the vector of case identification values. If it is \code{NULL}, the
 default, then \code{case.idx} used by \code{lavaan} functions will be used
 as case identification values.}
+
+\item{allow_inadmissible}{If \code{TRUE}, accepts a fit object with
+inadmissible results (i.e., \code{post.check} from
+\code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
+
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
+users to run this function on any object of \code{lavaan} class.
+For users to experiment this and other functions on models
+not officially supported. Default is \code{FALSE}.}
 }
 \value{
 A matrix with the number of columns equals to the number of
@@ -36,13 +47,14 @@ of cases. The row names are case identification values.
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
 approximate change
-in selected fit measures if a case is deleted.
+in selected fit measures if a case is included.
 }
 \details{
 For each case, \code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} computes the
 approximate differences in selected fit measures with and
 without this case:
-(fit measure with all case) - (fit measure without this case).
+
+(Fit measure with all case) - (Fit measure without this case).
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -52,6 +64,8 @@ Note that an increase is an improvement in fit for
 goodness of fit measures such as CFI and TLI, but a decrease
 is an improvement in fit for badness of fit measures such as
 RMSEA and model chi-square.
+This is a measure of the influence of a case on a fit measure
+if it is included.
 
 The model is not refitted. Therefore, the result is only an
 approximation of that of \code{\link[=fit_measures_change]{fit_measures_change()}}. However, this
@@ -91,9 +105,11 @@ head(out_approx)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is included
+# vs. if this case is excluded.
+# That is, case influence on model chi-squared.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
-# Results excluding a case, for the first few cases
+# Case influence, for the first few cases
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)
@@ -116,7 +132,9 @@ head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is included
+# vs. if this case is excluded.
+# That is, case influence on fit measures.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
@@ -144,9 +162,11 @@ head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is excluded
+# vs. if this case is included.
+# That is, case influence on model chi-squared.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
-# Results excluding a case, for the first few cases
+# Case influence, for the first few cases
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)

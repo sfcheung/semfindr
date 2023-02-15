@@ -2,7 +2,7 @@
 #'
 #' @description Prints the results of [lavaan_rerun()].
 #'
-#' @return NULL
+#' @return `x` is returned invisibly. Called for its side effect.
 #'
 #' @param x The output of [lavaan_rerun()].
 #'
@@ -90,4 +90,5 @@ print.lavaan_rerun <- function(x,
         cat("Detail:\n")
         print(failed_messages_df)
       }
+    invisible(x)
   }

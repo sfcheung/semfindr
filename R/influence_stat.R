@@ -1,7 +1,7 @@
 #' @title Case Influence Measures
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the changes
-#' in selected parameters and fit measures for each case.
+#' in selected parameters and fit measures for each case if included.
 #'
 #' @details For each case, [influence_stat()] computes the differences
 #' in the estimates of selected parameters and fit measures with and
@@ -80,17 +80,17 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #'
-#' ## Leave-One-Out Approach
+#' # --- Leave-One-Out Approach
 #'
 #' # Fit the model n times. Each time with one case removed.
-#' # For illustration, do this only for selected cases
+#' # For illustration, do this only for selected cases.
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = 1:10)
 #' # Get all default influence stats
 #' out <- influence_stat(fit_rerun)
 #' head(out)
 #'
-#' ## Approximate Approach
+#' # --- Approximate Approach
 #'
 #' out_approx <- influence_stat(fit)
 #' head(out_approx)

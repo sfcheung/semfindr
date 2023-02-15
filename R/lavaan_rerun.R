@@ -1,6 +1,6 @@
 #' @title Rerun a 'lavaan' Analysis Using the Leaving-One-Out Approach
 #'
-#' @description [lavaan_rerun()] reruns a `lavaan` analysis several
+#' @description Reruns a `lavaan` analysis several
 #' times, each time with one case removed.
 #'
 #' @details [lavaan_rerun()] gets an [lavaan::lavaan()] output and
@@ -134,7 +134,7 @@
 #' @examples
 #' library(lavaan)
 #' dat <- pa_dat
-#' # For illustration only, select only the first 50 cases
+#' # For illustration, select only the first 50 cases
 #' dat <- dat[1:50, ]
 #' # The model
 #' mod <-
@@ -145,8 +145,13 @@
 #' # Fit the model
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
+#'
 #' # Fit the model n times. Each time with one case removed.
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+#'
+#' # Print the output for a brief description of the runs
+#' fit_rerun
+#'
 #' # Results excluding the first case
 #' fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
 #' # Results by manually excluding the first case
@@ -304,7 +309,7 @@ lavaan_rerun <- function(fit,
       time_expected <-  length(id_to_rerun) * fit_total_time[[1]]
       message(paste0("The expected CPU time is ", round(time_expected, 2),
                     " second(s).\n",
-                    "Could be faster if ran in parallel."))
+                    "Could be faster if run in parallel."))
       utils::flush.console()
       rt <- system.time(out <- suppressWarnings(lapply(id_to_rerun, rerun_i)))
     }

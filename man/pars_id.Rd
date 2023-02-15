@@ -32,8 +32,8 @@ A numeric vector of the ids in the column "free" in the
 parameter table of the fit object.
 }
 \description{
-It converts a vector of
-parameters specified in lavaan syntax to the ids of them
+Converts a vector of
+lavaan syntax to the ids of parameters
 in the vector of free parameters or the row numbers
 in the parameter table.
 }
@@ -59,7 +59,6 @@ It is used by function such as \code{\link[=est_change]{est_change()}} and
 \examples{
 
 dat <- sem_dat
-set.seed(64264)
 
 library(lavaan)
 sem_model <-
