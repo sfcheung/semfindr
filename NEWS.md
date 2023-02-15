@@ -1,4 +1,4 @@
-# semfindr 0.1.1.5
+# semfindr 0.1.2
 
 - Added DOI of Pek and MacCallum in the DESCRIPTION. (0.1.1.1)
 - Added `approx_check()` to check whether the input object

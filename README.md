@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.1.5), updated on 2023-02-15, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+(Version 0.1.2), updated on 2023-02-15, [release history](https://sfcheung.github.io/semfindr/news/index.html))
 
 # semfindr
 
