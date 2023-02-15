@@ -18,6 +18,14 @@
 #' for labeling individual cases if they
 #' are stored as row names.
 #'
+#' The default settings for the plots
+#' should be good enough for diagnostic
+#' purpose. If so desired, users can
+#' use the `*_aes` arguments to nearly
+#' fully customize all the major
+#' elements of the plots, as they would
+#' do for building a [ggplot2] plot.
+#'
 #' @param change The output from
 #' [est_change()], [est_change_raw()],
 #' [est_change_approx()], or
@@ -169,6 +177,14 @@
 #'                     parameters = "~",
 #'                     largest_gcd = 5)
 #'
+#' # Customize elements in a plot.
+#' # For example, change the color and shape of the points.
+#'
+#' est_change_plot(out,
+#'                 parameters = "~",
+#'                 largest_change = 2,
+#'                 point_aes = list(shape = 5,
+#'                                  color = "red"))
 #'
 #' @references Pek, J., & MacCallum, R.
 #'  (2011). Sensitivity analysis in

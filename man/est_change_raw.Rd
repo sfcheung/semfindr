@@ -13,7 +13,7 @@ est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
-Supports specifying an operator to select all parameters with this
+Supports specifying an operator to select all parameters with these
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
 both parameter names and operators. More details can be found
 in the help of \code{\link[=pars_id]{pars_id()}}.
@@ -38,10 +38,16 @@ changes in selected parameters for each case if included.
 \details{
 For each case, \code{\link[=est_change_raw]{est_change_raw()}} computes the differences
 in the estimates of selected parameters with and without this
-case: (estimate with all case) - (estimate without this case). The
+case:
+
+(Estimate with all case) - (Estimate without this case).
+
+The
 change is the raw change, either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard
 error.
+This is a measure of the influence of a case on the parameter
+estimates if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 

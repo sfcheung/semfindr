@@ -5,7 +5,8 @@
 #'
 #' @details For each case, [fit_measures_change()] computes the
 #' differences in selected fit measures with and without this case:
-#' (fit measure with all case) - (fit measure without this case).
+#'
+#' (Fit measure with all case) - (Fit measure without this case).
 #'
 #' If the value of a case is positive, including the case increases an estimate.
 #'
@@ -15,6 +16,8 @@
 #' goodness of fit measures such as CFI and TLI, but a decrease
 #' is an improvement in fit for badness of fit measures such as
 #' RMSEA and model chi-square.
+#' This is a measure of the influence of a case on a fit measure
+#' if it is included.
 #'
 #' If the analysis is not admissible or does not converge when a case
 #' is deleted, `NA`s will be turned for the differences of this

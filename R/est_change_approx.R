@@ -6,9 +6,14 @@
 #'
 #' @details For each case, [est_change_approx()] computes the
 #' approximate differences in the estimates of selected parameters
-#' with and without this case: (estimate with all case) - (estimate
-#' without this case). The differences are standardized by dividing
-#' the approximate raw differences by their standard errors.
+#' with and without this case:
+#'
+#' (Estimate with all case) - (Estimate without this case)
+#'
+#' The differences are standardized by dividing
+#' the approximate raw differences by their standard errors. This is a
+#' measure of the standardized influence of a case on the parameter estimates
+#' if it is included.
 #'
 #' If the value of a case is positive, including the case increases an estimate.
 #'
@@ -20,7 +25,7 @@
 #' cases when the sample size is very large or the model takes a long
 #' time to fit. This function can be used to identify potentially
 #' influential cases quickly and then select them to conduct the
-#' leave-one-out sensitivity analysis using [lavaan_rerun()] and then
+#' leave-one-out sensitivity analysis using [lavaan_rerun()] and
 #' [est_change()].
 #'
 #' This function also computes the approximate generalized Cook's
@@ -38,7 +43,7 @@
 #' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
 #' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
 #' in the output of [lavaan::parameterEstimates()].
-#' Supports specifying an operator to select all parameters with this
+#' Supports specifying an operator to select all parameters with these
 #' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
 #' both parameter names and operators. More details can be found
 #' in the help of [pars_id()].
@@ -55,8 +60,8 @@
 #' inadmissible results (i.e., `post.check` from
 #' [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
 #'
-#' @param skip_all_checks If `TRUE`, skips all checks and allow
-#' users to run this function on any object of `lavaan` class.
+#' @param skip_all_checks If `TRUE`, skips all checks and allows
+#' users to run this function on any object of the `lavaan` class.
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'

@@ -15,7 +15,7 @@
 #' likelihood using [norm2::emNorm()]. The estimates will be passed
 #' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
-#' Currently it only support single-group models.
+#' Currently it only supports single-group models.
 #'
 #' @param fit It can be the output from `lavaan`, such as
 #' [lavaan::cfa()] and [lavaan::sem()], or the output from

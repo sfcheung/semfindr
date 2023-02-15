@@ -34,7 +34,7 @@ as case identification values.}
 inadmissible results (i.e., \code{post.check} from
 \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
 
-\item{skip_all_checks}{If \code{TRUE}, skips all checks and allow
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
 users to run this function on any object of \code{lavaan} class.
 For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
@@ -53,7 +53,8 @@ in selected fit measures if a case is included.
 For each case, \code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} computes the
 approximate differences in selected fit measures with and
 without this case:
-(fit measure with all case) - (fit measure without this case).
+
+(Fit measure with all case) - (Fit measure without this case).
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -63,6 +64,8 @@ Note that an increase is an improvement in fit for
 goodness of fit measures such as CFI and TLI, but a decrease
 is an improvement in fit for badness of fit measures such as
 RMSEA and model chi-square.
+This is a measure of the influence of a case on a fit measure
+if it is included.
 
 The model is not refitted. Therefore, the result is only an
 approximation of that of \code{\link[=fit_measures_change]{fit_measures_change()}}. However, this

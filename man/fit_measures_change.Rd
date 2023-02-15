@@ -33,7 +33,8 @@ in selected fit measures if a case is included.
 \details{
 For each case, \code{\link[=fit_measures_change]{fit_measures_change()}} computes the
 differences in selected fit measures with and without this case:
-(fit measure with all case) - (fit measure without this case).
+
+(Fit measure with all case) - (Fit measure without this case).
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -43,6 +44,8 @@ Note that an increase is an improvement in fit for
 goodness of fit measures such as CFI and TLI, but a decrease
 is an improvement in fit for badness of fit measures such as
 RMSEA and model chi-square.
+This is a measure of the influence of a case on a fit measure
+if it is included.
 
 If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for the differences of this

@@ -169,6 +169,14 @@ if applicable. However, case
 identification values will be used
 for labeling individual cases if they
 are stored as row names.
+
+The default settings for the plots
+should be good enough for diagnostic
+purpose. If so desired, users can
+use the \verb{*_aes} arguments to nearly
+fully customize all the major
+elements of the plots, as they would
+do for building a \link{ggplot2} plot.
 }
 \section{Functions}{
 \itemize{
@@ -213,6 +221,14 @@ est_change_gcd_plot(out,
                     parameters = "~",
                     largest_gcd = 5)
 
+# Customize elements in a plot.
+# For example, change the color and shape of the points.
+
+est_change_plot(out,
+                parameters = "~",
+                largest_change = 2,
+                point_aes = list(shape = 5,
+                                 color = "red"))
 
 }
 \references{

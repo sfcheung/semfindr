@@ -37,9 +37,15 @@ if included.
 \details{
 For each case, \code{\link[=est_change]{est_change()}} computes the differences in
 the estimates of selected parameters with and without this case:
-(estimate with all case) - (estimate without this case). The
+
+(Estimate with all case) - (Estimate without this case).
+
+The
 differences are standardized by dividing the raw differences by
 their standard errors (Pek & MacCallum, 2011).
+This is a measure of the standardized influence of a case on
+the parameter
+estimates if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 

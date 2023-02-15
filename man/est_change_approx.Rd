@@ -20,7 +20,7 @@ est_change_approx(
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
-Supports specifying an operator to select all parameters with this
+Supports specifying an operator to select all parameters with these
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
 both parameter names and operators. More details can be found
 in the help of \code{\link[=pars_id]{pars_id()}}.
@@ -37,8 +37,8 @@ as case identification values.}
 inadmissible results (i.e., \code{post.check} from
 \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
 
-\item{skip_all_checks}{If \code{TRUE}, skips all checks and allow
-users to run this function on any object of \code{lavaan} class.
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
+users to run this function on any object of the \code{lavaan} class.
 For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
@@ -59,9 +59,14 @@ if included.
 \details{
 For each case, \code{\link[=est_change_approx]{est_change_approx()}} computes the
 approximate differences in the estimates of selected parameters
-with and without this case: (estimate with all case) - (estimate
-without this case). The differences are standardized by dividing
-the approximate raw differences by their standard errors.
+with and without this case:
+
+(Estimate with all case) - (Estimate without this case)
+
+The differences are standardized by dividing
+the approximate raw differences by their standard errors. This is a
+measure of the standardized influence of a case on the parameter estimates
+if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -73,7 +78,7 @@ approximation is useful for identifying potentially influential
 cases when the sample size is very large or the model takes a long
 time to fit. This function can be used to identify potentially
 influential cases quickly and then select them to conduct the
-leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and then
+leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun()}} and
 \code{\link[=est_change]{est_change()}}.
 
 This function also computes the approximate generalized Cook's

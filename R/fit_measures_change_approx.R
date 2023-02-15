@@ -7,7 +7,8 @@
 #' @details For each case, [fit_measures_change_approx()] computes the
 #' approximate differences in selected fit measures with and
 #' without this case:
-#' (fit measure with all case) - (fit measure without this case).
+#'
+#' (Fit measure with all case) - (Fit measure without this case).
 #'
 #' If the value of a case is positive, including the case increases an estimate.
 #'
@@ -17,6 +18,8 @@
 #' goodness of fit measures such as CFI and TLI, but a decrease
 #' is an improvement in fit for badness of fit measures such as
 #' RMSEA and model chi-square.
+#' This is a measure of the influence of a case on a fit measure
+#' if it is included.
 #'
 #' The model is not refitted. Therefore, the result is only an
 #' approximation of that of [fit_measures_change()]. However, this
@@ -52,7 +55,7 @@
 #' inadmissible results (i.e., `post.check` from
 #' [lavaan::lavInspect()] is `FALSE`). Default is `FALSE`.
 #'
-#' @param skip_all_checks If `TRUE`, skips all checks and allow
+#' @param skip_all_checks If `TRUE`, skips all checks and allows
 #' users to run this function on any object of `lavaan` class.
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.

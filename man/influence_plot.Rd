@@ -177,6 +177,14 @@ Therefore, these functions will work for any matrix provided. Row
 number will be used on the x-axis if applicable. However, case
 identification values in the output from \code{\link[=influence_stat]{influence_stat()}} will
 be used for labeling individual cases.
+
+The default settings for the plots
+should be good enough for diagnostic
+purpose. If so desired, users can
+use the \verb{*_aes} arguments to nearly
+fully customize all the major
+elements of the plots, as they would
+do for building a \link{ggplot2} plot.
 }
 \section{Functions}{
 \itemize{
@@ -272,6 +280,13 @@ gcd_gof_md_plot(out, fit_measure = "chisq",
                      largest_fit_measure = 3,
                      largest_md = 3,
                      circle_size = 10)
+
+# Customize elements in the plot.
+# For example, change the color and shape of the points.
+
+gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+             largest_fit_measure = 3,
+             point_aes = list(shape = 3, color = "red"))
 
 }
 \references{

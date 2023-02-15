@@ -5,10 +5,16 @@
 #'
 #' @details For each case, [est_change_raw()] computes the differences
 #' in the estimates of selected parameters with and without this
-#' case: (estimate with all case) - (estimate without this case). The
+#' case:
+#'
+#' (Estimate with all case) - (Estimate without this case).
+#'
+#' The
 #' change is the raw change, either for the standardized or
 #' unstandardized solution. The change is *not* divided by standard
 #' error.
+#' This is a measure of the influence of a case on the parameter
+#' estimates if it is included.
 #'
 #' If the value of a case is positive, including the case increases an estimate.
 #'
@@ -26,7 +32,7 @@
 #' parameters. Each parameter is named as in `lavaan` syntax, e.g.,
 #' `x ~ y` or `x ~~ y`, as appeared in the columns `lhs`, `op`, and `rhs`
 #' in the output of [lavaan::parameterEstimates()].
-#' Supports specifying an operator to select all parameters with this
+#' Supports specifying an operator to select all parameters with these
 #' operators: `~`, `~~`, `=~`, and `~1`. This vector can contain
 #' both parameter names and operators. More details can be found
 #' in the help of [pars_id()].

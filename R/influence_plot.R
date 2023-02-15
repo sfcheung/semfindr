@@ -9,6 +9,14 @@
 #' identification values in the output from [influence_stat()] will
 #' be used for labeling individual cases.
 #'
+#' The default settings for the plots
+#' should be good enough for diagnostic
+#' purpose. If so desired, users can
+#' use the `*_aes` arguments to nearly
+#' fully customize all the major
+#' elements of the plots, as they would
+#' do for building a [ggplot2] plot.
+#'
 #' @param influence_out The output from [influence_stat()].
 #'
 #' @param cutoff_gcd Cases with generalized Cook's distance or
@@ -194,6 +202,13 @@
 #'                      largest_fit_measure = 3,
 #'                      largest_md = 3,
 #'                      circle_size = 10)
+#'
+#' # Customize elements in the plot.
+#' # For example, change the color and shape of the points.
+#'
+#' gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
+#'              largest_fit_measure = 3,
+#'              point_aes = list(shape = 3, color = "red"))
 #'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
