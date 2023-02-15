@@ -97,7 +97,7 @@ in the analysis. Its length should be equal to the length of
 }
 }
 \description{
-\code{\link[=lavaan_rerun]{lavaan_rerun()}} reruns a \code{lavaan} analysis several
+Reruns a \code{lavaan} analysis several
 times, each time with one case removed.
 }
 \details{

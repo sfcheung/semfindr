@@ -28,7 +28,7 @@ of cases. The row names are the case identification values used in
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
-in selected fit measures if a case is deleted
+in selected fit measures if a case is included.
 }
 \details{
 For each case, \code{\link[=fit_measures_change]{fit_measures_change()}} computes the

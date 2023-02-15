@@ -21,15 +21,18 @@ If omitted or \code{NULL}, the
 default, changes on all free parameters will be computed.}
 }
 \value{
-A matrix with the number of columns equal to the number of
-requested parameters, and the number of rows equal to the number
+A matrix. The number of columns is equal to the number of
+requested parameters plus one, the last column being the
+approximate generalized Cook's
+distance. The number of rows equal to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
 Please see Pek and MacCallum (2011), Equation 7.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
-standardized changes in selected parameters for each case.
+standardized changes in selected parameters for each case
+if included.
 }
 \details{
 For each case, \code{\link[=est_change]{est_change()}} computes the differences in

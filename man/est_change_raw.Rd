@@ -33,7 +33,7 @@ of cases. The row names are the case identification values used in
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
-changes in selected parameters for each case.
+changes in selected parameters for each case if included.
 }
 \details{
 For each case, \code{\link[=est_change_raw]{est_change_raw()}} computes the differences

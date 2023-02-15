@@ -47,7 +47,7 @@ of cases. The row names are case identification values.
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
 approximate change
-in selected fit measures if a case is deleted.
+in selected fit measures if a case is included.
 }
 \details{
 For each case, \code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} computes the

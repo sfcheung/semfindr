@@ -50,7 +50,8 @@ elements are the raw differences.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
-approximate changes in selected parameters for each case.
+approximate changes in selected parameters for each case
+if included.
 }
 \details{
 For each case, \code{\link[=est_change_raw_approx]{est_change_raw_approx()}} computes the

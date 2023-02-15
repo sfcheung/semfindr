@@ -54,7 +54,7 @@ cases. The row names are the case identification values used in
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
-in selected parameters and fit measures for each case.
+in selected parameters and fit measures for each case if included.
 }
 \details{
 For each case, \code{\link[=influence_stat]{influence_stat()}} computes the differences

@@ -168,7 +168,7 @@ or called inside a function, it will not be plotted. Use \code{\link[=plot]{plot
 plot it.
 }
 \description{
-Gets a \code{\link[=influence_stat]{influence_stat()}} output and plots selected
+Gets an \code{\link[=influence_stat]{influence_stat()}} output and plots selected
 statistics.
 }
 \details{
