@@ -12,7 +12,7 @@
 \item{...}{Other arguments. They will be ignored.}
 }
 \value{
-\code{NULL}. Called for its side effect.
+\code{x} is returned invisibly. Called for its side effect.
 }
 \description{
 Prints the results of \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
