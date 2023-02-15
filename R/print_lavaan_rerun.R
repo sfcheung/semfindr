@@ -2,7 +2,7 @@
 #'
 #' @description Prints the results of [lavaan_rerun()].
 #'
-#' @return NULL
+#' @return `NULL`. Called for its side effect.
 #'
 #' @param x The output of [lavaan_rerun()].
 #'
