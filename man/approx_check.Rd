@@ -23,7 +23,7 @@ number of tests failed.
 }
 \description{
 Gets a 'lavaan' output and checks whether it is
-supported by the functions using the approximation approach.
+supported by the functions using the approximate approach.
 }
 \details{
 This function is not supposed to be used by users. It is

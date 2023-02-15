@@ -21,22 +21,31 @@ If omitted or \code{NULL}, the
 default, changes on all free parameters will be computed.}
 }
 \value{
-A matrix with the number of columns equal to the number of
-requested parameters, and the number of rows equal to the number
+A matrix. The number of columns is equal to the number of
+requested parameters plus one, the last column being the
+approximate generalized Cook's
+distance. The number of rows equal to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
 Please see Pek and MacCallum (2011), Equation 7.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
-standardized changes in selected parameters for each case.
+standardized changes in selected parameters for each case
+if included.
 }
 \details{
 For each case, \code{\link[=est_change]{est_change()}} computes the differences in
 the estimates of selected parameters with and without this case:
-(estimate with all case) - (estimate without this case). The
+
+(Estimate with all case) - (Estimate without this case).
+
+The
 differences are standardized by dividing the raw differences by
 their standard errors (Pek & MacCallum, 2011).
+This is a measure of the standardized influence of a case on
+the parameter
+estimates if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -70,9 +79,11 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 4, 7, 9))
-# Compute the changes in chisq if a case is removed
+# Compute the standardized changes in parameter estimates
+# if a case is included vs. if this case is excluded.
+# That is, case influence on parameter estimates, standardized.
 out <- est_change(fit_rerun)
-# Results excluding a case
+# Case influence:
 out
 # Note that these are the differences divided by the standard errors
 # The rightmost column, `gcd`, contains the
@@ -81,7 +92,7 @@ out[, "gcd", drop = FALSE]
 
 # Compute the changes for the paths from iv1 and iv2 to m1
 out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
-# Results excluding a case
+# Case influence:
 out2
 # Note that only the changes in the selected parameters are included.
 # The generalized Cook's distance is computed only from the selected
@@ -102,7 +113,9 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the standardized changes in parameter estimates
+# if a case is included vs. if a case is excluded.
+# That is, case influence on parameter estimates, standardized.
 # For free loadings only
 out <- est_change(fit_rerun, parameters = "=~")
 out
@@ -125,7 +138,9 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if a case is excluded.
+# That is, standardized case influence on parameter estimates.
 # For structural paths only
 out <- est_change(fit_rerun, parameters = "~")
 out

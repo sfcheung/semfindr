@@ -1,11 +1,12 @@
 #' @title Case Influence on Fit Measures
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the changes
-#' in selected fit measures if a case is deleted
+#' in selected fit measures if a case is included.
 #'
 #' @details For each case, [fit_measures_change()] computes the
 #' differences in selected fit measures with and without this case:
-#' (fit measure with all case) - (fit measure without this case).
+#'
+#' (Fit measure with all case) - (Fit measure without this case).
 #'
 #' If the value of a case is positive, including the case increases an estimate.
 #'
@@ -15,6 +16,8 @@
 #' goodness of fit measures such as CFI and TLI, but a decrease
 #' is an improvement in fit for badness of fit measures such as
 #' RMSEA and model chi-square.
+#' This is a measure of the influence of a case on a fit measure
+#' if it is included.
 #'
 #' If the analysis is not admissible or does not converge when a case
 #' is deleted, `NA`s will be turned for the differences of this
@@ -63,11 +66,13 @@
 #' # For illustration, do this only for four selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = 1:10)
-#' # Compute the changes in chisq if a case is removed
+#' # Compute the changes in chisq if a case is included
+#' # vs. if this case is removed.
+#' # That is, case influence on model chi-squared.
 #' out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 #' # Results excluding a case, for the first few cases
 #' head(out)
-#' # Chi-square will all cases
+#' # Chi-square will all cases included.
 #' (chisq_all <- fitMeasures(fit, c("chisq")))
 #' # Chi-square with the first case removed
 #' fit_01 <- lavaan::sem(mod, dat[-1, ])

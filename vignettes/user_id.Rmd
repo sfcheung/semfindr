@@ -59,7 +59,7 @@ if (file.exists("user_id_fit_rerun.RDS")) {
 fit_rerun <- lavaan_rerun(fit, case_id = dat$id)
 ```
 
-The list of reruns now use `id` as the names:
+The list of reruns now uses `id` as the names:
 
 ```{r}
 head(fit_rerun$rerun[1:3])

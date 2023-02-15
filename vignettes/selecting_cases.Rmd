@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Instead of refitting the model *n* times, once
+Instead of refitting the model *n* times, each time
 with each case removed, it is possible to use some criteria
 to select cases to be included in the analysis. This is useful
 when the time to fit a model is long and/or the sample
@@ -97,7 +97,9 @@ variables only (i.e., path models). This is analogous to
 selecting cases based on their residuals in a multiple
 regression model. A path model can have more than one
 endogenous variable. The residuals of a case on all
-endogenous variables will be computed (by `implied_scores()`),
+endogenous variables will be computed (as differences
+between observed scores and implied scores computed
+by `implied_scores()`),
 and the Mahalanobis
 distance will be computed using these residuals.
 

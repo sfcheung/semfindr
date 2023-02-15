@@ -97,7 +97,7 @@ in the analysis. Its length should be equal to the length of
 }
 }
 \description{
-\code{\link[=lavaan_rerun]{lavaan_rerun()}} reruns a \code{lavaan} analysis several
+Reruns a \code{lavaan} analysis several
 times, each time with one case removed.
 }
 \details{
@@ -147,7 +147,7 @@ Currently \code{\link[=lavaan_rerun]{lavaan_rerun()}} only supports single-group
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
+# For illustration, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
 mod <-
@@ -158,8 +158,13 @@ dv ~ m1
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
+
 # Fit the model n times. Each time with one case removed.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
+
+# Print the output for a brief description of the runs
+fit_rerun
+
 # Results excluding the first case
 fitMeasures(fit_rerun$rerun[[1]], c("chisq", "cfi", "tli", "rmsea"))
 # Results by manually excluding the first case

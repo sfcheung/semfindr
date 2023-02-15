@@ -20,7 +20,7 @@ est_change_raw_approx(
 parameters. Each parameter is named as in \code{lavaan} syntax, e.g.,
 \code{x ~ y} or \code{x ~~ y}, as appeared in the columns \code{lhs}, \code{op}, and \code{rhs}
 in the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
-Supports specifying an operator to select all parameters with this
+Supports specifying an operator to select all parameters with these
 operators: \code{~}, \verb{~~}, \verb{=~}, and \code{~1}. This vector can contain
 both parameter names and operators. More details can be found
 in the help of \code{\link[=pars_id]{pars_id()}}.
@@ -37,7 +37,7 @@ as case identification values.}
 inadmissible results (i.e., \code{post.check} from
 \code{\link[lavaan:lavInspect]{lavaan::lavInspect()}} is \code{FALSE}). Default is \code{FALSE}.}
 
-\item{skip_all_checks}{If \code{TRUE}, skips all checks and allow
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
 users to run this function on any object of \code{lavaan} class.
 For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
@@ -50,15 +50,21 @@ elements are the raw differences.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
-approximate changes in selected parameters for each case.
+approximate changes in selected parameters for each case
+if included.
 }
 \details{
 For each case, \code{\link[=est_change_raw_approx]{est_change_raw_approx()}} computes the
 approximate differences
 in the estimates of selected parameters with and without this
-case: (estimate with all case) - (estimate without this case). The
-change is the approximate raw change. The change is \emph{not} divided by
-the standard error of an estimate (hance "raw" in the function name).
+case:
+
+(Estimate with all case) - (Estimate without this case).
+
+The change is the approximate raw change. The change is \emph{not} divided by
+the standard error of an estimate (hence "raw" in the function name).
+This is a measure of the influence of a case on the parameter
+estimates if it is included.
 
 If the value of a case is positive, including the case increases an estimate.
 
@@ -97,14 +103,18 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-# Compute the approximate changes in parameter estimates if a case is removed
+# Compute the approximate changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, the approximate case influence on parameter estimates.
 out_approx <- est_change_raw_approx(fit)
 head(out_approx)
 # Fit the model several times. Each time with one case removed.
 # For illustration, do this only for 10 selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, the case influence on the parameter estimates.
 out <- est_change_raw(fit_rerun)
 out
 # Compare the results
@@ -124,8 +134,10 @@ f1 ~~ f2
 # Fit the model
 fit <- lavaan::cfa(mod, dat)
 summary(fit)
-# Compute the approximate changes in parameter estimates if a case is removed
-# Compute changes for free loadings only
+# Compute the approximate changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, approximate case influence on parameter estimates.
+# Compute changes for free loadings only.
 out_approx <- est_change_raw_approx(fit,
                                     parameters = "=~")
 head(out_approx)
@@ -144,7 +156,9 @@ ab := a * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-# Compute the approximate changes in parameter estimates if a case is removed
+# Compute the approximate changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, the approximate case influence on parameter estimates.
 # Compute changes for structural paths only
 out_approx <- est_change_raw_approx(fit,
                                     parameters = c("~"))

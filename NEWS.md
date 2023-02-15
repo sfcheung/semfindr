@@ -1,4 +1,4 @@
-# semfindr 0.1.1.4
+# semfindr 0.1.2
 
 - Added DOI of Pek and MacCallum in the DESCRIPTION. (0.1.1.1)
 - Added `approx_check()` to check whether the input object
@@ -8,6 +8,8 @@
   parameter estimates. (0.1.1.3)
 - Diagnostic plot functions revised to allow users to
   fully control elements drawn. (0.1.1.4)
+- Fix typos and grammatical mistakes in help pages and
+  vignettes. (0.1.1.5)
 
 # semfindr 0.1.1
 
