@@ -90,4 +90,5 @@ print.lavaan_rerun <- function(x,
         cat("Detail:\n")
         print(failed_messages_df)
       }
+    invisible(x)
   }
