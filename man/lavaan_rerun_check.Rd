@@ -42,11 +42,11 @@ dat_gp <- dat
 dat$gp <- rep(c("gp1", "gp2"), length.out = nrow(dat_gp))
 
 fit01 <- lavaan::sem(mod, dat)
-# If supported, returns a zero
+# If supported, returns a zero.
 lavaan_rerun_check(fit01)
 
 fit05 <- lavaan::cfa(mod, dat, group = "gp")
-# If not supported, returns a negative number
+# If not supported, returns a negative number.
 lavaan_rerun_check(fit05)
 
 }

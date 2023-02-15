@@ -48,14 +48,14 @@
 #' fit <- lavaan::sem(mod, dat)
 #' summary(fit)
 #' # Fit the model n times. Each time with one case removed.
-#' # For illustration, do this only for selected cases
+#' # For illustration, do this only for selected cases.
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = 1:10)
 #' # Compute the Mahalanobis distance for each case
 #' out <- mahalanobis_rerun(fit_rerun)
 #' # Results excluding a case, for the first few cases
 #' head(out)
-#' # Compute the Mahalanobis distance using stats::mahalanobis
+#' # Compute the Mahalanobis distance using stats::mahalanobis()
 #' md1 <- stats::mahalanobis(dat, colMeans(dat), stats::cov(dat))
 #' # Compare the results
 #' head(md1)

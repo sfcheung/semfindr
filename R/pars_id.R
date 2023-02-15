@@ -50,7 +50,6 @@
 #' @examples
 #'
 #' dat <- sem_dat
-#' set.seed(64264)
 #'
 #' library(lavaan)
 #' sem_model <-
@@ -455,7 +454,6 @@ pars_id_special <- function(pars,
 #' tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 #' pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_ng))
 #'
-
 #'
 #' @export
 

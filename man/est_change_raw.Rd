@@ -69,11 +69,13 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 
-# Fit the model n times. Each time with one case removed.
+# Fit the model n times. Each time with one case is removed.
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(3, 5, 7, 8))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 out <- est_change_raw(fit_rerun)
 # Results excluding a case
 out
@@ -124,7 +126,9 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 # For free loadings only
 out <- est_change_raw(fit_rerun, parameters = "=~")
 out
@@ -151,7 +155,9 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if this case is excluded.
+# That is, case influence on parameter estimates.
 # For structural paths only
 out <- est_change_raw(fit_rerun, parameters = "~")
 out

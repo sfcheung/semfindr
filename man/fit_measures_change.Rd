@@ -70,11 +70,13 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is included
+# vs. if this case is removed.
+# That is, case influence on model chi-squared.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
-# Chi-square will all cases
+# Chi-square will all cases included.
 (chisq_all <- fitMeasures(fit, c("chisq")))
 # Chi-square with the first case removed
 fit_01 <- lavaan::sem(mod, dat[-1, ])

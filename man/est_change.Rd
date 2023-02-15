@@ -73,9 +73,11 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 4, 7, 9))
-# Compute the changes in chisq if a case is removed
+# Compute the standardized changes in parameter estimates
+# if a case is included vs. if this case is excluded.
+# That is, case influence on parameter estimates, standardized.
 out <- est_change(fit_rerun)
-# Results excluding a case
+# Case influence:
 out
 # Note that these are the differences divided by the standard errors
 # The rightmost column, `gcd`, contains the
@@ -84,7 +86,7 @@ out[, "gcd", drop = FALSE]
 
 # Compute the changes for the paths from iv1 and iv2 to m1
 out2 <- est_change(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
-# Results excluding a case
+# Case influence:
 out2
 # Note that only the changes in the selected parameters are included.
 # The generalized Cook's distance is computed only from the selected
@@ -105,7 +107,9 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the standardized changes in parameter estimates
+# if a case is included vs. if a case is excluded.
+# That is, case influence on parameter estimates, standardized.
 # For free loadings only
 out <- est_change(fit_rerun, parameters = "=~")
 out
@@ -128,7 +132,9 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-# Compute the changes in parameter estimates if a case is removed
+# Compute the changes in parameter estimates if a case is included
+# vs. if a case is excluded.
+# That is, standardized case influence on parameter estimates.
 # For structural paths only
 out <- est_change(fit_rerun, parameters = "~")
 out

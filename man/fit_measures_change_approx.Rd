@@ -102,9 +102,11 @@ head(out_approx)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is included
+# vs. if this case is excluded.
+# That is, case influence on model chi-squared.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
-# Results excluding a case, for the first few cases
+# Case influence, for the first few cases
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)
@@ -127,7 +129,9 @@ head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is included
+# vs. if this case is excluded.
+# That is, case influence on fit measures.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 # Results excluding a case, for the first few cases
 head(out)
@@ -155,9 +159,11 @@ head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-# Compute the changes in chisq if a case is removed
+# Compute the changes in chisq if a case is excluded
+# vs. if this case is included.
+# That is, case influence on model chi-squared.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
-# Results excluding a case, for the first few cases
+# Case influence, for the first few cases
 head(out)
 # Compare the results
 plot(out_approx[1:5, "chisq"], out)

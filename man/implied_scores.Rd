@@ -29,7 +29,7 @@ observed variables.
 \examples{
 library(lavaan)
 dat <- pa_dat
-# For illustration only, select only the first 50 cases
+# For illustration, select only the first 50 cases
 dat <- dat[1:50, ]
 # The model
 mod <-

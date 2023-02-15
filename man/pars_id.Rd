@@ -59,7 +59,6 @@ It is used by function such as \code{\link[=est_change]{est_change()}} and
 \examples{
 
 dat <- sem_dat
-set.seed(64264)
 
 library(lavaan)
 sem_model <-
