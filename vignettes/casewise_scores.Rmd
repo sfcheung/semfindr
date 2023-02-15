@@ -59,7 +59,7 @@ The second-order Taylor series expansion can be used to approximate the paramete
 
 $$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
 $$\hat \theta - \hat \theta_{(i)} \approx \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
-where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](p. 182).
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](https://conservancy.umn.edu/handle/11299/37076) (p. 182).
 
 ### Comparison
 
