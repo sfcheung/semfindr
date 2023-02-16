@@ -14,7 +14,7 @@ from a source."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,6 +97,20 @@ does not indicate whether a parameter is free or fixed,
 this argument will be ignored.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A data-frame like object of the class <code>lavaan.data.frame</code></p>
+
+
+<p>with four columns: <code>lhs</code>, <code>op</code>, <code>rhs</code>, and <code>group</code>.
+The number of rows is equal to number of parameters
+selected (usually the number of elements of <code>pars_id</code>).
+The values of the four columns are the values
+in the parameter table of the source <code>lavaan</code> model
+for each parameter selected by <code>pars_id</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>If the source is a parameter estimates table (i.e.,
