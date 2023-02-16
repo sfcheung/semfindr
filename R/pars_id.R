@@ -416,6 +416,15 @@ pars_id_special <- function(pars,
 #' output of [coef()]), it returns the names of parameters
 #' based on the ids.
 #'
+#' @return
+#' A data-frame like object of the class `lavaan.data.frame`
+#' with four columns: `lhs`, `op`, `rhs`, and `group`.
+#' The number of rows is equal to number of parameters
+#' selected (usually the number of elements of `pars_id`).
+#' The values of the four columns are the values
+#' in the parameter table of the source `lavaan` model
+#' for each parameter selected by `pars_id`.
+#'
 #' @param pars_id A vector of integers. Usually the output
 #' of [pars_id].
 #'
