@@ -101,15 +101,14 @@ this argument will be ignored.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A data-frame like object of the class <code>lavaan.data.frame</code></p>
-
-
-<p>with four columns: <code>lhs</code>, <code>op</code>, <code>rhs</code>, and <code>group</code>.
-The number of rows is equal to number of parameters
-selected (usually the number of elements of <code>pars_id</code>).
-The values of the four columns are the values
-in the parameter table of the source <code>lavaan</code> model
-for each parameter selected by <code>pars_id</code>.</p>
+<p>If <code>pars_source</code> is the output of
+<code><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html" class="external-link">lavaan::parameterEstimates()</a></code> or
+<code><a href="https://rdrr.io/pkg/lavaan/man/model.syntax.html" class="external-link">lavaan::parameterTable()</a></code>, it returns a subset of
+<code>pars_source</code>, keeping the rows of selected parameters
+and the columns <code>lhs</code>, <code>op</code>, <code>rhs</code>, and <code>group</code>. If
+<code>pars_source</code> is a named vector of free parameters, it
+returns a character vector containing the names of the
+selected parameters.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
