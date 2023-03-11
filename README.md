@@ -1,14 +1,17 @@
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN status](https://www.r-pkg.org/badges/version/semfindr?color=blue)](https://CRAN.R-project.org/package=semfindr)
+[![CRAN: Release Date](https://www.r-pkg.org/badges/last-release/semfindr?color=blue)](https://cran.r-project.org/package=semfindr)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/semfindr?color=blue)](https://r-pkg.org/pkg/semfindr)
 [![Code size](https://img.shields.io/github/languages/code-size/sfcheung/semfindr.svg)](https://github.com/sfcheung/semfindr)
 [![Last Commit at Master](https://img.shields.io/github/last-commit/sfcheung/semfindr.svg)](https://github.com/sfcheung/semfindr/commits/master)
 [![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.4), updated on 2023-02-17, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+(Version 0.1.4.1), updated on 2023-03-11, [release history](https://sfcheung.github.io/semfindr/news/index.html))
 
-# semfindr
+# semfindr: Finding influential cases in SEM <img src="man/figures/logo.png" align="right" height="150" />
 
 A find(e)r of influential cases in structural equation modeling
 based mainly on the sensitivity analysis procedures presented by Pek and

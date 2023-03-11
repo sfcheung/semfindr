@@ -1,3 +1,7 @@
+# semfindr 0.1.4.1
+
+- Fixed the pkgdown site. (0.1.4.1)
+
 # semfindr 0.1.4
 
 - Added DOI of Pek and MacCallum in the DESCRIPTION. (0.1.1.1)
