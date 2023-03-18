@@ -14,7 +14,7 @@ if included."><meta property="og:image" content="https://sfcheung.github.io/semf
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,6 +119,15 @@ estimates if it is included.</p>
 is deleted, <code>NA</code>s will be turned for this case on the differences.</p>
 <p>Unlike <code><a href="est_change_raw.html">est_change_raw()</a></code>, <code>est_change()</code> does not support
 computing the standardized changes of standardized estimates.</p>
+<p>It will also compute generalized Cook's distance (<em>gCD</em>), proposed by
+Pek and MacCallum (2011) for structural equation modeling.
+Only the parameters selected (all free parameters, by default)
+will be used in computing <em>gCD</em>.</p>
+<p>Note that, if (a) a model has one or more equality constraints, and
+(b) some selected parameters are linearly dependent or constrained
+to be equal due to the constraint(s), <em>gCD</em> will not be computed
+and <code>NA</code> will be returned. For this kind of models, manually select
+parameters that are not linearly dependent or constrained to be equal.</p>
 <p>Currently it only supports single-group models.</p>
     </div>
     <div class="section level2">
@@ -150,7 +159,7 @@ doi:10.1080/00273171.2011.561068</p>
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 1 iteration</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.15 ended normally after 1 iteration</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -192,7 +201,7 @@ doi:10.1080/00273171.2011.561068</p>
 <span class="r-in"><span><span class="co"># For illustration, do this only for four selected cases</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.22 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.2 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the standardized changes in parameter estimates</span></span></span>
 <span class="r-in"><span><span class="co"># if a case is included vs. if this case is excluded.</span></span></span>
@@ -243,7 +252,7 @@ doi:10.1080/00273171.2011.561068</p>
 <span class="r-in"><span><span class="co"># Examine four selected cases</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.23 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.2 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the standardized changes in parameter estimates</span></span></span>
 <span class="r-in"><span><span class="co"># if a case is included vs. if a case is excluded.</span></span></span>
@@ -275,7 +284,7 @@ doi:10.1080/00273171.2011.561068</p>
 <span class="r-in"><span><span class="co"># Examine four selected cases</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.27 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.24 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the changes in parameter estimates if a case is included</span></span></span>
 <span class="r-in"><span><span class="co"># vs. if a case is excluded.</span></span></span>

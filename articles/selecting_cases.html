@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +121,7 @@ illustration:</p>
 <p>The following model is fitted to the data set:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-14</span></span>
+<span><span class="co">#&gt; This is lavaan 0.6-15</span></span>
 <span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
@@ -140,7 +140,7 @@ selected. This can be done using the argument <code>to_rerun</code> of
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.5 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.44 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Only four reruns in the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -170,7 +170,7 @@ selected. This can be done using the argument <code>to_rerun</code> of
 <span>                                       <span class="st">"case4"</span>,</span>
 <span>                                       <span class="st">"case15"</span>,</span>
 <span>                                       <span class="st">"case18"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.5 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.44 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Only four reruns in the output. User supplied case IDs are used in
 the output:</p>
@@ -213,7 +213,7 @@ refitting a model.</p>
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          resid_md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.62 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.55 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -252,7 +252,7 @@ this distance to be selected for refitting a model.</p>
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.62 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.55 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

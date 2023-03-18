@@ -14,7 +14,7 @@ if included."><meta property="og:image" content="https://sfcheung.github.io/semf
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,6 +152,8 @@ leave-one-out sensitivity analysis using <code><a href="lavaan_rerun.html">lavaa
 changes for the standardized solution.</p>
 <p>For the technical details, please refer to the vignette
 on this approach: <code><a href="../articles/casewise_scores.html">vignette("casewise_scores", package = "semfindr")</a></code></p>
+<p>The approximate approach does not yet support a model with
+equality constraints.</p>
 <p>Currently it only supports single-group models.</p>
     </div>
     <div class="section level2">
@@ -177,7 +179,7 @@ implemented by Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" cl
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 1 iteration</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.15 ended normally after 1 iteration</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -231,7 +233,7 @@ implemented by Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" cl
 <span class="r-in"><span><span class="co"># For illustration, do this only for 10 selected cases</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.5 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.42 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Compute the changes in parameter estimates if a case is included</span></span></span>
 <span class="r-in"><span><span class="co"># vs. if this case is excluded.</span></span></span>
@@ -279,7 +281,7 @@ implemented by Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" cl
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 37 iterations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.15 ended normally after 37 iterations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -355,7 +357,7 @@ implemented by Shu Fai Cheung <a href="https://orcid.org/0000-0002-9871-9448" cl
 <span class="r-in"><span><span class="co"># Fit the model</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.14 ended normally after 37 iterations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6.15 ended normally after 37 iterations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>

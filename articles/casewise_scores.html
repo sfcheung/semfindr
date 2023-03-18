@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Approximate Case Influence Using Scores and Casewise Likelihood</h1>
             
-            <h4 data-toc-skip class="date">2023-03-11</h4>
+            <h4 data-toc-skip class="date">2023-03-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/HEAD/vignettes/casewise_scores.Rmd" class="external-link"><code>vignettes/casewise_scores.Rmd</code></a></small>
       <div class="d-none name"><code>casewise_scores.Rmd</code></div>
@@ -105,7 +105,7 @@ for refitting models <em>N</em> times is high.</p>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-14</span></span>
+<span><span class="co">#&gt; This is lavaan 0.6-15</span></span>
 <span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
@@ -313,6 +313,24 @@ comparison:</p>
 <p><img src="casewise_scores_files/figure-html/plot-change-rmsea-1.png" width="700"></p>
 <p>The values aligned reasonably well along the 45-degree line.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
+</h2>
+<ul>
+<li><p>The approximate approach is tested only for models fitted by
+maximum likelihood (ML) with normal theory standard errors (the
+default).</p></li>
+<li><p>The approximate approach does not yet support a model with one or
+more equality constraints.</p></li>
+<li><p>The approximate approach does not yet support multisample
+models.</p></li>
+<li><p>The approximate approach does not yet support multilevel
+models.</p></li>
+</ul>
+<p>The <code>lavaan</code> object will be checked by
+<code><a href="../reference/approx_check.html">approx_check()</a></code> to see if it is supported. If not, an error
+will be raised.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
