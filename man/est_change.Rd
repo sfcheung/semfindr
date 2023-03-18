@@ -57,6 +57,17 @@ is deleted, \code{NA}s will be turned for this case on the differences.
 Unlike \code{\link[=est_change_raw]{est_change_raw()}}, \code{\link[=est_change]{est_change()}} does not support
 computing the standardized changes of standardized estimates.
 
+It will also compute generalized Cook's distance (\emph{gCD}), proposed by
+Pek and MacCallum (2011) for structural equation modeling.
+Only the parameters selected (all free parameters, by default)
+will be used in computing \emph{gCD}.
+
+Note that, if (a) a model has one or more equality constraints, and
+(b) some selected parameters are linearly dependent or constrained
+to be equal due to the constraint(s), \emph{gCD} will not be computed
+and \code{NA} will be returned. For this kind of models, manually select
+parameters that are not linearly dependent or constrained to be equal.
+
 Currently it only supports single-group models.
 }
 \examples{

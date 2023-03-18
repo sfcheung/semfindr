@@ -34,6 +34,9 @@
 #' For the technical details, please refer to the vignette
 #' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 #'
+#' The approximate approach does not yet support a model with
+#' equality constraints.
+#'
 #' Currently it only supports single-group models.
 #'
 #' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,

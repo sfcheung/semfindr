@@ -194,6 +194,23 @@ ggplot(rmsea_change_df, aes(x = rmsea_change, y = rmsea_change_approx)) +
 
 The values aligned reasonably well along the 45-degree line.
 
+# Limitations
+
+- The approximate approach is tested only for models
+  fitted by maximum likelihood (ML) with normal theory
+  standard errors (the default).
+
+- The approximate approach does not yet support a model with one or more equality constraints.
+
+- The approximate approach does not yet support multisample
+models.
+
+- The approximate approach does not yet support multilevel
+models.
+
+The `lavaan` object will be checked by `approx_check()` to see if it is
+supported. If not, an error will be raised.
+
 # References
 
 Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. https://conservancy.umn.edu/handle/11299/37076
