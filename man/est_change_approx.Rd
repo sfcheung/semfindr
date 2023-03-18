@@ -87,6 +87,9 @@ distance (gCD). To avoid confusion, it is labelled \code{gcd_approx}.
 For the technical details, please refer to the vignette
 on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
+The approximate approach does not yet support a model with
+equality constraints.
+
 Currently it only supports single-group models.
 }
 \examples{

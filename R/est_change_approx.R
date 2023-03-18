@@ -34,6 +34,9 @@
 #' For the technical details, please refer to the vignette
 #' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 #'
+#' The approximate approach does not yet support a model with
+#' equality constraints.
+#'
 #' Currently it only supports single-group models.
 #'
 #' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
@@ -173,6 +176,9 @@ est_change_approx <- function(fit,
     }
   if (!inherits(fit, "lavaan")) {
       stop("The fit object is not a lavaan output.")
+    }
+  if (fit@Model@eq.constraints) {
+      stop("est_change_approx() does not yet support models with equality constraints.")
     }
 
   if (!skip_all_checks) {

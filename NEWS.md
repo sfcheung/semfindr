@@ -4,6 +4,9 @@
 - Check whether a model has at least one equality constraint
   and the selected parameters are involved in the constraint(s).
   If yes, *gCD* will not be computed. (0.1.4.2)
+- `est_change_raw_approx()` and `est_change_approx()`
+  will raise an error if the model has at least one
+  equality constraint. (0.1.4.2)
 
 # semfindr 0.1.4
 
