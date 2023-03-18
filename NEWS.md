@@ -6,6 +6,8 @@
   If yes, *gCD* will not be computed. (0.1.4.2)
 - `approx_check()` will check if the model has at least one
   equality constraint. (0.1.4.2)
+- Add a "Limitations" section to the vignette of the
+  approximate approach. (0.1.4.2)
 
 # semfindr 0.1.4
 
