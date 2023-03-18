@@ -1,6 +1,9 @@
-# semfindr 0.1.4.1
+# semfindr 0.1.4.2
 
 - Fixed the pkgdown site. (0.1.4.1)
+- Check whether a model has at least one equality constraint
+  and the selected parameters are involved in the constraint(s).
+  If yes, *gCD* will not be computed. (0.1.4.2)
 
 # semfindr 0.1.4
 

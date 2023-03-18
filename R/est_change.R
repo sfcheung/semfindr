@@ -26,6 +26,17 @@
 #' Unlike [est_change_raw()], [est_change()] does not support
 #' computing the standardized changes of standardized estimates.
 #'
+#' It will also compute generalized Cook's distance (*gCD*), proposed by
+#' Pek and MacCallum (2011) for structural equation modeling.
+#' Only the parameters selected (all free parameters, by default)
+#' will be used in computing *gCD*.
+#'
+#' Note that, if (a) a model has one or more equality constraints, and
+#' (b) some selected parameters are linearly dependent or constrained
+#' to be equal due to the constraint(s), *gCD* will not be computed
+#' and `NA` will be returned. For this kind of models, manually select
+#' parameters that are not linearly dependent or constrained to be equal.
+#'
 #' Currently it only supports single-group models.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
@@ -153,6 +164,7 @@ est_change <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
+
   estorg   <- lavaan::parameterEstimates(
               fit0,
               se = FALSE,
@@ -184,6 +196,17 @@ est_change <- function(rerun_out,
     } else {
       parameters_selected <- est0$free[est0$free > 0]
     }
+
+  # Not yet support parameters constrained to be equal
+  tmp <- tryCatch(solve(vcov(fit0)[parameters_selected,
+                                   parameters_selected]),
+                   error = function(e) e)
+  if (inherits(tmp, "error")) {
+      any_depend <- TRUE
+    } else {
+      any_depend <- FALSE
+    }
+
   out <- sapply(reruns,
                 function(x, est, parameters_names, parameters_selected) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
@@ -206,6 +229,20 @@ est_change <- function(rerun_out,
   out <- t(out)
   colnames(out) <- c(parameters_names[parameters_selected], "gcd")
   rownames(out) <- case_ids
+
+  # Not yet support a model with equality constraint
+  if (any_depend) {
+      out[, "gcd"] <- NA
+    }
+  if (fit0@Model@eq.constraints && any(is.na(out[, "gcd"]))) {
+      message(paste("The model has one or more equality constraints.",
+                "gCD will not be computed if the selected",
+                "parameters are linearly dependent",
+                "(e.g., some are constrained to be equal).",
+                "If you need gCD, select parameters not",
+                "constrained to be equal or linearly dependent."))
+    }
+
   out
 }
 
@@ -243,8 +280,14 @@ est_change_i <- function(x,
   esti_change_raw <- (est$est - esti_full$est)
   names(esti_change_raw) <- parameters_names
   esti_change_raw <- esti_change_raw[parameters_selected]
-  gcdi <- matrix(esti_change_raw, 1, k) %*% solve(vcovi_full) %*%
-          matrix(esti_change_raw, k, 1)
+  vcovi_full_inv <- tryCatch(solve(vcovi_full),
+                             error = function(e) e)
+  if (inherits(vcovi_full_inv, "error")) {
+      gcdi <- NA
+    } else {
+      gcdi <- matrix(esti_change_raw, 1, k) %*% vcovi_full_inv %*%
+              matrix(esti_change_raw, k, 1)
+    }
   outi <- c(esti_change, gcdi)
   names(outi) <- c(parameters_names[parameters_selected], "gcd")
   outi
