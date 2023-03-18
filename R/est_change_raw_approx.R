@@ -172,9 +172,6 @@ est_change_raw_approx <- function(fit,
   if (!inherits(fit, "lavaan")) {
       stop("The fit object is not a lavaan output.")
     }
-  if (fit@Model@eq.constraints) {
-      stop("est_change_raw_approx() does not yet support models with equality constraints.")
-    }
 
   if (!skip_all_checks) {
     check_out <- approx_check(fit, print_messages = FALSE)

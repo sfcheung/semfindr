@@ -62,6 +62,7 @@ approx_check <- function(fit,
     sem_nlevels <- lavaan::lavInspect(fit, "nlevels")
     sem_max_nclusters <- max(unlist(lavaan::lavInspect(fit, "nclusters")))
     sem_data <- tryCatch(lavaan::lavInspect(fit, "data"), error = function(e) e)
+    sem_eq_constraints <- fit@Model@eq.constraints
 
     # `_approx` functions are developed for ML estimators only.
     # `_approx` functions are developed for ML normal theory SEs only.
@@ -122,6 +123,13 @@ approx_check <- function(fit,
                 paste("The approximation method is tested only for",
                         "models fitted by ML, with normal theory standard errors",
                         "and normal theory chi-square test requested."))
+      }
+
+    if (sem_eq_constraints) {
+          out <- ifelse(out >= 0, -1, out - 1)
+          msg <- c(msg,
+                paste("The approximation method does not yet",
+                      "support a model with one or more equality constraints."))
       }
 
     attr(out, "info") <- msg
