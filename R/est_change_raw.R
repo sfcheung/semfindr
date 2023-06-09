@@ -44,10 +44,12 @@
 #' [lavaan::standardizedSolution()]). Otherwise, the changes in the
 #' unstandardized solution are returned. Default is `FALSE`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `est_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested parameters, and the number of rows equals to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. The elements are the raw differences.
+#' A print method is available for user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -251,6 +253,13 @@ est_change_raw <- function(rerun_out,
     }
   colnames(out) <- parameters_names[parameters_selected]
   rownames(out) <- case_ids
+
+  attr(out, "call") <- match.call()
+  attr(out, "type") <- "raw"
+  attr(out, "standardized") <- standardized
+
+  class(out) <- c("est_change", class(out))
+
   out
 }
 
