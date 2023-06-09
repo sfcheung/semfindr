@@ -255,7 +255,8 @@ est_change_raw <- function(rerun_out,
   rownames(out) <- case_ids
 
   attr(out, "call") <- match.call()
-  attr(out, "type") <- "raw"
+  attr(out, "change_type") <- "raw"
+  attr(out, "method") <- "leave_one_out"
   attr(out, "standardized") <- standardized
 
   class(out) <- c("est_change", class(out))

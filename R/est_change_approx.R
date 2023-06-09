@@ -68,13 +68,15 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix. The number of columns is equal to the number of
+#' @return An `est_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested parameters plus one, the last column being the
 #' approximate generalized Cook's
 #' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. The elements are approximate standardized
 #' differences.
+#' A print method is available for user-friendly output.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
 #' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -231,5 +233,13 @@ est_change_approx <- function(fit,
   out <- cbind(out0, gcd_approx)
   colnames(out) <- c(parameters_names[parameters_selected], "gcd_approx")
   rownames(out) <- case_ids
+
+  attr(out, "call") <- match.call()
+  attr(out, "change_type") <- "standardized"
+  attr(out, "method") <- "approx"
+  attr(out, "standardized") <- FALSE
+
+  class(out) <- c("est_change", class(out))
+
   out
 }
