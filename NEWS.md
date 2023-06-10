@@ -1,4 +1,4 @@
-# semfindr 0.1.4.5
+# semfindr 0.1.4.6
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -15,6 +15,9 @@
   and `fit_measures_change_approx()`. (0.1.4.4)
 - Added a print method for the output of `mahalanobis_rerun()`.
   (0.1.4.5)
+- Updated the print method of `md_semfindr` to
+  support the output of `mahalanobis_predictors()`.
+  (0.1.4.6)
 
 # semfindr 0.1.4
 
