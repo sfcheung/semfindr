@@ -1,4 +1,4 @@
-# semfindr 0.1.4.2
+# semfindr 0.1.4.3
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -6,8 +6,11 @@
   If yes, *gCD* will not be computed. (0.1.4.2)
 - `approx_check()` will check if the model has at least one
   equality constraint. (0.1.4.2)
-- Add a "Limitations" section to the vignette of the
+- Added a "Limitations" section to the vignette of the
   approximate approach. (0.1.4.2)
+- Added a print method for the output of `est_change()`,
+  `est_change_raw()`, `est_change_approx()`, and
+  `est_change_raw_approx()`. (0.1.4.3)
 
 # semfindr 0.1.4
 
