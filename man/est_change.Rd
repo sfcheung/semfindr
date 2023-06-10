@@ -21,13 +21,15 @@ If omitted or \code{NULL}, the
 default, changes on all free parameters will be computed.}
 }
 \value{
-A matrix. The number of columns is equal to the number of
+An \code{est_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested parameters plus one, the last column being the
-approximate generalized Cook's
+generalized Cook's
 distance. The number of rows equal to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
 Please see Pek and MacCallum (2011), Equation 7.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the

@@ -21,10 +21,12 @@ fit_measures_change(
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{fit_measures_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested fit measures, and the number of rows equals to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes

@@ -60,9 +60,11 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `fit_measures_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested fit measures, and the number of rows equals to the number
 #' of cases. The row names are case identification values.
+#' A print method is available for user-friendly output.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
 #' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -280,7 +282,13 @@ fit_measures_change_approx <- function(fit,
         rmsea_change <- rmsea_fit - rmsea_approx
         out[, "rmsea"] <- rmsea_change
       }
+
+    attr(out, "call") <- match.call()
+    attr(out, "method") <- "approx"
+    class(out) <- c("fit_measures_change", class(out))
+
     out
+
   }
 
 #' @noRd

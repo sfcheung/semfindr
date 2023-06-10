@@ -69,11 +69,12 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `est_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested parameters, and the number of rows equals to the number
 #' of cases. The row names are case identification values. The
 #' elements are the raw differences.
-#'
+#' A print method is available for user-friendly output.
 #'
 #' @examples
 #' library(lavaan)
@@ -215,6 +216,14 @@ est_change_raw_approx <- function(fit,
   colnames(out0) <- parameters_names
   out <- out0[, parameters_selected, drop = FALSE]
   rownames(out) <- case_ids
+
+  attr(out, "call") <- match.call()
+  attr(out, "change_type") <- "raw"
+  attr(out, "method") <- "approx"
+  attr(out, "standardized") <- FALSE
+
+  class(out) <- c("est_change", class(out))
+
   out
 }
 

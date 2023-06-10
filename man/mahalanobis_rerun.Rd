@@ -21,9 +21,11 @@ Ignored if there is no missing data on the exogenous observed
 variables.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis
+A \code{md_semfindr}-class object, which is
+a one-column matrix (a column vector) of the Mahalanobis
 distance for each case. The row names are the case identification
 values used in \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+A print method is available for user-friendly output.
 }
 \description{
 Computes the Mahalanobis distance for each case on all

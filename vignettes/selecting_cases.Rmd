@@ -2,7 +2,7 @@
 title: "Selecting Cases In lavaan_rerun"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Selecting Cases In Rerun}
+  %\VignetteIndexEntry{Selecting Cases In lavaan_rerun}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -3,7 +3,7 @@ title: "Approximate Case Influence Using Scores and Casewise Likelihood"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Approximate Case Influence}
+  %\VignetteIndexEntry{Approximate Case Influence Using Scores and Casewise Likelihood}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

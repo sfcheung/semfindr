@@ -52,13 +52,15 @@
 #' If omitted or `NULL`, the
 #' default, changes on all free parameters will be computed.
 #'
-#' @return A matrix. The number of columns is equal to the number of
+#' @return An `est_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested parameters plus one, the last column being the
-#' approximate generalized Cook's
+#' generalized Cook's
 #' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. The elements are the standardized difference.
 #' Please see Pek and MacCallum (2011), Equation 7.
+#' A print method is available for user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -242,6 +244,13 @@ est_change <- function(rerun_out,
                 "If you need gCD, select parameters not",
                 "constrained to be equal or linearly dependent."))
     }
+
+  attr(out, "call") <- match.call()
+  attr(out, "change_type") <- "standardized"
+  attr(out, "method") <- "leave_one_out"
+  attr(out, "standardized") <- FALSE
+
+  class(out) <- c("est_change", class(out))
 
   out
 }
