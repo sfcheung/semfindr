@@ -1,4 +1,4 @@
-# semfindr 0.1.4.3
+# semfindr 0.1.4.4
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -11,6 +11,8 @@
 - Added a print method for the output of `est_change()`,
   `est_change_raw()`, `est_change_approx()`, and
   `est_change_raw_approx()`. (0.1.4.3)
+- Added a print method for the output of `fit_measures_change()`
+  and `fit_measures_change_approx()`. (0.1.4.4)
 
 # semfindr 0.1.4
 
