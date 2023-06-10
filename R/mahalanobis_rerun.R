@@ -27,9 +27,11 @@
 #' Ignored if there is no missing data on the exogenous observed
 #' variables.
 #'
-#' @return A one-column matrix (a column vector) of the Mahalanobis
+#' @return A `mah_semfindr`-class object, which is
+#' a one-column matrix (a column vector) of the Mahalanobis
 #' distance for each case. The row names are the case identification
 #' values used in [lavaan_rerun()].
+#' A print method is available for user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -152,6 +154,7 @@ mahalanobis_rerun <- function(fit,
           stop("Currently does not support models with more than one level.")
         }
     }
+
   if (inherits(fit, "lavaan")) {
       case_ids <- lavaan::lavInspect(fit, "case.idx")
       fit_data <- lavaan::lavInspect(fit, "data")
@@ -165,6 +168,7 @@ mahalanobis_rerun <- function(fit,
   colnames(out_na) <- "md"
 
   if ((sum(stats::complete.cases(fit_data))) != nrow(fit_data)) {
+      missing_data <- TRUE
       if (!requireNamespace("modi", quietly = TRUE)) {
           stop(paste("Missing data is present but the modi package",
                      "is not installed."))
@@ -192,6 +196,8 @@ mahalanobis_rerun <- function(fit,
                             em_out$param$beta,
                             em_out$param$sigma)
     } else {
+      missing_data <- FALSE
+      em_out <- NULL
       md <- stats::mahalanobis(fit_data,
                             colMeans(fit_data),
                             stats::cov(fit_data))
@@ -203,5 +209,12 @@ mahalanobis_rerun <- function(fit,
   rownames(out) <- case_ids
   colnames(out) <- "md"
   # No need to check the dimension. The result is always a column vector
+
+  attr(out, "call") <- match.call()
+  attr(out, "missing_data") <- missing_data
+  attr(out, "em_out") <- em_out
+
+  class(out) <- c("mah_semfindr", class(out))
+
   out
 }
