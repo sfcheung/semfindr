@@ -1,4 +1,4 @@
-# semfindr 0.1.4.6
+# semfindr 0.1.4.7
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -18,6 +18,8 @@
 - Updated the print method of `md_semfindr` to
   support the output of `mahalanobis_predictors()`.
   (0.1.4.6)
+- Added a print method for the output of `influence_stat()`.
+  (0.1.4.7)
 
 # semfindr 0.1.4
 
