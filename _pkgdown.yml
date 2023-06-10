@@ -60,6 +60,7 @@ reference:
   - approx_check
   - print.est_change
   - print.fit_measures_change
+  - print.md_semfindr
   - pars_id
   - pars_id_to_lorg
 - title: Datasets

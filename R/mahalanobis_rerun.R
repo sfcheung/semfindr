@@ -27,7 +27,7 @@
 #' Ignored if there is no missing data on the exogenous observed
 #' variables.
 #'
-#' @return A `mah_semfindr`-class object, which is
+#' @return A `md_semfindr`-class object, which is
 #' a one-column matrix (a column vector) of the Mahalanobis
 #' distance for each case. The row names are the case identification
 #' values used in [lavaan_rerun()].
@@ -214,7 +214,7 @@ mahalanobis_rerun <- function(fit,
   attr(out, "missing_data") <- missing_data
   attr(out, "em_out") <- em_out
 
-  class(out) <- c("mah_semfindr", class(out))
+  class(out) <- c("md_semfindr", class(out))
 
   out
 }
