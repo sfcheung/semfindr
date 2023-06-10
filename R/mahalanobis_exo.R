@@ -26,9 +26,11 @@
 #' Ignored if there is no missing data on the observed
 #' predictors.
 #'
-#' @return A one-column matrix (a column vector) of the Mahalanobis
+#' @return A `md_semfindr`-class object, which is
+#' a one-column matrix (a column vector) of the Mahalanobis
 #' distance for each case. The number of rows equals to the number of
 #' cases in the data stored in the fit object.
+#' A print method is available for user-friendly output.
 #'
 #' @examples
 #' library(lavaan)
@@ -117,6 +119,7 @@ mahalanobis_predictors <- function(fit,
     }
   fit_data_exo <- fit_data[, exo_vars, drop = FALSE]
   if ((sum(stats::complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
+      missing_data <- TRUE
       if (!requireNamespace("modi", quietly = TRUE)) {
           stop(paste("Missing data is present but the modi package",
                      "is not installed."))
@@ -144,6 +147,8 @@ mahalanobis_predictors <- function(fit,
                             em_out$param$beta,
                             em_out$param$sigma)
     } else {
+      missing_data <- FALSE
+      em_out <- NULL
       md_predictors <- stats::mahalanobis(fit_data_exo,
                             colMeans(fit_data_exo),
                             stats::cov(fit_data_exo))
@@ -155,5 +160,13 @@ mahalanobis_predictors <- function(fit,
   rownames(out) <- case_ids
   colnames(out) <- "md"
   # No need to check the dimension. The result is always a column vector
+
+  attr(out, "call") <- match.call()
+  attr(out, "missing_data") <- missing_data
+  attr(out, "em_out") <- em_out
+  attr(out, "exo_vars") <- exo_vars
+
+  class(out) <- c("md_semfindr", class(out))
+
   out
 }

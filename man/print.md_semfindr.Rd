@@ -33,7 +33,7 @@ Print the content of a 'md_semfindr'-class object.
 \details{
 The print method for the
 'md_semfindr'-class object, returned by
-\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}.
+\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}} or \code{\link[=mahalanobis_predictors]{mahalanobis_predictors()}}.
 This method will print
 the output with the option to sort the cases.
 }
@@ -61,5 +61,5 @@ print(out, first = 3)
 
 }
 \seealso{
-\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}
+\code{\link[=mahalanobis_rerun]{mahalanobis_rerun()}}, \code{\link[=mahalanobis_predictors]{mahalanobis_predictors()}}
 }

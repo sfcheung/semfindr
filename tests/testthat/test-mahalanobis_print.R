@@ -25,13 +25,16 @@ suppressWarnings(fit1 <- lavaan::sem(mod, dat1, missing = "fiml.x"))
 md_rerun <- mahalanobis_rerun(rerun_out)
 md_fit <- mahalanobis_rerun(fit0)
 md_fit1 <- mahalanobis_rerun(fit1)
+md_predictors <- mahalanobis_predictors(fit0)
 
 md_rerun
 md_fit
 md_fit1
-
+md_predictors
 
 print(md_rerun, first = 7)
 print(md_fit, first = 3, sort = FALSE)
 print(md_fit, first = 3, sort = TRUE, decreasing = FALSE)
 print(md_fit1, first = 3, sort = TRUE, decreasing = FALSE)
+print(md_predictors, first = 10)
+

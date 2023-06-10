@@ -20,9 +20,11 @@ Ignored if there is no missing data on the observed
 predictors.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis
+A \code{md_semfindr}-class object, which is
+a one-column matrix (a column vector) of the Mahalanobis
 distance for each case. The number of rows equals to the number of
 cases in the data stored in the fit object.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output

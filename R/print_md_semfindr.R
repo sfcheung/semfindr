@@ -5,7 +5,7 @@
 #'
 #' @details The print method for the
 #' 'md_semfindr'-class object, returned by
-#' [mahalanobis_rerun()].
+#' [mahalanobis_rerun()] or [mahalanobis_predictors()].
 #' This method will print
 #' the output with the option to sort the cases.
 #'
@@ -29,7 +29,7 @@
 #'
 #' @param ... Other arguments. They will be ignored.
 #'
-#' @seealso [mahalanobis_rerun()]
+#' @seealso [mahalanobis_rerun()], [mahalanobis_predictors()]
 #'
 #' @examples
 #'
@@ -103,6 +103,11 @@ print.md_semfindr <- function(x,
 
     if (missing_data) {
         cat("- Missing data is present. modi::MDmiss() was used.\n")
+      }
+
+    exo_vars <- attr(x, "exo_vars")
+    if (!is.null(exo_vars)) {
+        cat("- Mahalanobis distance computed only on predictors.\n")
       }
 
     invisible(x)
