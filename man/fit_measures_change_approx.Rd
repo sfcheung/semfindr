@@ -40,9 +40,11 @@ For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{fit_measures_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested fit measures, and the number of rows equals to the number
 of cases. The row names are case identification values.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the

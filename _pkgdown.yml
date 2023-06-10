@@ -59,6 +59,7 @@ reference:
   - lavaan_rerun_check
   - approx_check
   - print.est_change
+  - print.fit_measures_change
   - pars_id
   - pars_id_to_lorg
 - title: Datasets
