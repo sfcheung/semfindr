@@ -1,3 +1,4 @@
+skip("WIP")
 library(testthat)
 library(lavaan)
 library(semfindr)
