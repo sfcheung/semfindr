@@ -87,6 +87,7 @@ print.est_change <- function(x,
     if (is.null(first)) {
         first <- nrow(x)
       }
+    first <- min(nrow(x), first)
     i <- seq_len(first)
     est_change_type <- attr(x, "change_type")
     est_method <- attr(x, "method")
