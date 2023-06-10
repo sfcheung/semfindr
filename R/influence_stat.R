@@ -135,10 +135,12 @@ influence_stat <- function(rerun_out,
                                     baseline_model = baseline_model))
       fm_names <- rownames(fm)
       fm_cnames <- colnames(fm)
+      fm_attrs <- attributes(fm)
     } else {
       fm <- NULL
       fm_names <- NULL
       fm_cnames <- NULL
+      fm_attrs <- NULL
     }
   if (!isFALSE(parameters)) {
       es <- switch(rerun_out_type,
@@ -148,19 +150,23 @@ influence_stat <- function(rerun_out,
                                     parameters = parameters))
       es_names <- rownames(es)
       es_cnames <- colnames(es)
+      es_attrs <- attributes(es)
     } else {
       es <- NULL
       es_names <- NULL
       es_cnames <- NULL
+      es_attrs <- NULL
     }
   if (isTRUE(mahalanobis)) {
       mh <- mahalanobis_rerun(rerun_out)
       mh_names <- rownames(mh)
       mh_cnames <- colnames(mh)
+      mh_attrs <- attributes(mh)
     } else {
       mh <- NULL
       mh_names <- NULL
       mh_cnames <- NULL
+      mh_attrs <- NULL
     }
 
   if (!all(is.null(fm), is.null(es), is.null(mh))) {
@@ -185,6 +191,9 @@ influence_stat <- function(rerun_out,
   attr(out, "method") <- switch(rerun_out_type,
                               lavaan_rerun = "rerun",
                               lavaan = "approx")
+  attr(out, "fit_measures_attrs") <- fm_attrs
+  attr(out, "parameters_attrs") <- es_attrs
+  attr(out, "mahalanobis_attrs") <- mh_attrs
 
   if (keep_fit) {
       attr(out, "fit") <- switch(rerun_out_type,

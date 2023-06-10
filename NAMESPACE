@@ -2,6 +2,7 @@
 
 S3method(print,est_change)
 S3method(print,fit_measures_change)
+S3method(print,influence_stat)
 S3method(print,lavaan_rerun)
 S3method(print,md_semfindr)
 export(approx_check)
