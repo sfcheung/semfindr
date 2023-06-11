@@ -181,11 +181,14 @@ est_change <- function(rerun_out,
               output = "data.frame"
               )
   ngroups <- lavaan::lavTech(fit0, "ngroups")
-  if (ngroups == 1) estorg$group <- 1
+  if (ngroups == 1) {
+      estorg$group <- 1
+      estorg$group[estorg$op == ":="] <- 0
+    }
   ptable <- lavaan::parameterTable(fit0)
   ptable_cols <- c("lhs", "op", "rhs",
                     "free", "label", "id",
-                    "lavlabel")
+                    "lavlabel", "group")
   ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
                                                  type = "user")
   est0 <- merge(estorg, ptable[, ptable_cols])
