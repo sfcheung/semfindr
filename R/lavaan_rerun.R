@@ -259,7 +259,7 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
       case_md_selected <- case_md_selected[!is.na(case_md_selected)]
-      # TODO: Revised for multiple group models
+      # TODO: Revise for multiple group models?
       to_rerun <- case_ids[case_md_selected]
     }
 
@@ -275,12 +275,11 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
       fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
-      # TODO: Revised for multiple group models
+      # TODO: Revise for multiple group models?
       to_rerun <- case_ids[fit_resid_md_selected]
     }
 
   if (!is.null(case_id)) {
-      # TODO: Revised for multiple group models
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
     } else {
