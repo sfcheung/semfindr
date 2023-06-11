@@ -203,12 +203,22 @@ lavaan_rerun <- function(fit,
       }
     }
 
-  n <- nrow(lavaan::lavInspect(fit, "data"))
+  ngroups <- lavaan::lavInspect(fit, "ngroups")
+  if (ngroups > 1) {
+      n_j <- sapply(lavaan::lavInspect(fit, "data"), nrow)
+      n <- sum(n_j)
+    } else {
+      n <- nrow(lavaan::lavInspect(fit, "data"))
+      n_j <- n
+    }
 
   if (is.null(case_id)) {
-      # Assume the model is a single-group model
-      case_ids <- lavaan::lavInspect(fit, "case.idx")
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                     drop.list.single.group = FALSE)
+      case_ids <- sort(unlist(case_ids, use.names = FALSE))
     } else {
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                    drop.list.single.group = FALSE)
       if (length(case_id) != n) {
           stop("The length of case_id is not equal to the number of cases.")
         } else {
@@ -240,7 +250,7 @@ lavaan_rerun <- function(fit,
             }
         }
     } else {
-      to_rerun <- case_ids
+      to_rerun <- sort(unlist(case_ids, use.names = FALSE))
     }
 
   if (!missing(md_top)) {
@@ -249,6 +259,7 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
       case_md_selected <- case_md_selected[!is.na(case_md_selected)]
+      # TODO: Revised for multiple group models
       to_rerun <- case_ids[case_md_selected]
     }
 
@@ -264,15 +275,20 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
       fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
+      # TODO: Revised for multiple group models
       to_rerun <- case_ids[fit_resid_md_selected]
     }
 
   if (!is.null(case_id)) {
+      # TODO: Revised for multiple group models
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
     } else {
-      case_ids <- lavaan::lavInspect(fit, "case.idx")[to_rerun]
-      id_to_rerun <- to_rerun
+      case_ids <- case_ids[to_rerun]
+      tmp <- sort(unlist(lavaan::lavInspect(fit, "case.idx",
+                    drop.list.single.group = FALSE),
+                    use.names = FALSE))
+      id_to_rerun <- tmp[to_rerun]
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
   if (rerun_method == "lavaan") {
@@ -362,19 +378,59 @@ gen_fct_use_lavaan <- function(fit) {
   slot_pat <- data.frame(fit@ParTable)
   slot_pat$est <- NULL
   slot_pat$start <- NULL
+  slot_mod <- fit@Model
   data_full <- lavaan::lavInspect(fit, "data")
-  function(i = NULL) {
-      if (is.null(i)) {
-          return(lavaan::lavaan(data = data_full,
-                                model = slot_pat,
-                                slotOptions = slot_opt))
-        } else {
-          return(lavaan::lavaan(data = data_full[-i, ],
-                                model = slot_pat,
-                                slotOptions = slot_opt))
+  ngroups <- lavaan::lavInspect(fit, "ngroups")
+  if (ngroups > 1) {
+      # Reconstruct the full dataset
+      gp_labels <- lavaan::lavInspect(fit, "group.label")
+      gp_var <- lavaan::lavInspect(fit, "group")
+      tmpfct <- function(x, gp_label, gp_var) {
+          out <- as.data.frame(x)
+          out[gp_var] <- gp_label
+          out
+        }
+      data_full <- mapply(tmpfct,
+                          x = data_full,
+                          gp_label = gp_labels,
+                          MoreArgs = list(gp_var = gp_var),
+                          SIMPLIFY = FALSE,
+                          USE.NAMES = TRUE)
+      data_full <- do.call(rbind, data_full)
+      rownames(data_full) <- NULL
+      ii <- unlist(lavaan::lavInspect(fit, "case.idx"))
+      data_full <- data_full[order(ii), ]
+      rownames(data_full) <- NULL
+    }
+  if (ngroups > 1) {
+      out <- function(i = NULL) {
+          if (is.null(i)) {
+              return(lavaan::lavaan(data = data_full,
+                                    model = slot_pat,
+                                    group = gp_var,
+                                    slotOptions = slot_opt))
+            } else {
+              return(lavaan::lavaan(data = data_full[-i, ],
+                                    model = slot_pat,
+                                    group = gp_var,
+                                    slotOptions = slot_opt))
+            }
+        }
+    } else {
+      out <- function(i = NULL) {
+          if (is.null(i)) {
+              return(lavaan::lavaan(data = data_full,
+                                    model = slot_pat,
+                                    slotOptions = slot_opt))
+            } else {
+              return(lavaan::lavaan(data = data_full[-i, ],
+                                    model = slot_pat,
+                                    slotOptions = slot_opt))
+            }
         }
     }
-  }
+  return(out)
+}
 
 gen_fct_old <- function(fit) {
   fit_call <- as.call(lavaan::lavInspect(fit, "call"))

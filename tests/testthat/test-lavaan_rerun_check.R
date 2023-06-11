@@ -31,11 +31,12 @@ test_that("Check against the flags", {
       )
   })
 
-test_that("Check against the flags", {
-    expect_true(
-        out_05 == -2
-      )
-  })
+# Multiple group models are now supported
+# test_that("Check against the flags", {
+#     expect_true(
+#         out_05 == -2
+#       )
+#   })
 
 test_that("Check against the flags", {
     expect_true(
@@ -43,11 +44,12 @@ test_that("Check against the flags", {
       )
   })
 
-test_that("Check against the flags", {
-    expect_error(
-        lavaan_rerun(fit05)
-      )
-  })
+# Multiple group models are now supported
+# test_that("Check against the flags", {
+#     expect_error(
+#         lavaan_rerun(fit05)
+#       )
+#   })
 
 test_that("Check against the flags", {
     expect_error(
