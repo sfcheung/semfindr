@@ -379,30 +379,10 @@ gen_fct_use_lavaan <- function(fit) {
   slot_pat$est <- NULL
   slot_pat$start <- NULL
   slot_mod <- fit@Model
-  data_full <- lavaan::lavInspect(fit, "data")
+  data_full <- lav_data_used(fit)
   ngroups <- lavaan::lavInspect(fit, "ngroups")
   if (ngroups > 1) {
-      # Reconstruct the full dataset
-      gp_labels <- lavaan::lavInspect(fit, "group.label")
       gp_var <- lavaan::lavInspect(fit, "group")
-      tmpfct <- function(x, gp_label, gp_var) {
-          out <- as.data.frame(x)
-          out[gp_var] <- gp_label
-          out
-        }
-      data_full <- mapply(tmpfct,
-                          x = data_full,
-                          gp_label = gp_labels,
-                          MoreArgs = list(gp_var = gp_var),
-                          SIMPLIFY = FALSE,
-                          USE.NAMES = TRUE)
-      data_full <- do.call(rbind, data_full)
-      rownames(data_full) <- NULL
-      ii <- unlist(lavaan::lavInspect(fit, "case.idx"))
-      data_full <- data_full[order(ii), ]
-      rownames(data_full) <- NULL
-    }
-  if (ngroups > 1) {
       out <- function(i = NULL) {
           if (is.null(i)) {
               return(lavaan::lavaan(data = data_full,
