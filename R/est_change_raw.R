@@ -44,6 +44,14 @@
 #' [lavaan::standardizedSolution()]). Otherwise, the changes in the
 #' unstandardized solution are returned. Default is `FALSE`.
 #'
+#' @param user_defined_label_full Logical. If `TRUE`, use the full
+#' labels for user-defined parameters (parameters created by
+#' `:=`), which include the definition. If `FALSE`, then only
+#' the label on the right-hand side of `:=` will be used.
+#' Default is `FALSE`. In previous version, the full labels
+#' were used. Set to `TRUE` if backward compatibility
+#' is needed.
+#'
 #' @return An `est_change`-class object, which is
 #' matrix with the number of columns equals to the number of
 #' requested parameters, and the number of rows equals to the number
@@ -177,7 +185,8 @@
 
 est_change_raw <- function(rerun_out,
                            parameters = NULL,
-                           standardized = FALSE) {
+                           standardized = FALSE,
+                           user_defined_label_full = FALSE) {
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }
@@ -199,16 +208,29 @@ est_change_raw <- function(rerun_out,
                 )
   estorg$est_id <- seq_len(nrow(estorg))
   ngroups <- lavaan::lavTech(fit0, "ngroups")
-  if (ngroups == 1) estorg$group <- 1
-  estorg[estorg$op == ":=", "group"] <- 0
+  if (ngroups == 1) {
+      estorg$group <- 1
+      estorg$group[estorg$op == ":="] <- 0
+    }
   ptable <- lavaan::parameterTable(fit0)
   ptable_cols <- c("lhs", "op", "rhs",
                     "free", "id",
-                    "lavlabel")
-  # Do not use user labels
-  ptable$label <- ""
+                    "lavlabel", "group")
+  # Do not use user labels except for user-defined parameters
+  # Ensure that plabels are not used as lavlabels
+  tmp1 <- ptable$plabel[ptable$plabel != ""]
+  tmp2 <- ptable$label %in% tmp1
+  tmp3 <- ptable$label
+  ptable$label[tmp2] <- ""
+  ptable$label[ptable$op != ":="] <- ""
   ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
                                                  type = "user")
+  if (!user_defined_label_full) {
+      ptable$label[ptable$op == ":="] <- tmp3[ptable$op == ":="]
+    }
+  tmp <- (ptable$lavlabel == ptable$plabel)
+  ptable$lavlabel[tmp] <- ""
+
   est0 <- merge(estorg, ptable[, ptable_cols])
   est0 <- est0[order(est0$id), ]
   parameters_names <- est0$lavlabel
