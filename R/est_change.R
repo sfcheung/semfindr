@@ -189,8 +189,18 @@ est_change <- function(rerun_out,
   ptable_cols <- c("lhs", "op", "rhs",
                     "free", "label", "id",
                     "lavlabel", "group")
+
+  # Ensure that plabels are not used as lavlabels
+  tmp1 <- ptable$plabel[ptable$plabel != ""]
+  tmp2 <- ptable$label %in% tmp1
+  tmp3 <- ptable$label
+  ptable$label[tmp2] <- ""
   ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
                                                  type = "user")
+  ptable$label <- tmp3
+  tmp <- (ptable$lavlabel == ptable$plabel)
+  ptable$lavlabel[tmp] <- ""
+
   est0 <- merge(estorg, ptable[, ptable_cols])
   est0 <- est0[order(est0$id), ]
   parameters_names <- est0$lavlabel
