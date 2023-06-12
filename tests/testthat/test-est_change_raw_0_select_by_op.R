@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-mod <- 
+mod <-
 '
 f1 =~ x1 + x2 + x3
 f2 =~ x4 + x5 + x6
@@ -22,37 +22,38 @@ rerun_15 <- rerun_out$rerun[[15]]
 
 est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
 est0_15 <- lavaan::parameterEstimates(fit0_15, standardized = TRUE)
-est_change_rerun_test1 <- est_change_raw(rerun_out, 
+est_change_rerun_test1 <- est_change_raw(rerun_out,
                                 c("~"))
-est_change_rerun_test2 <- est_change_raw(rerun_out, 
+est_change_rerun_test2 <- est_change_raw(rerun_out,
                                 c("~~"))
-est_change_rerun_test3 <- est_change_raw(rerun_out, 
+est_change_rerun_test3 <- est_change_raw(rerun_out,
                                 c("=~"))
-est_change_rerun_test4 <- est_change_raw(rerun_out, 
+est_change_rerun_test4 <- est_change_raw(rerun_out,
                                 c(":="))
-est_change_rerun_test5 <- est_change_raw(rerun_out, 
+est_change_rerun_test5 <- est_change_raw(rerun_out,
                                 c(":=", "~~"))
-est_change_rerun_test6 <- est_change_raw(rerun_out, 
+est_change_rerun_test6 <- est_change_raw(rerun_out,
                                 c("f3 ~ f2", ":=", "~~"))
-est_change_rerun_test7 <- est_change_raw(rerun_out, 
+est_change_rerun_test7 <- est_change_raw(rerun_out,
                                 c("~1"))
 
-est_change_rerun_std_test1 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test1 <- est_change_raw(rerun_out,
                                 c("~"), standardized = TRUE)
-est_change_rerun_std_test2 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test2 <- est_change_raw(rerun_out,
                                 c("~~"), standardized = TRUE)
-est_change_rerun_std_test3 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test3 <- est_change_raw(rerun_out,
                                 c("=~"), standardized = TRUE)
-est_change_rerun_std_test4 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test4 <- est_change_raw(rerun_out,
                                 c(":="), standardized = TRUE)
-est_change_rerun_std_test5 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test5 <- est_change_raw(rerun_out,
                                 c(":=", "~~"), standardized = TRUE)
-est_change_rerun_std_test6 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test6 <- est_change_raw(rerun_out,
                                 c("f3 ~ f2", ":=", "~~"), standardized = TRUE)
-est_change_rerun_std_test7 <- est_change_raw(rerun_out, 
+est_change_rerun_std_test7 <- est_change_raw(rerun_out,
                                 c("~1"), standardized = TRUE)
 
 parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
+parameters_names[est0$op == ":="] <- est0[est0$op == ":=", "label"]
 
 parameters_names_paths <- parameters_names[(est0$op == "~") & !is.na(est0$z)]
 parameters_names_cov <- parameters_names[(est0$op == "~~") & !is.na(est0$z)]
