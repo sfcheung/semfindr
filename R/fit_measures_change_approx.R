@@ -291,6 +291,7 @@ fit_measures_change_approx <- function(fit,
       }
     if ("rmsea" %in% fit_measures) {
         rmsea_fit <- lavaan::fitMeasures(fit, "rmsea")
+        # CHECK: The "n" of RMSEA in multiple group models.
         tmp <- (chisq_fit_approx / (n - 1)) / df_fit - 1 / (n - 1)
         rmsea_approx <- sqrt(pmax(tmp, 0, na.rm = TRUE))
         rmsea_change <- rmsea_fit - rmsea_approx
