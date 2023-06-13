@@ -175,7 +175,9 @@ est_change_raw_approx <- function(fit,
     }
 
   if (!skip_all_checks) {
-    check_out <- approx_check(fit, print_messages = FALSE)
+    check_out <- approx_check(fit, print_messages = FALSE,
+                              multiple_group = TRUE,
+                              equality_constraint = TRUE)
 
     if (check_out != 0) {
         if ((check_out == -1) &&
