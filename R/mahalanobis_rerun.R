@@ -115,12 +115,6 @@ mahalanobis_rerun <- function(fit,
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {
-      # if (lavaan::lavInspect(fit, "ngroups") > 1) {
-      #     stop("Currently only support single group models.")
-      #   }
-      # if (lavaan::lavInspect(fit, "nclusters") > 1) {
-      #     stop("Currently does not support models with more than one cluster.")
-      #   }
       if (lavaan::lavInspect(fit, "nlevels") > 1) {
           stop("Currently does not support models with more than one level.")
         }
@@ -134,9 +128,6 @@ mahalanobis_rerun <- function(fit,
         } else {
           gp_var <- NULL
         }
-      # fit_data <- lavaan::lavInspect(fit, "data")
-      # colnames(fit_data) <- lavaan::lavNames(fit)
-      # fit_free <- lavaan::lavInspect(fit, "free") # TO-DELETE
     }
 
   if (inherits(fit, "lavaan_rerun")) {
@@ -147,9 +138,6 @@ mahalanobis_rerun <- function(fit,
         } else {
           gp_var <- NULL
         }
-      # fit_data <- lavaan::lavInspect(fit$fit, "data")
-      # colnames(fit_data) <- lavaan::lavNames(fit$fit)
-      # fit_free <- lavaan::lavInspect(fit$fit, "free") # TO-DELETE
     }
 
   if (missing(fit)) {
@@ -159,12 +147,6 @@ mahalanobis_rerun <- function(fit,
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {
-      # if (lavaan::lavInspect(fit, "ngroups") > 1) {
-      #     stop("Currently only support single group models.")
-      #   }
-      # if (lavaan::lavInspect(fit, "nclusters") > 1) {
-      #     stop("Currently does not support models with more than one cluster.")
-      #   }
       if (lavaan::lavInspect(fit, "nlevels") > 1) {
           stop("Currently does not support models with more than one level.")
         }
@@ -173,11 +155,9 @@ mahalanobis_rerun <- function(fit,
   if (inherits(fit, "lavaan")) {
       case_ids <- sort(unlist(lavaan::lavInspect(fit, "case.idx"),
                        use.names = FALSE))
-      # fit_data <- lavaan::lavInspect(fit, "data")
     }
   if (inherits(fit, "lavaan_rerun")) {
       case_ids <- names(fit$rerun)
-      # fit_data <- lavaan::lavInspect(fit$fit, "data") # TO-DELETE
     }
 
   if ((sum(stats::complete.cases(fit_data))) != nrow(fit_data)) {

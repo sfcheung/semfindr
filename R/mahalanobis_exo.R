@@ -79,12 +79,6 @@ mahalanobis_predictors <- function(fit,
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {
-      # if (lavaan::lavInspect(fit, "ngroups") > 1) {
-      #     stop("Currently only support single group models.")
-      #   }
-      # if (lavaan::lavInspect(fit, "nclusters") > 1) {
-      #     stop("Currently does not support models with more than one cluster.")
-      #   }
       if (lavaan::lavInspect(fit, "nlevels") > 1) {
           stop("Currently does not support models with more than one level.")
         }
@@ -102,10 +96,6 @@ mahalanobis_predictors <- function(fit,
       exo_vars <- setdiff(lavaan::lavNames(fit, "eqs.x"),
                           lavaan::lavNames(fit, "eqs.y"))
       exo_vars <- intersect(lavaan::lavNames(fit, "ov"), exo_vars)
-      # fit_free <- lavaan::lavInspect(fit, "free")
-      # case_ids <- lavaan::lavInspect(fit, "case.idx")
-      # fit_data <- lavaan::lavInspect(fit, "data")
-      # colnames(fit_data) <- lavaan::lavNames(fit)
     }
   if (inherits(fit, "lavaan_rerun")) {
       case_ids <- names(fit$rerun)
@@ -119,9 +109,6 @@ mahalanobis_predictors <- function(fit,
       exo_vars <- setdiff(lavaan::lavNames(fit$fit, "eqs.x"),
                           lavaan::lavNames(fit$fit, "eqs.y"))
       exo_vars <- intersect(lavaan::lavNames(fit$fit, "ov"), exo_vars)
-      # fit_free <- lavaan::lavInspect(fit$fit, "free")
-      # fit_data <- lavaan::lavInspect(fit$fit, "data")
-      # colnames(fit_data) <- lavaan::lavNames(fit$fit)
     }
 
   md_predictors <- matrix(NA, length(case_ids), 1)

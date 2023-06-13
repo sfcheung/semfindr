@@ -233,17 +233,6 @@ est_change_raw_approx <- function(fit,
   scores0 <- lavaan::lavScores(fit,
                                ignore.constraints = TRUE,
                                remove.duplicated = FALSE)
-  # To be used in est_chagne_approx()
-  # vcov0_full <- full_rank(vcov0)
-  # vcov1 <- vcov0_full$final
-  # p_kept <- seq_len(ncol(scores0))
-  # scores1 <- scores0
-  # if (length(vcov0_full$dropped) > 0) {
-  #     p_kept <- p_kept[-vcov0_full$dropped]
-  #     scores1 <- scores1[, -vcov0_full$dropped, drop = FALSE]
-  #   }
-  # # out0 <- lavaan::lavScores(fit) %*% vcov(fit) *
-  #             n / (n - 1)
   out0 <- scores0 %*% vcov0 * n / (n - 1)
   colnames(out0) <- parameters_names
   out <- out0[, parameters_selected, drop = FALSE]
