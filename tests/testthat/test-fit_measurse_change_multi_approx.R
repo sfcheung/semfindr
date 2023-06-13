@@ -21,17 +21,20 @@ fit <- lavaan::sem(mod, dat0, group = "gp")
 
 fit_measures_change_approx2 <- fit_measures_change_approx(fit, skip_all_checks = TRUE)
 
-lli <- lavInspect(fit, what = "loglik.casewise")
+lli <- lavInspect(fit, what = "loglik.casewise", drop.list.single.group = FALSE)
+lli <- unlist(lli, use.names = FALSE)
 mod_h1 <- lav_partable_unrestricted(fit)
-fit_h1 <- sem(mod_h1, dat)
-lli_h1 <- lavInspect(fit_h1, what = "loglik.casewise")
+fit_h1 <- sem(mod_h1, dat0, group = "gp")
+lli_h1 <- lavInspect(fit_h1, what = "loglik.casewise", drop.list.single.group = FALSE)
+lli_h1 <- unlist(lli_h1)
+
 chisq_change_i_approx <- as.vector(2 * (lli_h1 - lli))
 
 # Need to add tests for CFI and TLI
 test_that("Check against known results", {
     expect_equal(ignore_attr = TRUE,
-        fit_measures_change_approx2[, "chisq"],
-        chisq_change_i_approx
+        sort(fit_measures_change_approx2[, "chisq"]),
+        sort(chisq_change_i_approx)
       )
   })
 
