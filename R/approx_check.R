@@ -15,8 +15,13 @@
 #' check. If `FALSE`, the messages will be attached to the return value
 #' as an attribute. Default is `TRUE`.
 #'
-#' @param multiple_group Logical. When multiple-group models are
+#' @param multiple_group Logical. Whether multiple-group models are
 #' supported. If yes, the check for multiple-groups models will be
+#' skipped. Default is `FALSE`.
+#'
+#' @param equality_constraint Logical. Whether models with
+#' equality constraints are
+#' supported. If yes, the check for equality constraints will be
 #' skipped. Default is `FALSE`.
 #'
 #' @return A single-element vector. If confirmed to be supported, will
@@ -50,7 +55,8 @@
 
 approx_check <- function(fit,
                          print_messages = TRUE,
-                         multiple_group = FALSE) {
+                         multiple_group = FALSE,
+                         equality_constraint = FALSE) {
 
     p_table <- lavaan::parameterTable(fit)
 
@@ -130,7 +136,7 @@ approx_check <- function(fit,
                         "and normal theory chi-square test requested."))
       }
 
-    if (sem_eq_constraints) {
+    if (sem_eq_constraints && !equality_constraint) {
           out <- ifelse(out >= 0, -1, out - 1)
           msg <- c(msg,
                 paste("The approximation method does not yet",
