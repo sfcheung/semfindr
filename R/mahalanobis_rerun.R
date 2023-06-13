@@ -301,7 +301,7 @@ md_i_multi <- function(fit_data,
     id <- seq_len(nrow(fit_data))
     rownames(fit_data) <- id
     j <- which(colnames(fit_data) == gp_var)
-    data_gp <- split(fit_data[, -j], fit_data[, gp_var])
+    data_gp <- split(fit_data[, -j, drop = FALSE], fit_data[, gp_var])
     out_1 <- lapply(data_gp,
                     md_i_single,
                     emNorm_arg = emNorm_arg)
