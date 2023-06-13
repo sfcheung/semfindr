@@ -40,7 +40,8 @@ Imports:
     rlang,
     stats,
     methods,
-    utils
+    utils,
+    Matrix
 VignetteBuilder: knitr
 Config/testthat/parallel: true
 Config/testthat/edition: 3

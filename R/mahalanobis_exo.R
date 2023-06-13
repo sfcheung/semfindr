@@ -99,9 +99,9 @@ mahalanobis_predictors <- function(fit,
         } else {
           gp_var <- NULL
         }
-      exo_vars <- setdiff(lavNames(fit, "eqs.x"),
-                          lavNames(fit, "eqs.y"))
-      exo_vars <- intersect(lavNames(fit, "ov"), exo_vars)
+      exo_vars <- setdiff(lavaan::lavNames(fit, "eqs.x"),
+                          lavaan::lavNames(fit, "eqs.y"))
+      exo_vars <- intersect(lavaan::lavNames(fit, "ov"), exo_vars)
       # fit_free <- lavaan::lavInspect(fit, "free")
       # case_ids <- lavaan::lavInspect(fit, "case.idx")
       # fit_data <- lavaan::lavInspect(fit, "data")
@@ -116,9 +116,9 @@ mahalanobis_predictors <- function(fit,
         } else {
           gp_var <- NULL
         }
-      exo_vars <- setdiff(lavNames(fit$fit, "eqs.x"),
-                          lavNames(fit$fit, "eqs.y"))
-      exo_vars <- intersect(lavNames(fit$fit, "ov"), exo_vars)
+      exo_vars <- setdiff(lavaan::lavNames(fit$fit, "eqs.x"),
+                          lavaan::lavNames(fit$fit, "eqs.y"))
+      exo_vars <- intersect(lavaan::lavNames(fit$fit, "ov"), exo_vars)
       # fit_free <- lavaan::lavInspect(fit$fit, "free")
       # fit_data <- lavaan::lavInspect(fit$fit, "data")
       # colnames(fit_data) <- lavaan::lavNames(fit$fit)
