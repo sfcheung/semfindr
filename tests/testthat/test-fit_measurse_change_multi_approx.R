@@ -19,7 +19,7 @@ dat0$gp <- sample(c("gp2", "gp1"), size = nrow(dat0), replace = TRUE)
 
 fit <- lavaan::sem(mod, dat0, group = "gp")
 
-fit_measures_change_approx2 <- fit_measures_change_approx(fit, skip_all_checks = TRUE)
+fit_measures_change_approx2 <- fit_measures_change_approx(fit)
 
 lli <- lavInspect(fit, what = "loglik.casewise", drop.list.single.group = FALSE)
 lli <- unlist(lli, use.names = FALSE)

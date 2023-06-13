@@ -183,7 +183,8 @@ fit_measures_change_approx <- function(fit,
       }
 
     if (!skip_all_checks) {
-      check_out <- approx_check(fit, print_messages = FALSE)
+      check_out <- approx_check(fit, print_messages = FALSE,
+                                multiple_group = TRUE)
 
       if (check_out != 0) {
           if ((check_out == -1) &&
