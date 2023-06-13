@@ -79,6 +79,8 @@ lav_data_used <- function(fit) {
 full_rank <- function(x) {
     # Idea based on WeightIt::make_full_rank
     tmp <- x
+    rownames(tmp) <- seq_len(nrow(tmp))
+    colnames(tmp) <- seq_len(ncol(tmp))
     x_rank <- Matrix::rankMatrix(x)
     dropped <- integer(0)
     while (x_rank != ncol(tmp)) {
@@ -86,7 +88,7 @@ full_rank <- function(x) {
             tmp2 <- tmp[-i, -i]
             tmp2_rank <- Matrix::rankMatrix(x)
             if (tmp2_rank == x_rank) {
-                dropped <- c(dropped, i)
+                dropped <- c(dropped, as.integer(colnames(tmp)[i]))
                 break
               }
           }
