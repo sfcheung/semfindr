@@ -10,17 +10,18 @@ library(semfindr)
 
 mod <-
 '
-m1 ~ a2 * iv1 + a2 * iv2
-dv ~ b * m1
-a1b := a2 * b
+m1 ~ iv1 + c(a1, a2) * iv2
+dv ~ c(b, b) * m1
+a2b := a2 * b
 '
 
-dat <- pa_dat
+dat0 <- dat[1:40, ]
+set.seed(856041)
+dat0$gp <- sample(c("gp2", "gp1"), size = nrow(dat0), replace = TRUE)
 
-dat0 <- dat
-fit0 <- lavaan::sem(mod, dat0)
+fit <- lavaan::sem(mod, dat0, group = "gp")
 
 # test_that("Error if equality constraints", {
-#     expect_error(raw_approx2 <- est_change_raw_approx(fit0))
+#     expect_error(gcd_approx2 <- est_change_approx(fit0))
 #   })
 
