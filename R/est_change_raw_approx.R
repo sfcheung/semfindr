@@ -187,11 +187,22 @@ est_change_raw_approx <- function(fit,
       }
     }
 
-  n <- lavaan::lavTech(fit, "nobs")
-  if (is.null(case_id)) {
-      # Assume the model is a single-group model
-      case_ids <- lavaan::lavInspect(fit, "case.idx")
+  ngroups <- lavaan::lavInspect(fit, "ngroups")
+  if (ngroups > 1) {
+      n_j <- sapply(lavaan::lavInspect(fit, "data"), nrow)
+      n <- sum(n_j)
     } else {
+      n <- nrow(lavaan::lavInspect(fit, "data"))
+      n_j <- n
+    }
+
+  if (is.null(case_id)) {
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                     drop.list.single.group = FALSE)
+      case_ids <- sort(unlist(case_ids, use.names = FALSE))
+    } else {
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                    drop.list.single.group = FALSE)
       if (length(case_id) != n) {
           stop("The length of case_id is not equal to the number of cases.")
         } else {
@@ -199,8 +210,13 @@ est_change_raw_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  # Do not use user labels
-  est0$label <- ""
+  # Do not use user labels except for user-defined parameters
+  # Ensure that plabels are not used as lavlabels
+  tmp1 <- est0$plabel[est0$plabel != ""]
+  tmp2 <- est0$label %in% tmp1
+  tmp3 <- est0$label
+  est0$label[tmp2] <- ""
+  est0$label[est0$op != ":="] <- ""
   est0$lavlabel <- lavaan::lav_partable_labels(est0,
                                                type = "user")
   parameters_names <- est0[est0$free > 0, "lavlabel"]
@@ -211,8 +227,22 @@ est_change_raw_approx <- function(fit,
     } else {
       parameters_selected <- seq_len(length(parameters_names))
     }
-  out0 <- lavaan::lavScores(fit) %*% vcov(fit) *
-              n / (n - 1)
+  vcov0 <- vcov(fit)
+  scores0 <- lavaan::lavScores(fit,
+                               ignore.constraints = TRUE,
+                               remove.duplicated = FALSE)
+  # To be used in est_chagne_approx()
+  # vcov0_full <- full_rank(vcov0)
+  # vcov1 <- vcov0_full$final
+  # p_kept <- seq_len(ncol(scores0))
+  # scores1 <- scores0
+  # if (length(vcov0_full$dropped) > 0) {
+  #     p_kept <- p_kept[-vcov0_full$dropped]
+  #     scores1 <- scores1[, -vcov0_full$dropped, drop = FALSE]
+  #   }
+  # # out0 <- lavaan::lavScores(fit) %*% vcov(fit) *
+  #             n / (n - 1)
+  out0 <- scores0 %*% vcov0 * n / (n - 1)
   colnames(out0) <- parameters_names
   out <- out0[, parameters_selected, drop = FALSE]
   rownames(out) <- case_ids
