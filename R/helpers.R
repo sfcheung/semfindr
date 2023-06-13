@@ -1,8 +1,12 @@
+#' @noRd
+
 est_names_by_op <- function(est, op) {
     est1 <- est[est$op %in% op, ]
     out <- paste0(est1$lhs, est1$op, est1$rhs)
     out
   }
+
+#' @noRd
 
 est_names_selected <- function(est, params) {
     pnames_full <- paste0(est$lhs, est$op, est$rhs)
@@ -13,12 +17,16 @@ est_names_selected <- function(est, params) {
     out
   }
 
+#' @noRd
+
 est_names_free <- function(fit) {
     ptable <- lavaan::parameterTable(fit)
     # For using lhs-op-rhs
     ptable$label <- ""
     lavaan::lav_partable_labels(ptable, type = "free")
   }
+
+#' @noRd
 
 est_ids_selected <- function(fit, params) {
     # This function returns all valid rows, free or not
@@ -39,6 +47,8 @@ est_ids_selected <- function(fit, params) {
     out <- union(out1, out2)
     out
   }
+
+#' @noRd
 
 lav_data_used <- function(fit) {
     data_full <- lavaan::lavInspect(fit, "data")
@@ -64,4 +74,26 @@ lav_data_used <- function(fit) {
         rownames(data_full) <- NULL
       }
     return(data_full)
+  }
+
+full_rank <- function(x) {
+    # Idea based on WeightIt::make_full_rank
+    tmp <- x
+    x_rank <- Matrix::rankMatrix(x)
+    dropped <- integer(0)
+    while (x_rank != ncol(tmp)) {
+        for (i in seq_len(ncol(tmp))) {
+            tmp2 <- tmp[-i, -i]
+            tmp2_rank <- Matrix::rankMatrix(x)
+            if (tmp2_rank == x_rank) {
+                dropped <- c(dropped, i)
+                break
+              }
+          }
+        tmp <- tmp[-i, -1]
+      }
+    out <- list(final = tmp,
+                original = x,
+                dropped = dropped)
+    return(out)
   }
