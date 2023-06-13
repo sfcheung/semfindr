@@ -194,12 +194,20 @@ fit_measures_change_approx <- function(fit,
             }
         }
       }
-
-    n <- lavaan::lavTech(fit, "nobs")
-    if (is.null(case_id)) {
-        # Assume the model is a single-group model
-        case_ids <- lavaan::lavInspect(fit, "case.idx")
+    ngroups <- lavaan::lavTech(fit, "ngroups")
+    if (ngroups > 1) {
+        n_j <- sapply(lavaan::lavInspect(fit, "data"), nrow)
+        n <- sum(n_j)
       } else {
+        n <- nrow(lavaan::lavInspect(fit, "data"))
+        n_j <- n
+      }
+    case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                  drop.list.single.group = FALSE)
+    case_ids <- unlist(case_ids, use.names = FALSE)
+    case_ids_order <- order(case_ids)
+    case_ids <- sort(case_ids)
+    if (!is.null(case_id)) {
         if (length(case_id) != n) {
             stop("The length of case_id is not equal to the number of cases.")
           } else {
@@ -216,8 +224,12 @@ fit_measures_change_approx <- function(fit,
                              slotOptions = opt_h1,
                              slotSampleStats = fit@SampleStats,
                              slotData = fit@Data)
-    lli_h1 <- lavaan::lavInspect(fit_h1, what = "loglik.casewise")
-    lli <- lavaan::lavInspect(fit, what = "loglik.casewise")
+    lli_h1 <- lavaan::lavInspect(fit_h1, what = "loglik.casewise",
+                                 drop.list.single.group = FALSE)
+    lli <- lavaan::lavInspect(fit, what = "loglik.casewise",
+                              drop.list.single.group = FALSE)
+    lli_h1 <- unlist(lli_h1, use.names = FALSE)[case_ids_order]
+    lli <- unlist(lli, use.names = FALSE)[case_ids_order]
     chisq_change_fit <- 2 * (lli_h1 - lli)
     if ("chisq" %in% fit_measures) {
         out[, "chisq"] <- chisq_change_fit
@@ -249,7 +261,9 @@ fit_measures_change_approx <- function(fit,
                                 slotData = fit@Data)
       }
     lli_base <- lavaan::lavInspect(baseline_model,
-                                    what = "loglik.casewise")
+                                    what = "loglik.casewise",
+                                    drop.list.single.group = FALSE)
+    lli_base <- unlist(lli_base, use.names = FALSE)[case_ids_order]
     tmp <- lavaan::fitMeasures(baseline_model, c("chisq", "df"))
     chisq_base <- unname(tmp["chisq"])
     df_base <- unname(tmp["df"])
