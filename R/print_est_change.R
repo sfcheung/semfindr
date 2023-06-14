@@ -210,7 +210,7 @@ print.est_change <- function(x,
                 cat("- Cases sorted by ", gcd_name2, ".\n", sep = "")
               } else {
                 cat("- Cases sorted by the absolute values for change or",
-                    gcd_name2, ".\n")
+                    gcd_name2, ".\n", sep = "")
               }
           }
       }
