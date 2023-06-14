@@ -114,8 +114,8 @@ implied_scores <- function(fit,
                    SIMPLIFY = FALSE)
 
     out <- do.call(rbind, out0)
-    out <- out[case_idx_full, , drop = FALSE]
-    rownames(out) <-case_idx_full
+    out <- out[order(case_idx_full), , drop = FALSE]
+    rownames(out) <- case_idx_full[order(case_idx_full)]
     return(out)
   }
 
