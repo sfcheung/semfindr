@@ -4,11 +4,17 @@
 \alias{implied_scores}
 \title{Implied Scores of Observed Outcome Variables}
 \usage{
-implied_scores(fit, skip_all_checks = FALSE)
+implied_scores(fit, output = TRUE, skip_all_checks = FALSE)
 }
 \arguments{
 \item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}}
 and \code{\link[lavaan:sem]{lavaan::sem()}}.}
+
+\item{output}{Output type. If \code{"matrix"}, the default,
+the output will be combined to one matrix, with cases ordered as
+in the original dataset (after listwise deletion, if used). If
+\code{"list"}, the a list of matrices is returned, even if the model
+has only one group.}
 
 \item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
 users to run this function on any object of \code{lavaan} class.
@@ -16,7 +22,8 @@ For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
 \value{
-A matrix of the implied scores.
+A matrix of the implied scores if \code{output} is \code{"matrix"}.
+If \code{output} is \code{"list"}, a list of matrices of the implied scores.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the

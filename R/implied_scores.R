@@ -14,12 +14,19 @@
 #' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()]
 #' and [lavaan::sem()].
 #'
+#' @param output Output type. If `"matrix"`, the default,
+#' the output will be combined to one matrix, with cases ordered as
+#' in the original dataset (after listwise deletion, if used). If
+#' `"list"`, the a list of matrices is returned, even if the model
+#' has only one group.
+#'
 #' @param skip_all_checks If `TRUE`, skips all checks and allows
 #' users to run this function on any object of `lavaan` class.
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix of the implied scores.
+#' @return A matrix of the implied scores if `output` is `"matrix"`.
+#' If `output` is `"list"`, a list of matrices of the implied scores.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -48,6 +55,7 @@
 #' @export implied_scores
 
 implied_scores <- function(fit,
+                           output = "matrix",
                            skip_all_checks = FALSE) {
 
     if (missing(fit)) {
@@ -112,10 +120,16 @@ implied_scores <- function(fit,
                    fit_rsquare = fit_rsquare,
                    MoreArgs = list(fit = fit),
                    SIMPLIFY = FALSE)
-
-    out <- do.call(rbind, out0)
-    out <- out[order(case_idx_full), , drop = FALSE]
-    rownames(out) <- case_idx_full[order(case_idx_full)]
+    if (identical(output, "matrix")) {
+        out <- do.call(rbind, out0)
+        out <- out[order(case_idx_full), , drop = FALSE]
+        rownames(out) <- case_idx_full[order(case_idx_full)]
+      } else {
+        out <- mapply(function(x, y) {rownames(x) <- y; x},
+                      x = out0,
+                      y = case_idx,
+                      SIMPLIFY = FALSE)
+      }
     return(out)
   }
 
