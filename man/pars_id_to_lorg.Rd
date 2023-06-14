@@ -72,5 +72,27 @@ pars_id_to_lorg(tmp, pars_source = coef(fit_ng))
 tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_ng))
 
+# Multiple-group models
+
+dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
+                 nrow(dat),
+                 replace = TRUE)
+
+fit_gp <- sem(sem_model, dat, group = "gp")
+
+pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
+tmp <- pars_id(pars, fit = fit_gp)
+pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
+tmp <- pars_id(pars, fit = fit_gp, where = "partable")
+pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
+
+parameterTable(fit_gp)[tmp, ]
+pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
+tmp <- pars_id(pars2, fit = fit_gp)
+pars_id_to_lorg(tmp, pars_source = coef(fit_gp))
+tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
+pars_id_to_lorg(tmp, pars_source = parameterEstimates(fit_gp))
+# Note that group 1 is "Beta", not "Alpha"
+lavInspect(fit_gp, "group.label")
 
 }
