@@ -8,8 +8,10 @@
 #' simply computed in the same way the predicted scores in a linear
 #' regression model are computed.
 #'
-#' Currently it supports only single-group path analysis models with only
+#' Currently it supports only single-group and multiple-group
+#' path analysis models with only
 #' observed variables.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()]
 #' and [lavaan::sem()].

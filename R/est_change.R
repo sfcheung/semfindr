@@ -31,13 +31,17 @@
 #' Only the parameters selected (all free parameters, by default)
 #' will be used in computing *gCD*.
 #'
-#' Note that, if (a) a model has one or more equality constraints, and
+#' Since version 0.1.4.8, if (a) a model has one or more equality
+#' constraints, and
 #' (b) some selected parameters are linearly dependent or constrained
-#' to be equal due to the constraint(s), *gCD* will not be computed
-#' and `NA` will be returned. For this kind of models, manually select
-#' parameters that are not linearly dependent or constrained to be equal.
+#' to be equal due to the constraint(s), *gCD* will be computed
+#' by removing parameters such that the remaining parameters are
+#' not linearly dependent nor constrained to be equal.
+#' (Support for equality constraints and
+#' linearly dependent parameters available in 0.1.4.8 and later version).
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #'
@@ -244,19 +248,6 @@ est_change <- function(rerun_out,
   out <- t(out)
   colnames(out) <- c(parameters_names[parameters_selected], "gcd")
   rownames(out) <- case_ids
-
-  # Not yet support a model with equality constraint
-  if (any_depend) {
-      out[, "gcd"] <- NA
-    }
-  if (fit0@Model@eq.constraints && any(is.na(out[, "gcd"]))) {
-      message(paste("The model has one or more equality constraints.",
-                "gCD will not be computed if the selected",
-                "parameters are linearly dependent",
-                "(e.g., some are constrained to be equal).",
-                "If you need gCD, select parameters not",
-                "constrained to be equal or linearly dependent."))
-    }
 
   attr(out, "call") <- match.call()
   attr(out, "change_type") <- "standardized"

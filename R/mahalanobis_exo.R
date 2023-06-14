@@ -15,7 +15,11 @@
 #' likelihood using [norm2::emNorm()]. The estimates will be passed
 #' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
-#' Currently this function only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' For multiple-group models, the Mahalanobis distance for
+#' each case is computed using the means and covariance matrix
+#' of the group this case belongs to.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit It can be the output from `lavaan`, such as
 #' [lavaan::cfa()] and [lavaan::sem()], or the output from

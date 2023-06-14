@@ -53,7 +53,8 @@ If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for the differences of this
 case.
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

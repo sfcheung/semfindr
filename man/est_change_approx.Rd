@@ -89,10 +89,11 @@ distance (gCD). To avoid confusion, it is labelled \code{gcd_approx}.
 For the technical details, please refer to the vignette
 on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
-The approximate approach does not yet support a model with
-equality constraints.
+The approximate approach supports a model with
+equality constraints (available in 0.1.4.8 and later version).
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

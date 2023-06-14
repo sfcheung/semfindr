@@ -44,7 +44,8 @@
 #' recommended to save the output to an external file (e.g., by
 #' [base::saveRDS()]).
 #'
-#' Currently [lavaan_rerun()] only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
 #' [lavaan::cfa()] and [lavaan::sem()]).
