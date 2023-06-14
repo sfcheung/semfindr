@@ -86,13 +86,14 @@ full_rank <- function(x) {
     while (x_rank != ncol(tmp)) {
         for (i in seq_len(ncol(tmp))) {
             tmp2 <- tmp[-i, -i]
-            tmp2_rank <- Matrix::rankMatrix(x)
+            tmp2_rank <- Matrix::rankMatrix(tmp2)
             if (tmp2_rank == x_rank) {
-                dropped <- c(dropped, as.integer(colnames(tmp)[i]))
                 break
               }
           }
-        tmp <- tmp[-i, -1]
+        dropped <- c(dropped, as.integer(colnames(tmp)[i]))
+        tmp <- tmp[-i, -i]
+        x_rank <- Matrix::rankMatrix(tmp)
       }
     out <- list(final = tmp,
                 original = x,
