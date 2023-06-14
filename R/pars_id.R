@@ -91,6 +91,10 @@ pars_id <- function(pars,
                        where = where,
                        free_only = free_only)
     out <- sort(unique(c(ids1, ids2, ids3)))
+    if (length(out) == 0) {
+        stop("No parameters selected. ",
+             "Please check the parameter argument.")
+      }
     out
   }
 
