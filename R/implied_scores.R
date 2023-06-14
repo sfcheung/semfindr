@@ -88,18 +88,35 @@ implied_scores <- function(fit,
         stop("Raw data not available. Implied scores cannot be computed.")
       }
 
-browser()
-    dat <- lav_data_used(fit)
-    fit_implied <- fitted(fit)
-    out <- implied_scores_i(fit = fit,
-                            dat = dat,
-                            mm = lavaan::inspect(fit, "est"),
-                            implied_cov = fit_implied$cov,
-                            implied_mean = fit_implied$mean,
-                            fit_rsquare = implied_rsquare(fit))
+    dat_full <- lav_data_used(fit)
+    ngroups <- lavaan::lavInspect(fit, "ngroups")
+    group_label <- lavaan::lavInspect(fit, "group.label")
+    dat <- lavaan::lavInspect(fit, "data",
+                              drop.list.single.group = FALSE)
+    case_idx <- lavaan::lavInspect(fit, "case.idx",
+                                   drop.list.single.group = FALSE)
+    case_idx_full <- unlist(case_idx, use.names = FALSE)
+    fit_implied <- lavaan::lavInspect(fit, "fitted",
+                                      drop.list.single.group = FALSE)
+    implied_cov <- lapply(fit_implied, function(x) x$cov)
+    implied_mean <- lapply(fit_implied, function(x) x$mean)
+    mm <- lavaan::lavInspect(fit, "est",
+                             drop.list.single.group = FALSE)
+    fit_rsquare <- implied_rsquare(fit)
 
+    out0 <- mapply(implied_scores_i,
+                   dat = dat,
+                   mm = mm,
+                   implied_cov = implied_cov,
+                   implied_mean = implied_mean,
+                   fit_rsquare = fit_rsquare,
+                   MoreArgs = list(fit = fit),
+                   SIMPLIFY = FALSE)
+
+    out <- do.call(rbind, out0)
+    out <- out[case_idx_full, , drop = FALSE]
+    rownames(out) <-case_idx_full
     return(out)
-
   }
 
 #' @noRd
@@ -221,8 +238,16 @@ implied_scores_i <- function(fit,
 
 implied_rsquare <- function(fit) {
     fit_rsquare_raw <- lavaan::parameterEstimates(fit, rsquare = TRUE)
+    ngroups <- lavaan::lavInspect(fit, "ngroups")
+    if (ngroups == 1) {
+        fit_rsquare_raw$group <- 1
+      }
     fit_rsquare_raw <- fit_rsquare_raw[fit_rsquare_raw$op == "r2", ]
     fit_rsquare <- fit_rsquare_raw$est
     names(fit_rsquare) <- fit_rsquare_raw$lhs
-    fit_rsquare
+    out <- split(fit_rsquare, fit_rsquare_raw$group)
+    if (ngroups > 1) {
+        names(out) <- lavaan::lavInspect(fit, "group.label")
+      }
+    return(out)
   }
