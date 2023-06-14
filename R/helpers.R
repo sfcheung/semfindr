@@ -78,6 +78,12 @@ lav_data_used <- function(fit) {
 
 full_rank <- function(x) {
     # Idea based on WeightIt::make_full_rank
+    if (ncol(x) == 1) {
+        out <- list(final = x,
+                    original = x,
+                    dropped = integer(0))
+        return(out)
+      }
     tmp <- x
     rownames(tmp) <- seq_len(nrow(tmp))
     colnames(tmp) <- seq_len(ncol(tmp))
