@@ -259,7 +259,6 @@ lavaan_rerun <- function(fit,
       case_md_ordered <- case_md_ordered[!is.na(case_md_ordered)]
       case_md_selected <- case_md_ordered[seq_len(md_top)]
       case_md_selected <- case_md_selected[!is.na(case_md_selected)]
-      # TODO: Revise for multiple group models?
       to_rerun <- case_ids[case_md_selected]
     }
 
