@@ -57,7 +57,7 @@ test_that("params_selected", {
                  c("m1~~m1", "dv~~dv"))
   })
 
-skip("To be tested interactively")
+skip("To be tested in an interactive session")
 
 params <- c("m1~iv1", "a2", "b")
 est_change_gcd_plot(fit_est_change, parameters = params)
