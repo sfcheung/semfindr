@@ -120,13 +120,17 @@ implied_scores <- function(fit,
   }
 
 #' @noRd
+# check_rsquare disabled by default due to the computation
+# of r-squares in multiple-group models.
+# It is sufficient to check implied cov and means.
 
 implied_scores_i <- function(fit,
                              dat,
                              mm,
                              implied_cov,
                              implied_mean,
-                             fit_rsquare) {
+                             fit_rsquare,
+                             check_rsquare = FALSE) {
     n <- nrow(dat)
     v_names <- lavaan::lavNames(fit, "ov")
     y_names <- lavaan::lavNames(fit, "eqs.y")
@@ -194,7 +198,6 @@ implied_scores_i <- function(fit,
                              use = "pairwise.complete.obs")^2)
     }
     y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]
-    fit_rsquare
     check_rsquare <- all(round(y_hat_rsquare, 5) == round(fit_rsquare, 5))
 
     check_summary <- vector(mode = "character")
@@ -216,7 +219,7 @@ implied_scores_i <- function(fit,
                 "Implied means of y-variables cannot be reproduced.")
         }
       }
-    if (!check_rsquare) {
+    if (!check_rsquare && check_rsquare) {
         check_summary <- c(check_summary,
             "Implied R-squares of y-variables cannot be reproduced.")
     }
