@@ -296,7 +296,22 @@ est_change_i <- function(x,
   vcovi_full_inv <- tryCatch(solve(vcovi_full),
                              error = function(e) e)
   if (inherits(vcovi_full_inv, "error")) {
-      gcdi <- NA
+      vcovi_full_0 <- full_rank(vcovi_full)
+      vcovi_full_1 <- vcovi_full_0$final
+      p_kept <- seq_len(ncol(vcovi_full))
+      if (length(vcovi_full_0$dropped) > 0) {
+          p_kept <- p_kept[-vcovi_full_0$dropped]
+        }
+      vcovi_full_1_inv <- tryCatch(solve(vcovi_full_1),
+                                   error = function(e) e)
+      if (inherits(vcovi_full_1_inv, "error")) {
+          gcdi <- NA
+        } else {
+          esti_change_raw_1 <- esti_change_raw[p_kept]
+          k_1 <- length(p_kept)
+          gcdi <- matrix(esti_change_raw_1, 1, k_1) %*% vcovi_full_1_inv %*%
+                  matrix(esti_change_raw_1, k_1, 1)
+        }
     } else {
       gcdi <- matrix(esti_change_raw, 1, k) %*% vcovi_full_inv %*%
               matrix(esti_change_raw, k, 1)
