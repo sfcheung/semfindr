@@ -51,3 +51,23 @@ test_that("full_rank: Simple", {
     expect_equal(x2_full$dropped,
                  1)
   })
+
+dat <- pa_dat2
+mod <-
+"
+m1 ~ a1 * iv1 + a2 * iv2
+dv ~ b * m1
+a1 == a2
+a2 == b
+"
+fit <- sem(mod, pa_dat2, fixed.x = FALSE)
+summary(fit)
+
+x <- vcov(fit)
+x_full <- full_rank(x)
+
+test_that("full_rank: Simple", {
+    expect_error(solve(x_full$original))
+    expect_equal(as.numeric(Matrix::rankMatrix(x_full$final)),
+                 6)
+  })
