@@ -1,3 +1,4 @@
+skip("Equality constraints are supported in est_change()")
 library(testthat)
 library(lavaan)
 library(semfindr)

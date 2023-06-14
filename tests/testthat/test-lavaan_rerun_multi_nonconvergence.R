@@ -43,7 +43,7 @@ test_that("est_change_raw", {
 
 test_that("est_change", {
     suppressMessages(tmp <- est_change(fit_rerun))
-    expect_true(all(!complete.cases(tmp)[c(3, 11)]))
+    expect_true(all(!complete.cases(tmp)[c(3, 12)]))
   })
 
 test_that("fit_measures_change", {
