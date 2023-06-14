@@ -64,3 +64,7 @@ print(est_change_approx_op1)
 print(est_change_approx_op2)
 print(est_change_approx_mixed)
 
+tmp <- est_change_all
+tmp[, "gcd"] <- NA
+head(tmp)
+print(tmp)
