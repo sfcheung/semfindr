@@ -14,6 +14,11 @@
 #' @param fit The output from [lavaan::lavaan()], such as [lavaan::cfa()]
 #' and [lavaan::sem()].
 #'
+#' @param skip_all_checks If `TRUE`, skips all checks and allows
+#' users to run this function on any object of `lavaan` class.
+#' For users to experiment this and other functions on models
+#' not officially supported. Default is `FALSE`.
+#'
 #' @return A matrix of the implied scores.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -42,7 +47,8 @@
 #' @importFrom lavaan fitted
 #' @export implied_scores
 
-implied_scores <- function(fit) {
+implied_scores <- function(fit,
+                           skip_all_checks = FALSE) {
 
     if (missing(fit)) {
         stop("lavaan output is missing.")
@@ -56,22 +62,24 @@ implied_scores <- function(fit) {
     #     stop("Datasets with missing data is not yet supported.")
     #   }
 
-    if (lavaan::lavInspect(fit, "ngroups") != 1) {
-        stop(paste0("The model has more than one group. \n",
-                    "Multiple group analysis not yet supported."))
-      }
+    if (!skip_all_checks) {
+        if (lavaan::lavInspect(fit, "ngroups") != 1) {
+            stop(paste0("The model has more than one group. \n",
+                        "Multiple group analysis not yet supported."))
+          }
 
-    # if (is.null(lavaan::inspect(fit, "est")$alpha)) {
-    #     stop(paste0("Mean structure not analyzed. It is required."))
-    #   }
+        # if (is.null(lavaan::inspect(fit, "est")$alpha)) {
+        #     stop(paste0("Mean structure not analyzed. It is required."))
+        #   }
 
-    if (lavaan::lavInspect(fit, "nlevels") != 1) {
-        stop(paste0("The model has more than one level. \n",
-                    "Multiple group analysis not yet supported."))
-      }
+        if (lavaan::lavInspect(fit, "nlevels") != 1) {
+            stop(paste0("The model has more than one level. \n",
+                        "Multiple group analysis not yet supported."))
+          }
 
-    if (max(unlist(lavaan::lavInspect(fit, "nclusters"))) > 1) {
-        stop(paste0("Clustered mode not yet supported."))
+        if (max(unlist(lavaan::lavInspect(fit, "nclusters"))) > 1) {
+            stop(paste0("Clustered mode not yet supported."))
+          }
       }
 
     check_data <- tryCatch(lavaan::lavInspect(fit, "data"),
@@ -80,6 +88,7 @@ implied_scores <- function(fit) {
         stop("Raw data not available. Implied scores cannot be computed.")
       }
 
+browser()
     dat <- lav_data_used(fit)
     fit_implied <- fitted(fit)
     out <- implied_scores_i(fit = fit,

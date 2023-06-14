@@ -4,11 +4,16 @@
 \alias{implied_scores}
 \title{Implied Scores of Observed Outcome Variables}
 \usage{
-implied_scores(fit)
+implied_scores(fit, skip_all_checks = FALSE)
 }
 \arguments{
 \item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}}
 and \code{\link[lavaan:sem]{lavaan::sem()}}.}
+
+\item{skip_all_checks}{If \code{TRUE}, skips all checks and allows
+users to run this function on any object of \code{lavaan} class.
+For users to experiment this and other functions on models
+not officially supported. Default is \code{FALSE}.}
 }
 \value{
 A matrix of the implied scores.
