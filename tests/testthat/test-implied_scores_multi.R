@@ -21,7 +21,7 @@ head(dat0)
 fit0 <- lavaan::sem(mod, dat0, meanstructure = TRUE, group = "gp")
 group_label <- lavInspect(fit0, "group.label")
 
-implied_scores0 <- implied_scores(fit0, skip_all_checks = TRUE)
+implied_scores0 <- implied_scores(fit0)
 implied_scores0_g <- split(as.data.frame(implied_scores0), dat0$gp)
 implied_scores0_g <- implied_scores0_g[group_label]
 fitted0 <- lavInspect(fit0, "fitted")
@@ -70,7 +70,7 @@ head(dat0)
 fit0 <- lavaan::sem(mod, dat0, meanstructure = TRUE, group = "gp")
 group_label <- lavInspect(fit0, "group.label")
 
-implied_scores0 <- implied_scores(fit0, skip_all_checks = TRUE)
+implied_scores0 <- implied_scores(fit0)
 implied_scores0_g <- split(as.data.frame(implied_scores0), dat0$gp)
 implied_scores0_g <- implied_scores0_g[group_label]
 fitted0 <- lavInspect(fit0, "fitted")

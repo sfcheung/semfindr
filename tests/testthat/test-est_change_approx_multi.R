@@ -45,7 +45,7 @@ gcd_approx <- rowSums(
   (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
 )
 
-gcd_approx2 <- est_change_approx(fit, skip_all_checks = TRUE)
+gcd_approx2 <- est_change_approx(fit)
 
 test_that("Check against known results", {
     expect_equal(ignore_attr = TRUE,
@@ -54,9 +54,9 @@ test_that("Check against known results", {
       )
   })
 
-test1 <- est_change_approx(fit, c("~"), skip_all_checks = TRUE)
-test2 <- est_change_approx(fit, c("~~"), skip_all_checks = TRUE)
-test3 <- est_change_approx(fit, c("m1 ~ iv1", "~~"), skip_all_checks = TRUE)
+test1 <- est_change_approx(fit, c("~"))
+test2 <- est_change_approx(fit, c("~~"))
+test3 <- est_change_approx(fit, c("m1 ~ iv1", "~~"))
 
 test_that("est_change_raw_approx: Selected parameters", {
     expect_equal(setdiff(colnames(test1),
@@ -120,7 +120,7 @@ gcd_approx <- rowSums(
   (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
 )
 
-gcd_approx2 <- est_change_approx(fit, skip_all_checks = TRUE)
+gcd_approx2 <- est_change_approx(fit)
 
 test_that("Check against known results", {
     expect_equal(ignore_attr = TRUE,
@@ -177,7 +177,7 @@ gcd_approx <- rowSums(
   (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
 )
 
-gcd_approx2 <- est_change_approx(fit, parameters = "=~", skip_all_checks = TRUE)
+gcd_approx2 <- est_change_approx(fit, parameters = "=~")
 
 test_that("Check against known results", {
     expect_equal(ignore_attr = TRUE,

@@ -26,7 +26,7 @@ fit_est_change_approx <- lavScores(fit,
                                    remove.duplicated = FALSE) %*% vcov(fit) *
   nobs(fit) / (nobs(fit) - 1)
 # From function
-fit_est_change_approx2 <- est_change_raw_approx(fit, skip_all_checks = TRUE)
+fit_est_change_approx2 <- est_change_raw_approx(fit)
 
 test_that("Checked against known results", {
     expect_equal(ignore_attr = TRUE,
@@ -45,9 +45,9 @@ test_that("Exact and approximate results are similar", {
     expect_lt(max(abs_diff), expected = .01)
   })
 
-test1 <- est_change_raw_approx(fit, c("~"), skip_all_checks = TRUE)
-test2 <- est_change_raw_approx(fit, c("~~"), skip_all_checks = TRUE)
-test3 <- est_change_raw_approx(fit, c("m1 ~ iv1", "~~"), skip_all_checks = TRUE)
+test1 <- est_change_raw_approx(fit, c("~"))
+test2 <- est_change_raw_approx(fit, c("~~"))
+test3 <- est_change_raw_approx(fit, c("m1 ~ iv1", "~~"))
 
 test_that("est_change_raw_approx: Selected parameters", {
     expect_equal(setdiff(colnames(test1),
@@ -91,7 +91,7 @@ fit_est_change_approx <- lavScores(fit,
                                    remove.duplicated = FALSE) %*% vcov(fit) *
   nobs(fit) / (nobs(fit) - 1)
 # From function
-fit_est_change_approx2 <- est_change_raw_approx(fit, skip_all_checks = TRUE)
+fit_est_change_approx2 <- est_change_raw_approx(fit)
 
 test_that("Checked against known results", {
     expect_equal(ignore_attr = TRUE,
