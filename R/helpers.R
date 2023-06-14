@@ -78,6 +78,7 @@ lav_data_used <- function(fit) {
 
 full_rank <- function(x) {
     # Idea based on WeightIt::make_full_rank
+    x <- check_square(x)
     if (ncol(x) == 1) {
         out <- list(final = x,
                     original = x,
@@ -87,22 +88,43 @@ full_rank <- function(x) {
     tmp <- x
     rownames(tmp) <- seq_len(nrow(tmp))
     colnames(tmp) <- seq_len(ncol(tmp))
-    x_rank <- Matrix::rankMatrix(x)
+    x_rank <- rankMatrix_square(x)
     dropped <- integer(0)
     while (x_rank != ncol(tmp)) {
         for (i in seq_len(ncol(tmp))) {
             tmp2 <- tmp[-i, -i]
-            tmp2_rank <- Matrix::rankMatrix(tmp2)
+            tmp2_rank <- rankMatrix_square(tmp2)
             if (tmp2_rank == x_rank) {
                 break
               }
           }
         dropped <- c(dropped, as.integer(colnames(tmp)[i]))
         tmp <- tmp[-i, -i]
-        x_rank <- Matrix::rankMatrix(tmp)
+        x_rank <- rankMatrix_square(tmp)
       }
     out <- list(final = tmp,
                 original = x,
                 dropped = dropped)
     return(out)
+  }
+
+rankMatrix_square <- function(x) {
+    x <- check_square(x)
+    if (ncol(x) == 1) {
+        return(1)
+      } else {
+        return(Matrix::rankMatrix(x))
+      }
+  }
+
+#' @noRd
+
+check_square <- function(x) {
+    if (length(dim(x)) != 2) {
+        stop("x is not a 2-dimensional matrix.")
+      }
+    if (ncol(x) != nrow(x)) {
+        stop("x is not a square matrix.")
+      }
+    x
   }
