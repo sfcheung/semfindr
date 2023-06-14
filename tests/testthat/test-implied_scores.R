@@ -4,7 +4,7 @@ library(semfindr)
 
 #context("Test implied_scores with x variables free")
 
-mod <- 
+mod <-
 '
 iv1 ~~ iv2
 m1 ~ iv1 + iv2
@@ -29,7 +29,7 @@ p <- length(y_names)
 y_hat_rsquare <- rep(NA, p)
 names(y_hat_rsquare) <- y_names
 for (i in y_names) {
-    y_hat_rsquare[i] <- 
+    y_hat_rsquare[i] <-
         suppressWarnings(cor(dat[, i], implied_scores0[, i], use = "pairwise.complete.obs")^2)
 }
 y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]
@@ -50,7 +50,7 @@ test_that("Can implied R-squares be reproduced?", {
 
 #context("Test implied_scores with x variables fixed")
 
-mod <- 
+mod <-
 '
 m1 ~ iv1 + iv2
 dv ~ m1
@@ -74,7 +74,7 @@ p <- length(y_names)
 y_hat_rsquare <- rep(NA, p)
 names(y_hat_rsquare) <- y_names
 for (i in y_names) {
-    y_hat_rsquare[i] <- 
+    y_hat_rsquare[i] <-
         suppressWarnings(cor(dat[, i], implied_scores0[, i], use = "pairwise.complete.obs")^2)
 }
 y_hat_rsquare <- y_hat_rsquare[!is.na(y_hat_rsquare)]
@@ -101,3 +101,4 @@ test_that("Can implied R-squares be reproduced?", {
 # test_that("Can detect a dataset with missing data", {
 #     expect_error(implied_scores(fit0), "missing data")
 #   })
+
