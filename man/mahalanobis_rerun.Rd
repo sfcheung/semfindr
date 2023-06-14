@@ -44,7 +44,11 @@ and variance-covariance matrices will be estimated by maximum
 likelihood using \code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed
 to \code{\link[modi:MDmiss]{modi::MDmiss()}} to compute the Mahalanobis distance.
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+For multiple-group models, the Mahalanobis distance for
+each case is computed using the means and covariance matrix
+of the group this case belongs to.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

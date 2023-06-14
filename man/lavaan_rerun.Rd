@@ -142,7 +142,8 @@ of cases or the long processing time in fitting the model, it is
 recommended to save the output to an external file (e.g., by
 \code{\link[base:readRDS]{base::saveRDS()}}).
 
-Currently \code{\link[=lavaan_rerun]{lavaan_rerun()}} only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

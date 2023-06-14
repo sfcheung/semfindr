@@ -64,13 +64,17 @@ Pek and MacCallum (2011) for structural equation modeling.
 Only the parameters selected (all free parameters, by default)
 will be used in computing \emph{gCD}.
 
-Note that, if (a) a model has one or more equality constraints, and
+Since version 0.1.4.8, if (a) a model has one or more equality
+constraints, and
 (b) some selected parameters are linearly dependent or constrained
-to be equal due to the constraint(s), \emph{gCD} will not be computed
-and \code{NA} will be returned. For this kind of models, manually select
-parameters that are not linearly dependent or constrained to be equal.
+to be equal due to the constraint(s), \emph{gCD} will be computed
+by removing parameters such that the remaining parameters are
+not linearly dependent nor constrained to be equal.
+(Support for equality constraints and
+linearly dependent parameters available in 0.1.4.8 and later version).
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

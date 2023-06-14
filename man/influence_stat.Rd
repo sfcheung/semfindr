@@ -80,7 +80,8 @@ If Mahalanobis distance is requested, it is computed by
 Please refer to the help pages of the above functions on
 the technical details.
 
-Currently it only works for single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

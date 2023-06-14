@@ -31,13 +31,17 @@
 #' Only the parameters selected (all free parameters, by default)
 #' will be used in computing *gCD*.
 #'
-#' Note that, if (a) a model has one or more equality constraints, and
+#' Since version 0.1.4.8, if (a) a model has one or more equality
+#' constraints, and
 #' (b) some selected parameters are linearly dependent or constrained
-#' to be equal due to the constraint(s), *gCD* will not be computed
-#' and `NA` will be returned. For this kind of models, manually select
-#' parameters that are not linearly dependent or constrained to be equal.
+#' to be equal due to the constraint(s), *gCD* will be computed
+#' by removing parameters such that the remaining parameters are
+#' not linearly dependent nor constrained to be equal.
+#' (Support for equality constraints and
+#' linearly dependent parameters available in 0.1.4.8 and later version).
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #'
@@ -181,13 +185,26 @@ est_change <- function(rerun_out,
               output = "data.frame"
               )
   ngroups <- lavaan::lavTech(fit0, "ngroups")
-  if (ngroups == 1) estorg$group <- 1
+  if (ngroups == 1) {
+      estorg$group <- 1
+      estorg$group[estorg$op == ":="] <- 0
+    }
   ptable <- lavaan::parameterTable(fit0)
   ptable_cols <- c("lhs", "op", "rhs",
                     "free", "label", "id",
-                    "lavlabel")
+                    "lavlabel", "group")
+
+  # Ensure that plabels are not used as lavlabels
+  tmp1 <- ptable$plabel[ptable$plabel != ""]
+  tmp2 <- ptable$label %in% tmp1
+  tmp3 <- ptable$label
+  ptable$label[tmp2] <- ""
   ptable$lavlabel <- lavaan::lav_partable_labels(ptable,
                                                  type = "user")
+  ptable$label <- tmp3
+  tmp <- (ptable$lavlabel == ptable$plabel)
+  ptable$lavlabel[tmp] <- ""
+
   est0 <- merge(estorg, ptable[, ptable_cols])
   est0 <- est0[order(est0$id), ]
   parameters_names <- est0$lavlabel
@@ -232,19 +249,6 @@ est_change <- function(rerun_out,
   colnames(out) <- c(parameters_names[parameters_selected], "gcd")
   rownames(out) <- case_ids
 
-  # Not yet support a model with equality constraint
-  if (any_depend) {
-      out[, "gcd"] <- NA
-    }
-  if (fit0@Model@eq.constraints && any(is.na(out[, "gcd"]))) {
-      message(paste("The model has one or more equality constraints.",
-                "gCD will not be computed if the selected",
-                "parameters are linearly dependent",
-                "(e.g., some are constrained to be equal).",
-                "If you need gCD, select parameters not",
-                "constrained to be equal or linearly dependent."))
-    }
-
   attr(out, "call") <- match.call()
   attr(out, "change_type") <- "standardized"
   attr(out, "method") <- "leave_one_out"
@@ -284,7 +288,8 @@ est_change_i <- function(x,
   q <- which(vcovi_full_names %in% est$label)
   colnames(vcovi_full)[q] <- parameters_names[q]
   rownames(vcovi_full)[q] <- parameters_names[q]
-  vcovi_full <- vcovi_full[parameters_selected, parameters_selected]
+  vcovi_full <- vcovi_full[parameters_selected, parameters_selected,
+                           drop = FALSE]
   k <- length(esti_change)
   esti_change_raw <- (est$est - esti_full$est)
   names(esti_change_raw) <- parameters_names
@@ -292,7 +297,22 @@ est_change_i <- function(x,
   vcovi_full_inv <- tryCatch(solve(vcovi_full),
                              error = function(e) e)
   if (inherits(vcovi_full_inv, "error")) {
-      gcdi <- NA
+      vcovi_full_0 <- full_rank(vcovi_full)
+      vcovi_full_1 <- vcovi_full_0$final
+      p_kept <- seq_len(ncol(vcovi_full))
+      if (length(vcovi_full_0$dropped) > 0) {
+          p_kept <- p_kept[-vcovi_full_0$dropped]
+        }
+      vcovi_full_1_inv <- tryCatch(solve(vcovi_full_1),
+                                   error = function(e) e)
+      if (inherits(vcovi_full_1_inv, "error")) {
+          gcdi <- NA
+        } else {
+          esti_change_raw_1 <- esti_change_raw[p_kept]
+          k_1 <- length(p_kept)
+          gcdi <- matrix(esti_change_raw_1, 1, k_1) %*% vcovi_full_1_inv %*%
+                  matrix(esti_change_raw_1, k_1, 1)
+        }
     } else {
       gcdi <- matrix(esti_change_raw, 1, k) %*% vcovi_full_inv %*%
               matrix(esti_change_raw, k, 1)

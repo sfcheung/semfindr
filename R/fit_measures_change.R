@@ -23,7 +23,8 @@
 #' is deleted, `NA`s will be turned for the differences of this
 #' case.
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #'

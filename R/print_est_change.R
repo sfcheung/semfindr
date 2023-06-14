@@ -137,14 +137,13 @@ print.est_change <- function(x,
       }
 
     if (identical(est_change_type, "standardized")) {
+        fallback_to_est <- FALSE
+        if (any(is.na(x[, gcd_name]))) {
+            fallback_to_est <- TRUE
+            by <- "est"
+          }
         if (sort) {
             if (identical(by, "gcd")) {
-                if (any(is.na(x[, gcd_name]))) {
-                    stop("Cannot sort by ",
-                         sQuote(gcd_name),
-                         ". At least one NA on ",
-                         sQuote(gcd_name), ".")
-                  }
                 out_1 <- x[order(x[, gcd_name], decreasing = TRUE), , drop = FALSE]
                 out <- as.data.frame(round(out_1, digits = digits))
                 out <- out[i, , drop = FALSE]
@@ -201,11 +200,17 @@ print.est_change <- function(x,
         if (identical(est_change_type, "raw")) {
             cat("- Cases sorted by the absolute changes for each variable.\n")
           } else {
+            if (fallback_to_est) {
+                cat("- Cannot sort by ",
+                    sQuote(gcd_name),
+                    ". At least one NA on ",
+                    sQuote(gcd_name), ".\n", sep = "")
+              }
             if (identical(by, "gcd")) {
                 cat("- Cases sorted by ", gcd_name2, ".\n", sep = "")
               } else {
                 cat("- Cases sorted by the absolute values for change or",
-                    gcd_name2, ".\n")
+                    gcd_name2, ".\n", sep = "")
               }
           }
       }

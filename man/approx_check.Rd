@@ -4,7 +4,12 @@
 \alias{approx_check}
 \title{Compatibility Check for the '_approx' Functions}
 \usage{
-approx_check(fit, print_messages = TRUE)
+approx_check(
+  fit,
+  print_messages = TRUE,
+  multiple_group = FALSE,
+  equality_constraint = FALSE
+)
 }
 \arguments{
 \item{fit}{The output from \code{lavaan}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}} and
@@ -13,6 +18,15 @@ approx_check(fit, print_messages = TRUE)
 \item{print_messages}{Logical. If \code{TRUE}, will print messages about the
 check. If \code{FALSE}, the messages will be attached to the return value
 as an attribute. Default is \code{TRUE}.}
+
+\item{multiple_group}{Logical. Whether multiple-group models are
+supported. If yes, the check for multiple-groups models will be
+skipped. Default is \code{FALSE}.}
+
+\item{equality_constraint}{Logical. Whether models with
+equality constraints are
+supported. If yes, the check for equality constraints will be
+skipped. Default is \code{FALSE}.}
 }
 \value{
 A single-element vector. If confirmed to be supported, will

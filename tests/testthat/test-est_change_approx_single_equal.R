@@ -1,3 +1,4 @@
+skip("Equality constraints are supported in est_change_raw_approx()")
 library(testthat)
 library(lavaan)
 library(semfindr)
@@ -19,7 +20,7 @@ dat <- pa_dat
 dat0 <- dat
 fit0 <- lavaan::sem(mod, dat0)
 
-test_that("Error if equality constraints", {
-    expect_error(raw_approx2 <- est_change_raw_approx(fit0))
-  })
+# test_that("Error if equality constraints", {
+#     expect_error(gcd_approx2 <- est_change_approx(fit0))
+#   })
 

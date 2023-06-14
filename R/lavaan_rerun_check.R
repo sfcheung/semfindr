@@ -89,10 +89,10 @@ lavaan_rerun_check <- function(fit,
           msg <- c(msg, "Clustered models are not yet supported.")
         }
 
-    if (model_multigroup) {
-          out <- ifelse(out >= 0, -1, out - 1)
-          msg <- c(msg, "Multigroup models are not yet supported.")
-        }
+    # if (model_multigroup) {
+    #       out <- ifelse(out >= 0, -1, out - 1)
+    #       msg <- c(msg, "Multigroup models are not yet supported.")
+    #     }
 
     if (!optim_converged) {
           out <- ifelse(out >= 0, -1, out - 1)

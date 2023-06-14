@@ -24,7 +24,8 @@
 #' Please refer to the help pages of the above functions on
 #' the technical details.
 #'
-#' Currently it only works for single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()], or the output
 #' of [lavaan::lavaan()] or its wrappers (e.g., [lavaan::cfa()]
