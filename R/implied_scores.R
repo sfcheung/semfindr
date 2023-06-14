@@ -63,10 +63,10 @@ implied_scores <- function(fit,
     #   }
 
     if (!skip_all_checks) {
-        if (lavaan::lavInspect(fit, "ngroups") != 1) {
-            stop(paste0("The model has more than one group. \n",
-                        "Multiple group analysis not yet supported."))
-          }
+        # if (lavaan::lavInspect(fit, "ngroups") != 1) {
+        #     stop(paste0("The model has more than one group. \n",
+        #                 "Multiple group analysis not yet supported."))
+        #   }
 
         # if (is.null(lavaan::inspect(fit, "est")$alpha)) {
         #     stop(paste0("Mean structure not analyzed. It is required."))
