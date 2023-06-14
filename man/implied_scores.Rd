@@ -4,7 +4,7 @@
 \alias{implied_scores}
 \title{Implied Scores of Observed Outcome Variables}
 \usage{
-implied_scores(fit, output = TRUE, skip_all_checks = FALSE)
+implied_scores(fit, output = "matrix", skip_all_checks = FALSE)
 }
 \arguments{
 \item{fit}{The output from \code{\link[lavaan:lavaan]{lavaan::lavaan()}}, such as \code{\link[lavaan:cfa]{lavaan::cfa()}}

@@ -1,4 +1,3 @@
-skip("WIP")
 library(testthat)
 library(lavaan)
 
@@ -22,12 +21,24 @@ suppressWarnings(fit0 <- lavaan::sem(mod, dat0, meanstructure = TRUE, group = "g
 
 fit0_data <- lav_data_used(fit0)
 head(fit0_data)
+case_idx <- lavInspect(fit0, "case.idx", drop.list.single.group = FALSE)
+case_idx_full <- unlist(case_idx, use.names = FALSE)
 
-fit0_implied <- implied_scores(fit0)
-fit0_observed <- fit0_data[, colnames(fit0_implied)]
-fit0_residual <- fit0_implied - fit0_observed
-fit0_resid_md <- mahalanobis(fit0_residual, colMeans(fit0_residual),
-                                            cov(fit0_residual))
+fit0_implied <- implied_scores(fit0, output = "list")
+y_names <- colnames(fit0_implied[[1]])
+fit0_observed <- lapply(lavInspect(fit0, "data"), function(x) x[, y_names])
+fit0_residual <- mapply(function(x1, x2) {x1 - x2},
+                        x1 = fit0_implied,
+                        x2 = fit0_observed,
+                        SIMPLIFY = FALSE)
+fit0_resid_md <- lapply(fit0_residual,
+                        function(x) {
+                            mahalanobis(x,
+                                        colMeans(x),
+                                        cov(x))
+                          })
+fit0_resid_md <- unlist(fit0_resid_md, use.names = FALSE)
+names(fit0_resid_md) <- case_idx_full
 
 resid_md_ordered <- order(fit0_resid_md, decreasing = TRUE, na.last = NA)
 
@@ -53,8 +64,8 @@ test_that("Check selected", {
 # With Case ID
 
 set.seed(80689)
-case_id_test <- paste0(sample(letters, 50, replace = TRUE),
-                       sample(letters, 50, replace = TRUE))
+case_id_test <- paste0(sample(letters, nrow(dat0), replace = TRUE),
+                       sample(letters, nrow(dat0), replace = TRUE))
 rerun_out <- suppressWarnings(lavaan_rerun(fit0, case_id = case_id_test, resid_md_top = 4, parallel = FALSE))
 
 test_that("Check the number of reruns", {

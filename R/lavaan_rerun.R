@@ -235,7 +235,10 @@ lavaan_rerun <- function(fit,
   #     stop("resid_md_top does not support a model without mean structure.")
   #   }
 
-  if (!missing(resid_md_top) && !all(lavaan::lavInspect(fit, "pattern") == 1)) {
+  tmp <- sapply(lavaan::lavInspect(fit, "pattern",
+                drop.list.single.group = FALSE),
+              nrow)
+  if (!missing(resid_md_top) && !all(tmp == 1)) {
       stop("resid_md_top does not support analysis with missing data.")
     }
 
@@ -261,20 +264,38 @@ lavaan_rerun <- function(fit,
       case_md_selected <- case_md_selected[!is.na(case_md_selected)]
       to_rerun <- case_ids[case_md_selected]
     }
-
   if (!missing(resid_md_top)) {
-      fit_data <- lavaan::lavInspect(fit, "data")
-      fit_implied <- implied_scores(fit)
-      fit_observed <- fit_data[, colnames(fit_implied)]
-      fit_residual <- fit_implied - fit_observed
-      fit_resid_md <- stats::mahalanobis(fit_residual,
-                                         colMeans(fit_residual),
-                                         stats::cov(fit_residual))
+      # fit_data <- lavaan::lavInspect(fit, "data")
+      # fit_implied <- implied_scores(fit)
+      # fit_observed <- fit_data[, colnames(fit_implied)]
+      # fit_residual <- fit_implied - fit_observed
+      # fit_resid_md <- stats::mahalanobis(fit_residual,
+      #                                    colMeans(fit_residual),
+      #                                    stats::cov(fit_residual))
+      fit_implied <- implied_scores(fit, output = "list")
+      y_names <- colnames(fit_implied[[1]])
+      fit_observed <- lapply(lavaan::lavInspect(fit, "data",
+                                                drop.list.single.group = FALSE),
+                             function(x) x[, y_names])
+      fit_residual <- mapply(function(x1, x2) {x1 - x2},
+                             x1 = fit_implied,
+                             x2 = fit_observed,
+                             SIMPLIFY = FALSE)
+      fit_resid_md <- lapply(fit_residual,
+                             function(x) {
+                                 stats::mahalanobis(x,
+                                             colMeans(x),
+                                             stats::cov(x))
+                               })
+      fit_resid_md <- unlist(fit_resid_md, use.names = FALSE)
+      tmp1 <- lavaan::lavInspect(fit, "case.idx",
+                                 drop.list.single.group = FALSE)
+      tmp2 <- unlist(tmp1, use.names = FALSE)
+      names(fit_resid_md) <- tmp2
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
       fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
-      # TODO: Revise for multiple group models?
       to_rerun <- case_ids[fit_resid_md_selected]
     }
 
