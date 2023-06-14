@@ -185,10 +185,6 @@ implied_scores_i <- function(fit,
     y_hat <-  matrix(alpha, n, p, byrow = TRUE) +
                 as.matrix(dat_y) %*% t(beta) + as.matrix(dat_x) %*% t(gamma)
 
-    # fit_rsquare_raw <- lavaan::parameterEstimates(fit, rsquare = TRUE)
-    # fit_rsquare_raw <- fit_rsquare_raw[fit_rsquare_raw$op == "r2", ]
-    # fit_rsquare <- fit_rsquare_raw$est
-    # names(fit_rsquare) <- fit_rsquare_raw$lhs
     dat_y <- dat[, y_names]
     y_hat_rsquare <- rep(NA, p)
     names(y_hat_rsquare) <- y_names
