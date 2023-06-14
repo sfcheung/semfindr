@@ -288,7 +288,8 @@ est_change_i <- function(x,
   q <- which(vcovi_full_names %in% est$label)
   colnames(vcovi_full)[q] <- parameters_names[q]
   rownames(vcovi_full)[q] <- parameters_names[q]
-  vcovi_full <- vcovi_full[parameters_selected, parameters_selected]
+  vcovi_full <- vcovi_full[parameters_selected, parameters_selected,
+                           drop = FALSE]
   k <- length(esti_change)
   esti_change_raw <- (est$est - esti_full$est)
   names(esti_change_raw) <- parameters_names
