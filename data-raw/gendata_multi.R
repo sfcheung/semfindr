@@ -45,5 +45,6 @@ lavTestLRT(fit0, fit1, fit2)
 lavTestLRT(fit0b, fit2b)
 lavTestLRT(fit0, fit2)
 
-cfa_dat_mg <- dat
+cfa_dat_mg <- dat[, c("x1", "x2", "x3", "x4", "x5", "x6", "gp")]
+head(cfa_dat_mg)
 usethis::use_data(cfa_dat_mg, overwrite = TRUE)
