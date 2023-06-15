@@ -77,3 +77,9 @@ test_that("Compare generalized Cook's distance for for an arbitrary case", {
         est_change_rerun_all[15, "gcd"]
       )
   })
+
+test_that("User parameters should return error or excluded", {
+    expect_error(est_change(rerun_out, "a1b"))
+    expect_equal(intersect(colnames(est_change(rerun_out, c("m1 ~ iv1", "a1b"))), "a1b"),
+                 character(0))
+  })

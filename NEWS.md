@@ -1,4 +1,4 @@
-# semfindr 0.1.4.12
+# semfindr 0.1.4.14
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -21,8 +21,9 @@
 - Added a print method for the output of `influence_stat()`.
   (0.1.4.7)
 - Provided initial support for multiple-group models
-  and models with linearity constraints. (0.1.4.8 - 0.1.4.11)
+  and models with linearity constraints. (0.1.4.8 - 0.1.4.14)
 - Fixed the documentation of `pars_id()`. (0.1.4.12)
+- Added support for labels and `":="` to `pars_id()`. (0.1.4.13)
 
 # semfindr 0.1.4
 

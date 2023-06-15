@@ -59,6 +59,14 @@ test_that("est_change_approx: Selected parameters", {
                     "gcd_approx")))
   })
 
+
+test_that("User parameters should return error or excluded", {
+    expect_error(est_change_approx(fit, "a1b"))
+    expect_equal(intersect(colnames(est_change_approx(fit, c("m1 ~ iv1"))), "a1b"),
+                 character(0))
+  })
+
+
 # With fixed parameters
 
 mod <-

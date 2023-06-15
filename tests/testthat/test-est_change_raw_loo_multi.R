@@ -35,6 +35,11 @@ est_change_rerun_all_paths <- est_change_raw(rerun_out,
 est_change_rerun_all_paths_std <- est_change_raw(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"),
                                 standardized = TRUE)
+est_change_rerun_user <- est_change_raw(rerun_out,
+                                        "a2b")
+est_change_rerun_user_std <- est_change_raw(rerun_out,
+                                            "a2b",
+                                            standardized = TRUE)
 parameters_names <- gsub(" ", "", c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
 
 (est0_15$est_all <- est0$est)
@@ -89,6 +94,17 @@ test_that("Compare raw change in standardized solution for an arbitrary case, wi
     expect_equal(ignore_attr = TRUE,
         sort(est0_15_all_paths_std),
         sort(est_change_rerun_all_paths_std[15, ])
+      )
+  })
+
+test_that("Check user-defined parameters", {
+    expect_equal(ignore_attr = TRUE,
+        sort(est_change_rerun_user),
+        sort(est_change_rerun_all[, "a2b"])
+      )
+    expect_equal(ignore_attr = TRUE,
+        sort(est_change_rerun_user_std),
+        sort(est_change_rerun_all_std[, "a2b"])
       )
   })
 

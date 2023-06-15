@@ -244,7 +244,7 @@ est_change_approx <- function(fit,
                               remove.duplicated = FALSE)
   s0 <- scores0[, param_idx, drop = FALSE]
   v0 <- vcov0[param_idx, param_idx, drop = FALSE]
-  v1 <- diag(1 / sqrt(diag(v0)))
+  v1 <- diag(1 / sqrt(diag(v0)), nrow = nrow(v0), ncol = ncol(v0))
   out0 <- x0 %*% v1 * n / (n - 1)
   if (((ngroups > 1) || fit@Model@eq.constraints)) {
       v0_full <- full_rank(v0)
@@ -255,7 +255,7 @@ est_change_approx <- function(fit,
         }
       x0 <- x0[, p_kept, drop = FALSE]
       gcd_approx <- rowSums(
-          (x0 %*% v1_full * n / (n - 1)) * x0
+          (x0 %*% solve(v1_full * n) * (n - 1)) * x0
         )
     } else {
       info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx,

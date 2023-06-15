@@ -20,6 +20,15 @@
 #'
 #'   - For example, `"~"` denotes all regression coefficients.
 #'
+#'   - It also supports `:=`, which can be used to select
+#'     user-defined parameters.
+#'
+#' - Label
+#'
+#'   - For example, `"ab"` denotes all parameters with this
+#'     labels defined in model syntax. It can be used to
+#'     select user-defined parameters, such as `"ab := a*b"`.
+#'
 #' It is used by functions such as [est_change()].
 #'
 #' ## Multisample model
@@ -160,7 +169,11 @@ pars_id <- function(pars,
                        fit = fit,
                        where = where,
                        free_only = free_only)
-    out <- sort(unique(c(ids1, ids2, ids3)))
+    ids4 <- pars_id_label(pars = pars,
+                          fit = fit,
+                          where = where,
+                          free_only = free_only)
+    out <- sort(unique(c(ids1, ids2, ids3, ids4)))
     if (length(out) == 0) {
         stop("No parameters selected. ",
              "Please check the parameter argument.")
@@ -187,12 +200,15 @@ pars_id_lorg_mod <- function(pars,
     if (inherits(parspt, "simpleError")) {
         return(numeric(0))
       }
-    parspt2 <- as.data.frame(lavaan::lavParseModelString(pars))
+    parspt <- parspt[parspt$free > 1, ]
     mcol <- c("lhs", "op", "rhs", "group", "free")
+    mcol2 <- c("lhs", "op", "rhs", "group")
+    parspt <- merge(parspt[, mcol2], ptable[, mcol])
+    parspt2 <- as.data.frame(lavaan::lavParseModelString(pars))
     parspt3 <- merge(parspt[, mcol],
                      parspt2)[, mcol]
     if (free_only) {
-        parspt3 <- parspt3[parspt3$free > 0, ]
+        parspt3 <- parspt3[(parspt3$free > 0) | (parspt3$op == ":="), ]
       }
     parspt4 <- merge(parspt3[, -which(mcol == "free")], ptable)
     if (where == "partable") {
@@ -248,7 +264,7 @@ pars_id_lorg <- function(pars,
     parspt4 <- ptable[ptable$lavlabel %in% pars_c, ]
     if (where == "partable") {
       if (free_only) {
-          out <- parspt4[parspt4$free > 0, "rowid"]
+          out <- parspt4[(parspt4$free > 0) | (parspt4$op == ":="), "rowid"]
         } else {
           out <- parspt4$rowid
         }
@@ -344,7 +360,7 @@ pars_id_op <- function(pars,
     tmp <- ptable[out0, ]
     if (where == "partable") {
         if (free_only) {
-            out <- tmp[tmp$free > 0, "rowid"]
+            out <- tmp[(tmp$free > 0) | (tmp$op == ":="), "rowid"]
           } else {
             out <- tmp$rowid
           }
@@ -364,6 +380,52 @@ keep_ops <- function(pars, ops) {
             })
     unique(pars[unlist(tmp)])
   }
+
+#' @title Get id based on labels
+#' @noRd
+
+pars_id_label <- function(pars,
+                          fit,
+                          where = c("coef",
+                                    "partable"),
+                          free_only = TRUE) {
+    where <- match.arg(where)
+    pfree <- lavaan::lavInspect(fit, "npar")
+    ngp <- lavaan::lavInspect(fit, "ngroups")
+    glabels <- lavaan::lavInspect(fit, "group.label")
+    ptable <- lavaan::parameterTable(fit)
+    # Keep user-supplied labels
+    tmp1 <- ptable$plabel[ptable$plabel != ""]
+    tmp2 <- ptable$label %in% tmp1
+    ptable$label[tmp2] <- ""
+    ptable$rowid <- seq_len(nrow(ptable))
+    ptable$lavlabel <- lavaan::lav_partable_labels(ptable, type = "user")
+    pars_c <- sapply(pars, function(x) {
+                              gsub(x = x,
+                                   pattern = " ",
+                                   replacement = "",
+                                   fixed = TRUE)
+                            }, USE.NAMES = FALSE)
+    out0 <- integer(0)
+    # For both operators without suffixes
+    # and models with only one group
+    tmp <- ptable[ptable$label %in% pars, ]
+    if (nrow(tmp) == 0) {
+        return(out0)
+      }
+    if (where == "partable") {
+        if (free_only) {
+            out <- tmp[(tmp$free > 0) | (tmp$op == ":="), "rowid"]
+          } else {
+            out <- tmp$rowid
+          }
+      }
+    if (where == "coef") {
+        out <- tmp[tmp$free > 0, "free"]
+      }
+    out
+  }
+
 
 #' @title Get id based on wildcard
 #' @noRd

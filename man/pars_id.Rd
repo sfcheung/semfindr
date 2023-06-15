@@ -54,6 +54,14 @@ parse the syntax strings.
 \item Operator
 \itemize{
 \item For example, \code{"~"} denotes all regression coefficients.
+\item It also supports \verb{:=}, which can be used to select
+user-defined parameters.
+}
+\item Label
+\itemize{
+\item For example, \code{"ab"} denotes all parameters with this
+labels defined in model syntax. It can be used to
+select user-defined parameters, such as \code{"ab := a*b"}.
 }
 }
 
