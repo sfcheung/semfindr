@@ -84,3 +84,9 @@ test_that("Compare standardized change for an arbitrary case, with selected para
 #         est_change_rerun_all[15, "gcd"]
 #       )
 #   })
+
+test_that("User parameters should return error or excluded", {
+    expect_error(est_change(rerun_out, "a2b"))
+    expect_equal(intersect(colnames(est_change(rerun_out, c("m1 ~ iv1", "a1b"))), "a1b"),
+                 character(0))
+  })
