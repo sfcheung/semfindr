@@ -42,7 +42,7 @@ tmp3 <- full_rank(tmp2)
 i <- tmp3$dropped
 n <- nobs(fit)
 gcd_approx <- rowSums(
-  (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
+  (fit_est_change_approx[, -i] %*% solve(tmp3$final * n) * (n - 1)) * fit_est_change_approx[, -i]
 )
 
 gcd_approx2 <- est_change_approx(fit)
@@ -79,6 +79,13 @@ test_that("est_change_raw_approx: Selected parameters", {
                     "gcd_approx")),
                  character(0))
   })
+
+test_that("User parameters should return error or excluded", {
+    expect_error(est_change_approx(fit, "a2b"))
+    expect_equal(intersect(colnames(est_change_approx(fit, c("m1 ~ iv1", "a1b"))), "a2b"),
+                 character(0))
+  })
+
 
 # With fixed parameters
 
@@ -117,7 +124,7 @@ tmp3 <- full_rank(tmp2)
 i <- tmp3$dropped
 n <- nobs(fit)
 gcd_approx <- rowSums(
-  (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
+  (fit_est_change_approx[, -i] %*% solve(tmp3$final * n) * (n - 1)) * fit_est_change_approx[, -i]
 )
 
 gcd_approx2 <- est_change_approx(fit)
@@ -174,7 +181,7 @@ tmp3 <- full_rank(tmp2)
 i <- tmp3$dropped
 n <- nobs(fit)
 gcd_approx <- rowSums(
-  (fit_est_change_approx[, -i] %*% tmp3$final * n / (n - 1)) * fit_est_change_approx[, -i]
+  (fit_est_change_approx[, -i] %*% solve(tmp3$final * n) * (n - 1)) * fit_est_change_approx[, -i]
 )
 
 gcd_approx2 <- est_change_approx(fit, parameters = "=~")
@@ -185,3 +192,4 @@ test_that("Check against known results", {
         gcd_approx
       )
   })
+
