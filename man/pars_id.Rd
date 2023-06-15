@@ -27,12 +27,13 @@ this model will be considered.}
 (coefficient vector).
 Default is "coef".}
 
-\item{free_only}{Wether only free parameters will be
+\item{free_only}{Whether only free parameters will be
 kept. Default is \code{TRUE}.}
 }
 \value{
-A numeric vector of the ids in the column "free" in the
-parameter table of the fit object.
+A numeric vector of the ids. If \code{where} is \code{"partable"},
+the ids are row numbers. If \code{where} is \code{"coef"},
+the ids are the positions in the vector.
 }
 \description{
 Converts a vector of
@@ -55,35 +56,38 @@ parse the syntax strings.
 \item For example, \code{"~"} denotes all regression coefficients.
 }
 }
-}
-\section{Multisample model}{
+
+It is used by functions such as \code{\link[=est_change]{est_change()}}.
+\subsection{Multisample model}{
+
 If a model has more than one group, a specification
 specified as in a single sample model denotes the same
 parameters in all group.
-
-For example, \code{"f1 =~ x2"} denote the factor loading of
+\itemize{
+\item For example, \code{"f1 =~ x2"} denote the factor loading of
 \code{x2} on \code{f1} in all groups. \code{"~~"} denotes covariances
 and error covariances in all groups.
+}
 
 There are two ways to select parameters only in selected
 groups. First, the syntax to fix parameter values
 can be used, with \code{NA} denoting parameters to be selected.
-
-For example, \code{"f2 =~ c(NA, 1, NA) * x5"} select the
+\itemize{
+\item For example, \code{"f2 =~ c(NA, 1, NA) * x5"} select the
 factor loadings of \code{x5} on \code{f2} in the first and third
 groups.
+}
 
 Users can also add ".grouplabel" to a specification,
 \code{grouplabel} being the group label of a group (the one
 appears in \code{\link[=summary]{summary()}}, not the one of the form \code{".g2"},
 \code{"g3"}, etc.).
-
-For example, \code{"f2 =~ x5.Alpha"} denotes the factor loading
+\itemize{
+\item For example, \code{"f2 =~ x5.Alpha"} denotes the factor loading
 of \code{x5} on \code{f2} in the group \code{"Alpha"}.
-It is used by function such as \code{\link[=est_change]{est_change()}} and
-\code{\link[=fit_measures_change]{fit_measures_change()}}.
 }
-
+}
+}
 \examples{
 
 dat <- sem_dat

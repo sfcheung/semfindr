@@ -20,37 +20,38 @@
 #'
 #'   - For example, `"~"` denotes all regression coefficients.
 #'
-#' # Multisample model
+#' It is used by functions such as [est_change()].
+#'
+#' ## Multisample model
 #'
 #' If a model has more than one group, a specification
 #' specified as in a single sample model denotes the same
 #' parameters in all group.
 #'
-#' For example, `"f1 =~ x2"` denote the factor loading of
-#' `x2` on `f1` in all groups. `"~~"` denotes covariances
-#' and error covariances in all groups.
+#'  - For example, `"f1 =~ x2"` denote the factor loading of
+#'    `x2` on `f1` in all groups. `"~~"` denotes covariances
+#'    and error covariances in all groups.
 #'
 #' There are two ways to select parameters only in selected
 #' groups. First, the syntax to fix parameter values
 #' can be used, with `NA` denoting parameters to be selected.
 #'
-#' For example, `"f2 =~ c(NA, 1, NA) * x5"` select the
-#' factor loadings of `x5` on `f2` in the first and third
-#' groups.
+#'   - For example, `"f2 =~ c(NA, 1, NA) * x5"` select the
+#'     factor loadings of `x5` on `f2` in the first and third
+#'     groups.
 #'
 #' Users can also add ".grouplabel" to a specification,
 #' `grouplabel` being the group label of a group (the one
 #' appears in [summary()], not the one of the form `".g2"`,
 #' `"g3"`, etc.).
 #'
-#' For example, `"f2 =~ x5.Alpha"` denotes the factor loading
-#' of `x5` on `f2` in the group `"Alpha"`.
-#' It is used by function such as [est_change()] and
-#' [fit_measures_change()].
+#'   - For example, `"f2 =~ x5.Alpha"` denotes the factor loading
+#'     of `x5` on `f2` in the group `"Alpha"`.
 #'
 #' @return
-#' A numeric vector of the ids in the column "free" in the
-#' parameter table of the fit object.
+#' A numeric vector of the ids. If `where` is `"partable"`,
+#' the ids are row numbers. If `where` is `"coef"`,
+#' the ids are the positions in the vector.
 #'
 #' @param pars A character vector of parameters specified
 #' in lavaan syntax, e.g., `"y ~ x"` and `f1 =~ x3`. For
@@ -70,7 +71,7 @@
 #' (coefficient vector).
 #' Default is "coef".
 #'
-#' @param free_only Wether only free parameters will be
+#' @param free_only Whether only free parameters will be
 #' kept. Default is `TRUE`.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
