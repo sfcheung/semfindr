@@ -1,0 +1,259 @@
+---
+title: "Sensitivity Analysis in Multiple-Group Models (Work-in-Progress)"
+output:
+  html_document:
+    fig.align: "center"
+    toc: true
+    number_sections: false
+bibliography: references.bib
+csl: apa.csl
+---
+
+# Goal
+
+This articles illustrates how to use `semfindr` to
+identify influential cases in a multiple-group model.
+
+# Dataset and Model
+
+The sample dataset `cfa_dat_mg` will be used in This
+illustration:
+
+```{r}
+library(semfindr)
+data(cfa_dat_mg)
+head(cfa_dat_mg)
+table(cfa_dat_mg$gp)
+```
+
+The dataset has six variables, `x1` to `x6`. The variable
+`gp` denotes the group of a case, either `"GroupA"`
+or `"GroupB"`. Each group has 50 cases and the total
+number of cases is 100.
+
+Three confirmatory factor analytic (CFA) models are to be
+fitted. They are all defined by the following model syntax:
+
+```{r}
+mod <-
+"
+f1 =~ x1 + x2 + x3
+f2 =~ x4 + x5 + x6
+"
+```
+
+The first model has no between-group constraints. It test
+configural invariance:
+
+```{r}
+library(lavaan)
+fit1 <- cfa(mod, cfa_dat_mg, group = "gp")
+```
+
+The second model tests weak invariance, with factor loadings
+constrained to be equal across groups:
+
+```{r}
+fit2 <- cfa(mod, cfa_dat_mg, group = "gp",
+            group.equal = "loadings")
+```
+
+The third model tests strong invariance, with factor
+loadings and item interepts constrained to be equal
+across groups:
+
+```{r}
+fit3 <- cfa(mod, cfa_dat_mg, group = "gp",
+            group.equal = c("loadings", "intercepts"))
+```
+
+The three models are compared by `lavaan::lavTestLRT()`:
+
+```{r}
+lavTestLRT(fit1, fit2, fit3)
+lavTestLRT(fit1, fit3)
+```
+
+The tests does not reject both strong invariance and weak invariance.
+
+These are the fit measures:
+
+```{r}
+summary(semTools::compareFit(fit1, fit2, fit3))
+```
+
+# Influential Cases
+
+## Model with No Constraints
+
+Let us use the leave-one-out approach first, on the
+first model, `fit1`.
+
+```{r}
+fit1_rerun <- lavaan_rerun(fit1)
+fit1_inf <- influence_stat(fit1_rerun)
+```
+
+Because the model is a CFA model and all observed variables
+are endogenous, it is acceptable to examine Mahalanobis
+distance first:
+
+```{r}
+print(fit1_inf, what = "mahalanobis", first = 5)
+```
+
+Case 77 and 100 are high on Mahalanobis distance. However,
+the differences from other cases are not substantially
+large.
+
+We than examine case influence on fit measures,
+sorted by chi-square:
+
+```{r}
+print(fit1_inf, what = "fit_measures", first = 5,
+      sort_fit_measures_by = "chisq")
+```
+
+Cases 100 has relatively large influence
+on model chi-square.
+
+Let us examine influence on parameter estimates.
+
+```{r}
+fit1_est_change <- est_change(fit1_rerun)
+print(fit1_est_change, first = 5, by = "gcd")
+```
+
+The results suggest that Case 100 has strong influence
+on parameter estimates.
+
+We can also use the functions for diagnostic plots"
+
+```{R}
+gcd_plot(fit1_inf,
+         largest_gcd = 3)
+```
+
+```{r}
+md_plot(fit1_inf,
+        largest_md = 3)
+```
+
+```{r}
+gcd_gof_md_plot(fit1_inf,
+                fit_measure = "chisq",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
+## Strong Invariance
+
+```{r}
+fit3_rerun <- lavaan_rerun(fit3)
+fit3_inf <- influence_stat(fit3_rerun)
+```
+
+```{r}
+print(fit3_inf, what = "fit_measures", first = 5,
+      sort_fit_measures_by = "chisq")
+```
+
+```{r}
+fit3_est_change <- est_change(fit3_rerun)
+print(fit3_est_change, first = 5, by = "gcd")
+```
+
+```{R}
+gcd_plot(fit3_inf,
+         largest_gcd = 3)
+```
+
+```{r}
+md_plot(fit3_inf,
+        largest_md = 3)
+```
+
+```{r}
+gcd_gof_md_plot(fit3_inf,
+                fit_measure = "chisq",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
+# Fit the Models Again
+
+Let us fit the three models again, without Case 1.
+
+
+```{r}
+cfa_dat_mg_no100 <- cfa_dat_mg[-100, ]
+fit1_no100 <- cfa(mod, cfa_dat_mg_no100, group = "gp")
+fit2_no100 <- cfa(mod, cfa_dat_mg_no100, group = "gp",
+                  group.equal = "loadings")
+fit3_no100 <- cfa(mod, cfa_dat_mg_no100, group = "gp",
+                  group.equal = c("loadings", "intercepts"))
+```
+
+```{r}
+lavTestLRT(fit1_no100, fit2_no100, fit3_no100)
+lavTestLRT(fit1_no100, fit3_no100)
+```
+
+```{r}
+summary(semTools::compareFit(fit1_no100, fit2_no100, fit3_no100))
+```
+
+Strong invariance is supported if Case 1 is removed.
+
+The model with strong invariance also fit satisfactorily:
+
+We can check case influence again:
+
+```{r}
+fit1_no100_rerun <- lavaan_rerun(fit1_no100)
+fit1_no100_inf <- influence_stat(fit1_no100_rerun)
+```
+
+```{R}
+gcd_plot(fit1_no100_inf,
+         largest_gcd = 3)
+```
+
+```{r}
+md_plot(fit1_no100_inf,
+        largest_md = 3)
+```
+
+```{r}
+gcd_gof_md_plot(fit1_no100_inf,
+                fit_measure = "chisq",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
+
+```{r}
+fit3_no100_rerun <- lavaan_rerun(fit3_no100)
+fit3_no100_inf <- influence_stat(fit3_no100_rerun)
+```
+
+```{R}
+gcd_plot(fit3_no100_inf,
+         largest_gcd = 3)
+```
+
+```{r}
+gcd_gof_md_plot(fit3_no100_inf,
+                fit_measure = "chisq",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
