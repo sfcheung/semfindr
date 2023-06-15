@@ -1,4 +1,4 @@
-# semfindr 0.1.4.11
+# semfindr 0.1.4.12
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -22,6 +22,7 @@
   (0.1.4.7)
 - Provided initial support for multiple-group models
   and models with linearity constraints. (0.1.4.8 - 0.1.4.11)
+- Fixed the documentation of `pars_id()`. (0.1.4.12)
 
 # semfindr 0.1.4
 
