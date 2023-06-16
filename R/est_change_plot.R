@@ -220,6 +220,10 @@ est_change_plot <- function(change,
                             wrap_aes = list()
                             ) {
 
+    if (inherits(change, "influence_stat")) {
+        change <- to_est_change_from_influence_stat(change)
+      }
+
     point_aes <- utils::modifyList(list(shape = 21,
                                         color = "black",
                                         fill = "grey",
@@ -342,6 +346,11 @@ est_change_gcd_plot <- function(change,
                                 case_label_aes = list(),
                                 wrap_aes = list()
                                 ) {
+
+    if (inherits(change, "influence_stat")) {
+        change <- to_est_change_from_influence_stat(change)
+      }
+
     point_aes <- utils::modifyList(list(shape = 21,
                                         color = "black",
                                         fill = "grey",
