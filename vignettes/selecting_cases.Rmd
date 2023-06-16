@@ -69,7 +69,7 @@ Only four reruns in the output:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 If user supplied case IDs are used, then the value of
@@ -89,7 +89,7 @@ are used in the output:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 # Mahalanobis Distance on Residuals
@@ -121,7 +121,7 @@ Five cases were selected, as shown below:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 Note that selecting cases by this method *can* miss some
@@ -148,7 +148,7 @@ Five cases were selected, as shown below:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 Note that selecting cases by this method *can* miss some
