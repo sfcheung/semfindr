@@ -32,22 +32,14 @@
 #' only the first *k* cases, *k* equal to `first`.
 #' Default is 10.
 #'
-#' @param sort_paramaters Logical. Whether cases will be sorted.
-#' in the output of case influence on parameter estimates.
-#' How
-#' they will
-#' be sorted depends on the type of case influence and
-#' the argument `sort_parameters_by`.
-#'
-#' @param sort_parameters_by If `sort_parameters`
-#' is `TRUE`, then `sort_parameters_by` determines how
-#' the cases are sorted.
+#' @param sort_parameters_by String.
 #' If it is `"est"`, the cases are sorted individually
 #' on each columns. If it is `"gcd"`,
 #' the default,
 #' then cases are sorted by generalized Cook's distance
 #' or approximate generalized Cook's distance, depending on
 #' which column is available.
+#' If `NULL`, cases are not sorted.
 #'
 #' @param sort_fit_measures_by String. Default is `NULL` and
 #' the output of case influence on fit measures is not
@@ -129,7 +121,6 @@ print.influence_stat <- function(x,
                                           "fit_measures",
                                           "mahalanobis"),
                                  first = 10,
-                                 sort_paramaters = TRUE,
                                  sort_parameters_by = c("gcd", "est"),
                                  sort_fit_measures_by = NULL,
                                  sort_mahalanobis = TRUE,
@@ -149,8 +140,7 @@ print.influence_stat <- function(x,
         print(xx,
               digits = digits,
               first = first,
-              sort = sort_paramaters,
-              by = sort_parameters_by,
+              sort_by = sort_parameters_by,
               ...)
       }
 
