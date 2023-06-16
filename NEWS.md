@@ -1,4 +1,4 @@
-# semfindr 0.1.4.15
+# semfindr 0.1.4.16
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -27,6 +27,9 @@
 - Added an article for multiple-group models. (0.1.4.15)
 - Restructured articles and references in the `pgkdown`
   websites. (0.1.4.15)
+- Changed the default number of cases to printed to 10
+  for the print methods of `est_change`, `influence_stat`,
+  `md_semfindr`, and `fit_measures_change` objects. (0.1.4.16)
 
 # semfindr 0.1.4
 

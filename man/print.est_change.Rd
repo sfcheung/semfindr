@@ -4,7 +4,7 @@
 \alias{print.est_change}
 \title{Print an 'est_change' Class Object}
 \usage{
-\method{print}{est_change}(x, digits = 3, first = NULL, sort = TRUE, by = c("gcd", "est"), ...)
+\method{print}{est_change}(x, digits = 3, first = 10, sort = TRUE, by = c("gcd", "est"), ...)
 }
 \arguments{
 \item{x}{An 'est_change'-class object.}
@@ -12,8 +12,9 @@
 \item{digits}{The number of digits after the decimal.
 Default is 3.}
 
-\item{first}{Numeric. If not \code{NULL}, the default, it print
-only the first \emph{k} cases, \emph{k} equal to \code{first}.}
+\item{first}{Numeric. If not \code{NULL}, it prints
+only the first \emph{k} cases, \emph{k} equal to \code{first}.
+Default is 10.}
 
 \item{sort}{Logical. Whether cases will be sorted. How
 they will

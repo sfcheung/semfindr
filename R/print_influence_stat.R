@@ -28,8 +28,9 @@
 #' and `"mahalanobis"`. Default
 #' is `c("parameters", "fit_measures", "mahalanobis")`.
 #'
-#' @param first Numeric. If not `NULL`, the default, it print
+#' @param first Numeric. If not `NULL`, it prints
 #' only the first *k* cases, *k* equal to `first`.
+#' Default is 10.
 #'
 #' @param sort_paramaters Logical. Whether cases will be sorted.
 #' in the output of case influence on parameter estimates.
@@ -78,7 +79,9 @@
 #' on Mahalanobis distance,
 #' is on decreasing order. Default is `TRUE`.
 #'
-#' @param ...  Optional arguments.
+#' @param ...  Optional arguments. Passed to
+#' other print methods, such as [print.est_change()],
+#' [print.fit_measures_change()], and [print.md_semfindr()].
 #'
 #' @seealso [influence_stat()], [print.est_change()],
 #' [print.fit_measures_change()], [print.md_semfindr()]
@@ -125,7 +128,7 @@ print.influence_stat <- function(x,
                                  what = c("parameters",
                                           "fit_measures",
                                           "mahalanobis"),
-                                 first = NULL,
+                                 first = 10,
                                  sort_paramaters = TRUE,
                                  sort_parameters_by = c("gcd", "est"),
                                  sort_fit_measures_by = NULL,

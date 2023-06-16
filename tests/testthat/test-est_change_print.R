@@ -46,6 +46,7 @@ est_change_approx_op2 <- est_change_approx(fit0, c("~~"))
 est_change_approx_mixed <- est_change_approx(fit0, c("m1 ~ iv1", "~~"))
 
 print(est_change_raw_all)
+print(est_change_raw_all, first = NULL)
 print(est_change_raw_all, first = 10)
 print(est_change_raw_all, first = 10, sort = FALSE)
 print(est_change_raw_all_std, first = 6)

@@ -8,7 +8,7 @@
   x,
   digits = 3,
   what = c("parameters", "fit_measures", "mahalanobis"),
-  first = NULL,
+  first = 10,
   sort_paramaters = TRUE,
   sort_parameters_by = c("gcd", "est"),
   sort_fit_measures_by = NULL,
@@ -32,8 +32,9 @@ one or more of the following:
 and \code{"mahalanobis"}. Default
 is \code{c("parameters", "fit_measures", "mahalanobis")}.}
 
-\item{first}{Numeric. If not \code{NULL}, the default, it print
-only the first \emph{k} cases, \emph{k} equal to \code{first}.}
+\item{first}{Numeric. If not \code{NULL}, it prints
+only the first \emph{k} cases, \emph{k} equal to \code{first}.
+Default is 10.}
 
 \item{sort_paramaters}{Logical. Whether cases will be sorted.
 in the output of case influence on parameter estimates.
@@ -82,7 +83,9 @@ See \code{sort_fit_measures_by}.}
 on Mahalanobis distance,
 is on decreasing order. Default is \code{TRUE}.}
 
-\item{...}{Optional arguments.}
+\item{...}{Optional arguments. Passed to
+other print methods, such as \code{\link[=print.est_change]{print.est_change()}},
+\code{\link[=print.fit_measures_change]{print.fit_measures_change()}}, and \code{\link[=print.md_semfindr]{print.md_semfindr()}}.}
 }
 \value{
 \code{x} is returned invisibly. Called for its side effect.

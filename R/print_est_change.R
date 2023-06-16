@@ -18,8 +18,9 @@
 #' @param digits The number of digits after the decimal.
 #' Default is 3.
 #'
-#' @param first Numeric. If not `NULL`, the default, it print
+#' @param first Numeric. If not `NULL`, it prints
 #' only the first *k* cases, *k* equal to `first`.
+#' Default is 10.
 #'
 #' @param sort Logical. Whether cases will be sorted. How
 #' they will
@@ -80,7 +81,7 @@
 
 print.est_change <- function(x,
                              digits = 3,
-                             first = NULL,
+                             first = 10,
                              sort = TRUE,
                              by = c("gcd", "est"),
                              ...) {
@@ -193,7 +194,14 @@ print.est_change <- function(x,
         "raw changes if a case is included.\n", sep = "")
 
     if (first != nrow(x)) {
-        cat("- Only the first", first, "cases are displayed.\n")
+        cat("- Only the first ",
+            first,
+            " case(s) is/are displayed.",
+            " Set ", sQuote("first"),
+            " to NULL to display all cases.",
+            "\n", sep = "")
+      } else {
+        cat("- All stored cases are displayed.\n")
       }
 
     if (sort) {

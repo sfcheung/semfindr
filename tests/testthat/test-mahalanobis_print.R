@@ -33,6 +33,7 @@ md_fit1
 md_predictors
 
 print(md_rerun, first = 7)
+print(md_rerun, first = NULL)
 print(md_fit, first = 3, sort = FALSE)
 print(md_fit, first = 3, sort = TRUE, decreasing = FALSE)
 print(md_fit1, first = 3, sort = TRUE, decreasing = FALSE)
