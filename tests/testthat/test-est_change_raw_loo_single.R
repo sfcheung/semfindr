@@ -101,3 +101,17 @@ test_that("Check user-defined parameters", {
       )
   })
 
+# Parameters that are fixed but free in the standardized solution.
+
+parameterEstimates(fit0)
+parameterEstimates(fit0, standardized = TRUE)
+est_change_rerun_vcov_std <- est_change_raw(rerun_out,
+                                c("~~"),
+                                standardized = TRUE)
+
+test_that("Check fixed parameters which is free in the standardized solution ", {
+    expect_equal(ignore_attr = TRUE,
+        sort(est_change_rerun_vcov_std[15, ]),
+        sort(est0_15$est_std_cha[est0_15$op == "~~"])
+      )
+  })

@@ -7,7 +7,7 @@
 \method{print}{fit_measures_change}(
   x,
   digits = 3,
-  first = NULL,
+  first = 10,
   sort_by = NULL,
   decreasing = TRUE,
   absolute = TRUE,
@@ -20,8 +20,9 @@
 \item{digits}{The number of digits after the decimal.
 Default is 3.}
 
-\item{first}{Numeric. If not \code{NULL}, the default, it print
-only the first \emph{k} cases, \emph{k} equal to \code{first}.}
+\item{first}{Numeric. If not \code{NULL}, it prints
+only the first \emph{k} cases, \emph{k} equal to \code{first}.
+Default is 10.}
 
 \item{sort_by}{String. Default is \code{NULL} and
 the output is not sorted. If set to a column
@@ -75,13 +76,13 @@ summary(fit)
 # Case influence
 out <- fit_measures_change_approx(fit)
 out
-print(out, sort_by = "chisq", first = 10)
+print(out, sort_by = "chisq", first = 5)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))#'
 out <- fit_measures_change(fit_rerun)
 out
-print(out, sort_by = "chisq", first = 10)
+print(out, sort_by = "chisq", first = 5)
 
 }
 \seealso{

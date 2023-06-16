@@ -17,8 +17,9 @@
 #' @param digits The number of digits after the decimal.
 #' Default is 3.
 #'
-#' @param first Numeric. If not `NULL`, the default, it print
+#' @param first Numeric. If not `NULL`, it prints
 #' only the first *k* cases, *k* equal to `first`.
+#' Default is 10.
 #'
 #' @param sort Logical. If `TRUE`, the default, the cases
 #' will be sorted based on Mahalanobis distance.
@@ -56,11 +57,11 @@
 #' @export
 
 print.md_semfindr <- function(x,
-                               digits = 3,
-                               first = NULL,
-                               sort = TRUE,
-                               decreasing = TRUE,
-                               ...) {
+                              digits = 3,
+                              first = 10,
+                              sort = TRUE,
+                              decreasing = TRUE,
+                              ...) {
     if (is.null(first)) {
         first <- nrow(x)
       }
@@ -70,6 +71,10 @@ print.md_semfindr <- function(x,
     mh_call <- attr(x, "call")
     missing_data <- attr(x, "missing_data")
     call_name <- as.character(mh_call[[1]])
+    md_na <- FALSE
+    if (any(is.na(x[, "md"]))) {
+        md_na <- TRUE
+      }
     if (sort) {
         j <- order(x[, "md", drop = TRUE],
                    decreasing = decreasing)
@@ -88,7 +93,12 @@ print.md_semfindr <- function(x,
     cat("\nNote:\n")
 
     if (first != nrow(x)) {
-        cat("- Only the first", first, "cases are displayed.\n")
+        cat("- Only the first ",
+            first,
+            " case(s) is/are displayed.",
+            " Set ", sQuote("first"),
+            " to NULL to display all cases.",
+            "\n", sep = "")
       } else {
         cat("- All stored cases are displayed.\n")
       }
@@ -103,6 +113,10 @@ print.md_semfindr <- function(x,
 
     if (missing_data) {
         cat("- Missing data is present. modi::MDmiss() was used.\n")
+      }
+
+    if (md_na) {
+        cat("- Mahalanobis distance computation failed on one or more cases.\n")
       }
 
     exo_vars <- attr(x, "exo_vars")

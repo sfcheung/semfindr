@@ -220,6 +220,10 @@ est_change_plot <- function(change,
                             wrap_aes = list()
                             ) {
 
+    if (inherits(change, "influence_stat")) {
+        change <- to_est_change_from_influence_stat(change)
+      }
+
     point_aes <- utils::modifyList(list(shape = 21,
                                         color = "black",
                                         fill = "grey",
@@ -335,6 +339,8 @@ est_change_gcd_plot <- function(change,
                                 parameters,
                                 cutoff_gcd = NULL,
                                 largest_gcd = 1,
+                                cutoff_change = NULL,
+                                largest_change = 1,
                                 title = TRUE,
                                 point_aes = list(),
                                 hline_aes = list(),
@@ -342,6 +348,11 @@ est_change_gcd_plot <- function(change,
                                 case_label_aes = list(),
                                 wrap_aes = list()
                                 ) {
+
+    if (inherits(change, "influence_stat")) {
+        change <- to_est_change_from_influence_stat(change)
+      }
+
     point_aes <- utils::modifyList(list(shape = 21,
                                         color = "black",
                                         fill = "grey",
@@ -374,6 +385,37 @@ est_change_gcd_plot <- function(change,
     p <- p + do.call(ggplot2::geom_point, point_aes)
     p <- p + do.call(ggplot2::geom_hline, hline_aes)
 
+    if (is.numeric(cutoff_change)) {
+        cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                                  cutoff_line_aes)
+        # The following part should never be changed by users.
+        cutoff_line_aes1 <- utils::modifyList(cutoff_line_aes,
+                                      list(yintercept = cutoff_change))
+        cutoff_line_aes2 <- utils::modifyList(cutoff_line_aes,
+                                      list(yintercept = -cutoff_change))
+        p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes1)
+        p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes2)
+        c_change_i <- abs(x0$change) >= cutoff_change
+      } else {
+        c_change_i <- rep(FALSE, nrow(x0))
+      }
+    if (is.numeric(largest_change) && largest_change >= 1) {
+        o_change <- tapply(abs(x0$change),
+                           INDEX = x0$param,
+                           FUN = order,
+                           decreasing = TRUE,
+                           simplify = FALSE)
+        tmp <- lapply(o_change, function(x) {
+                          out <- rep(FALSE, length(x))
+                          out[x[seq_len(largest_change)]] <- TRUE
+                          out
+                        })
+        m_change_i <- unlist(tmp[unique(x0$param)])
+      } else {
+        m_change_i <- rep(FALSE, nrow(x0))
+      }
+    label_i <- c_change_i | m_change_i
+
     if (is.numeric(cutoff_gcd)) {
         cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
                                       cutoff_line_aes)
@@ -396,7 +438,8 @@ est_change_gcd_plot <- function(change,
         m_gcd_cut <- Inf
       }
     label_gcd <- (x0[[gcd_name]] >= c_gcd_cut) |
-                 (x0[[gcd_name]] >= m_gcd_cut)
+                 (x0[[gcd_name]] >= m_gcd_cut) |
+                 label_i
 
     case_label_aes <- utils::modifyList(list(min.segment.length = 0),
                                    case_label_aes)

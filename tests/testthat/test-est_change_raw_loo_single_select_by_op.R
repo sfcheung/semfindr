@@ -131,3 +131,21 @@ test_that("Parameter selected by operators", {
         sort(parameters_names_int_std)
       )
   })
+
+# Parameters that are fixed but free in the standardized solution.
+
+parameterEstimates(fit0, standardized = TRUE)
+est_change_rerun_load_std <- est_change_raw(rerun_out,
+                                c("=~"),
+                                standardized = TRUE)
+(est0_15$est_all <- est0$est)
+(est0_15$est_cha <- est0_15$est_all - est0_15$est)
+(est0_15$est_all_std <- est0$std.all)
+(est0_15$est_std_cha <- est0_15$est_all_std - est0_15$std.all)
+
+test_that("Check fixed parameters which is free in the standardized solution ", {
+    expect_equal(ignore_attr = TRUE,
+        sort(est_change_rerun_load_std[15, ]),
+        sort(est0_15$est_std_cha[est0_15$op == "=~"])
+      )
+  })

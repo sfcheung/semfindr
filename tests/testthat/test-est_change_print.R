@@ -46,25 +46,28 @@ est_change_approx_op2 <- est_change_approx(fit0, c("~~"))
 est_change_approx_mixed <- est_change_approx(fit0, c("m1 ~ iv1", "~~"))
 
 print(est_change_raw_all)
+print(est_change_raw_all, first = NULL)
 print(est_change_raw_all, first = 10)
-print(est_change_raw_all, first = 10, sort = FALSE)
+print(est_change_raw_all, first = 10, sort_by = NULL)
 print(est_change_raw_all_std, first = 6)
 print(est_change_raw_all_paths, first = 1)
 print(est_change_raw_all_paths_std, first = 3)
 
 print(est_change_raw_approx_op1)
 print(est_change_raw_approx_op2, first = 5)
-print(est_change_raw_approx_mixed, first = 6, sort = TRUE)
+print(est_change_raw_approx_mixed, first = 6, sort_by = NULL)
 
 print(est_change_all)
 print(est_change_all_paths, first = 3)
-print(est_change_all, by = "est")
+print(est_change_all, sort_by = "est")
 
 print(est_change_approx_op1)
 print(est_change_approx_op2)
 print(est_change_approx_mixed)
 
 tmp <- est_change_all
-tmp[, "gcd"] <- NA
+tmp[c(1, 3, 16, 22, 20), "gcd"] <- NA
 head(tmp)
 print(tmp)
+print(tmp, first = NULL)
+print(est_change_all)

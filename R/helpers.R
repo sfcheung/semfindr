@@ -128,3 +128,19 @@ check_square <- function(x) {
       }
     x
   }
+
+#' @noRd
+
+to_est_change_from_influence_stat <- function(x) {
+    if (!inherits(x, "influence_stat")) {
+        stop("The object is of an influence_stat object.")
+      }
+    pnames <- attr(x, "parameters_names")
+    if (is.null(pnames)) {
+        warnings("Case influence on parameters not available.")
+      }
+    xx <- x[, pnames, drop = FALSE]
+    attributes(xx) <- attr(x, "parameters_attrs")
+    class(xx) <- c("est_change", class(xx))
+    invisible(xx)
+  }

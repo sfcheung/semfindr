@@ -28,25 +28,18 @@
 #' and `"mahalanobis"`. Default
 #' is `c("parameters", "fit_measures", "mahalanobis")`.
 #'
-#' @param first Numeric. If not `NULL`, the default, it print
+#' @param first Numeric. If not `NULL`, it prints
 #' only the first *k* cases, *k* equal to `first`.
+#' Default is 10.
 #'
-#' @param sort_paramaters Logical. Whether cases will be sorted.
-#' in the output of case influence on parameter estimates.
-#' How
-#' they will
-#' be sorted depends on the type of case influence and
-#' the argument `sort_parameters_by`.
-#'
-#' @param sort_parameters_by If `sort_parameters`
-#' is `TRUE`, then `sort_parameters_by` determines how
-#' the cases are sorted.
+#' @param sort_parameters_by String.
 #' If it is `"est"`, the cases are sorted individually
 #' on each columns. If it is `"gcd"`,
 #' the default,
 #' then cases are sorted by generalized Cook's distance
 #' or approximate generalized Cook's distance, depending on
 #' which column is available.
+#' If `NULL`, cases are not sorted.
 #'
 #' @param sort_fit_measures_by String. Default is `NULL` and
 #' the output of case influence on fit measures is not
@@ -78,7 +71,9 @@
 #' on Mahalanobis distance,
 #' is on decreasing order. Default is `TRUE`.
 #'
-#' @param ...  Optional arguments.
+#' @param ...  Optional arguments. Passed to
+#' other print methods, such as [print.est_change()],
+#' [print.fit_measures_change()], and [print.md_semfindr()].
 #'
 #' @seealso [influence_stat()], [print.est_change()],
 #' [print.fit_measures_change()], [print.md_semfindr()]
@@ -125,8 +120,7 @@ print.influence_stat <- function(x,
                                  what = c("parameters",
                                           "fit_measures",
                                           "mahalanobis"),
-                                 first = NULL,
-                                 sort_paramaters = TRUE,
+                                 first = 10,
                                  sort_parameters_by = c("gcd", "est"),
                                  sort_fit_measures_by = NULL,
                                  sort_mahalanobis = TRUE,
@@ -146,8 +140,7 @@ print.influence_stat <- function(x,
         print(xx,
               digits = digits,
               first = first,
-              sort = sort_paramaters,
-              by = sort_parameters_by,
+              sort_by = sort_parameters_by,
               ...)
       }
 

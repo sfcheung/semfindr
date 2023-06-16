@@ -19,7 +19,9 @@ fit_measures_change_approx(
 
 \item{fit_measures}{The argument \code{fit.measures} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
-\code{c("chisq", "cfi", "rmsea", "tli")}.}
+\code{c("chisq", "cfi", "rmsea", "tli")}.
+Currently, the approximate method supports only
+these four measures.}
 
 \item{baseline_model}{The argument \code{baseline.model} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}

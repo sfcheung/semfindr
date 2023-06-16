@@ -8,8 +8,7 @@
   x,
   digits = 3,
   what = c("parameters", "fit_measures", "mahalanobis"),
-  first = NULL,
-  sort_paramaters = TRUE,
+  first = 10,
   sort_parameters_by = c("gcd", "est"),
   sort_fit_measures_by = NULL,
   sort_mahalanobis = TRUE,
@@ -32,25 +31,18 @@ one or more of the following:
 and \code{"mahalanobis"}. Default
 is \code{c("parameters", "fit_measures", "mahalanobis")}.}
 
-\item{first}{Numeric. If not \code{NULL}, the default, it print
-only the first \emph{k} cases, \emph{k} equal to \code{first}.}
+\item{first}{Numeric. If not \code{NULL}, it prints
+only the first \emph{k} cases, \emph{k} equal to \code{first}.
+Default is 10.}
 
-\item{sort_paramaters}{Logical. Whether cases will be sorted.
-in the output of case influence on parameter estimates.
-How
-they will
-be sorted depends on the type of case influence and
-the argument \code{sort_parameters_by}.}
-
-\item{sort_parameters_by}{If \code{sort_parameters}
-is \code{TRUE}, then \code{sort_parameters_by} determines how
-the cases are sorted.
+\item{sort_parameters_by}{String.
 If it is \code{"est"}, the cases are sorted individually
 on each columns. If it is \code{"gcd"},
 the default,
 then cases are sorted by generalized Cook's distance
 or approximate generalized Cook's distance, depending on
-which column is available.}
+which column is available.
+If \code{NULL}, cases are not sorted.}
 
 \item{sort_fit_measures_by}{String. Default is \code{NULL} and
 the output of case influence on fit measures is not
@@ -82,7 +74,9 @@ See \code{sort_fit_measures_by}.}
 on Mahalanobis distance,
 is on decreasing order. Default is \code{TRUE}.}
 
-\item{...}{Optional arguments.}
+\item{...}{Optional arguments. Passed to
+other print methods, such as \code{\link[=print.est_change]{print.est_change()}},
+\code{\link[=print.fit_measures_change]{print.fit_measures_change()}}, and \code{\link[=print.md_semfindr]{print.md_semfindr()}}.}
 }
 \value{
 \code{x} is returned invisibly. Called for its side effect.

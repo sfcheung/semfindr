@@ -17,8 +17,9 @@
 #' @param digits The number of digits after the decimal.
 #' Default is 3.
 #'
-#' @param first Numeric. If not `NULL`, the default, it print
+#' @param first Numeric. If not `NULL`, it prints
 #' only the first *k* cases, *k* equal to `first`.
+#' Default is 10.
 #'
 #' @param sort_by String. Default is `NULL` and
 #' the output is not sorted. If set to a column
@@ -61,19 +62,19 @@
 #' # Case influence
 #' out <- fit_measures_change_approx(fit)
 #' out
-#' print(out, sort_by = "chisq", first = 10)
+#' print(out, sort_by = "chisq", first = 5)
 #'
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = c(2, 3, 5, 7))#'
 #' out <- fit_measures_change(fit_rerun)
 #' out
-#' print(out, sort_by = "chisq", first = 10)
+#' print(out, sort_by = "chisq", first = 5)
 #'
 #' @export
 
 print.fit_measures_change <- function(x,
                              digits = 3,
-                             first = NULL,
+                             first = 10,
                              sort_by = NULL,
                              decreasing = TRUE,
                              absolute = TRUE,
@@ -119,7 +120,12 @@ print.fit_measures_change <- function(x,
     cat("\nNote:\n")
 
     if (first != nrow(x)) {
-        cat("- Only the first", first, "cases are displayed.\n")
+        cat("- Only the first ",
+            first,
+            " case(s) is/are displayed.",
+            " Set ", sQuote("first"),
+            " to NULL to display all cases.",
+            "\n", sep = "")
       } else {
         cat("- All stored cases are displayed.\n")
       }

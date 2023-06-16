@@ -4,7 +4,7 @@
 \alias{print.md_semfindr}
 \title{Print a 'md_semfindr' Class Object}
 \usage{
-\method{print}{md_semfindr}(x, digits = 3, first = NULL, sort = TRUE, decreasing = TRUE, ...)
+\method{print}{md_semfindr}(x, digits = 3, first = 10, sort = TRUE, decreasing = TRUE, ...)
 }
 \arguments{
 \item{x}{An 'md_semfindr'-class object.}
@@ -12,8 +12,9 @@
 \item{digits}{The number of digits after the decimal.
 Default is 3.}
 
-\item{first}{Numeric. If not \code{NULL}, the default, it print
-only the first \emph{k} cases, \emph{k} equal to \code{first}.}
+\item{first}{Numeric. If not \code{NULL}, it prints
+only the first \emph{k} cases, \emph{k} equal to \code{first}.
+Default is 10.}
 
 \item{sort}{Logical. If \code{TRUE}, the default, the cases
 will be sorted based on Mahalanobis distance.
