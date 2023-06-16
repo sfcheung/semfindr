@@ -139,9 +139,11 @@ print.est_change <- function(x,
 
     if (identical(est_change_type, "standardized")) {
         fallback_to_est <- FALSE
+        gcd_na <- FALSE
         if (any(is.na(x[, gcd_name]))) {
-            fallback_to_est <- TRUE
-            by <- "est"
+            gcd_na <- TRUE
+            # fallback_to_est <- TRUE
+            # by <- "est"
           }
         if (sort) {
             if (identical(by, "gcd")) {
@@ -217,8 +219,13 @@ print.est_change <- function(x,
             if (identical(by, "gcd")) {
                 cat("- Cases sorted by ", gcd_name2, ".\n", sep = "")
               } else {
-                cat("- Cases sorted by the absolute values for change or",
+                cat("- Cases sorted by the absolute values of change or ",
                     gcd_name2, ".\n", sep = "")
+              }
+            if (gcd_na) {
+                cat("- One or more cases are missing on ",
+                    gcd_name2,
+                    ".\n", sep = "")
               }
           }
       }

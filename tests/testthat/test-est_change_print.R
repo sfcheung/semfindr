@@ -66,6 +66,8 @@ print(est_change_approx_op2)
 print(est_change_approx_mixed)
 
 tmp <- est_change_all
-tmp[, "gcd"] <- NA
+tmp[c(1, 3, 16, 22, 20), "gcd"] <- NA
 head(tmp)
 print(tmp)
+print(tmp, first = NULL)
+print(est_change_all)
