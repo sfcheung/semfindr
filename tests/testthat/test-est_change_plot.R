@@ -66,6 +66,9 @@ params <- c("m1~iv1", "a2", "b")
 est_change_gcd_plot(fit_est_change, parameters = params)
 est_change_gcd_plot(fit_est_change, parameters = params, largest_gcd = 3)
 est_change_gcd_plot(fit_est_change, parameters = params, cutoff_gcd = .2)
+est_change_gcd_plot(fit_est_change, parameters = params, cutoff_gcd = .2,
+                    cutoff_change = .05,
+                    largest_change = 5)
 
 params <- c("~")
 est_change_plot(fit_est_change_raw, parameters = params)
