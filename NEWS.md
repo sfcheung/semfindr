@@ -1,4 +1,4 @@
-# semfindr 0.1.4.24
+# semfindr 0.1.4.25
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -50,6 +50,7 @@
   (0.1.4.23)
 - Updated vignettes and articles with links to the
   package website. (0.1.4.24)
+- Updated all vignettes for the new print methods. (0.1.4.25)
 
 # semfindr 0.1.4
 
