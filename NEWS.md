@@ -43,6 +43,8 @@
   (0.1.4.20)
 - Remark that `fit_measures_change_approx()` only supports
   selected fit measures. (0.1.4.21)
+- Add `cutoff_change` and `largest_change` to
+  `est_change_gcd_plot()`. (0.1.4.22)
 
 # semfindr 0.1.4
 
