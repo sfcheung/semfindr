@@ -1,4 +1,4 @@
-# semfindr 0.1.4.20
+# semfindr 0.1.4.21
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -41,6 +41,8 @@
 - Revised plot functions of `est_change()` and friends. They
   now work properly for the output of `influence_stat()`.
   (0.1.4.20)
+- Remark that `fit_measures_change_approx()` only supports
+  selected fit measures. (0.1.4.21)
 
 # semfindr 0.1.4
 
