@@ -1,4 +1,4 @@
-# semfindr 0.1.4.14
+# semfindr 0.1.4.15
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -24,6 +24,9 @@
   and models with linearity constraints. (0.1.4.8 - 0.1.4.14)
 - Fixed the documentation of `pars_id()`. (0.1.4.12)
 - Added support for labels and `":="` to `pars_id()`. (0.1.4.13)
+- Added an article for multiple-group models. (0.1.4.15)
+- Restructured articles and references in the `pgkdown`
+  websites. (0.1.4.15)
 
 # semfindr 0.1.4
 
