@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Purpose
 
-The `semfindr` package contains functions for doing structural
+The [semfindr](https://sfcheung.github.io/semfindr/) package contains functions for doing structural
 equation modeling (SEM) diagnostics, such as identifying
 influential cases and computing various diagnostic measures.
 This document illustrates how to use `semfindr` to do casewise sensitivity

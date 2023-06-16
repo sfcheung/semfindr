@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+This vignette illustrates how to select
+cases when calling `lavaan_rerun()` from
+the package [semfindr](https://sfcheung.github.io/semfindr/).
+
 Instead of refitting the model *n* times, each time
 with each case removed, it is possible to use some criteria
 to select cases to be included in the analysis. This is useful

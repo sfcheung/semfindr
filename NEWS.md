@@ -1,4 +1,4 @@
-# semfindr 0.1.4.23
+# semfindr 0.1.4.24
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -48,6 +48,8 @@
 - Updated a few tests on parameters which are fixed in
   the model but their standardized versions are free.
   (0.1.4.23)
+- Updated vignettes and articles with links to the
+  package website. (0.1.4.24)
 
 # semfindr 0.1.4
 
