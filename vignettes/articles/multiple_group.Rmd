@@ -1,5 +1,6 @@
 ---
 title: "Sensitivity Analysis in Multiple-Group Models"
+date: "`r Sys.Date()`"
 output:
   html_document:
     fig.align: "center"
@@ -14,14 +15,14 @@ csl: apa.csl
 This article illustrates how to use `semfindr` to
 identify influential cases in a multiple-group model
 using
-the `[semfindr](https://sfcheung.github.io/semfindr/)` package
+the [`semfindr`](https://sfcheung.github.io/semfindr/) package
 .
 This article assumes
 that readers have learned how to use the main functions
 for single-group models
 (See `vignette("casewise_scores", package = "semfindr")`).
 
-# Dataset and Model
+# Dataset and Models
 
 The sample dataset `cfa_dat_mg` in `semfindr` will be used
 in this illustration:
@@ -138,7 +139,9 @@ computed for these cases.
 
 For preliminary assessment, we can just `influence_stat()`
 to compute all commonly used measures of case influence
-as well as Mahalanobis distance, using the output of
+[@pek_sensitivity_2011],
+as well as Mahalanobis distance [@mahalanobis_generalized_1936],
+using the output of
 `lavaan_rerun()`:
 
 ```{r}
@@ -196,7 +199,7 @@ on model chi-square.
 Last, we assess casewise influence on parameter estimates
 by setting `what` to `"parameters"`. When printed,
 by default, cases will be sorted by generalized Cook's
-distance:
+distance [@cook_detection_1977]:
 
 ```{r}
 print(inf_config,
@@ -236,7 +239,7 @@ aspects are considered together.
 To assess case influence only on factor loadings in
 `GroupB` in this model, we can use `est_change()`.
 `"=~.GroupB"` denotes all factor loadings in `GroupB`
-(see [pars_id()] on how to select parameters):
+(see `pars_id()` on how to select parameters):
 
 ```{r}
 est_change_group <- est_change(rerun_config,
@@ -257,7 +260,14 @@ gcd_plot(est_change_group)
 ### Is Mahalanobis Distance Enough?
 
 Note that the example above illustrates that a case
-that is extreme is not necessarily the case
+that is extreme is not necessarily a case that is
+influential. Case 100 is influential but it is not the case
+with the highest Mahalanobis distance. Admittedly,
+Mahalanobis distance does reflect the potential to be
+influential. However, in some models, such as models with
+regression paths (e.g., a path model), an influential
+case may not be an extreme case. Therefore, it is not
+enough to examine only Mahalanobis distance.
 
 ## Weak Invariance Model and Strong Invariance Model
 
@@ -284,7 +294,7 @@ lavTestLRT(fit_config_no100, fit_weak_no100, fit_strong_no100)
 lavTestLRT(fit_config_no100, fit_strong_no100)
 ```
 
-Strong invariance is still not rejected again, if Case 100 is
+Strong invariance is still not rejected if Case 100 is
 removed.
 
 ```{r}
@@ -326,8 +336,7 @@ gcd_gof_md_plot(inf_config_no100,
 ```
 
 Although there are still cases with large
-generalized Cook's distance (there always
-are, due to the way it is computed), there
+generalized Cook's distance, there
 are no case stand out from others,
 compared to the analysis with Case 100.
 
@@ -352,6 +361,7 @@ examination of other information is necessary
 before deciding what to do with them. We
 cannot do this in the example above
 because the dataset is artificial. In
-real datasets, please see @aguinis_best-practice_2013.
+real datasets, please see
+@aguinis_best-practice_2013.
 
 # Reference
