@@ -1,4 +1,4 @@
-# semfindr 0.1.4.16
+# semfindr 0.1.4.17
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -30,6 +30,8 @@
 - Changed the default number of cases to printed to 10
   for the print methods of `est_change`, `influence_stat`,
   `md_semfindr`, and `fit_measures_change` objects. (0.1.4.16)
+- In `print.lavaan_rerun()`, keep the format of lavaan
+  warnings. (0.1.4.17)
 
 # semfindr 0.1.4
 
