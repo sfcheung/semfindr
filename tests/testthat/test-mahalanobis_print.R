@@ -39,3 +39,6 @@ print(md_fit, first = 3, sort = TRUE, decreasing = FALSE)
 print(md_fit1, first = 3, sort = TRUE, decreasing = FALSE)
 print(md_predictors, first = 10)
 
+print(md_fit1)
+unclass(md_fit1)
+
