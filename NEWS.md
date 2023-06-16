@@ -1,4 +1,4 @@
-# semfindr 0.1.4.21
+# semfindr 0.1.4.23
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -45,6 +45,9 @@
   selected fit measures. (0.1.4.21)
 - Add `cutoff_change` and `largest_change` to
   `est_change_gcd_plot()`. (0.1.4.22)
+- Updated a few tests on parameters which are fixed in
+  the model but their standardized versions are free.
+  (0.1.4.23)
 
 # semfindr 0.1.4
 
