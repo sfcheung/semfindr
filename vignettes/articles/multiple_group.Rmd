@@ -12,7 +12,7 @@ csl: apa.csl
 
 # Goal
 
-This article illustrates how to use `semfindr` to
+This article illustrates how to
 identify influential cases in a multiple-group model
 using
 the [`semfindr`](https://sfcheung.github.io/semfindr/) package
@@ -20,7 +20,7 @@ the [`semfindr`](https://sfcheung.github.io/semfindr/) package
 This article assumes
 that readers have learned how to use the main functions
 for single-group models
-(See `vignette("casewise_scores", package = "semfindr")`).
+(See `vignette("semfindr", package = "semfindr")`).
 
 # Dataset and Models
 

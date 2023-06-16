@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette explains the computational shortcut implemented in `semfindr` to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
+This vignette explains the computational shortcut implemented in [semfindr](https://sfcheung.github.io/semfindr/) to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
 
 ```{r dat}
 library(semfindr)

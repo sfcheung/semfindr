@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 ```
 
 Instead of using row numbers (`case.idx` in the `lavaan` object),
-`lavaan_rerun()` supports user supplied case IDs.
+`lavaan_rerun()` from the
+package [semfindr](https://sfcheung.github.io/semfindr/)
+supports user supplied case IDs.
 This can make the output more readable.
 
 ```{r}
