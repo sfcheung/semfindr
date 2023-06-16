@@ -42,6 +42,8 @@
 #' @param fit_measures The argument `fit.measures` used in
 #' [lavaan::fitMeasures]. Default is
 #' `c("chisq", "cfi", "rmsea", "tli")`.
+#' Currently, the approximate method supports only
+#' these four measures.
 #'
 #' @param baseline_model The argument `baseline.model` used in
 #' [lavaan::fitMeasures]. Default is `NULL`.
@@ -175,6 +177,7 @@ fit_measures_change_approx <- function(fit,
                                        allow_inadmissible = FALSE,
                                        skip_all_checks = FALSE
                                        ) {
+    fit_measures <- match.arg(fit_measures, several.ok = TRUE)
     if (length(fit_measures) == 0) stop("No measure is requested.")
     if (missing(fit)) {
         stop("No lavaan output supplied.")
