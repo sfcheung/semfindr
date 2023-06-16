@@ -1,4 +1,4 @@
-# semfindr 0.1.4.18
+# semfindr 0.1.4.19
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -36,6 +36,8 @@
   gCD even if it is NA for some cases. (0.1.4.18)
 - In `print.md_semfindr()`, cases are still sorted by
   even if MD is NA for some cases. (0.1.4.18)
+- Revise `print.est_change()` to make its interface
+  similar to that of `print.fit_measures_change()`. (0.1.4.19)
 
 # semfindr 0.1.4
 
