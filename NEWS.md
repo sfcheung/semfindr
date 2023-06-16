@@ -1,4 +1,4 @@
-# semfindr 0.1.4.17
+# semfindr 0.1.4.18
 
 - Fixed the pkgdown site. (0.1.4.1)
 - Check whether a model has at least one equality constraint
@@ -32,6 +32,10 @@
   `md_semfindr`, and `fit_measures_change` objects. (0.1.4.16)
 - In `print.lavaan_rerun()`, keep the format of lavaan
   warnings. (0.1.4.17)
+- In `print.est_change()`, cases are still sorted by
+  gCD even if it is NA for some cases. (0.1.4.18)
+- In `print.md_semfindr()`, cases are still sorted by
+  even if MD is NA for some cases. (0.1.4.18)
 
 # semfindr 0.1.4
 
