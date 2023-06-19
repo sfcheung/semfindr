@@ -1,0 +1,367 @@
+---
+title: "Sensitivity Analysis in Multiple-Group Models"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig.align: "center"
+    toc: true
+    number_sections: false
+bibliography: references.bib
+csl: apa.csl
+---
+
+# Goal
+
+This article illustrates how to
+identify influential cases in a multiple-group model
+using
+the [`semfindr`](https://sfcheung.github.io/semfindr/) package
+.
+This article assumes
+that readers have learned how to use the main functions
+for single-group models
+(See `vignette("semfindr", package = "semfindr")`).
+
+# Dataset and Models
+
+The sample dataset `cfa_dat_mg` in `semfindr` will be used
+in this illustration:
+
+```{r}
+library(semfindr)
+data(cfa_dat_mg)
+head(cfa_dat_mg)
+table(cfa_dat_mg$gp)
+```
+
+The dataset has six variables, `x1` to `x6`. The variable
+`gp` denotes the group of a case, with values `"GroupA"`
+and `"GroupB"`. Each group has 50 cases and the total
+number of cases is 100.
+
+We use assessing measurement invariance as the scenario,
+based on the [tutorial](https://lavaan.ugent.be/tutorial/groups.html)
+on multiple-group models at the official website of
+lavaan.
+
+Three confirmatory factor analytic (CFA) models are to be
+fitted. They are all defined by the following model syntax:
+
+```{r}
+mod <-
+"
+f1 =~ x1 + x2 + x3
+f2 =~ x4 + x5 + x6
+"
+```
+
+The first model has no between-group constraints. It tests
+configural invariance.
+
+```{r}
+library(lavaan)
+fit_config <- cfa(mod, cfa_dat_mg,
+                  group = "gp")
+```
+
+The second model tests weak invariance, with factor loadings
+constrained to be equal across groups:
+
+```{r}
+fit_weak <- cfa(mod, cfa_dat_mg,
+                group = "gp",
+                group.equal = "loadings")
+```
+
+The third model tests strong invariance, with factor
+loadings and item intercepts constrained to be equal
+across groups:
+
+```{r}
+fit_strong <- cfa(mod, cfa_dat_mg,
+                  group = "gp",
+                  group.equal = c("loadings", "intercepts"))
+```
+
+The three models are compared by `lavaan::lavTestLRT()`:
+
+```{r}
+lavTestLRT(fit_config, fit_weak, fit_strong)
+lavTestLRT(fit_config, fit_strong)
+```
+
+The tests does not reject both strong invariance and
+weak invariance.
+
+These are the fit measures of the three models:
+
+```{r}
+fm <- c("chisq", "pvalue", "cfi", "tli", "rmsea")
+round(data.frame(configural = fitMeasures(fit_config, fm),
+                 weak = fitMeasures(fit_weak, fm),
+                 strong = fitMeasures(fit_strong, fm)), 3)
+```
+
+Although strong invariance is not rejected, the configural
+invariance and weak invariance model do not have satisfactory
+fit. Interestingly, the most restrictive model, the
+strong invariance model, has the best fit. The model chi-square
+is not significant.
+
+# Influential Cases
+
+Despite the fit measures, it is still a good practice to
+check whether there are any influential cases. Let's start
+with the configural invariance model.
+
+## Configural Invariance Model
+
+### Leave-One-Out by `lavaan_rerun()`
+
+The leave-one-out approach is used for illustration on the
+configural invariance model, `fit_config`. For this simple
+model with only 100 cases, we do not have to use parallel
+processing. The model is fitted 100 times, each time with
+one case removed:
+
+```{r}
+rerun_config <- lavaan_rerun(fit_config)
+```
+
+Not shown here, but it is possible that a model may
+fail to converge or have inadmissible solution if removed.
+This is especially the case for models with constraints.
+The function will report cases leading to nonconvergence
+or inadmissible solution. Influence measures will not be
+computed for these cases.
+
+### All-In-One: `influence_stat()`
+
+For preliminary assessment, we can just `influence_stat()`
+to compute all commonly used measures of case influence
+[@pek_sensitivity_2011],
+as well as Mahalanobis distance [@mahalanobis_generalized_1936],
+using the output of
+`lavaan_rerun()`:
+
+```{r}
+inf_config <- influence_stat(rerun_config)
+```
+
+The output can then be used for other functions to
+examine specific aspects of case influence.
+
+### Mahalanobis Distance
+
+Because the model is a CFA model and all observed variables
+are endogenous, it is acceptable to examine Mahalanobis
+distance first (see `print.influence_stat()` on options
+available when printing the output of `influence_stat()`).
+
+For multiple-group models, Mahalanobis distance for a case
+is computed using the mean and covariance matrix of the group
+this case belongs to.
+
+```{r}
+print(inf_config,
+      what = "mahalanobis",
+      first = 5)
+```
+
+We can visualize the values using `md_plot()`
+
+```{r}
+md_plot(inf_config,
+        largest_md = 3)
+```
+
+Case 77 and 100 are high on Mahalanobis distance. However,
+the differences from other cases are not substantially
+large.
+
+### Case Influence on Fit Measures
+
+We than examine case influence on fit measures,
+sorted by model chi-squares:
+
+```{r}
+print(inf_config,
+      what = "fit_measures",
+      first = 5,
+      sort_fit_measures_by = "chisq")
+```
+
+Case 100 has relatively large influence
+on model chi-square.
+
+### Case Influence on Parameter Estimates
+
+Last, we assess casewise influence on parameter estimates
+by setting `what` to `"parameters"`. When printed,
+by default, cases will be sorted by generalized Cook's
+distance [@cook_detection_1977]:
+
+```{r}
+print(inf_config,
+      what = "parameters",
+      first = 5)
+```
+
+We can also visualize the generalized Cook's distance
+using `gcd_plot()`:
+
+```{r}
+gcd_plot(inf_config,
+         largest_gcd = 3)
+```
+
+The generalized Cook's distance suggests that Case 100
+has strong influence on parameter estimates. It only
+affects parameter estimates in `GroupB` because it is
+in `GroupB` and the model has no between-group equality
+constraints.
+
+We can visualize all three aspects in one plot using
+`gcd_gof_md_plot()`:
+
+```{r}
+gcd_gof_md_plot(inf_config,
+                fit_measure = "chisq",
+                circle_size = 15,
+                largest_gcd = 3,
+                largest_md = 3,
+                largest_fit_measure = 3)
+```
+
+Case 100 stands out from others when all three
+aspects are considered together.
+
+To assess case influence only on factor loadings in
+`GroupB` in this model, we can use `est_change()`.
+`"=~.GroupB"` denotes all factor loadings in `GroupB`
+(see `pars_id()` on how to select parameters):
+
+```{r}
+est_change_group <- est_change(rerun_config,
+                               parameters = c("=~.GroupB"))
+print(est_change_group,
+      first = 5)
+```
+
+The value of generalized Cook's distance is smaller for Case 100
+because only influence on factor loadings is computed. However,
+the difference from those values of other cases is much larger.
+This can be visualize using `gcd_plot()`:
+
+```{r}
+gcd_plot(est_change_group)
+```
+
+### Is Mahalanobis Distance Enough?
+
+Note that the example above illustrates that a case
+that is extreme is not necessarily a case that is
+influential. Case 100 is influential but it is not the case
+with the highest Mahalanobis distance. Admittedly,
+Mahalanobis distance does reflect the potential to be
+influential. However, in some models, such as models with
+regression paths (e.g., a path model), an influential
+case may not be an extreme case. Therefore, it is not
+enough to examine only Mahalanobis distance.
+
+## Weak Invariance Model and Strong Invariance Model
+
+The above steps can be repeated for the other two models.
+They are not shown here for brevity.
+
+# Fit the Models Again Without The Potential Influential Case
+
+Let us fit the three models again, without Case 100.
+
+```{r}
+cfa_dat_mg_no100 <- cfa_dat_mg[-100, ]
+fit_config_no100 <- cfa(mod, cfa_dat_mg_no100,
+                        group = "gp")
+fit_weak_no100 <- cfa(mod, cfa_dat_mg_no100,
+                      group = "gp",
+                      group.equal = "loadings")
+fit_strong_no100 <- cfa(mod, cfa_dat_mg_no100,
+                        group = "gp",
+                        group.equal = c("loadings", "intercepts"))
+```
+```{r}
+lavTestLRT(fit_config_no100, fit_weak_no100, fit_strong_no100)
+lavTestLRT(fit_config_no100, fit_strong_no100)
+```
+
+Strong invariance is still not rejected if Case 100 is
+removed.
+
+```{r}
+fm <- c("chisq", "pvalue", "cfi", "tli", "rmsea")
+round(data.frame(configural = fitMeasures(fit_config_no100, fm),
+                 weak = fitMeasures(fit_weak_no100, fm),
+                 strong = fitMeasures(fit_strong_no100, fm)), 3)
+```
+
+If Case 100 is removed, all three models fit satisfactorily,
+with model chi-squares not significant.
+
+We can check case influence again:
+
+```{r}
+rerun_config_no100 <- lavaan_rerun(fit_config_no100)
+inf_config_no100 <- influence_stat(rerun_config_no100)
+```
+
+For brevity, we only examine the plots:
+
+```{r}
+md_plot(inf_config_no100,
+        largest_md = 3)
+```
+
+```{r}
+gcd_plot(inf_config_no100,
+         largest_gcd = 3)
+```
+
+```{r}
+gcd_gof_md_plot(inf_config_no100,
+                fit_measure = "chisq",
+                circle_size = 15,
+                largest_gcd = 3,
+                largest_md = 3,
+                largest_fit_measure = 3)
+```
+
+Although there are still cases with large
+generalized Cook's distance, there
+are no case stand out from others,
+compared to the analysis with Case 100.
+
+# Final Remarks
+
+Note that the sample dataset above was
+artificially created. Case 100 was inserted
+to illustrate the workflow and how to use
+the functions. In real datasets, it is
+usually not that simple in sensitivity
+analysis due to the complexity and noise
+in real data.
+
+Nevertheless, it is still possible to have
+cases easily identifiable. For example,
+a case may be influential due to computation
+error or reporting error.
+
+Moreover, in real datasets, when one or
+more influential cases are identified,
+examination of other information is necessary
+before deciding what to do with them. We
+cannot do this in the example above
+because the dataset is artificial. In
+real datasets, please see
+@aguinis_best-practice_2013.
+
+# Reference

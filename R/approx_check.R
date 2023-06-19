@@ -15,6 +15,15 @@
 #' check. If `FALSE`, the messages will be attached to the return value
 #' as an attribute. Default is `TRUE`.
 #'
+#' @param multiple_group Logical. Whether multiple-group models are
+#' supported. If yes, the check for multiple-groups models will be
+#' skipped. Default is `FALSE`.
+#'
+#' @param equality_constraint Logical. Whether models with
+#' equality constraints are
+#' supported. If yes, the check for equality constraints will be
+#' skipped. Default is `FALSE`.
+#'
 #' @return A single-element vector. If confirmed to be supported, will
 #' return 0. If not confirmed to be support but may still work, return 1.
 #' If confirmed to be not yet supported, will return a negative
@@ -45,7 +54,9 @@
 #'@export
 
 approx_check <- function(fit,
-                         print_messages = TRUE) {
+                         print_messages = TRUE,
+                         multiple_group = FALSE,
+                         equality_constraint = FALSE) {
 
     p_table <- lavaan::parameterTable(fit)
 
@@ -90,7 +101,7 @@ approx_check <- function(fit,
           msg <- c(msg, "Clustered models are not yet supported.")
         }
 
-    if (model_multigroup) {
+    if (model_multigroup && !multiple_group) {
           out <- ifelse(out >= 0, -1, out - 1)
           msg <- c(msg, "Multigroup models are not yet supported.")
         }
@@ -125,7 +136,7 @@ approx_check <- function(fit,
                         "and normal theory chi-square test requested."))
       }
 
-    if (sem_eq_constraints) {
+    if (sem_eq_constraints && !equality_constraint) {
           out <- ifelse(out >= 0, -1, out - 1)
           msg <- c(msg,
                 paste("The approximation method does not yet",

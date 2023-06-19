@@ -20,9 +20,11 @@ Ignored if there is no missing data on the observed
 predictors.}
 }
 \value{
-A one-column matrix (a column vector) of the Mahalanobis
+A \code{md_semfindr}-class object, which is
+a one-column matrix (a column vector) of the Mahalanobis
 distance for each case. The number of rows equals to the number of
 cases in the data stored in the fit object.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} or \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output
@@ -41,7 +43,11 @@ and variance-covariance matrices will be estimated by maximum
 likelihood using \code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed
 to \code{\link[modi:MDmiss]{modi::MDmiss()}} to compute the Mahalanobis distance.
 
-Currently this function only supports single-group models.
+Supports both single-group and multiple-group models.
+For multiple-group models, the Mahalanobis distance for
+each case is computed using the means and covariance matrix
+of the group this case belongs to.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

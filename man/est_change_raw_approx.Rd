@@ -43,10 +43,12 @@ For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{est_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested parameters, and the number of rows equals to the number
 of cases. The row names are case identification values. The
 elements are the raw differences.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
@@ -85,10 +87,11 @@ changes for the standardized solution.
 For the technical details, please refer to the vignette
 on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
-The approximate approach does not yet support a model with
-equality constraints.
+The approximate approach supports a model with
+equality constraints (available in 0.1.4.8 and later version).
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

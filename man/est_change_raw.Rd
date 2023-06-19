@@ -4,7 +4,12 @@
 \alias{est_change_raw}
 \title{Case Influence on Parameter Estimates}
 \usage{
-est_change_raw(rerun_out, parameters = NULL, standardized = FALSE)
+est_change_raw(
+  rerun_out,
+  parameters = NULL,
+  standardized = FALSE,
+  user_defined_label_full = FALSE
+)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
@@ -24,12 +29,22 @@ default, changes on all free parameters will be computed.}
 solution is returned (\code{type} = \code{std.all} in
 \code{\link[lavaan:standardizedSolution]{lavaan::standardizedSolution()}}). Otherwise, the changes in the
 unstandardized solution are returned. Default is \code{FALSE}.}
+
+\item{user_defined_label_full}{Logical. If \code{TRUE}, use the full
+labels for user-defined parameters (parameters created by
+\verb{:=}), which include the definition. If \code{FALSE}, then only
+the label on the right-hand side of \verb{:=} will be used.
+Default is \code{FALSE}. In previous version, the full labels
+were used. Set to \code{TRUE} if backward compatibility
+is needed.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{est_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested parameters, and the number of rows equals to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the raw differences.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the
@@ -57,7 +72,8 @@ If the analysis is not admissible or did not converge when a case
 is deleted, \code{NA}s will be returned for this case on the
 differences.
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

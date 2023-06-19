@@ -43,13 +43,15 @@ For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
 \value{
-A matrix. The number of columns is equal to the number of
+An \code{est_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested parameters plus one, the last column being the
 approximate generalized Cook's
 distance. The number of rows equal to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are approximate standardized
 differences.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
@@ -87,10 +89,11 @@ distance (gCD). To avoid confusion, it is labelled \code{gcd_approx}.
 For the technical details, please refer to the vignette
 on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
-The approximate approach does not yet support a model with
-equality constraints.
+The approximate approach supports a model with
+equality constraints (available in 0.1.4.8 and later version).
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

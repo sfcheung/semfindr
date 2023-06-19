@@ -23,7 +23,8 @@
 #' is deleted, `NA`s will be turned for the differences of this
 #' case.
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #'
@@ -34,10 +35,12 @@
 #' @param baseline_model The argument `baseline.model` used in
 #' [lavaan::fitMeasures]. Default is `NULL`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `fit_measures_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested fit measures, and the number of rows equals to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()].
+#' A print method is available for user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -166,5 +169,11 @@ fit_measures_change <- function(rerun_out,
     }
   colnames(out) <- names(fitm0)
   rownames(out) <- case_ids
+
+  attr(out, "call") <- match.call()
+  attr(out, "method") <- "leave_one_out"
+
+  class(out) <- c("fit_measures_change", class(out))
+
   out
 }

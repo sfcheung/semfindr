@@ -34,10 +34,11 @@
 #' For the technical details, please refer to the vignette
 #' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 #'
-#' The approximate approach does not yet support a model with
-#' equality constraints.
+#' The approximate approach supports a model with
+#' equality constraints (available in 0.1.4.8 and later version).
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
 #' [lavaan::cfa()] and [lavaan::sem()]).
@@ -68,13 +69,15 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix. The number of columns is equal to the number of
+#' @return An `est_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested parameters plus one, the last column being the
 #' approximate generalized Cook's
 #' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. The elements are approximate standardized
 #' differences.
+#' A print method is available for user-friendly output.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
 #' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -179,7 +182,9 @@ est_change_approx <- function(fit,
     }
 
   if (!skip_all_checks) {
-    check_out <- approx_check(fit, print_messages = FALSE)
+    check_out <- approx_check(fit, print_messages = FALSE,
+                              multiple_group = TRUE,
+                              equality_constraint = TRUE)
 
     if (check_out != 0) {
         if ((check_out == -1) &&
@@ -191,11 +196,21 @@ est_change_approx <- function(fit,
       }
     }
 
-  n <- lavaan::lavTech(fit, "nobs")
-  if (is.null(case_id)) {
-      # Assume the model is a single-group model
-      case_ids <- lavaan::lavInspect(fit, "case.idx")
+  ngroups <- lavaan::lavInspect(fit, "ngroups")
+  if (ngroups > 1) {
+      n_j <- sapply(lavaan::lavInspect(fit, "data"), nrow)
+      n <- sum(n_j)
     } else {
+      n <- nrow(lavaan::lavInspect(fit, "data"))
+      n_j <- n
+    }
+  if (is.null(case_id)) {
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                     drop.list.single.group = FALSE)
+      case_ids <- sort(unlist(case_ids, use.names = FALSE))
+    } else {
+      case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                    drop.list.single.group = FALSE)
       if (length(case_id) != n) {
           stop("The length of case_id is not equal to the number of cases.")
         } else {
@@ -203,8 +218,13 @@ est_change_approx <- function(fit,
         }
     }
   est0 <- lavaan::parameterTable(fit)
-  # Do not use user labels
-  est0$label <- ""
+  # Do not use user labels except for user-defined parameters
+  # Ensure that plabels are not used as lavlabels
+  tmp1 <- est0$plabel[est0$plabel != ""]
+  tmp2 <- est0$label %in% tmp1
+  tmp3 <- est0$label
+  est0$label[tmp2] <- ""
+  est0$label[est0$op != ":="] <- ""
   est0$lavlabel <- lavaan::lav_partable_labels(est0,
                                                type = "user")
   parameters_names <- est0[est0$free > 0, "lavlabel"]
@@ -218,18 +238,43 @@ est_change_approx <- function(fit,
   param_idx <- parameters_selected
   x0 <- est_change_raw_approx(fit = fit,
                               parameters = parameters, case_id = case_id)
-  s0 <- lavaan::lavScores(fit)[, param_idx, drop = FALSE]
-  v0 <- lavaan::vcov(fit)[param_idx, param_idx, drop = FALSE]
-  v1 <- diag(1 / sqrt(diag(v0)))
-  info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx,
-                                                         drop = FALSE]
+  vcov0 <- lavaan::vcov(fit)
+  scores0 <- lavaan::lavScores(fit,
+                              ignore.constraints = TRUE,
+                              remove.duplicated = FALSE)
+  s0 <- scores0[, param_idx, drop = FALSE]
+  v0 <- vcov0[param_idx, param_idx, drop = FALSE]
+  v1 <- diag(1 / sqrt(diag(v0)), nrow = nrow(v0), ncol = ncol(v0))
   out0 <- x0 %*% v1 * n / (n - 1)
+  if (((ngroups > 1) || fit@Model@eq.constraints)) {
+      v0_full <- full_rank(v0)
+      v1_full <- v0_full$final
+      p_kept <- seq_len(ncol(v0))
+      if (length(v0_full$dropped) > 0) {
+          p_kept <- p_kept[-v0_full$dropped]
+        }
+      x0 <- x0[, p_kept, drop = FALSE]
+      gcd_approx <- rowSums(
+          (x0 %*% solve(v1_full * n) * (n - 1)) * x0
+        )
+    } else {
+      info0 <- lavaan::lavInspect(fit, what = "information")[param_idx, param_idx,
+                                                            drop = FALSE]
+      gcd_approx <- rowSums(
+          (x0 %*% info0 * (n - 1)) * x0
+        )
+    }
   colnames(out0) <- parameters_names[parameters_selected]
-  gcd_approx <- rowSums(
-      (x0 %*% info0 * (n - 1)) * x0
-    )
   out <- cbind(out0, gcd_approx)
   colnames(out) <- c(parameters_names[parameters_selected], "gcd_approx")
   rownames(out) <- case_ids
+
+  attr(out, "call") <- match.call()
+  attr(out, "change_type") <- "standardized"
+  attr(out, "method") <- "approx"
+  attr(out, "standardized") <- FALSE
+
+  class(out) <- c("est_change", class(out))
+
   out
 }

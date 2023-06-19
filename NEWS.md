@@ -1,13 +1,44 @@
-# semfindr 0.1.4.2
+# semfindr 0.1.5
 
-- Fixed the pkgdown site. (0.1.4.1)
-- Check whether a model has at least one equality constraint
-  and the selected parameters are involved in the constraint(s).
-  If yes, *gCD* will not be computed. (0.1.4.2)
+## New Features
+
+- Added a print method for the output of `est_change()`,
+  `est_change_raw()`, `est_change_approx()`, and
+  `est_change_raw_approx()`. (0.1.4.3, 0.1.4.16, 0.1.4.18,
+  0.1.4.19, 0.1.4.20)
+- Added a print method for the output of `fit_measures_change()`
+  and `fit_measures_change_approx()`. (0.1.4.4, 0.1.4.16)
+- Added a print method for the output of `mahalanobis_rerun()`
+  and `mahalanobis_predictors()` (0.1.4.5-0.1.4.6, 0.1.4.16, 0.1.4.18)
+- Added a print method for the output of `influence_stat()`.
+  (0.1.4.7)
+- Provided initial support for multiple-group models
+  and models with linearity constraints. (0.1.4.8 - 0.1.4.14)
+- Added support for labels and `":="` to `pars_id()`. (0.1.4.13)
+
+## Others
+
+- Fixed the `pkgdown` site. (0.1.4.1)
 - `approx_check()` will check if the model has at least one
   equality constraint. (0.1.4.2)
-- Add a "Limitations" section to the vignette of the
+- Added a "Limitations" section to the vignette of the
   approximate approach. (0.1.4.2)
+- Fixed the documentation of `pars_id()`. (0.1.4.12)
+- Added an article for multiple-group models. (0.1.4.15)
+- Restructured articles and references in the `pgkdown`
+  websites. (0.1.4.15)
+- In `print.lavaan_rerun()`, keep the format of lavaan
+  warnings. (0.1.4.17)
+- Remark that `fit_measures_change_approx()` only supports
+  selected fit measures. (0.1.4.21)
+- Add `cutoff_change` and `largest_change` to
+  `est_change_gcd_plot()`. (0.1.4.22)
+- Updated a few tests on parameters which are fixed in
+  the model but their standardized versions are free.
+  (0.1.4.23)
+- Updated vignettes and articles with links to the
+  package website. (0.1.4.24)
+- Updated all vignettes for the new print methods. (0.1.4.25)
 
 # semfindr 0.1.4
 

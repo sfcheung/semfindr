@@ -33,7 +33,8 @@
 #' For the technical details, please refer to the vignette
 #' on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 #'
-#' Currently it only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit The output from [lavaan::lavaan()] or its wrappers (e.g.,
 #' [lavaan::cfa()] and [lavaan::sem()]).
@@ -41,6 +42,8 @@
 #' @param fit_measures The argument `fit.measures` used in
 #' [lavaan::fitMeasures]. Default is
 #' `c("chisq", "cfi", "rmsea", "tli")`.
+#' Currently, the approximate method supports only
+#' these four measures.
 #'
 #' @param baseline_model The argument `baseline.model` used in
 #' [lavaan::fitMeasures]. Default is `NULL`.
@@ -60,9 +63,11 @@
 #' For users to experiment this and other functions on models
 #' not officially supported. Default is `FALSE`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `fit_measures_change`-class object, which is
+#' matrix with the number of columns equals to the number of
 #' requested fit measures, and the number of rows equals to the number
 #' of cases. The row names are case identification values.
+#' A print method is available for user-friendly output.
 #'
 #' @author Idea by Mark Hok Chio Lai <https://orcid.org/0000-0002-9196-7406>,
 #' implemented by Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -172,6 +177,7 @@ fit_measures_change_approx <- function(fit,
                                        allow_inadmissible = FALSE,
                                        skip_all_checks = FALSE
                                        ) {
+    fit_measures <- match.arg(fit_measures, several.ok = TRUE)
     if (length(fit_measures) == 0) stop("No measure is requested.")
     if (missing(fit)) {
         stop("No lavaan output supplied.")
@@ -181,7 +187,9 @@ fit_measures_change_approx <- function(fit,
       }
 
     if (!skip_all_checks) {
-      check_out <- approx_check(fit, print_messages = FALSE)
+      check_out <- approx_check(fit, print_messages = FALSE,
+                                multiple_group = TRUE,
+                                equality_constraint = TRUE)
 
       if (check_out != 0) {
           if ((check_out == -1) &&
@@ -192,12 +200,20 @@ fit_measures_change_approx <- function(fit,
             }
         }
       }
-
-    n <- lavaan::lavTech(fit, "nobs")
-    if (is.null(case_id)) {
-        # Assume the model is a single-group model
-        case_ids <- lavaan::lavInspect(fit, "case.idx")
+    ngroups <- lavaan::lavTech(fit, "ngroups")
+    if (ngroups > 1) {
+        n_j <- sapply(lavaan::lavInspect(fit, "data"), nrow)
+        n <- sum(n_j)
       } else {
+        n <- nrow(lavaan::lavInspect(fit, "data"))
+        n_j <- n
+      }
+    case_ids <- lavaan::lavInspect(fit, "case.idx",
+                                  drop.list.single.group = FALSE)
+    case_ids <- unlist(case_ids, use.names = FALSE)
+    case_ids_order <- order(case_ids)
+    case_ids <- sort(case_ids)
+    if (!is.null(case_id)) {
         if (length(case_id) != n) {
             stop("The length of case_id is not equal to the number of cases.")
           } else {
@@ -214,8 +230,12 @@ fit_measures_change_approx <- function(fit,
                              slotOptions = opt_h1,
                              slotSampleStats = fit@SampleStats,
                              slotData = fit@Data)
-    lli_h1 <- lavaan::lavInspect(fit_h1, what = "loglik.casewise")
-    lli <- lavaan::lavInspect(fit, what = "loglik.casewise")
+    lli_h1 <- lavaan::lavInspect(fit_h1, what = "loglik.casewise",
+                                 drop.list.single.group = FALSE)
+    lli <- lavaan::lavInspect(fit, what = "loglik.casewise",
+                              drop.list.single.group = FALSE)
+    lli_h1 <- unlist(lli_h1, use.names = FALSE)[case_ids_order]
+    lli <- unlist(lli, use.names = FALSE)[case_ids_order]
     chisq_change_fit <- 2 * (lli_h1 - lli)
     if ("chisq" %in% fit_measures) {
         out[, "chisq"] <- chisq_change_fit
@@ -247,7 +267,9 @@ fit_measures_change_approx <- function(fit,
                                 slotData = fit@Data)
       }
     lli_base <- lavaan::lavInspect(baseline_model,
-                                    what = "loglik.casewise")
+                                    what = "loglik.casewise",
+                                    drop.list.single.group = FALSE)
+    lli_base <- unlist(lli_base, use.names = FALSE)[case_ids_order]
     tmp <- lavaan::fitMeasures(baseline_model, c("chisq", "df"))
     chisq_base <- unname(tmp["chisq"])
     df_base <- unname(tmp["df"])
@@ -275,12 +297,19 @@ fit_measures_change_approx <- function(fit,
       }
     if ("rmsea" %in% fit_measures) {
         rmsea_fit <- lavaan::fitMeasures(fit, "rmsea")
+        # CHECK: The "n" of RMSEA in multiple group models.
         tmp <- (chisq_fit_approx / (n - 1)) / df_fit - 1 / (n - 1)
         rmsea_approx <- sqrt(pmax(tmp, 0, na.rm = TRUE))
         rmsea_change <- rmsea_fit - rmsea_approx
         out[, "rmsea"] <- rmsea_change
       }
+
+    attr(out, "call") <- match.call()
+    attr(out, "method") <- "approx"
+    class(out) <- c("fit_measures_change", class(out))
+
     out
+
   }
 
 #' @noRd

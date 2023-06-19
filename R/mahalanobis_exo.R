@@ -15,7 +15,11 @@
 #' likelihood using [norm2::emNorm()]. The estimates will be passed
 #' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
-#' Currently this function only supports single-group models.
+#' Supports both single-group and multiple-group models.
+#' For multiple-group models, the Mahalanobis distance for
+#' each case is computed using the means and covariance matrix
+#' of the group this case belongs to.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param fit It can be the output from `lavaan`, such as
 #' [lavaan::cfa()] and [lavaan::sem()], or the output from
@@ -26,9 +30,11 @@
 #' Ignored if there is no missing data on the observed
 #' predictors.
 #'
-#' @return A one-column matrix (a column vector) of the Mahalanobis
+#' @return A `md_semfindr`-class object, which is
+#' a one-column matrix (a column vector) of the Mahalanobis
 #' distance for each case. The number of rows equals to the number of
 #' cases in the data stored in the fit object.
+#' A print method is available for user-friendly output.
 #'
 #' @examples
 #' library(lavaan)
@@ -77,77 +83,67 @@ mahalanobis_predictors <- function(fit,
       stop("The fit object must of of the class 'lavaan' or 'lavaan_rerun'.")
     }
   if (inherits(fit, "lavaan")) {
-      if (lavaan::lavInspect(fit, "ngroups") > 1) {
-          stop("Currently only support single group models.")
-        }
-      if (lavaan::lavInspect(fit, "nclusters") > 1) {
-          stop("Currently does not support models with more than one cluster.")
-        }
       if (lavaan::lavInspect(fit, "nlevels") > 1) {
           stop("Currently does not support models with more than one level.")
         }
     }
   if (inherits(fit, "lavaan")) {
-      case_ids <- lavaan::lavInspect(fit, "case.idx")
-      fit_data <- lavaan::lavInspect(fit, "data")
-      colnames(fit_data) <- lavaan::lavNames(fit)
-      fit_free <- lavaan::lavInspect(fit, "free")
+      case_ids <- sort(unlist(lavaan::lavInspect(fit, "case.idx"),
+                       use.names = FALSE))
+      fit_data <- lav_data_used(fit)
+      ngroups <- lavaan::lavInspect(fit, "ngroups")
+      if (ngroups > 1) {
+          gp_var <- lavaan::lavInspect(fit, "group")
+        } else {
+          gp_var <- NULL
+        }
+      exo_vars <- setdiff(lavaan::lavNames(fit, "eqs.x"),
+                          lavaan::lavNames(fit, "eqs.y"))
+      exo_vars <- intersect(lavaan::lavNames(fit, "ov"), exo_vars)
     }
   if (inherits(fit, "lavaan_rerun")) {
       case_ids <- names(fit$rerun)
-      fit_data <- lavaan::lavInspect(fit$fit, "data")
-      colnames(fit_data) <- lavaan::lavNames(fit$fit)
-      fit_free <- lavaan::lavInspect(fit$fit, "free")
+      fit_data <- lav_data_used(fit$fit)
+      ngroups <- lavaan::lavInspect(fit$fit, "ngroups")
+      if (ngroups > 1) {
+          gp_var <- lavaan::lavInspect(fit$fit, "group")
+        } else {
+          gp_var <- NULL
+        }
+      exo_vars <- setdiff(lavaan::lavNames(fit$fit, "eqs.x"),
+                          lavaan::lavNames(fit$fit, "eqs.y"))
+      exo_vars <- intersect(lavaan::lavNames(fit$fit, "ov"), exo_vars)
     }
 
-  out_na <- matrix(NA, nrow(fit_data), 1)
-  colnames(out_na) <- "md"
+  md_predictors <- matrix(NA, length(case_ids), 1)
+  colnames(md_predictors) <- "md"
+  rownames(md_predictors) <- case_ids
 
-  if (is.null(fit_free$beta)) {
-      warning("The model has no exogenous observed variables.")
-      return(out_na)
-    }
+  missing_data <- NA
 
-  i <- apply(fit_free$beta, 1, function(x) all(x == 0))
-  exo_vars <- names(i)[i]
-  exo_vars <- exo_vars[exo_vars %in% colnames(fit_data)]
   if (length(exo_vars) == 0) {
       warning("The model has no exogenous observed variables.")
-      return(out_na)
-    }
-  fit_data_exo <- fit_data[, exo_vars, drop = FALSE]
-  if ((sum(stats::complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
-      if (!requireNamespace("modi", quietly = TRUE)) {
-          stop(paste("Missing data is present but the modi package",
-                     "is not installed."))
-        }
-      if (!requireNamespace("norm2", quietly = TRUE)) {
-          stop(paste("Missing data is present but the norm2 package",
-                     "is not installed."))
-        }
-      emNorm_arg_final <- utils::modifyList(list(),
-                                    emNorm_arg)
-      em_out <- tryCatch(do.call(norm2::emNorm,
-                                 c(list(obj = fit_data_exo),
-                                 emNorm_arg_final)),
-                         error = function(e) e)
-      if (inherits(em_out, "SimpleError")) {
-          warning("Missing data is present but norm2::emNorm raised an error.")
-          warning(em_out)
-          return(out_na)
-        }
-      if (!em_out$converged) {
-          warning("Missing data is present but norm2::emNorm did not converge.")
-          return(out_na)
-        }
-      md_predictors <- modi::MDmiss(fit_data_exo,
-                            em_out$param$beta,
-                            em_out$param$sigma)
     } else {
-      md_predictors <- stats::mahalanobis(fit_data_exo,
-                            colMeans(fit_data_exo),
-                            stats::cov(fit_data_exo))
+      fit_data_exo <- fit_data[, c(exo_vars, gp_var), drop = FALSE]
+      if ((sum(stats::complete.cases(fit_data_exo))) != nrow(fit_data_exo)) {
+            missing_data <- TRUE
+            if (!requireNamespace("modi", quietly = TRUE)) {
+                stop(paste("Missing data is present but the modi package",
+                          "is not installed."))
+              }
+            if (!requireNamespace("norm2", quietly = TRUE)) {
+                stop(paste("Missing data is present but the norm2 package",
+                          "is not installed."))
+              }
+        } else {
+            missing_data <- FALSE
+        }
+      md_predictors <- md_i(fit_data = fit_data_exo,
+                            ngroups = ngroups,
+                            gp_var = gp_var,
+                            emNorm_arg = emNorm_arg)
     }
+
   if (inherits(fit, "lavaan_rerun")) {
       md_predictors <- md_predictors[fit$selected]
     }
@@ -155,5 +151,13 @@ mahalanobis_predictors <- function(fit,
   rownames(out) <- case_ids
   colnames(out) <- "md"
   # No need to check the dimension. The result is always a column vector
+
+  attr(out, "call") <- match.call()
+  attr(out, "missing_data") <- missing_data
+  # attr(out, "em_out") <- em_out
+  attr(out, "exo_vars") <- exo_vars
+
+  class(out) <- c("md_semfindr", class(out))
+
   out
 }

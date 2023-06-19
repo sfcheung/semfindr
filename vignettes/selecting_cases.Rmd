@@ -2,7 +2,7 @@
 title: "Selecting Cases In lavaan_rerun"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Selecting Cases In Rerun}
+  %\VignetteIndexEntry{Selecting Cases In lavaan_rerun}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
+This vignette illustrates how to select
+cases when calling `lavaan_rerun()` from
+the package [semfindr](https://sfcheung.github.io/semfindr/).
 
 Instead of refitting the model *n* times, each time
 with each case removed, it is possible to use some criteria
@@ -65,7 +69,7 @@ Only four reruns in the output:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 If user supplied case IDs are used, then the value of
@@ -85,7 +89,7 @@ are used in the output:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 # Mahalanobis Distance on Residuals
@@ -117,7 +121,7 @@ Five cases were selected, as shown below:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 Note that selecting cases by this method *can* miss some
@@ -144,7 +148,7 @@ Five cases were selected, as shown below:
 
 ```{r}
 rerun_out
-round(est_change(rerun_out), 3)
+est_change(rerun_out)
 ```
 
 Note that selecting cases by this method *can* miss some

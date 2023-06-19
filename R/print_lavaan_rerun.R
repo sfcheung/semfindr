@@ -56,8 +56,8 @@ print.lavaan_rerun <- function(x,
                                   msg
                                 })
         failed_messages_df <- as.data.frame(table(failed_messages))
+        failed_messages_df$failed_messages <- as.character(failed_messages_df$failed_messages)
         failed_messages_df <- failed_messages_df[, c(2, 1)]
-        colnames(failed_messages_df) <- c("N", "Warning or error messages")
       }
     org_call <- x$call
     i_valid <- i_converged & i_checked
@@ -88,7 +88,14 @@ print.lavaan_rerun <- function(x,
         cat(paste0("Case(s) failed post.check:\n",
                   paste(names(x$rerun)[i_failed], collapse = ","), "\n"))
         cat("Detail:\n")
-        print(failed_messages_df)
+        for (i in seq_len(nrow(failed_messages_df))) {
+            cat("Warning/Message (",
+                failed_messages_df$Freq[i],
+                " case[s])",
+                ":\n", sep = "")
+            cat(failed_messages_df$failed_messages[i], "\n")
+          }
+        cat("\n")
       }
     invisible(x)
   }

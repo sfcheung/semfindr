@@ -21,10 +21,12 @@ fit_measures_change(
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{fit_measures_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested fit measures, and the number of rows equals to the number
 of cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
@@ -51,7 +53,8 @@ If the analysis is not admissible or does not converge when a case
 is deleted, \code{NA}s will be turned for the differences of this
 case.
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

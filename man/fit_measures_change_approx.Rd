@@ -19,7 +19,9 @@ fit_measures_change_approx(
 
 \item{fit_measures}{The argument \code{fit.measures} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is
-\code{c("chisq", "cfi", "rmsea", "tli")}.}
+\code{c("chisq", "cfi", "rmsea", "tli")}.
+Currently, the approximate method supports only
+these four measures.}
 
 \item{baseline_model}{The argument \code{baseline.model} used in
 \link[lavaan:fitMeasures]{lavaan::fitMeasures}. Default is \code{NULL}.}
@@ -40,9 +42,11 @@ For users to experiment this and other functions on models
 not officially supported. Default is \code{FALSE}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{fit_measures_change}-class object, which is
+matrix with the number of columns equals to the number of
 requested fit measures, and the number of rows equals to the number
 of cases. The row names are case identification values.
+A print method is available for user-friendly output.
 }
 \description{
 Gets a \code{\link[lavaan:lavaan]{lavaan::lavaan()}} output and computes the
@@ -79,7 +83,8 @@ leave-one-out sensitivity analysis using \code{\link[=lavaan_rerun]{lavaan_rerun
 For the technical details, please refer to the vignette
 on this approach: \code{vignette("casewise_scores", package = "semfindr")}
 
-Currently it only supports single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

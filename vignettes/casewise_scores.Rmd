@@ -3,7 +3,7 @@ title: "Approximate Case Influence Using Scores and Casewise Likelihood"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Approximate Case Influence}
+  %\VignetteIndexEntry{Approximate Case Influence Using Scores and Casewise Likelihood}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette explains the computational shortcut implemented in `semfindr` to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
+This vignette explains the computational shortcut implemented in [semfindr](https://sfcheung.github.io/semfindr/) to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
 
 ```{r dat}
 library(semfindr)
@@ -67,7 +67,7 @@ The approximation is implemented in the `est_change_raw_approx()` function:
 
 ```{r fit_est_change_approx}
 fit_est_change_approx <- est_change_raw_approx(fit)
-head(fit_est_change_approx)
+fit_est_change_approx
 ```
 
 Here is a comparison between the approximation using `semfindr::est_change_raw_approx()` and `semfindr::est_change_raw()`
@@ -109,7 +109,7 @@ This is implemented in the `est_change_approx()` function:
 
 ```{r est_change_approx-gcd}
 fit_est_change_approx <- est_change_approx(fit)
-head(fit_est_change_approx)
+fit_est_change_approx
 ```
 
 ```{r compare-approx-gcd}
@@ -199,11 +199,6 @@ The values aligned reasonably well along the 45-degree line.
 - The approximate approach is tested only for models
   fitted by maximum likelihood (ML) with normal theory
   standard errors (the default).
-
-- The approximate approach does not yet support a model with one or more equality constraints.
-
-- The approximate approach does not yet support multisample
-models.
 
 - The approximate approach does not yet support multilevel
 models.

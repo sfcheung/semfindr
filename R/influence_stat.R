@@ -24,7 +24,8 @@
 #' Please refer to the help pages of the above functions on
 #' the technical details.
 #'
-#' Currently it only works for single-group models.
+#' Supports both single-group and multiple-group models.
+#' (Support for multiple-group models available in 0.1.4.8 and later version).
 #'
 #' @param rerun_out The output from [lavaan_rerun()], or the output
 #' of [lavaan::lavaan()] or its wrappers (e.g., [lavaan::cfa()]
@@ -56,12 +57,14 @@
 #' by other functions to extract necessary information. Default is
 #' `TRUE`.
 #'
-#' @return A matrix with the number of columns equals to the number of
+#' @return An `influence_stat`-class object, which is
+#' a matrix with the number of columns equals to the number of
 #' requested statistics, and the number of rows equals to the number of
 #' cases. The row names are the case identification values used in
 #' [lavaan_rerun()]. Please refer to the help pages of [est_change()] and
 #' [fit_measures_change()] (or [est_change_approx()] and
-#' [fit_measures_change_approx()] for details.
+#' [fit_measures_change_approx()] for details. This object
+#' has a print method for printing user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
@@ -132,9 +135,13 @@ influence_stat <- function(rerun_out,
                                     fit_measures = fit_measures,
                                     baseline_model = baseline_model))
       fm_names <- rownames(fm)
+      fm_cnames <- colnames(fm)
+      fm_attrs <- attributes(fm)
     } else {
       fm <- NULL
       fm_names <- NULL
+      fm_cnames <- NULL
+      fm_attrs <- NULL
     }
   if (!isFALSE(parameters)) {
       es <- switch(rerun_out_type,
@@ -143,16 +150,24 @@ influence_stat <- function(rerun_out,
                    lavaan =  est_change_approx(rerun_out,
                                     parameters = parameters))
       es_names <- rownames(es)
+      es_cnames <- colnames(es)
+      es_attrs <- attributes(es)
     } else {
       es <- NULL
       es_names <- NULL
+      es_cnames <- NULL
+      es_attrs <- NULL
     }
   if (isTRUE(mahalanobis)) {
       mh <- mahalanobis_rerun(rerun_out)
       mh_names <- rownames(mh)
+      mh_cnames <- colnames(mh)
+      mh_attrs <- attributes(mh)
     } else {
       mh <- NULL
       mh_names <- NULL
+      mh_cnames <- NULL
+      mh_attrs <- NULL
     }
 
   if (!all(is.null(fm), is.null(es), is.null(mh))) {
@@ -169,13 +184,23 @@ influence_stat <- function(rerun_out,
     } else {
       stop("No statistics are requested. Something is wrong.")
     }
+
+  attr(out, "fit_measures_names") <- fm_cnames
+  attr(out, "parameters_names") <- es_cnames
+  attr(out, "mahalanobis_names") <- mh_cnames
+  attr(out, "call") <- match.call()
+  attr(out, "method") <- switch(rerun_out_type,
+                              lavaan_rerun = "rerun",
+                              lavaan = "approx")
+  attr(out, "fit_measures_attrs") <- fm_attrs
+  attr(out, "parameters_attrs") <- es_attrs
+  attr(out, "mahalanobis_attrs") <- mh_attrs
+
   if (keep_fit) {
       attr(out, "fit") <- switch(rerun_out_type,
                                  lavaan_rerun = rerun_out$fit,
                                  lavaan = rerun_out)
-      attr(out, "method") <- switch(rerun_out_type,
-                                 lavaan_rerun = "rerun",
-                                 lavaan = "approx")
     }
+  class(out) <- c("influence_stat", class(out))
   out
 }

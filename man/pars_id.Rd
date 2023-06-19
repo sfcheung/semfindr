@@ -10,9 +10,12 @@ pars_id(pars, fit, where = c("coef", "partable"), free_only = TRUE)
 }
 \arguments{
 \item{pars}{A character vector of parameters specified
-in lavaan syntax, e.g., \code{"y ~ x"} and \code{f1 =~ x3}. Can
-mix specific parameters with operators. See the Details
-section.}
+in lavaan syntax, e.g., \code{"y ~ x"} and \code{f1 =~ x3}. For
+multisample models, if only the parameters in some groups
+are needed, use the modifier for labeling parameters and
+use \code{NA} to denote parameters to be requested. E.g.,
+\code{f1 =~ c(NA, 0, NA, NA) * x2} denotes the loadings of
+\code{x2} on \code{f1} in the first, third, and fourth groups.}
 
 \item{fit}{A \code{lavaan}-class object. This object is used
 to determine the number of groups and the parameters
@@ -24,12 +27,13 @@ this model will be considered.}
 (coefficient vector).
 Default is "coef".}
 
-\item{free_only}{Wether only free parameters will be
+\item{free_only}{Whether only free parameters will be
 kept. Default is \code{TRUE}.}
 }
 \value{
-A numeric vector of the ids in the column "free" in the
-parameter table of the fit object.
+A numeric vector of the ids. If \code{where} is \code{"partable"},
+the ids are row numbers. If \code{where} is \code{"coef"},
+the ids are the positions in the vector.
 }
 \description{
 Converts a vector of
@@ -50,11 +54,47 @@ parse the syntax strings.
 \item Operator
 \itemize{
 \item For example, \code{"~"} denotes all regression coefficients.
+\item It also supports \verb{:=}, which can be used to select
+user-defined parameters.
+}
+\item Label
+\itemize{
+\item For example, \code{"ab"} denotes all parameters with this
+labels defined in model syntax. It can be used to
+select user-defined parameters, such as \code{"ab := a*b"}.
 }
 }
 
-It is used by function such as \code{\link[=est_change]{est_change()}} and
-\code{\link[=fit_measures_change]{fit_measures_change()}}.
+It is used by functions such as \code{\link[=est_change]{est_change()}}.
+\subsection{Multisample model}{
+
+If a model has more than one group, a specification
+specified as in a single sample model denotes the same
+parameters in all group.
+\itemize{
+\item For example, \code{"f1 =~ x2"} denote the factor loading of
+\code{x2} on \code{f1} in all groups. \code{"~~"} denotes covariances
+and error covariances in all groups.
+}
+
+There are two ways to select parameters only in selected
+groups. First, the syntax to fix parameter values
+can be used, with \code{NA} denoting parameters to be selected.
+\itemize{
+\item For example, \code{"f2 =~ c(NA, 1, NA) * x5"} select the
+factor loadings of \code{x5} on \code{f2} in the first and third
+groups.
+}
+
+Users can also add ".grouplabel" to a specification,
+\code{grouplabel} being the group label of a group (the one
+appears in \code{\link[=summary]{summary()}}, not the one of the form \code{".g2"},
+\code{"g3"}, etc.).
+\itemize{
+\item For example, \code{"f2 =~ x5.Alpha"} denotes the factor loading
+of \code{x5} on \code{f2} in the group \code{"Alpha"}.
+}
+}
 }
 \examples{
 
@@ -77,6 +117,47 @@ tmp <- pars_id(pars, fit = fit_ng)
 coef(fit_ng)[tmp]
 tmp <- pars_id(pars, fit = fit_ng, where = "partable")
 parameterTable(fit_ng)[tmp, ]
+
+# Multiple-group models
+
+dat <- sem_dat
+set.seed(64264)
+dat$gp <- sample(c("Alpha", "Beta", "Gamma"),
+                 nrow(dat),
+                 replace = TRUE)
+
+library(lavaan)
+sem_model <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~   f1
+f3 ~   f2
+"
+
+fit_ng <- sem(sem_model, dat)
+fit_gp <- sem(sem_model, dat, group = "gp")
+
+pars <- c("f1 =~ x2", "f2 =~ x5", "f2 ~ f1")
+tmp <- pars_id(pars, fit = fit_ng)
+coef(fit_ng)[tmp]
+tmp <- pars_id(pars, fit = fit_ng, where = "partable")
+parameterTable(fit_ng)[tmp, ]
+
+pars <- c("f1 =~ x2", "f2 =~ c(NA, 1, NA) * x5")
+tmp <- pars_id(pars, fit = fit_gp)
+coef(fit_gp)[tmp]
+tmp <- pars_id(pars, fit = fit_gp, where = "partable")
+parameterTable(fit_gp)[tmp, ]
+
+pars2 <- c("f1 =~ x2", "~~.Beta", "f2 =~ x5.Gamma")
+tmp <- pars_id(pars2, fit = fit_gp)
+coef(fit_gp)[tmp]
+tmp <- pars_id(pars2, fit = fit_gp, where = "partable")
+parameterTable(fit_gp)[tmp, ]
+# Note that group 1 is "Beta", not "Alpha"
+lavInspect(fit_gp, "group.label")
 
 
 }

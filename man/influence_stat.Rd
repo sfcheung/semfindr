@@ -45,12 +45,14 @@ by other functions to extract necessary information. Default is
 \code{TRUE}.}
 }
 \value{
-A matrix with the number of columns equals to the number of
+An \code{influence_stat}-class object, which is
+a matrix with the number of columns equals to the number of
 requested statistics, and the number of rows equals to the number of
 cases. The row names are the case identification values used in
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}. Please refer to the help pages of \code{\link[=est_change]{est_change()}} and
 \code{\link[=fit_measures_change]{fit_measures_change()}} (or \code{\link[=est_change_approx]{est_change_approx()}} and
-\code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} for details.
+\code{\link[=fit_measures_change_approx]{fit_measures_change_approx()}} for details. This object
+has a print method for printing user-friendly output.
 }
 \description{
 Gets a \code{\link[=lavaan_rerun]{lavaan_rerun()}} output and computes the changes
@@ -78,7 +80,8 @@ If Mahalanobis distance is requested, it is computed by
 Please refer to the help pages of the above functions on
 the technical details.
 
-Currently it only works for single-group models.
+Supports both single-group and multiple-group models.
+(Support for multiple-group models available in 0.1.4.8 and later version).
 }
 \examples{
 library(lavaan)

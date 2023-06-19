@@ -27,6 +27,9 @@ fit_est_change_raw <- est_change_raw(rerun_out)
 fit_est_change_raw_approx <- est_change_raw_approx(fit)
 fit_est_change_raw_std <- est_change_raw(rerun_out,
                                          standardized = TRUE)
+inf_out <- influence_stat(rerun_out)
+inf_approx_out <- influence_stat(fit)
+
 set.seed(89235)
 n <- nrow(dat0)
 random_case_ids <- paste0("case_", sample.int(n))
@@ -57,12 +60,15 @@ test_that("params_selected", {
                  c("m1~~m1", "dv~~dv"))
   })
 
-skip("To be tested interactively")
+skip("To be tested in an interactive session")
 
 params <- c("m1~iv1", "a2", "b")
 est_change_gcd_plot(fit_est_change, parameters = params)
 est_change_gcd_plot(fit_est_change, parameters = params, largest_gcd = 3)
 est_change_gcd_plot(fit_est_change, parameters = params, cutoff_gcd = .2)
+est_change_gcd_plot(fit_est_change, parameters = params, cutoff_gcd = .2,
+                    cutoff_change = .05,
+                    largest_change = 5)
 
 params <- c("~")
 est_change_plot(fit_est_change_raw, parameters = params)
@@ -79,6 +85,19 @@ est_change_gcd_plot(fit_est_change_approx, parameters = params, cutoff_gcd = .1)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, cutoff_gcd = .2)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5)
 est_change_gcd_plot(fit_est_change_approx, parameters = params, largest_gcd = 5, cutoff_gcd = .3)
+
+# Test the functions on the output of influence_stat()
+
+params <- c("m1~iv1", "a2", "b")
+est_change_gcd_plot(inf_out, parameters = params)
+est_change_gcd_plot(fit_est_change, parameters = params)
+est_change_plot(inf_out, parameters = params)
+est_change_plot(fit_est, parameters = params)
+params <- c("~")
+est_change_gcd_plot(inf_approx_out, parameters = params)
+est_change_gcd_plot(fit_est_change_approx, parameters = params)
+est_change_plot(inf_approx_out, parameters = params)
+est_change_plot(fit_est_change_approx, parameters = params)
 
 # CFA model with selected loadings
 

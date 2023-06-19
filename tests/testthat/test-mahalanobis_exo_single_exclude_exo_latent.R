@@ -1,7 +1,7 @@
 library(testthat)
 library(lavaan)
 library(semfindr)
- 
+
 # Can exclude exogenous variables that are not observed variables
 
 mod <-

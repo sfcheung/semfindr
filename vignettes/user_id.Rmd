@@ -15,7 +15,9 @@ knitr::opts_chunk$set(
 ```
 
 Instead of using row numbers (`case.idx` in the `lavaan` object),
-`lavaan_rerun()` supports user supplied case IDs.
+`lavaan_rerun()` from the
+package [semfindr](https://sfcheung.github.io/semfindr/)
+supports user supplied case IDs.
 This can make the output more readable.
 
 ```{r}
@@ -76,28 +78,28 @@ original data set.
 
 ```{r}
 fit_est_change <- est_change(fit_rerun)
-round(head(fit_est_change), 3)
+fit_est_change
 ```
 ```{r}
 fit_est_change_paths_only <- est_change(fit_rerun,
                                 parameters = c("m1 ~ iv1",
                                                "m1 ~ iv2",
                                                "dv ~ m1"))
-round(fit_est_change_paths_only[1:5, ], 3)
+fit_est_change_paths_only
 ```
 
 ## Raw Changes in Estimates
 
 ```{r}
 fit_est_change_raw <- est_change_raw(fit_rerun)
-round(fit_est_change_raw[1:5, ], 3)
+fit_est_change_raw
 ```
 
 ## Mahalanobis Distance
 
 ```{r}
 fit_md <- mahalanobis_rerun(fit_rerun)
-round(fit_md[1:5, , drop = FALSE], 3)
+fit_md
 ```
 
 ## Changes in Fit Measures
@@ -105,14 +107,14 @@ round(fit_md[1:5, , drop = FALSE], 3)
 ```{r}
 fit_mc <- fit_measures_change(fit_rerun,
             fit_measures = c("chisq", "cfi", "tli", "rmsea"))
-round(fit_mc[1:5, ], 3)
+fit_mc
 ```
 
 ## All-In-One-Function
 
 ```{r}
 fit_influence <- influence_stat(fit_rerun)
-round(fit_influence[1:5, ], 3)
+fit_influence
 ```
 
 # Diagnostic Plots

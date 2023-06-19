@@ -25,6 +25,8 @@ est_change_gcd_plot(
   parameters,
   cutoff_gcd = NULL,
   largest_gcd = 1,
+  cutoff_change = NULL,
+  largest_change = 1,
   title = TRUE,
   point_aes = list(),
   hline_aes = list(),

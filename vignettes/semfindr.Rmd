@@ -2,7 +2,7 @@
 title: "Quick Start"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{semfindr}
+  %\VignetteIndexEntry{Quick Start}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # Purpose
 
-The `semfindr` package contains functions for doing structural
+The [semfindr](https://sfcheung.github.io/semfindr/) package contains functions for doing structural
 equation modeling (SEM) diagnostics, such as identifying
 influential cases and computing various diagnostic measures.
 This document illustrates how to use `semfindr` to do casewise sensitivity
@@ -148,12 +148,18 @@ by their standard errors (Pek & MacCallum, 2011, Equation 7):
 
 ```{r}
 fit_est_change <- est_change(fit_rerun)
-round(head(fit_est_change), 3)
+fit_est_change
 ```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). By default,
+the cases are sorted in descending order based on
+generalized Cook's distance (`gcd`, described below),
+and only the first 10 cases are printed.
 
 The standardized change is a measure of *influence* if a case
 is *included*. If the standardized change of a parameter for
-a case is positive, then including this case increase
+a case is positive, then including this case increases
 the estimate of this parameter.
 
 For example, the standardized change of the path from `iv1`
@@ -174,16 +180,11 @@ analogous to Cook's distance in multiple regression. It
 measures the overall influence in the parameters if a case
 is included.
 
-Let's examine the top five cases with largest *gCD*:
-
-```{r}
+```{r echo = FALSE}
 i <- order(fit_est_change[, "gcd"],
            decreasing = TRUE)
 i_top5 <- i[1:5]
 round(fit_est_change[i_top5, ], 3)
-```
-
-```{r echo = FALSE}
 i_top5_gcd_overall <- i_top5
 ```
 
@@ -200,9 +201,12 @@ fit_est_change_paths_only <- est_change(fit_rerun,
                                         parameters = c("m1 ~ iv1",
                                                       "m1 ~ iv2",
                                                       "dv ~ m1"))
+fit_est_change_paths_only
+```
+
+```{r echo = FALSE}
 i <- order(fit_est_change_paths_only[, "gcd"],
            decreasing = TRUE)
-round(fit_est_change_paths_only[i[1:5], ], 3)
 ```
 
 If all paths are to be included, the following call will also work:
@@ -217,9 +221,9 @@ i_top5_gcd_paths <- i[1:5]
 ```
 
 Although the
-`r as.integer(i_top5_gcd_overall[1])`th case has the
+`r as.integer(i_top5_gcd_overall[1])`^th^ case has the
 largest *gCD* based on all parameters, the
-`r as.integer(i_top5_gcd_paths[1])`th case has the
+`r as.integer(i_top5_gcd_paths[1])`^th^ case has the
 largest *gCD* based on regression paths only. Therefore,
 when examining *gCD*, it is better to compute it only for parameters
 that are theoretically important.
@@ -238,28 +242,35 @@ by `est_change_raw()`:
 
 ```{r}
 fit_est_change_raw <- est_change_raw(fit_rerun)
-round(fit_est_change_raw[i_top5, ], 3)
+fit_est_change_raw
 ```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). If the
+output was generated `est_change_raw()`, by default,
+each column of parameter is sorted in the descending order
+of the absolute value, with case IDs inserted.
 
 For example, the change of the path from `iv1`
 to `m1` is `r round(fit_est_change_raw[43, "m1~iv1"], 3)`
 for the
-43rd case. The estimate of this path with and without
-the 43rd cases are `r round(coef(fit)["m1~iv1"], 3)` and
+43^rd^ case. The estimate of this path with and without
+the 43^rd^ cases are `r round(coef(fit)["m1~iv1"], 3)` and
 `r round(coef(fit_no43)["m1~iv1"], 3)`, respectively. The
-estimate with the 43rd case included is smaller than the
-estimate with the 43rd case excluded. The raw changes is
+estimate with the 43^rd^ case included is smaller than the
+estimate with the 43^rd^ case excluded. The raw changes is
 `r round(coef(fit)["m1~iv1"], 3)` -
 `r round(coef(fit_no43)["m1~iv1"], 3)` or
 `r round(fit_est_change_raw[43, "m1~iv1"], 3)`.
 
 If desired, `est_change_raw()` can also compute the changes
-in parameters in the *standardized solution*:
+in parameters in the *standardized solution*, by
+setting `standardized` to `TRUE`:
 
 ```{r}
 fit_est_change_raw_std <- est_change_raw(fit_rerun,
                                          standardized = TRUE)
-round(fit_est_change_raw_std[i_top5, ], 3)
+fit_est_change_raw_std
 ```
 
 Note that the variances of `iv1` and `iv2` are necessarily
@@ -277,15 +288,15 @@ standardizedSolution(sem(mod, dat[-43, ]), se = FALSE)[1, ]
 The change of the standardized estimate of the path from `iv1`
 to `m1` is `r round(fit_est_change_raw_std[43, "m1~iv1"], 3)`
 for the
-43rd case. The standardized estimates of this path with and
+43^rd^ case. The standardized estimates of this path with and
 without
-the 43rd cases are
+the 43^rd^ cases are
 `r round(standardizedSolution(fit, se = FALSE)[1, ][, 4], 3)`
 and
 `r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)`,
 respectively. The
 estimate of the standardized coefficient from `iv1` to `m1`
-is smaller than the estimate with the 43rd
+is smaller than the estimate with the 43^rd^
 case removed. The raw changes of standardized estimate is
 `r round(standardizedSolution(fit, se = FALSE)[1, ][, 4], 3)` -
 `r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)` or
@@ -300,7 +311,7 @@ fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
                                                parameters = c("m1 ~ iv1",
                                                               "m1 ~ iv2",
                                                               "dv ~ m1"))
-round(fit_est_change_raw_std_paths[i_top5, ], 3)
+fit_est_change_raw_std_paths
 ```
 
 If all parameters of the same operators are to be included,
@@ -326,12 +337,17 @@ all the variables used in the target model:
 
 ```{r}
 fit_md <- mahalanobis_rerun(fit_rerun)
-round(fit_md[i_top5, , drop = FALSE], 3)
+fit_md
 ```
+
+The output is a matrix-like object of the class "md_semfindr",
+with a print method (`print.md_semfindr()`). By default,
+cases are sorted in descending order of Mahalanobis
+distance.
 
 Note that a case with a large Mahalanobis distance is not
 necessarily an influential case (Pek & MacCallum, 2011).
-Therefore, if time allows,
+Therefore,
 influence measures should be examined to avoid overlooking
 cases that are not extreme but are influential.
 
@@ -350,7 +366,20 @@ from the results from `lavaan_rerun`:
 ```{r}
 fit_mc <- fit_measures_change(fit_rerun,
             fit_measures = c("chisq", "cfi", "tli", "rmsea"))
-round(fit_mc[i_top5, ], 3)
+fit_mc
+```
+
+The output is a matrix-like object of the class "fit_measures_change",
+with a print method (`print.fit_measures_change()`). By default,
+only the first 10 cases are printed.
+
+To sort cases by a specific measure, set `sort_by` to the
+column name to be used for sorting cases. By default,
+cases are sorted in descending order of the *absolute* value
+of the selected column.
+
+```{r}
+print(fit_mc, sort_by = "chisq")
 ```
 
 The value is computed by $M_\textrm{full sample} - M_\textrm{one case removed}$.
@@ -383,13 +412,17 @@ page of `fit_measures_change()` for further information.
 
 We can also use `influence_stat()` to compute the previous
 measures. It calls `fit_measures_change()`, `est_change()`,
-and `mahalanobis_rerun()` (if requested) and then merges
-their results into one matrix:
+and `mahalanobis_rerun()` and then merges
+their results into one object:
 
 ```{r}
 fit_influence <- influence_stat(fit_rerun)
-round(fit_influence[i_top5, ], 3)
+fit_influence
 ```
+
+The output is a matrix-like object of the class "influence_stat",
+with a print method (`print.influence_stat()`). If printed,
+it will print the results using the methods described above.
 
 One major use of `influence_stat()` is to provide information
 for the diagnostic plots introduced below.
@@ -528,6 +561,18 @@ est_change_plot(fit_est_change_raw,
                 largest_change = 3)
 ```
 
+Last, the output of `influence_stat()` can also be
+used. The case influence will be extracted from the
+object. For example, the following call, using
+`fit_influence` instead of `fit_est_change_raw`,
+will generate the same plot.
+
+```{r eval = FALSE}
+est_change_plot(fit_influence,
+                parameters = "~",
+                largest_change = 3)
+```
+
 More options of `est_change_plot()` can be found on its help
 page.
 
@@ -560,6 +605,19 @@ est_change_gcd_plot(fit_est_change,
 
 It does not support plotting the raw changes against *gCD*
 because *gCD* is not computed by `est_change_raw()`.
+
+Last, the output of `influence_stat()` can also be
+used. The case influence will be extracted from the
+object. For example, the following call, using
+`fit_influence` instead of `fit_est_change`,
+will generate the same plot.
+
+```{r eval = FALSE}
+est_change_gcd_plot(fit_influence,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
 
 More options of `est_change_gcd_plot()` can be found on its help
 page.
@@ -605,8 +663,14 @@ is the output of `lavaan`:
 
 ```{r}
 fit_est_change_approx <- est_change_approx(fit)
-round(head(fit_est_change_approx), 3)
+fit_est_change_approx
 ```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). By default,
+the cases are sorted in descending order based on
+approximate generalized Cook's distance (`gcd_approx`,
+described below), and only the first 10 cases are printed.
 
 The column `gcd_approx` indicates that the *gCD* is only
 an approximate value.
@@ -618,7 +682,7 @@ the following computes the *gCD* based on regression coefficients only:
 ```{r}
 fit_est_change_approx_paths <- est_change_approx(fit,
                                                  parameters = "~")
-round(head(fit_est_change_approx_paths), 3)
+fit_est_change_approx_paths
 ```
 
 See the help
@@ -633,8 +697,14 @@ is the output of `lavaan`:
 
 ```{r}
 fit_est_change_raw_approx <- est_change_raw_approx(fit)
-round(fit_est_change_raw_approx[i_top5, ], 3)
+fit_est_change_raw_approx
 ```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). If the
+output was generated `est_change_raw_approx()`, by default,
+each column of parameter is sorted in the descending order
+of the absolute value, with case IDs inserted.
 
 Unlike `est_change_raw()`, `est_change_raw_approx()`
 does not support raw changes in the standardized solution.
@@ -651,7 +721,7 @@ to the output of `lavaan`:
 
 ```{r}
 fit_md <- mahalanobis_rerun(fit)
-round(fit_md[i_top5, , drop = FALSE], 3)
+fit_md
 ```
 
 The results are the same whether the output of `lavaan` or
@@ -666,7 +736,20 @@ argument is the output of `lavaan`:
 ```{r}
 fit_mc_approx <- fit_measures_change_approx(fit,
                    fit_measures = c("chisq", "cfi", "tli", "rmsea"))
-round(fit_mc_approx[1:5, ], 3)
+fit_mc_approx
+```
+
+The output is a matrix-like object of the class "fit_measures_change",
+with a print method (`print.fit_measures_change()`). By default,
+only the first 10 cases are printed.
+
+To sort cases by a specific measure, set `sort_by` to the
+column name to be used for sorting cases. By default,
+cases are sorted in descending order of the *absolute* value
+of the selected column.
+
+```{r}
+print(fit_mc_approx, sort_by = "chisq")
 ```
 
 These measures are the default values. Therefore, if only these four measures
@@ -690,8 +773,12 @@ first argument:
 
 ```{r}
 fit_influence_approx <- influence_stat(fit)
-round(fit_influence_approx[1:5, ], 3)
+fit_influence_approx
 ```
+
+The output is a matrix-like object of the class "influence_stat",
+with a print method (`print.influence_stat()`). If printed,
+it will print the results using the methods described above.
 
 See the help
 page of `influence_stat()` for further information.
@@ -767,6 +854,19 @@ est_change_plot(fit_est_change_raw_approx,
                 largest_change = 3)
 ```
 
+Like the leave-one-out approach, the output
+of `influence_stat()` can also be used.
+For example, replacing `fit_est_change_raw_approx`
+by `fit_influence_approx` will generate the
+same plot:
+
+```{r eval = FALSE}
+est_change_plot(fit_influence_approx,
+                parameters = "~",
+                largest_change = 3)
+```
+
+
 ### Standardized Changes Against *gCD*
 
 ```{r fig.height = 7}
@@ -779,6 +879,18 @@ largest *approximated* *gCD* to be labelled. The default is 1.
 
 ```{r}
 est_change_gcd_plot(fit_est_change_approx,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
+Like the leave-one-out approach, the output
+of `influence_stat()` can also be used.
+For example, replacing `fit_est_change_approx`
+by `fit_influence_approx` will generate the
+same plot:
+
+```{r eval = FALSE}
+est_change_gcd_plot(fit_influence_approx,
                     parameters = "~",
                     largest_gcd = 3)
 ```
