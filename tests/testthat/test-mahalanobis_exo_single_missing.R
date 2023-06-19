@@ -1,7 +1,8 @@
+skip_if_not_installed("modi")
 library(testthat)
 library(lavaan)
 library(semfindr)
- 
+
 # Can handle missing data
 
 mod <-
