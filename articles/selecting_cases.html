@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Chivo_Mono-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Chivo_Mono-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Selecting Cases In lavaan_rerun">
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,16 +47,20 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/semfindr.html">Get started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>&lt;General&gt;</h6>
     <a class="dropdown-item" href="../articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
     <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
-    <a class="dropdown-item" href="../articles/user_id.html">Use Case IDs</a>
+    <a class="dropdown-item" href="../articles/user_id.html">Using Case IDs</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>&lt;Multiple-Group Models&gt;</h6>
+    <a class="dropdown-item" href="../articles/multiple_group.html">Illustration</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -94,6 +98,8 @@
 
     
     
+<p>This vignette illustrates how to select cases when calling
+<code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> from the package <a href="https://sfcheung.github.io/semfindr/">semfindr</a>.</p>
 <p>Instead of refitting the model <em>n</em> times, each time with each
 case removed, it is possible to use some criteria to select cases to be
 included in the analysis. This is useful when the time to fit a model is
@@ -140,7 +146,7 @@ selected. This can be done using the argument <code>to_rerun</code> of
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">15</span>, <span class="fl">18</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.44 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.46 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Only four reruns in the output:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -155,12 +161,20 @@ selected. This can be done using the argument <code>to_rerun</code> of
 <span><span class="co">#&gt; Number of reruns that failed post.check of lavaan: 0</span></span>
 <span><span class="co">#&gt; Number of reruns that both converged and passed post.check: 4</span></span>
 <span><span class="co">#&gt; Number of reruns that either did not converge or failed post.check: 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    iv1~~iv2 m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv iv1~~iv1 iv2~~iv2   gcd</span></span>
-<span><span class="co">#&gt; 1    -0.013  0.024 -0.030  0.052 -0.037  0.017   -0.061   -0.056 0.013</span></span>
-<span><span class="co">#&gt; 4     0.006 -0.024 -0.003  0.022 -0.051 -0.044   -0.056   -0.070 0.014</span></span>
+<span><span class="co">#&gt; 18   -0.023 -0.273  0.035  0.101  0.260 -0.046    0.043   -0.067 0.163</span></span>
 <span><span class="co">#&gt; 15    0.008  0.001  0.003 -0.009 -0.070 -0.061   -0.070   -0.058 0.017</span></span>
-<span><span class="co">#&gt; 18   -0.023 -0.273  0.035  0.101  0.260 -0.046    0.043   -0.067 0.163</span></span></code></pre></div>
+<span><span class="co">#&gt; 4     0.006 -0.024 -0.003  0.022 -0.051 -0.044   -0.056   -0.070 0.014</span></span>
+<span><span class="co">#&gt; 1    -0.013  0.024 -0.030  0.052 -0.037  0.017   -0.061   -0.056 0.013</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - All stored cases are displayed.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 <p>If user supplied case IDs are used, then the value of
 <code>to_rerun</code> should be a vector of these case IDs:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -170,7 +184,7 @@ selected. This can be done using the argument <code>to_rerun</code> of
 <span>                                       <span class="st">"case4"</span>,</span>
 <span>                                       <span class="st">"case15"</span>,</span>
 <span>                                       <span class="st">"case18"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.44 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.46 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Only four reruns in the output. User supplied case IDs are used in
 the output:</p>
@@ -187,12 +201,20 @@ the output:</p>
 <span><span class="co">#&gt; Number of reruns that failed post.check of lavaan: 0</span></span>
 <span><span class="co">#&gt; Number of reruns that both converged and passed post.check: 4</span></span>
 <span><span class="co">#&gt; Number of reruns that either did not converge or failed post.check: 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;        iv1~~iv2 m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv iv1~~iv1 iv2~~iv2   gcd</span></span>
-<span><span class="co">#&gt; case1    -0.013  0.024 -0.030  0.052 -0.037  0.017   -0.061   -0.056 0.013</span></span>
-<span><span class="co">#&gt; case4     0.006 -0.024 -0.003  0.022 -0.051 -0.044   -0.056   -0.070 0.014</span></span>
+<span><span class="co">#&gt; case18   -0.023 -0.273  0.035  0.101  0.260 -0.046    0.043   -0.067 0.163</span></span>
 <span><span class="co">#&gt; case15    0.008  0.001  0.003 -0.009 -0.070 -0.061   -0.070   -0.058 0.017</span></span>
-<span><span class="co">#&gt; case18   -0.023 -0.273  0.035  0.101  0.260 -0.046    0.043   -0.067 0.163</span></span></code></pre></div>
+<span><span class="co">#&gt; case4     0.006 -0.024 -0.003  0.022 -0.051 -0.044   -0.056   -0.070 0.014</span></span>
+<span><span class="co">#&gt; case1    -0.013  0.024 -0.030  0.052 -0.037  0.017   -0.061   -0.056 0.013</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - All stored cases are displayed.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="mahalanobis-distance-on-residuals">Mahalanobis Distance on Residuals<a class="anchor" aria-label="anchor" href="#mahalanobis-distance-on-residuals"></a>
@@ -213,7 +235,7 @@ refitting a model.</p>
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          resid_md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.55 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.57 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -228,13 +250,21 @@ refitting a model.</p>
 <span><span class="co">#&gt; Number of reruns that failed post.check of lavaan: 0</span></span>
 <span><span class="co">#&gt; Number of reruns that both converged and passed post.check: 5</span></span>
 <span><span class="co">#&gt; Number of reruns that either did not converge or failed post.check: 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;        iv1~~iv2 m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv iv1~~iv1 iv2~~iv2   gcd</span></span>
 <span><span class="co">#&gt; case16   -0.019  0.052 -0.038 -0.237 -0.004  0.624   -0.049   -0.059 0.456</span></span>
 <span><span class="co">#&gt; case43    0.236 -0.403 -0.263 -0.135  0.223  0.120    0.195    0.030 0.407</span></span>
-<span><span class="co">#&gt; case61    0.004 -0.007 -0.021 -0.153  0.350 -0.031   -0.070   -0.070 0.157</span></span>
+<span><span class="co">#&gt; case65    0.133  0.152  0.191  0.363  0.076  0.161    0.000    0.046 0.241</span></span>
 <span><span class="co">#&gt; case85   -0.066 -0.174  0.216 -0.119  0.335 -0.052   -0.031   -0.011 0.214</span></span>
-<span><span class="co">#&gt; case65    0.133  0.152  0.191  0.363  0.076  0.161    0.000    0.046 0.241</span></span></code></pre></div>
+<span><span class="co">#&gt; case61    0.004 -0.007 -0.021 -0.153  0.350 -0.031   -0.070   -0.070 0.157</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - All stored cases are displayed.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 <p>Note that selecting cases by this method <em>can</em> miss some
 influential cases. As in multiple regression, a case that is influential
 on the results needs not be a case that is poorly predicted by the
@@ -252,7 +282,7 @@ this distance to be selected for refitting a model.</p>
 <code class="sourceCode R"><span><span class="va">rerun_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span>,</span>
 <span>                          md_top <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 0.55 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 0.57 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>Five cases were selected, as shown below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -267,13 +297,21 @@ this distance to be selected for refitting a model.</p>
 <span><span class="co">#&gt; Number of reruns that failed post.check of lavaan: 0</span></span>
 <span><span class="co">#&gt; Number of reruns that both converged and passed post.check: 5</span></span>
 <span><span class="co">#&gt; Number of reruns that either did not converge or failed post.check: 0</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">rerun_out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;        iv1~~iv2 m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv iv1~~iv1 iv2~~iv2   gcd</span></span>
-<span><span class="co">#&gt; case16   -0.019  0.052 -0.038 -0.237 -0.004  0.624   -0.049   -0.059 0.456</span></span>
 <span><span class="co">#&gt; case99    0.163  0.002  0.009  0.187 -0.070  0.033   -0.054    0.686 0.559</span></span>
+<span><span class="co">#&gt; case51   -0.130  0.421 -0.057  0.094  0.089 -0.044    0.525   -0.056 0.492</span></span>
+<span><span class="co">#&gt; case16   -0.019  0.052 -0.038 -0.237 -0.004  0.624   -0.049   -0.059 0.456</span></span>
 <span><span class="co">#&gt; case87   -0.419 -0.011  0.019  0.101 -0.070  0.000    0.096    0.457 0.413</span></span>
 <span><span class="co">#&gt; case43    0.236 -0.403 -0.263 -0.135  0.223  0.120    0.195    0.030 0.407</span></span>
-<span><span class="co">#&gt; case51   -0.130  0.421 -0.057  0.094  0.089 -0.044    0.525   -0.056 0.492</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - All stored cases are displayed.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 <p>Note that selecting cases by this method <em>can</em> miss some
 influential cases (Pek &amp; MacCallum, 2011). Unlike multiple
 regression, this distance is not a measure of leverage. For a path

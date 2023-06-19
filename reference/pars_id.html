@@ -4,7 +4,7 @@ lavaan syntax to the ids of parameters
 in the vector of free parameters or the row numbers
 in the parameter table."><title>Convert Parameter Syntax to Position
 or Row Numbers in the Parameter
-Vector or Table — pars_id • semfindr</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.5/font.css" rel="stylesheet"><link href="../deps/Chivo_Mono-0.4.5/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Convert Parameter Syntax to Position
+Vector or Table — pars_id • semfindr</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.6/font.css" rel="stylesheet"><link href="../deps/Chivo_Mono-0.4.6/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Convert Parameter Syntax to Position
 or Row Numbers in the Parameter
 Vector or Table — pars_id"><meta property="og:description" content="Converts a vector of
 lavaan syntax to the ids of parameters
@@ -20,7 +20,7 @@ in the parameter table."><meta property="og:image" content="https://sfcheung.git
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,16 +31,20 @@ in the parameter table."><meta property="og:image" content="https://sfcheung.git
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../articles/semfindr.html">Get started</a>
 </li>
-<li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>&lt;General&gt;</h6>
     <a class="dropdown-item" href="../articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
     <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
-    <a class="dropdown-item" href="../articles/user_id.html">Use Case IDs</a>
+    <a class="dropdown-item" href="../articles/user_id.html">Using Case IDs</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>&lt;Multiple-Group Models&gt;</h6>
+    <a class="dropdown-item" href="../articles/multiple_group.html">Illustration</a>
   </div>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -84,9 +88,12 @@ in the parameter table.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>pars</dt>
 <dd><p>A character vector of parameters specified
-in lavaan syntax, e.g., <code>"y ~ x"</code> and <code>f1 =~ x3</code>. Can
-mix specific parameters with operators. See the Details
-section.</p></dd>
+in lavaan syntax, e.g., <code>"y ~ x"</code> and <code>f1 =~ x3</code>. For
+multisample models, if only the parameters in some groups
+are needed, use the modifier for labeling parameters and
+use <code>NA</code> to denote parameters to be requested. E.g.,
+<code>f1 =~ c(NA, 0, NA, NA) * x2</code> denotes the loadings of
+<code>x2</code> on <code>f1</code> in the first, third, and fourth groups.</p></dd>
 
 
 <dt>fit</dt>
@@ -104,7 +111,7 @@ Default is "coef".</p></dd>
 
 
 <dt>free_only</dt>
-<dd><p>Wether only free parameters will be
+<dd><p>Whether only free parameters will be
 kept. Default is <code>TRUE</code>.</p></dd>
 
 </dl></div>
@@ -112,8 +119,9 @@ kept. Default is <code>TRUE</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A numeric vector of the ids in the column "free" in the
-parameter table of the fit object.</p>
+<p>A numeric vector of the ids. If <code>where</code> is <code>"partable"</code>,
+the ids are row numbers. If <code>where</code> is <code>"coef"</code>,
+the ids are the positions in the vector.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -123,9 +131,34 @@ regression <code>y</code> on <code>x</code>. It uses <code><a href="https://rdrr
 parse the syntax strings.</p></li>
 </ul></li>
 <li><p>Operator</p><ul><li><p>For example, <code>"~"</code> denotes all regression coefficients.</p></li>
+<li><p>It also supports <code>:=</code>, which can be used to select
+user-defined parameters.</p></li>
 </ul></li>
-</ul><p>It is used by function such as <code><a href="est_change.html">est_change()</a></code> and
-<code><a href="fit_measures_change.html">fit_measures_change()</a></code>.</p>
+<li><p>Label</p><ul><li><p>For example, <code>"ab"</code> denotes all parameters with this
+labels defined in model syntax. It can be used to
+select user-defined parameters, such as <code>"ab := a*b"</code>.</p></li>
+</ul></li>
+</ul><p>It is used by functions such as <code><a href="est_change.html">est_change()</a></code>.</p><div class="section">
+<h3 id="multisample-model">Multisample model<a class="anchor" aria-label="anchor" href="#multisample-model"></a></h3>
+
+
+<p>If a model has more than one group, a specification
+specified as in a single sample model denotes the same
+parameters in all group.</p><ul><li><p>For example, <code>"f1 =~ x2"</code> denote the factor loading of
+<code>x2</code> on <code>f1</code> in all groups. <code>"~~"</code> denotes covariances
+and error covariances in all groups.</p></li>
+</ul><p>There are two ways to select parameters only in selected
+groups. First, the syntax to fix parameter values
+can be used, with <code>NA</code> denoting parameters to be selected.</p><ul><li><p>For example, <code>"f2 =~ c(NA, 1, NA) * x5"</code> select the
+factor loadings of <code>x5</code> on <code>f2</code> in the first and third
+groups.</p></li>
+</ul><p>Users can also add ".grouplabel" to a specification,
+<code>grouplabel</code> being the group label of a group (the one
+appears in <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, not the one of the form <code>".g2"</code>,
+<code>"g3"</code>, etc.).</p><ul><li><p>For example, <code>"f2 =~ x5.Alpha"</code> denotes the factor loading
+of <code>x5</code> on <code>f2</code> in the group <code>"Alpha"</code>.</p></li>
+</ul></div>
+
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -164,6 +197,112 @@ parse the syntax strings.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.099</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.233</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Multiple-group models</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">sem_dat</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">64264</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat</span><span class="op">$</span><span class="va">gp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Alpha"</span>, <span class="st">"Beta"</span>, <span class="st">"Gamma"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sem_model</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">f1 =~  x1 + x2 + x3</span></span></span>
+<span class="r-in"><span><span class="st">f2 =~  x4 + x5 + x6</span></span></span>
+<span class="r-in"><span><span class="st">f3 =~  x7 + x8 + x9</span></span></span>
+<span class="r-in"><span><span class="st">f2 ~   f1</span></span></span>
+<span class="r-in"><span><span class="st">f3 ~   f2</span></span></span>
+<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit_ng</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">sem_model</span>, <span class="va">dat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_gp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">sem_model</span>, <span class="va">dat</span>, group <span class="op">=</span> <span class="st">"gp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f1 =~ x2"</span>, <span class="st">"f2 =~ x5"</span>, <span class="st">"f2 ~ f1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars</span>, fit <span class="op">=</span> <span class="va">fit_ng</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_ng</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    f1=~x2    f2=~x5     f2~f1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5895183 0.7299536 1.1145114 </span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars</span>, fit <span class="op">=</span> <span class="va">fit_ng</span>, where <span class="op">=</span> <span class="st">"partable"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavParTable.html" class="external-link">parameterTable</a></span><span class="op">(</span><span class="va">fit_ng</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span>, <span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id lhs op rhs user block group free ustart exo label plabel start   est</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2  f1 =~  x2    1     1     1    1     NA   0         .p2. 0.684 0.590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5  f2 =~  x5    1     1     1    3     NA   0         .p5. 0.978 0.730</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 10  f2  ~  f1    1     1     1    7     NA   0        .p10. 0.000 1.115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.099</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 0.233</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f1 =~ x2"</span>, <span class="st">"f2 =~ c(NA, 1, NA) * x5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars</span>, fit <span class="op">=</span> <span class="va">fit_gp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_gp</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    f1=~x2    f2=~x5 f1=~x2.g2 f1=~x2.g3 f2=~x5.g3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4503424 0.8397750 0.6869992 1.6257211 0.4857651 </span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars</span>, fit <span class="op">=</span> <span class="va">fit_gp</span>, where <span class="op">=</span> <span class="st">"partable"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavParTable.html" class="external-link">parameterTable</a></span><span class="op">(</span><span class="va">fit_gp</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span>, <span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id lhs op rhs user block group free ustart exo label plabel start   est</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2  f1 =~  x2    1     1     1    1     NA   0         .p2. 0.453 0.450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5  f2 =~  x5    1     1     1    3     NA   0         .p5. 0.578 0.840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 37  f1 =~  x2    1     2     2   30     NA   0        .p37. 0.538 0.687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72 72  f1 =~  x2    1     3     3   59     NA   0        .p72. 1.703 1.626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75 75  f2 =~  x5    1     3     3   61     NA   0        .p75. 1.210 0.486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 0.218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72 1.114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75 0.155</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pars2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"f1 =~ x2"</span>, <span class="st">"~~.Beta"</span>, <span class="st">"f2 =~ x5.Gamma"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars2</span>, fit <span class="op">=</span> <span class="va">fit_gp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit_gp</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     f1=~x2     x1~~x1     x2~~x2     x3~~x3     x4~~x4     x5~~x5     x6~~x6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.45034240 1.14251961 0.96797675 0.74202425 0.63334211 0.72245573 0.98337279 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     x7~~x7     x8~~x8     x9~~x9     f1~~f1     f2~~f2     f3~~f3  f1=~x2.g2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.15545837 1.12337264 1.06251947 1.01524121 0.66420675 0.08588945 0.68699918 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  f1=~x2.g3  f2=~x5.g3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.62572111 0.48576515 </span>
+<span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu">pars_id</span><span class="op">(</span><span class="va">pars2</span>, fit <span class="op">=</span> <span class="va">fit_gp</span>, where <span class="op">=</span> <span class="st">"partable"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavParTable.html" class="external-link">parameterTable</a></span><span class="op">(</span><span class="va">fit_gp</span><span class="op">)</span><span class="op">[</span><span class="va">tmp</span>, <span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id lhs op rhs user block group free ustart exo label plabel start   est</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2  f1 =~  x2    1     1     1    1     NA   0         .p2. 0.453 0.450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 12  x1 ~~  x1    0     1     1    9     NA   0        .p12. 1.079 1.143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 13  x2 ~~  x2    0     1     1   10     NA   0        .p13. 0.587 0.968</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 14  x3 ~~  x3    0     1     1   11     NA   0        .p14. 0.656 0.742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 15  x4 ~~  x4    0     1     1   12     NA   0        .p15. 1.122 0.633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 16  x5 ~~  x5    0     1     1   13     NA   0        .p16. 0.929 0.722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 17  x6 ~~  x6    0     1     1   14     NA   0        .p17. 0.630 0.983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 18  x7 ~~  x7    0     1     1   15     NA   0        .p18. 0.639 1.155</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 19  x8 ~~  x8    0     1     1   16     NA   0        .p19. 0.926 1.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 20  x9 ~~  x9    0     1     1   17     NA   0        .p20. 1.012 1.063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 21  f1 ~~  f1    0     1     1   18     NA   0        .p21. 0.050 1.015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 22  f2 ~~  f2    0     1     1   19     NA   0        .p22. 0.050 0.664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 23  f3 ~~  f3    0     1     1   20     NA   0        .p23. 0.050 0.086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 37  f1 =~  x2    1     2     2   30     NA   0        .p37. 0.538 0.687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72 72  f1 =~  x2    1     3     3   59     NA   0        .p72. 1.703 1.626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75 75  f2 =~  x5    1     3     3   61     NA   0        .p75. 1.210 0.486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 0.289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0.175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.175</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0.225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 0.188</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0.173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0.303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 0.357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 0.293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0.080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 0.218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72 1.114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75 0.155</span>
+<span class="r-in"><span><span class="co"># Note that group 1 is "Beta", not "Alpha"</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect</a></span><span class="op">(</span><span class="va">fit_gp</span>, <span class="st">"group.label"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Beta"  "Alpha" "Gamma"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

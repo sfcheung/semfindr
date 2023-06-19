@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Chivo_Mono-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Chivo_Mono-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Approximate Case Influence Using Scores and Casewise Likelihood">
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,16 +47,20 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/semfindr.html">Get started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>&lt;General&gt;</h6>
     <a class="dropdown-item" href="../articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
     <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
-    <a class="dropdown-item" href="../articles/user_id.html">Use Case IDs</a>
+    <a class="dropdown-item" href="../articles/user_id.html">Using Case IDs</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>&lt;Multiple-Group Models&gt;</h6>
+    <a class="dropdown-item" href="../articles/multiple_group.html">Illustration</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -87,7 +91,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Approximate Case Influence Using Scores and Casewise Likelihood</h1>
             
-            <h4 data-toc-skip class="date">2023-03-18</h4>
+            <h4 data-toc-skip class="date">2023-06-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/HEAD/vignettes/casewise_scores.Rmd" class="external-link"><code>vignettes/casewise_scores.Rmd</code></a></small>
       <div class="d-none name"><code>casewise_scores.Rmd</code></div>
@@ -95,11 +99,11 @@
 
     
     
-<p>This vignette explains the computational shortcut implemented in
-<code>semfindr</code> to approximate the casewise influence. The
-approximation is most beneficial when the sample size <em>N</em> is
-large, where the approximation works better and the computational cost
-for refitting models <em>N</em> times is high.</p>
+<p>This vignette explains the computational shortcut implemented in <a href="https://sfcheung.github.io/semfindr/">semfindr</a> to approximate
+the casewise influence. The approximation is most beneficial when the
+sample size <em>N</em> is large, where the approximation works better
+and the computational cost for refitting models <em>N</em> times is
+high.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span></span></code></pre></div>
@@ -171,14 +175,26 @@ described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="ext
 <code><a href="../reference/est_change_raw_approx.html">est_change_raw_approx()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw_approx.html">est_change_raw_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          m1~iv1        m1~iv2        dv~m1       m1~~m1       dv~~dv</span></span>
-<span><span class="co">#&gt; 1  0.0025826195 -2.987160e-03  0.005478785 -0.004783799  0.003015677</span></span>
-<span><span class="co">#&gt; 2  0.0007581403  3.411181e-04 -0.001383390 -0.008744342 -0.011010937</span></span>
-<span><span class="co">#&gt; 3 -0.0039693069 -3.914928e-03 -0.003154241 -0.008240420 -0.008525904</span></span>
-<span><span class="co">#&gt; 4 -0.0025450320 -3.118916e-04  0.002296162 -0.006671599 -0.008331854</span></span>
-<span><span class="co">#&gt; 5  0.0070027557  2.748024e-03  0.003450422  0.006144848 -0.012529327</span></span>
-<span><span class="co">#&gt; 6  0.0004248632  9.671545e-05  0.001008609 -0.008958217 -0.010293608</span></span></code></pre></div>
+<span><span class="va">fit_est_change_approx</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Approximate Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    id m1~iv1  id m1~iv2 id  dv~m1  id m1~~m1 id dv~~dv</span></span>
+<span><span class="co">#&gt; 1  51  0.042  43 -0.025 65  0.037  61  0.042 16  0.106</span></span>
+<span><span class="co">#&gt; 2  43 -0.040  94  0.023 11 -0.027  85  0.040  9  0.050</span></span>
+<span><span class="co">#&gt; 3  34 -0.032 100 -0.022 16 -0.024 100  0.037 76  0.049</span></span>
+<span><span class="co">#&gt; 4  18 -0.028  85  0.021 32 -0.020  18  0.031 25  0.049</span></span>
+<span><span class="co">#&gt; 5  13  0.028  20  0.020 99  0.020  42  0.028 91  0.043</span></span>
+<span><span class="co">#&gt; 6  32 -0.025  32  0.019 79  0.018  43  0.025 17  0.039</span></span>
+<span><span class="co">#&gt; 7  20 -0.024  65  0.019 93  0.018  32  0.023 26  0.028</span></span>
+<span><span class="co">#&gt; 8  75  0.021  34 -0.018 22  0.017  34  0.022 65  0.027</span></span>
+<span><span class="co">#&gt; 9  42 -0.020  64 -0.016 61 -0.016  40  0.022 62  0.027</span></span>
+<span><span class="co">#&gt; 10 68  0.018  52  0.016 25 -0.015  20  0.022 90  0.024</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are approximate raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by the absolute changes for each variable.</span></span></code></pre></div>
 <p>Here is a comparison between the approximation using
 <code><a href="../reference/est_change_raw_approx.html">semfindr::est_change_raw_approx()</a></code> and
 <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code></p>
@@ -217,14 +233,26 @@ described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="ext
 function:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_approx.html">est_change_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_est_change_approx</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         m1~iv1       m1~iv2        dv~m1      m1~~m1      dv~~dv  gcd_approx</span></span>
-<span><span class="co">#&gt; 1  0.024713396 -0.030383580  0.052370026 -0.03784100  0.01630488 0.005850455</span></span>
-<span><span class="co">#&gt; 2  0.007254736  0.003469647 -0.013223396 -0.06916983 -0.05953293 0.008312026</span></span>
-<span><span class="co">#&gt; 3 -0.037982774 -0.039820283 -0.030150418 -0.06518369 -0.04609708 0.009904544</span></span>
-<span><span class="co">#&gt; 4 -0.024353717 -0.003172373  0.021948305 -0.05277394 -0.04504791 0.005719499</span></span>
-<span><span class="co">#&gt; 5  0.067010210  0.027951233  0.032981527  0.04860722 -0.06774242 0.012793226</span></span>
-<span><span class="co">#&gt; 6  0.004065567  0.000983731  0.009640981 -0.07086163 -0.05565453 0.007984573</span></span></code></pre></div>
+<span><span class="va">fit_est_change_approx</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Approximate Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv gcd_approx</span></span>
+<span><span class="co">#&gt; 16   0.052 -0.038 -0.228 -0.006  0.572      0.372</span></span>
+<span><span class="co">#&gt; 43  -0.387 -0.249 -0.135  0.201  0.116      0.270</span></span>
+<span><span class="co">#&gt; 65   0.150  0.189  0.355  0.071  0.148      0.203</span></span>
+<span><span class="co">#&gt; 85  -0.170  0.211 -0.118  0.315 -0.054      0.187</span></span>
+<span><span class="co">#&gt; 51   0.405 -0.052  0.094  0.075 -0.046      0.179</span></span>
+<span><span class="co">#&gt; 34  -0.306 -0.186 -0.110  0.176  0.028      0.163</span></span>
+<span><span class="co">#&gt; 32  -0.241  0.190 -0.189  0.181 -0.002      0.161</span></span>
+<span><span class="co">#&gt; 20  -0.234  0.199 -0.140  0.172 -0.034      0.144</span></span>
+<span><span class="co">#&gt; 18  -0.269  0.035  0.101  0.246 -0.048      0.143</span></span>
+<span><span class="co">#&gt; 100 -0.001 -0.221 -0.069  0.290 -0.058      0.137</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are approximate standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by approximate generalized Cook's distance.</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare to exact computation</span></span>
 <span><span class="va">fit_est_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
@@ -321,10 +349,6 @@ comparison:</p>
 <li><p>The approximate approach is tested only for models fitted by
 maximum likelihood (ML) with normal theory standard errors (the
 default).</p></li>
-<li><p>The approximate approach does not yet support a model with one or
-more equality constraints.</p></li>
-<li><p>The approximate approach does not yet support multisample
-models.</p></li>
 <li><p>The approximate approach does not yet support multilevel
 models.</p></li>
 </ul>

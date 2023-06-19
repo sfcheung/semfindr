@@ -13,6 +13,9 @@
     <loc>https://sfcheung.github.io/semfindr/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/semfindr/articles/multiple_group.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/semfindr/articles/selecting_cases.html</loc>
   </url>
   <url>
@@ -41,6 +44,9 @@
   </url>
   <url>
     <loc>https://sfcheung.github.io/semfindr/reference/cfa_dat_heywood.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/cfa_dat_mg.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/semfindr/reference/est_change.html</loc>
@@ -100,7 +106,19 @@
     <loc>https://sfcheung.github.io/semfindr/reference/pars_id_to_lorg.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/print.est_change.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/print.fit_measures_change.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/print.influence_stat.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/semfindr/reference/print.lavaan_rerun.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semfindr/reference/print.md_semfindr.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/semfindr/reference/sem_dat.html</loc>

@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Chivo_Mono-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Chivo_Mono-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Use Case IDs">
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,16 +47,20 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/semfindr.html">Get started</a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>&lt;General&gt;</h6>
     <a class="dropdown-item" href="../articles/casewise_scores.html">Approximate Case Influence Using Scores and Casewise Likelihood</a>
     <a class="dropdown-item" href="../articles/selecting_cases.html">Selecting Cases In lavaan_rerun</a>
-    <a class="dropdown-item" href="../articles/user_id.html">Use Case IDs</a>
+    <a class="dropdown-item" href="../articles/user_id.html">Using Case IDs</a>
+    <div class="dropdown-divider"></div>
+    <h6 class="dropdown-header" data-toc-skip>&lt;Multiple-Group Models&gt;</h6>
+    <a class="dropdown-item" href="../articles/multiple_group.html">Illustration</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -95,8 +99,10 @@
     
     
 <p>Instead of using row numbers (<code>case.idx</code> in the
-<code>lavaan</code> object), <code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> supports user
-supplied case IDs. This can make the output more readable.</p>
+<code>lavaan</code> object), <code><a href="../reference/lavaan_rerun.html">lavaan_rerun()</a></code> from the
+package <a href="https://sfcheung.github.io/semfindr/">semfindr</a>
+supports user supplied case IDs. This can make the output more
+readable.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span></span>
@@ -135,7 +141,7 @@ Although the <code>id</code> column is not stored in
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">$</span><span class="va">rerun</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $case1</span></span>
-<span><span class="co">#&gt; lavaan 0.6.9 ended normally after 11 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.6.15 ended normally after 2 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -149,8 +155,8 @@ Although the <code>id</code> column is not stored in
 <span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
 <span><span class="co">#&gt;   P-value (Chi-square)                           0.038</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $case2</span></span>
-<span><span class="co">#&gt; lavaan 0.6.9 ended normally after 11 iterations</span></span>
+<span><span class="co">#&gt; $case10</span></span>
+<span><span class="co">#&gt; lavaan 0.6.15 ended normally after 1 iteration</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -160,12 +166,12 @@ Although the <code>id</code> column is not stored in
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Test User Model:</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
-<span><span class="co">#&gt;   Test statistic                                 6.731</span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.015</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.035</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.049</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $case3</span></span>
-<span><span class="co">#&gt; lavaan 0.6.9 ended normally after 11 iterations</span></span>
+<span><span class="co">#&gt; $case100</span></span>
+<span><span class="co">#&gt; lavaan 0.6.15 ended normally after 1 iteration</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -175,9 +181,9 @@ Although the <code>id</code> column is not stored in
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model Test User Model:</span></span>
 <span><span class="co">#&gt;                                                       </span></span>
-<span><span class="co">#&gt;   Test statistic                                 7.128</span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.620</span></span>
 <span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
-<span><span class="co">#&gt;   P-value (Chi-square)                           0.028</span></span></code></pre></div>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.037</span></span></code></pre></div>
 <p>As shown below, most diagnostic functions will use user supplied case
 IDs in their displays, making it easier to locate them in the original
 data set.</p>
@@ -190,52 +196,102 @@ data set.</p>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_est_change</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
-<span><span class="co">#&gt; case1  0.024 -0.030  0.052 -0.037  0.017 0.006</span></span>
-<span><span class="co">#&gt; case2  0.007  0.003 -0.013 -0.067 -0.058 0.008</span></span>
-<span><span class="co">#&gt; case3 -0.038 -0.040 -0.030 -0.063 -0.045 0.010</span></span>
-<span><span class="co">#&gt; case4 -0.024 -0.003  0.022 -0.051 -0.044 0.006</span></span>
-<span><span class="co">#&gt; case5  0.067  0.028  0.033  0.050 -0.066 0.013</span></span>
-<span><span class="co">#&gt; case6  0.004  0.001  0.010 -0.069 -0.054 0.008</span></span></code></pre></div>
+<span><span class="va">fit_est_change</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
+<span><span class="co">#&gt; case16   0.052 -0.038 -0.237 -0.004  0.624 0.450</span></span>
+<span><span class="co">#&gt; case43  -0.403 -0.263 -0.135  0.223  0.120 0.302</span></span>
+<span><span class="co">#&gt; case65   0.152  0.191  0.363  0.076  0.161 0.221</span></span>
+<span><span class="co">#&gt; case85  -0.174  0.216 -0.119  0.335 -0.052 0.208</span></span>
+<span><span class="co">#&gt; case51   0.421 -0.057  0.094  0.089 -0.044 0.200</span></span>
+<span><span class="co">#&gt; case34  -0.314 -0.192 -0.109  0.189  0.030 0.178</span></span>
+<span><span class="co">#&gt; case32  -0.247  0.195 -0.191  0.193  0.001 0.175</span></span>
+<span><span class="co">#&gt; case18  -0.273  0.035  0.101  0.260 -0.046 0.156</span></span>
+<span><span class="co">#&gt; case20  -0.239  0.204 -0.141  0.183 -0.032 0.156</span></span>
+<span><span class="co">#&gt; case100 -0.001 -0.225 -0.069  0.305 -0.056 0.152</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_paths_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
 <span>                                parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1 ~ iv1"</span>,</span>
 <span>                                               <span class="st">"m1 ~ iv2"</span>,</span>
 <span>                                               <span class="st">"dv ~ m1"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_est_change_paths_only</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       m1~iv1 m1~iv2  dv~m1   gcd</span></span>
-<span><span class="co">#&gt; case1  0.024 -0.030  0.052 0.004</span></span>
-<span><span class="co">#&gt; case2  0.007  0.003 -0.013 0.000</span></span>
-<span><span class="co">#&gt; case3 -0.038 -0.040 -0.030 0.004</span></span>
-<span><span class="co">#&gt; case4 -0.024 -0.003  0.022 0.001</span></span>
-<span><span class="co">#&gt; case5  0.067  0.028  0.033 0.006</span></span></code></pre></div>
+<span><span class="va">fit_est_change_paths_only</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        m1~iv1 m1~iv2  dv~m1   gcd</span></span>
+<span><span class="co">#&gt; case43 -0.403 -0.263 -0.135 0.238</span></span>
+<span><span class="co">#&gt; case51  0.421 -0.057  0.094 0.190</span></span>
+<span><span class="co">#&gt; case65  0.152  0.191  0.363 0.189</span></span>
+<span><span class="co">#&gt; case34 -0.314 -0.192 -0.109 0.142</span></span>
+<span><span class="co">#&gt; case32 -0.247  0.195 -0.191 0.138</span></span>
+<span><span class="co">#&gt; case20 -0.239  0.204 -0.141 0.121</span></span>
+<span><span class="co">#&gt; case85 -0.174  0.216 -0.119 0.093</span></span>
+<span><span class="co">#&gt; case11  0.010  0.149 -0.257 0.088</span></span>
+<span><span class="co">#&gt; case18 -0.273  0.035  0.101 0.087</span></span>
+<span><span class="co">#&gt; case13  0.274  0.059 -0.068 0.082</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="raw-changes-in-estimates">Raw Changes in Estimates<a class="anchor" aria-label="anchor" href="#raw-changes-in-estimates"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_est_change_raw</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv</span></span>
-<span><span class="co">#&gt; case1  0.003 -0.003  0.005 -0.005  0.003</span></span>
-<span><span class="co">#&gt; case2  0.001  0.000 -0.001 -0.009 -0.011</span></span>
-<span><span class="co">#&gt; case3 -0.004 -0.004 -0.003 -0.008 -0.008</span></span>
-<span><span class="co">#&gt; case4 -0.003  0.000  0.002 -0.007 -0.008</span></span>
-<span><span class="co">#&gt; case5  0.007  0.003  0.004  0.006 -0.013</span></span></code></pre></div>
+<span><span class="va">fit_est_change_raw</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        id m1~iv1      id m1~iv2     id  dv~m1      id m1~~m1     id dv~~dv</span></span>
+<span><span class="co">#&gt; 1  case51  0.046  case43 -0.026 case65  0.039  case61  0.043 case16  0.108</span></span>
+<span><span class="co">#&gt; 2  case43 -0.043  case94  0.024 case11 -0.027  case85  0.041  case9  0.051</span></span>
+<span><span class="co">#&gt; 3  case34 -0.033 case100 -0.022 case16 -0.024 case100  0.038 case76  0.050</span></span>
+<span><span class="co">#&gt; 4  case13  0.030  case85  0.021 case32 -0.021  case18  0.032 case25  0.050</span></span>
+<span><span class="co">#&gt; 5  case18 -0.029  case20  0.020 case99  0.020  case42  0.029 case91  0.043</span></span>
+<span><span class="co">#&gt; 6  case32 -0.026  case32  0.019 case79  0.019  case43  0.028 case17  0.039</span></span>
+<span><span class="co">#&gt; 7  case20 -0.025  case65  0.019 case93  0.018  case32  0.024 case65  0.030</span></span>
+<span><span class="co">#&gt; 8  case75  0.021  case34 -0.019 case22  0.017  case34  0.024 case26  0.029</span></span>
+<span><span class="co">#&gt; 9  case42 -0.020  case64 -0.017 case61 -0.017  case20  0.023 case62  0.027</span></span>
+<span><span class="co">#&gt; 10 case68  0.020  case52  0.016 case25 -0.015  case40  0.023 case90  0.024</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by the absolute changes for each variable.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mahalanobis-distance">Mahalanobis Distance<a class="anchor" aria-label="anchor" href="#mahalanobis-distance"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mahalanobis_rerun.html">mahalanobis_rerun</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_md</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          md</span></span>
-<span><span class="co">#&gt; case1 1.911</span></span>
-<span><span class="co">#&gt; case2 0.444</span></span>
-<span><span class="co">#&gt; case3 3.787</span></span>
-<span><span class="co">#&gt; case4 1.065</span></span>
-<span><span class="co">#&gt; case5 1.980</span></span></code></pre></div>
+<span><span class="va">fit_md</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Mahalanobis Distance --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            md</span></span>
+<span><span class="co">#&gt; case16 11.530</span></span>
+<span><span class="co">#&gt; case99 11.312</span></span>
+<span><span class="co">#&gt; case87 11.091</span></span>
+<span><span class="co">#&gt; case43 10.181</span></span>
+<span><span class="co">#&gt; case51  9.869</span></span>
+<span><span class="co">#&gt; case13  8.476</span></span>
+<span><span class="co">#&gt; case91  8.078</span></span>
+<span><span class="co">#&gt; case71  7.757</span></span>
+<span><span class="co">#&gt; case17  7.555</span></span>
+<span><span class="co">#&gt; case68  7.472</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by Mahalanobis distance in decreasing order.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="changes-in-fit-measures">Changes in Fit Measures<a class="anchor" aria-label="anchor" href="#changes-in-fit-measures"></a>
@@ -243,32 +299,85 @@ data set.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change.html">fit_measures_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
 <span>            fit_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chisq"</span>, <span class="st">"cfi"</span>, <span class="st">"tli"</span>, <span class="st">"rmsea"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_mc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        chisq    cfi    tli  rmsea</span></span>
-<span><span class="co">#&gt; case1  0.154 -0.002 -0.005  0.002</span></span>
-<span><span class="co">#&gt; case2 -0.019  0.001  0.003 -0.001</span></span>
-<span><span class="co">#&gt; case3 -0.417  0.008  0.021 -0.007</span></span>
-<span><span class="co">#&gt; case4 -0.154  0.004  0.009 -0.003</span></span>
-<span><span class="co">#&gt; case5  0.097  0.000  0.001  0.001</span></span></code></pre></div>
+<span><span class="va">fit_mc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Fit Measures --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;          chisq    cfi    tli  rmsea</span></span>
+<span><span class="co">#&gt; case1    0.154 -0.002 -0.005  0.002</span></span>
+<span><span class="co">#&gt; case10   0.697 -0.013 -0.033  0.011</span></span>
+<span><span class="co">#&gt; case100  0.092 -0.006 -0.015  0.001</span></span>
+<span><span class="co">#&gt; case11   0.083 -0.002 -0.005  0.001</span></span>
+<span><span class="co">#&gt; case12   0.173 -0.003 -0.007  0.002</span></span>
+<span><span class="co">#&gt; case13  -0.909  0.020  0.050 -0.015</span></span>
+<span><span class="co">#&gt; case14  -0.239  0.004  0.011 -0.005</span></span>
+<span><span class="co">#&gt; case15   0.047  0.000  0.000  0.000</span></span>
+<span><span class="co">#&gt; case16  -1.533  0.019  0.048 -0.024</span></span>
+<span><span class="co">#&gt; case17  -1.591  0.027  0.066 -0.025</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="all-in-one-function">All-In-One-Function<a class="anchor" aria-label="anchor" href="#all-in-one-function"></a>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_influence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">fit_influence</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        chisq    cfi  rmsea    tli m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
-<span><span class="co">#&gt; case1  0.154 -0.002  0.002 -0.005  0.024 -0.030  0.052 -0.037  0.017 0.006</span></span>
-<span><span class="co">#&gt; case2 -0.019  0.001 -0.001  0.003  0.007  0.003 -0.013 -0.067 -0.058 0.008</span></span>
-<span><span class="co">#&gt; case3 -0.417  0.008 -0.007  0.021 -0.038 -0.040 -0.030 -0.063 -0.045 0.010</span></span>
-<span><span class="co">#&gt; case4 -0.154  0.004 -0.003  0.009 -0.024 -0.003  0.022 -0.051 -0.044 0.006</span></span>
-<span><span class="co">#&gt; case5  0.097  0.000  0.001  0.001  0.067  0.028  0.033  0.050 -0.066 0.013</span></span>
-<span><span class="co">#&gt;          md</span></span>
-<span><span class="co">#&gt; case1 1.911</span></span>
-<span><span class="co">#&gt; case2 0.444</span></span>
-<span><span class="co">#&gt; case3 3.787</span></span>
-<span><span class="co">#&gt; case4 1.065</span></span>
-<span><span class="co">#&gt; case5 1.980</span></span></code></pre></div>
+<span><span class="va">fit_influence</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
+<span><span class="co">#&gt; case16   0.052 -0.038 -0.237 -0.004  0.624 0.450</span></span>
+<span><span class="co">#&gt; case43  -0.403 -0.263 -0.135  0.223  0.120 0.302</span></span>
+<span><span class="co">#&gt; case65   0.152  0.191  0.363  0.076  0.161 0.221</span></span>
+<span><span class="co">#&gt; case85  -0.174  0.216 -0.119  0.335 -0.052 0.208</span></span>
+<span><span class="co">#&gt; case51   0.421 -0.057  0.094  0.089 -0.044 0.200</span></span>
+<span><span class="co">#&gt; case34  -0.314 -0.192 -0.109  0.189  0.030 0.178</span></span>
+<span><span class="co">#&gt; case32  -0.247  0.195 -0.191  0.193  0.001 0.175</span></span>
+<span><span class="co">#&gt; case18  -0.273  0.035  0.101  0.260 -0.046 0.156</span></span>
+<span><span class="co">#&gt; case20  -0.239  0.204 -0.141  0.183 -0.032 0.156</span></span>
+<span><span class="co">#&gt; case100 -0.001 -0.225 -0.069  0.305 -0.056 0.152</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Fit Measures --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;          chisq    cfi  rmsea    tli</span></span>
+<span><span class="co">#&gt; case1    0.154 -0.002  0.002 -0.005</span></span>
+<span><span class="co">#&gt; case10   0.697 -0.013  0.011 -0.033</span></span>
+<span><span class="co">#&gt; case100  0.092 -0.006  0.001 -0.015</span></span>
+<span><span class="co">#&gt; case11   0.083 -0.002  0.001 -0.005</span></span>
+<span><span class="co">#&gt; case12   0.173 -0.003  0.002 -0.007</span></span>
+<span><span class="co">#&gt; case13  -0.909  0.020 -0.015  0.050</span></span>
+<span><span class="co">#&gt; case14  -0.239  0.004 -0.005  0.011</span></span>
+<span><span class="co">#&gt; case15   0.047  0.000  0.000  0.000</span></span>
+<span><span class="co">#&gt; case16  -1.533  0.019 -0.024  0.048</span></span>
+<span><span class="co">#&gt; case17  -1.591  0.027 -0.025  0.066</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Mahalanobis Distance --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            md</span></span>
+<span><span class="co">#&gt; case16 11.530</span></span>
+<span><span class="co">#&gt; case99 11.312</span></span>
+<span><span class="co">#&gt; case87 11.091</span></span>
+<span><span class="co">#&gt; case43 10.181</span></span>
+<span><span class="co">#&gt; case51  9.869</span></span>
+<span><span class="co">#&gt; case13  8.476</span></span>
+<span><span class="co">#&gt; case91  8.078</span></span>
+<span><span class="co">#&gt; case71  7.757</span></span>
+<span><span class="co">#&gt; case17  7.555</span></span>
+<span><span class="co">#&gt; case68  7.472</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by Mahalanobis distance in decreasing order.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
