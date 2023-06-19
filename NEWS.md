@@ -1,46 +1,34 @@
-# semfindr 0.1.4.25
+# semfindr 0.1.5
 
-- Fixed the pkgdown site. (0.1.4.1)
-- Check whether a model has at least one equality constraint
-  and the selected parameters are involved in the constraint(s).
-  If yes, *gCD* will not be computed. (0.1.4.2)
-- `approx_check()` will check if the model has at least one
-  equality constraint. (0.1.4.2)
-- Added a "Limitations" section to the vignette of the
-  approximate approach. (0.1.4.2)
+## New Features
+
 - Added a print method for the output of `est_change()`,
   `est_change_raw()`, `est_change_approx()`, and
-  `est_change_raw_approx()`. (0.1.4.3)
+  `est_change_raw_approx()`. (0.1.4.3, 0.1.4.16, 0.1.4.18,
+  0.1.4.19, 0.1.4.20)
 - Added a print method for the output of `fit_measures_change()`
-  and `fit_measures_change_approx()`. (0.1.4.4)
-- Added a print method for the output of `mahalanobis_rerun()`.
-  (0.1.4.5)
-- Updated the print method of `md_semfindr` to
-  support the output of `mahalanobis_predictors()`.
-  (0.1.4.6)
+  and `fit_measures_change_approx()`. (0.1.4.4, 0.1.4.16)
+- Added a print method for the output of `mahalanobis_rerun()`
+  and `mahalanobis_predictors()` (0.1.4.5-0.1.4.6, 0.1.4.16, 0.1.4.18)
 - Added a print method for the output of `influence_stat()`.
   (0.1.4.7)
 - Provided initial support for multiple-group models
   and models with linearity constraints. (0.1.4.8 - 0.1.4.14)
-- Fixed the documentation of `pars_id()`. (0.1.4.12)
 - Added support for labels and `":="` to `pars_id()`. (0.1.4.13)
+
+## Others
+
+- Fixed the `pkgdown` site. (0.1.4.1)
+- `approx_check()` will check if the model has at least one
+  equality constraint. (0.1.4.2)
+- Added a "Limitations" section to the vignette of the
+  approximate approach. (0.1.4.2)
+- Fixed the documentation of `pars_id()`. (0.1.4.12)
 - Added an article for multiple-group models. (0.1.4.15)
 - Restructured articles and references in the `pgkdown`
   websites. (0.1.4.15)
-- Changed the default number of cases to printed to 10
-  for the print methods of `est_change`, `influence_stat`,
-  `md_semfindr`, and `fit_measures_change` objects. (0.1.4.16)
 - In `print.lavaan_rerun()`, keep the format of lavaan
   warnings. (0.1.4.17)
-- In `print.est_change()`, cases are still sorted by
-  gCD even if it is NA for some cases. (0.1.4.18)
-- In `print.md_semfindr()`, cases are still sorted by
-  even if MD is NA for some cases. (0.1.4.18)
-- Revised `print.est_change()` to make its interface
-  similar to that of `print.fit_measures_change()`. (0.1.4.19)
-- Revised plot functions of `est_change()` and friends. They
-  now work properly for the output of `influence_stat()`.
-  (0.1.4.20)
 - Remark that `fit_measures_change_approx()` only supports
   selected fit measures. (0.1.4.21)
 - Add `cutoff_change` and `largest_change` to
