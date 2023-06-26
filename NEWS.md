@@ -1,3 +1,8 @@
+# semfindr 0.1.5.1
+
+- Fixed typos in the article on
+  multiple-group models. (0.1.5.1)
+
 # semfindr 0.1.5
 
 ## New Features
