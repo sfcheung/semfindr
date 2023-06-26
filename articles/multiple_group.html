@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Sensitivity Analysis in Multiple-Group Models</h1>
             
-            <h4 data-toc-skip class="date">2023-06-19</h4>
+            <h4 data-toc-skip class="date">2023-06-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/HEAD/vignettes/articles/multiple_group.Rmd" class="external-link"><code>vignettes/articles/multiple_group.Rmd</code></a></small>
       <div class="d-none name"><code>multiple_group.Rmd</code></div>
@@ -184,7 +184,7 @@ item intercepts constrained to be equal across groups:</p>
 <span><span class="co">##            Df    AIC    BIC  Chisq Chisq diff RMSEA Df diff Pr(&gt;Chisq)</span></span>
 <span><span class="co">## fit_config 16 1878.3 1977.3 30.454                                    </span></span>
 <span><span class="co">## fit_strong 24 1866.2 1944.3 34.357      3.903     0       8     0.8658</span></span></code></pre>
-<p>The tests does not reject both strong invariance and weak
+<p>The tests do not reject both strong invariance and weak
 invariance.</p>
 <p>These are the fit measures of the three models:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -221,12 +221,12 @@ only 100 cases, we do not have to use parallel processing. The model is
 fitted 100 times, each time with one case removed:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 14.6 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 23.7 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <p>Not shown here, but it is possible that a model may fail to converge
-or have inadmissible solution if removed. This is especially the case
+or have inadmissible solutions if removed. This is especially the case
 for models with constraints. The function will report cases leading to
-nonconvergence or inadmissible solution. Influence measures will not be
+nonconvergence or inadmissible solutions. Influence measures will not be
 computed for these cases.</p>
 </div>
 <div class="section level4">
@@ -273,13 +273,13 @@ belongs to.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">md_plot</a></span><span class="op">(</span><span class="va">inf_config</span>,</span>
 <span>        largest_md <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multiple_group_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<p>Case 77 and 100 are high on Mahalanobis distance. However, the
+<p>Cases 77 and 100 are high on Mahalanobis distance. However, the
 differences from other cases are not substantially large.</p>
 </div>
 <div class="section level4">
 <h4 id="case-influence-on-fit-measures">Case Influence on Fit Measures<a class="anchor" aria-label="anchor" href="#case-influence-on-fit-measures"></a>
 </h4>
-<p>We than examine case influence on fit measures, sorted by model
+<p>We then examine case influence on fit measures, sorted by model
 chi-squares:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">inf_config</span>,</span>
@@ -299,7 +299,7 @@ chi-squares:</p>
 <span><span class="co">## Note:</span></span>
 <span><span class="co">## - Only the first 5 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
 <span><span class="co">## - Cases sorted by chisq in decreasing order on absolute values.</span></span></code></pre>
-<p>Case 100 has relatively large influence on model chi-square.</p>
+<p>Case 100 has a relatively large influence on model chi-square.</p>
 </div>
 <div class="section level4">
 <h4 id="case-influence-on-parameter-estimates">Case Influence on Parameter Estimates<a class="anchor" aria-label="anchor" href="#case-influence-on-parameter-estimates"></a>
@@ -355,7 +355,7 @@ default, cases will be sorted by generalized Cook’s distance <span class="cita
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">inf_config</span>,</span>
 <span>         largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multiple_group_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
-<p>The generalized Cook’s distance suggests that Case 100 has strong
+<p>The generalized Cook’s distance suggests that Case 100 has a strong
 influence on parameter estimates. It only affects parameter estimates in
 <code>GroupB</code> because it is in <code>GroupB</code> and the model
 has no between-group equality constraints.</p>
@@ -396,9 +396,9 @@ parameters):</p>
 <span><span class="co">## - Only the first 5 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
 <span><span class="co">## - Cases sorted by generalized Cook's distance.</span></span></code></pre>
 <p>The value of generalized Cook’s distance is smaller for Case 100
-because only influence on factor loadings is computed. However, the
+because only the influence on factor loadings is computed. However, the
 difference from those values of other cases is much larger. This can be
-visualize using <code><a href="../reference/influence_plot.html">gcd_plot()</a></code>:</p>
+visualized using <code><a href="../reference/influence_plot.html">gcd_plot()</a></code>:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">est_change_group</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multiple_group_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
@@ -471,7 +471,7 @@ model chi-squares not significant.</p>
 <p>We can check case influence again:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config_no100</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 8.61 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 16.14 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">inf_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">rerun_config_no100</span><span class="op">)</span></span></code></pre></div>
@@ -493,7 +493,7 @@ model chi-squares not significant.</p>
 <span>                largest_fit_measure <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="multiple_group_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <p>Although there are still cases with large generalized Cook’s
-distance, there are no case stand out from others, compared to the
+distance, there are no cases stand out from others, compared to the
 analysis with Case 100.</p>
 </div>
 <div class="section level2">
