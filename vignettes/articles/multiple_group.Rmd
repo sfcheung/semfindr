@@ -90,7 +90,7 @@ lavTestLRT(fit_config, fit_weak, fit_strong)
 lavTestLRT(fit_config, fit_strong)
 ```
 
-The tests does not reject both strong invariance and
+The tests do not reject both strong invariance and
 weak invariance.
 
 These are the fit measures of the three models:
@@ -129,10 +129,10 @@ rerun_config <- lavaan_rerun(fit_config)
 ```
 
 Not shown here, but it is possible that a model may
-fail to converge or have inadmissible solution if removed.
+fail to converge or have inadmissible solutions if removed.
 This is especially the case for models with constraints.
 The function will report cases leading to nonconvergence
-or inadmissible solution. Influence measures will not be
+or inadmissible solutions. Influence measures will not be
 computed for these cases.
 
 ### All-In-One: `influence_stat()`
@@ -175,13 +175,13 @@ md_plot(inf_config,
         largest_md = 3)
 ```
 
-Case 77 and 100 are high on Mahalanobis distance. However,
+Cases 77 and 100 are high on Mahalanobis distance. However,
 the differences from other cases are not substantially
 large.
 
 ### Case Influence on Fit Measures
 
-We than examine case influence on fit measures,
+We then examine case influence on fit measures,
 sorted by model chi-squares:
 
 ```{r}
@@ -191,7 +191,7 @@ print(inf_config,
       sort_fit_measures_by = "chisq")
 ```
 
-Case 100 has relatively large influence
+Case 100 has a relatively large influence
 on model chi-square.
 
 ### Case Influence on Parameter Estimates
@@ -216,7 +216,7 @@ gcd_plot(inf_config,
 ```
 
 The generalized Cook's distance suggests that Case 100
-has strong influence on parameter estimates. It only
+has a strong influence on parameter estimates. It only
 affects parameter estimates in `GroupB` because it is
 in `GroupB` and the model has no between-group equality
 constraints.
@@ -249,9 +249,9 @@ print(est_change_group,
 ```
 
 The value of generalized Cook's distance is smaller for Case 100
-because only influence on factor loadings is computed. However,
+because only the influence on factor loadings is computed. However,
 the difference from those values of other cases is much larger.
-This can be visualize using `gcd_plot()`:
+This can be visualized using `gcd_plot()`:
 
 ```{r}
 gcd_plot(est_change_group)
@@ -337,7 +337,7 @@ gcd_gof_md_plot(inf_config_no100,
 
 Although there are still cases with large
 generalized Cook's distance, there
-are no case stand out from others,
+are no cases stand out from others,
 compared to the analysis with Case 100.
 
 # Final Remarks
