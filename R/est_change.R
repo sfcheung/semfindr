@@ -56,6 +56,10 @@
 #' If omitted or `NULL`, the
 #' default, changes on all free parameters will be computed.
 #'
+#' @param standardized Logical. If `TRUE`, then the
+#' standardized changes of parameters in the *standardized*
+#' solution are computed and returned. Default is `FALSE`.
+#'
 #' @return An `est_change`-class object, which is
 #' matrix with the number of columns equals to the number of
 #' requested parameters plus one, the last column being the
@@ -163,27 +167,39 @@
 #' @importMethodsFrom lavaan vcov coef
 
 est_change <- function(rerun_out,
-                       parameters = NULL) {
+                       parameters = NULL,
+                       standardized = FALSE) {
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
-
-  estorg   <- lavaan::parameterEstimates(
-              fit0,
-              se = FALSE,
-              zstat = FALSE,
-              pvalue = FALSE,
-              ci = FALSE,
-              standardized = FALSE,
-              fmi = FALSE,
-              cov.std = TRUE,
-              rsquare = FALSE,
-              remove.nonfree = TRUE,
-              output = "data.frame"
-              )
+  if (standardized) {
+      estorg <- lavaan::standardizedSolution(
+                  fit0,
+                  se = TRUE,
+                  zstat = TRUE,
+                  pvalue = FALSE,
+                  ci = FALSE,
+                  remove.eq = TRUE,
+                  remove.ineq = TRUE,
+                  remove.def = FALSE,
+                  output = "data.frame")
+    } else {
+      estorg   <- lavaan::parameterEstimates(
+                  fit0,
+                  se = FALSE,
+                  zstat = FALSE,
+                  pvalue = FALSE,
+                  ci = FALSE,
+                  standardized = FALSE,
+                  fmi = FALSE,
+                  cov.std = TRUE,
+                  rsquare = FALSE,
+                  remove.nonfree = TRUE,
+                  output = "data.frame")
+    }
   ngroups <- lavaan::lavTech(fit0, "ngroups")
   if (ngroups == 1) {
       estorg$group <- 1
@@ -206,18 +222,32 @@ est_change <- function(rerun_out,
   ptable$lavlabel[tmp] <- ""
 
   est0 <- merge(estorg, ptable[, ptable_cols])
+  if (standardized) {
+      std_vcov <- lavaan::lavInspect(fit0,
+                                     what = "vcov.std.all")
+      est0$std_id <- match(est0$lavlabel, colnames(std_vcov), nomatch = 0)
+      est0$std_free <- est0$std_id
+      est0$std_free[is.na(est0$z)] <- 0
+    }
   est0 <- est0[order(est0$id), ]
+  est0 <- est0[est0$std_id > 0, ]
   parameters_names <- est0$lavlabel
   if (!is.null(parameters)) {
       parameters_selected <- pars_id(parameters,
                                     fit = fit0,
-                                    where = "coef")
+                                    where = "coef",
+                                    free_only = !standardized)
     } else {
-      parameters_selected <- est0$free[est0$free > 0]
+      parameters_selected <- est0$std_id[est0$std_free > 0]
     }
 
   # Not yet support parameters constrained to be equal
-  tmp <- tryCatch(solve(vcov(fit0)[parameters_selected,
+  if (standardized) {
+      p_vcov <- std_vcov
+    } else {
+      p_vcov <- vcov(fit0)
+    }
+  tmp <- tryCatch(solve(p_vcov[parameters_selected,
                                    parameters_selected]),
                    error = function(e) e)
   if (inherits(tmp, "error")) {
@@ -225,23 +255,31 @@ est_change <- function(rerun_out,
     } else {
       any_depend <- FALSE
     }
-
   out <- sapply(reruns,
-                function(x, est, parameters_names, parameters_selected) {
+                function(x, est, parameters_names, parameters_selected,
+                         standardized) {
                   chk <- suppressWarnings(lavaan::lavTech(x, "post.check"))
                   chk2 <- lavaan::lavTech(x, "converged")
                   if (isTRUE(chk) & isTRUE(chk2)) {
-                      return(est_change_i(x, est = est,
-                                    parameters_names = parameters_names,
-                                    parameters_selected = parameters_selected)
-                            )
+                      if (standardized) {
+                          return(std_change_i(x, est = est,
+                                        parameters_names = parameters_names,
+                                        parameters_selected = parameters_selected)
+                                )
+                        } else {
+                          return(est_change_i(x, est = est,
+                                        parameters_names = parameters_names,
+                                        parameters_selected = parameters_selected)
+                                )
+                        }
                     } else {
                       return(rep(NA, length(parameters_selected) + 1))
                     }
                   },
                 est = est0,
                 parameters_names = parameters_names,
-                parameters_selected = parameters_selected
+                parameters_selected = parameters_selected,
+                standardized = standardized
               )
   # No need to check the number of columns because it is always greater than one
 
@@ -293,6 +331,71 @@ est_change_i <- function(x,
   k <- length(esti_change)
   esti_change_raw <- (est$est - esti_full$est)
   names(esti_change_raw) <- parameters_names
+  esti_change_raw <- esti_change_raw[parameters_selected]
+  vcovi_full_inv <- tryCatch(solve(vcovi_full),
+                             error = function(e) e)
+  if (inherits(vcovi_full_inv, "error")) {
+      vcovi_full_0 <- full_rank(vcovi_full)
+      vcovi_full_1 <- vcovi_full_0$final
+      p_kept <- seq_len(ncol(vcovi_full))
+      if (length(vcovi_full_0$dropped) > 0) {
+          p_kept <- p_kept[-vcovi_full_0$dropped]
+        }
+      vcovi_full_1_inv <- tryCatch(solve(vcovi_full_1),
+                                   error = function(e) e)
+      if (inherits(vcovi_full_1_inv, "error")) {
+          gcdi <- NA
+        } else {
+          esti_change_raw_1 <- esti_change_raw[p_kept]
+          k_1 <- length(p_kept)
+          gcdi <- matrix(esti_change_raw_1, 1, k_1) %*% vcovi_full_1_inv %*%
+                  matrix(esti_change_raw_1, k_1, 1)
+        }
+    } else {
+      gcdi <- matrix(esti_change_raw, 1, k) %*% vcovi_full_inv %*%
+              matrix(esti_change_raw, k, 1)
+    }
+  outi <- c(esti_change, gcdi)
+  names(outi) <- c(parameters_names[parameters_selected], "gcd")
+  outi
+}
+
+# std_change() for one fit object
+#' @noRd
+
+std_change_i <- function(x,
+                         est,
+                         parameters_names,
+                         parameters_selected) {
+  esti_full <- lavaan::standardizedSolution(
+                  x,
+                  se = TRUE,
+                  zstat = TRUE,
+                  pvalue = FALSE,
+                  ci = FALSE,
+                  remove.eq = TRUE,
+                  remove.ineq = TRUE,
+                  remove.def = FALSE,
+                  output = "data.frame")
+  esti_full <- esti_full[est$id, ]
+  esti_full$est <- esti_full$std.all
+  est$est <- est$est.std
+  esti_change <- (est$est - esti_full$est) / esti_full$se
+  names(esti_change) <- parameters_names
+  esti_change <- esti_change[est$std_id > 0]
+  esti_change <- esti_change[parameters_selected]
+  vcovi_full <- lavaan::lavInspect(x, what = "vcov.std.all")
+  class(vcovi_full) <- "matrix"
+  vcovi_full_names <- colnames(vcovi_full)
+  q <- which(vcovi_full_names %in% est$label)
+  colnames(vcovi_full)[q] <- parameters_names[q]
+  rownames(vcovi_full)[q] <- parameters_names[q]
+  vcovi_full <- vcovi_full[parameters_selected, parameters_selected,
+                           drop = FALSE]
+  k <- length(esti_change)
+  esti_change_raw <- (est$est - esti_full$est)
+  names(esti_change_raw) <- parameters_names
+  esti_change_raw <- esti_change_raw[est$std_id > 0]
   esti_change_raw <- esti_change_raw[parameters_selected]
   vcovi_full_inv <- tryCatch(solve(vcovi_full),
                              error = function(e) e)
