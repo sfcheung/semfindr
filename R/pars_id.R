@@ -334,6 +334,8 @@ pars_id_op <- function(pars,
     pars_c <- keep_ops(pars_c, pt_ops)
     out0 <- integer(0)
     if (ngp > 1) {
+        lavlabel_gp <- get_g1(ptable$lavlabel)
+        ptable$lavlabel <- add_g1(ptable$lavlabel)
         for (x in seq_along(pars_c)) {
             tmp <- sapply(glabels, function(y) {
                       grepl(paste0("\\.", y), pars_c[x])
@@ -345,8 +347,25 @@ pars_id_op <- function(pars,
                                   gsub(pattern = paste0("\\.", glabels[gp_tmp]),
                                        replacement = "",
                                        x = pars_c[x])), ]
-                out0 <- c(out0, pt_tmp$rowid)
+              } else {
+                pt_tmp <- NULL
               }
+            glavlabels <- paste0("g", seq_len(ngp))
+            tmp <- sapply(glavlabels, function(y) {
+                      grepl(paste0("\\.", y), pars_c[x])
+                    })
+            if (any(tmp)) {
+                gp_tmp <- which(tmp)
+                pt_tmp2 <- ptable[(ptable$group == gp_tmp) &
+                                 (ptable$op ==
+                                  gsub(pattern = paste0("\\.", glavlabels[gp_tmp]),
+                                       replacement = "",
+                                       x = pars_c[x])), ]
+              } else {
+                pt_tmp2 <- NULL
+              }
+            out0 <- c(out0, pt_tmp$rowid,
+                            pt_tmp2$rowid)
           }
       }
     # For both operators without suffixes

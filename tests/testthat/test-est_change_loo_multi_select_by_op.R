@@ -45,9 +45,18 @@ est_change_rerun_test6 <- est_change(rerun_out,
                                 c("f3 ~ f2", "=~", "~~"))
 est_change_rerun_test7 <- est_change(rerun_out,
                                 c("~1"))
+# Address issue 87
+est_change_rerun_test_87_1 <- est_change(rerun_out,
+                                c("=~.g2", "~~"))
+est_change_rerun_test_87_2 <- est_change(rerun_out,
+                                c("~~.g2"))
+est_change_rerun_test_87_3 <- est_change(rerun_out,
+                                c("=~.g1", "~1", "f3 ~ f2.g2"))
+
 
 parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
 parameters_names[est0$group == 2] <- paste0(parameters_names[est0$group == 2], ".g2")
+parameters_names_no_user_labels <- parameters_names
 # Use label if available
 tmp <- (est0$label != "") & !grepl(".p", est0$label)
 parameters_names[tmp] <- est0$label[tmp]
@@ -57,6 +66,24 @@ parameters_names_cov <- parameters_names[(est0$op == "~~") & !is.na(est0$z)]
 parameters_names_loads <- parameters_names[(est0$op == "=~") & !is.na(est0$z)]
 parameters_names_def <- parameters_names[(est0$op == ":=") & !is.na(est0$z)]
 parameters_names_int <- parameters_names[(est0$op == "~1") & !is.na(est0$z)]
+
+parameters_names_87_1 <- c(parameters_names[(est0$op == "=~") &
+                                            !is.na(est0$z) &
+                                            est0$group == 2],
+                           parameters_names[(est0$op == "~~") &
+                                             !is.na(est0$z)])
+parameters_names_87_2 <- c(parameters_names[(est0$op == "~~") &
+                                            !is.na(est0$z) &
+                                            est0$group == 2])
+parameters_names_87_3 <- c(parameters_names[(est0$op == "=~") &
+                                            !is.na(est0$z) &
+                                            est0$group == 1],
+                           parameters_names[(est0$op == "~1") &
+                                            !is.na(est0$z)],
+                           parameters_names[(est0$op == "~") &
+                                            (est0$lhs == "f3") &
+                                            (est0$rhs == "f2") &
+                                            est0$group == 2])
 
 test_that("Parameter selected by operators", {
     expect_equal(ignore_attr = TRUE,
@@ -91,5 +118,17 @@ test_that("Parameter selected by operators", {
     expect_equal(ignore_attr = TRUE,
         sort(colnames(est_change_rerun_test7)),
         sort(c("gcd", parameters_names_int))
+      )
+    expect_equal(ignore_attr = TRUE,
+        sort(colnames(est_change_rerun_test_87_1)),
+        sort(c("gcd", parameters_names_87_1))
+      )
+    expect_equal(ignore_attr = TRUE,
+        sort(colnames(est_change_rerun_test_87_2)),
+        sort(c("gcd", parameters_names_87_2))
+      )
+    expect_equal(ignore_attr = TRUE,
+        sort(colnames(est_change_rerun_test_87_3)),
+        sort(c("gcd", parameters_names_87_3))
       )
   })
