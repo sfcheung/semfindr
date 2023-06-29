@@ -37,7 +37,7 @@
 #' specified as in a single sample model denotes the same
 #' parameters in all group.
 #'
-#'  - For example, `"f1 =~ x2"` denote the factor loading of
+#'  - For example, `"f1 =~ x2"` denotes the factor loading of
 #'    `x2` on `f1` in all groups. `"~~"` denotes covariances
 #'    and error covariances in all groups.
 #'
@@ -45,7 +45,7 @@
 #' groups. First, the syntax to fix parameter values
 #' can be used, with `NA` denoting parameters to be selected.
 #'
-#'   - For example, `"f2 =~ c(NA, 1, NA) * x5"` select the
+#'   - For example, `"f2 =~ c(NA, 1, NA) * x5"` selects the
 #'     factor loadings of `x5` on `f2` in the first and third
 #'     groups.
 #'
@@ -56,6 +56,31 @@
 #'
 #'   - For example, `"f2 =~ x5.Alpha"` denotes the factor loading
 #'     of `x5` on `f2` in the group `"Alpha"`.
+#'
+#'   - This method can be used for operators. For example,
+#'     `"=~.Alpha"` denotes all factors loadings in the
+#'     group `"Alpha"`.
+#'
+#' Though not recommended, users can use labels such as
+#' `".g2"` and `".g3"` to denote the parameter in a specific
+#' group. These are the labels appear in the output of
+#' some functions of `lavaan`. Although `lavaan` does not label
+#' the parameters in the first group by `".g1"`, this can
+#' still be used in `pars_id()`.
+#'
+#'   - For example, `"f2 =~ x5.g2"` denotes the factor loading
+#'     of `x5` on `f2` in the second group. `"y ~ x.g1"`
+#'     denotes the regression coefficient from `x` to `y`
+#'     in the first group.
+#'
+#'   - This method can also be used for operators. For example,
+#'     `"=~.g2"` denotes all factors loadings in the
+#'     second group.
+#'
+#' However, this method is not
+#' as reliable as using `grouplabel` because the numbering
+#' of groups depends on the order they appear in the data
+#' set.
 #'
 #' @return
 #' A numeric vector of the ids. If `where` is `"partable"`,
