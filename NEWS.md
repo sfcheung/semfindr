@@ -1,7 +1,14 @@
-# semfindr 0.1.5.1
+# semfindr 0.1.5.2
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
+- Fixed `pars_id()`. Users can now use
+  the internal `lavaan` group labels
+  (e.g., `".g2"`, `".g3"`) to denote
+  parameters in a group. This method
+  is not recommended (noted in the
+  help page) but is included as an
+  option. (0.1.5.2)
 
 # semfindr 0.1.5
 
