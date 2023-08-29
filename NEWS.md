@@ -1,4 +1,4 @@
-# semfindr 0.1.5.3
+# semfindr 0.1.5.4
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
@@ -11,6 +11,12 @@
   option. (0.1.5.2)
 - Fixed an error at CRAN check due to
   suggested packages not installed. (0.1.5.3)
+- Use `lavaan::lavCor()` to estimate
+  means and correlations for Mahalanobis
+  distance when missing data is present.
+  The package `norm2` is no longer
+  needed nor suggested. (0.1.5.4)
+
 
 # semfindr 0.1.5
 
