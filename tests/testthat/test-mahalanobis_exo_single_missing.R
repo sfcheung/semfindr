@@ -27,7 +27,14 @@ fit0_free <- lavInspect(fit0, "free")
 i <- apply(fit0_free$beta, 1, function(x) all(x == 0))
 exo_vars <- names(i)[i]
 fit0_data_exo <- dat0[, exo_vars]
-em_out <- norm2::emNorm(fit0_data_exo, estimate.worst = FALSE, criterion = 1e-6)
+suppressWarnings(em_out_fit <- lavaan::lavCor(fit0_data_exo,
+                                              missing = "fiml",
+                                              output = "fit"))
+em_out <- list(param = list())
+tmp <- lavaan::lavInspect(em_out_fit, "implied")
+em_out$param$beta <- tmp$mean
+em_out$param$sigma <- tmp$cov
+
 md_predictors_check <- modi::MDmiss(fit0_data_exo,
                       em_out$param$beta,
                       em_out$param$sigma)
