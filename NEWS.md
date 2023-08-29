@@ -1,4 +1,4 @@
-# semfindr 0.1.5.2
+# semfindr 0.1.5.3
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
@@ -9,6 +9,8 @@
   is not recommended (noted in the
   help page) but is included as an
   option. (0.1.5.2)
+- Fixed an error at CRAN check due to
+  suggested packages not installed. (0.1.5.3)
 
 # semfindr 0.1.5
 

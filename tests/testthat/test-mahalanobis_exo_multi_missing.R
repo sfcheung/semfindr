@@ -1,4 +1,5 @@
 skip_if_not_installed("modi")
+skip_if_not_installed("norm2")
 library(testthat)
 library(lavaan)
 library(semfindr)
