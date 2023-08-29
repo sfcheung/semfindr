@@ -29,11 +29,19 @@ head(fit0_data)
 exo_vars <- c("iv1", "iv2")
 fit0_data_exo <- dat0[, exo_vars]
 fit0_data_exo_g <- split(fit0_data_exo, dat0$gp)
+em_tmp <- function(x) {
+    suppressWarnings(em_out_fit <- lavaan::lavCor(x,
+                                                  missing = "fiml",
+                                                  output = "fit"))
+    em_out <- list(param = list())
+    tmp <- lavaan::lavInspect(em_out_fit, "implied")
+    em_out$param$beta <- tmp$mean
+    em_out$param$sigma <- tmp$cov
+    em_out
+  }
 md_predictors_check0 <- lapply(fit0_data_exo_g,
                           function(x) {
-                              em_out <- norm2::emNorm(x,
-                                                      estimate.worst = FALSE,
-                                                      criterion = 1e-6)
+                              em_out <- em_tmp(x)
                               out <- modi::MDmiss(x,
                                                   em_out$param$beta,
                                                   em_out$param$sigma)

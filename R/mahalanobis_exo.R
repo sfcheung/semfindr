@@ -12,7 +12,7 @@
 #'
 #' If there are missing values on the observed predictors, the means
 #' and variance-covariance matrices will be estimated by maximum
-#' likelihood using [norm2::emNorm()]. The estimates will be passed
+#' likelihood using [lavaan::lavCor()]. The estimates will be passed
 #' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
 #' Supports both single-group and multiple-group models.
@@ -25,10 +25,8 @@
 #' [lavaan::cfa()] and [lavaan::sem()], or the output from
 #' [lavaan_rerun()].
 #'
-#' @param emNorm_arg A list of argument for [norm2::emNorm()].
-#' Default is `list(estimate.worst = FALSE, criterion = 1e-6)`.
-#' Ignored if there is no missing data on the observed
-#' predictors.
+#' @param emNorm_arg No longer used. Kept for backward
+#' compatibility.
 #'
 #' @return A `md_semfindr`-class object, which is
 #' a one-column matrix (a column vector) of the Mahalanobis
@@ -129,10 +127,6 @@ mahalanobis_predictors <- function(fit,
             missing_data <- TRUE
             if (!requireNamespace("modi", quietly = TRUE)) {
                 stop(paste("Missing data is present but the modi package",
-                          "is not installed."))
-              }
-            if (!requireNamespace("norm2", quietly = TRUE)) {
-                stop(paste("Missing data is present but the norm2 package",
                           "is not installed."))
               }
         } else {

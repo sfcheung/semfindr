@@ -28,11 +28,25 @@ fit0_data_g2 <- fit0_data[fit0_data$gp == "gp1", -5]
 head(fit0_data_g1)
 head(fit0_data_g2)
 
-em_out_g1 <- norm2::emNorm(fit0_data_g1, estimate.worst = FALSE, criterion = 1e-6)
+suppressWarnings(em_out_fit <- lavaan::lavCor(fit0_data_g1,
+                                              missing = "fiml",
+                                              output = "fit"))
+em_out <- list(param = list())
+tmp <- lavaan::lavInspect(em_out_fit, "implied")
+em_out$param$beta <- tmp$mean
+em_out$param$sigma <- tmp$cov
+em_out_g1 <- em_out
 md_check_g1 <- modi::MDmiss(fit0_data_g1,
                           em_out_g1$param$beta,
                           em_out_g1$param$sigma)
-em_out_g2 <- norm2::emNorm(fit0_data_g2, estimate.worst = FALSE, criterion = 1e-6)
+suppressWarnings(em_out_fit <- lavaan::lavCor(fit0_data_g2,
+                                              missing = "fiml",
+                                              output = "fit"))
+em_out <- list(param = list())
+tmp <- lavaan::lavInspect(em_out_fit, "implied")
+em_out$param$beta <- tmp$mean
+em_out$param$sigma <- tmp$cov
+em_out_g2 <- em_out
 md_check_g2 <- modi::MDmiss(fit0_data_g2,
                           em_out_g2$param$beta,
                           em_out_g2$param$sigma)
