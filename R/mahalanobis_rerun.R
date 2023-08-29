@@ -12,7 +12,7 @@
 #'
 #' If there are missing values on the observed predictors, the means
 #' and variance-covariance matrices will be estimated by maximum
-#' likelihood using [norm2::emNorm()]. The estimates will be passed
+#' likelihood using [lavaan::lavCor()]. The estimates will be passed
 #' to [modi::MDmiss()] to compute the Mahalanobis distance.
 #'
 #' Supports both single-group and multiple-group models.
@@ -25,11 +25,8 @@
 #' [lavaan::cfa()] and [lavaan::sem()], or the output from
 #' [lavaan_rerun()].
 #'
-#' @param emNorm_arg A list of argument for
-#' [norm2::emNorm()]. Default is
-#' `list(estimate.worst = FALSE, criterion = 1e-6)`.
-#' Ignored if there is no missing data on the exogenous observed
-#' variables.
+#' @param emNorm_arg No longer used. Kept for backward
+#' compatibility.
 #'
 #' @return A `md_semfindr`-class object, which is
 #' a one-column matrix (a column vector) of the Mahalanobis
@@ -170,10 +167,6 @@ mahalanobis_rerun <- function(fit,
           stop(paste("Missing data is present but the modi package",
                     "is not installed."))
         }
-      if (!requireNamespace("norm2", quietly = TRUE)) {
-          stop(paste("Missing data is present but the norm2 package",
-                    "is not installed."))
-        }
    } else {
       missing_data <- FALSE
    }
@@ -235,27 +228,13 @@ md_i_single <- function(fit_data,
             stop(paste("Missing data is present but the modi package",
                       "is not installed."))
           }
-        if (!requireNamespace("norm2", quietly = TRUE)) {
-            stop(paste("Missing data is present but the norm2 package",
-                      "is not installed."))
-          }
-        emNorm_arg_final <- utils::modifyList(list(),
-                                      emNorm_arg)
-        em_out <- tryCatch(do.call(norm2::emNorm,
-                                  c(list(obj = fit_data),
-                                  emNorm_arg_final)),
-                          error = function(e) e)
-        if (inherits(em_out, "SimpleError")) {
-            warning("Missing data is present but norm2::emNorm raised an error.")
-            warning(em_out)
-            # TO DECIDE: Store the info?
-            return(out_na)
-          }
-        if (!em_out$converged) {
-            warning("Missing data is present but norm2::emNorm did not converge.")
-            # TO DECIDE: Store the info?
-            return(out_na)
-          }
+        suppressWarnings(em_out_fit <- lavaan::lavCor(fit_data,
+                                                      missing = "fiml",
+                                                      output = "fit"))
+        em_out <- list(param = list())
+        tmp <- lavaan::lavInspect(em_out_fit, "implied")
+        em_out$param$beta <- tmp$mean
+        em_out$param$sigma <- tmp$cov
         md <- modi::MDmiss(fit_data,
                               em_out$param$beta,
                               em_out$param$sigma)

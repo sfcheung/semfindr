@@ -14,10 +14,8 @@ mahalanobis_predictors(
 \code{\link[lavaan:cfa]{lavaan::cfa()}} and \code{\link[lavaan:sem]{lavaan::sem()}}, or the output from
 \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
 
-\item{emNorm_arg}{A list of argument for \code{\link[norm2:emNorm]{norm2::emNorm()}}.
-Default is \code{list(estimate.worst = FALSE, criterion = 1e-6)}.
-Ignored if there is no missing data on the observed
-predictors.}
+\item{emNorm_arg}{No longer used. Kept for backward
+compatibility.}
 }
 \value{
 A \code{md_semfindr}-class object, which is
@@ -40,7 +38,7 @@ to compute the Mahalanobis distance.
 
 If there are missing values on the observed predictors, the means
 and variance-covariance matrices will be estimated by maximum
-likelihood using \code{\link[norm2:emNorm]{norm2::emNorm()}}. The estimates will be passed
+likelihood using \code{\link[lavaan:lavCor]{lavaan::lavCor()}}. The estimates will be passed
 to \code{\link[modi:MDmiss]{modi::MDmiss()}} to compute the Mahalanobis distance.
 
 Supports both single-group and multiple-group models.
