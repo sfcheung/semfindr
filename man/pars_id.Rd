@@ -72,7 +72,7 @@ If a model has more than one group, a specification
 specified as in a single sample model denotes the same
 parameters in all group.
 \itemize{
-\item For example, \code{"f1 =~ x2"} denote the factor loading of
+\item For example, \code{"f1 =~ x2"} denotes the factor loading of
 \code{x2} on \code{f1} in all groups. \code{"~~"} denotes covariances
 and error covariances in all groups.
 }
@@ -81,7 +81,7 @@ There are two ways to select parameters only in selected
 groups. First, the syntax to fix parameter values
 can be used, with \code{NA} denoting parameters to be selected.
 \itemize{
-\item For example, \code{"f2 =~ c(NA, 1, NA) * x5"} select the
+\item For example, \code{"f2 =~ c(NA, 1, NA) * x5"} selects the
 factor loadings of \code{x5} on \code{f2} in the first and third
 groups.
 }
@@ -93,7 +93,31 @@ appears in \code{\link[=summary]{summary()}}, not the one of the form \code{".g2
 \itemize{
 \item For example, \code{"f2 =~ x5.Alpha"} denotes the factor loading
 of \code{x5} on \code{f2} in the group \code{"Alpha"}.
+\item This method can be used for operators. For example,
+\code{"=~.Alpha"} denotes all factors loadings in the
+group \code{"Alpha"}.
 }
+
+Though not recommended, users can use labels such as
+\code{".g2"} and \code{".g3"} to denote the parameter in a specific
+group. These are the labels appear in the output of
+some functions of \code{lavaan}. Although \code{lavaan} does not label
+the parameters in the first group by \code{".g1"}, this can
+still be used in \code{pars_id()}.
+\itemize{
+\item For example, \code{"f2 =~ x5.g2"} denotes the factor loading
+of \code{x5} on \code{f2} in the second group. \code{"y ~ x.g1"}
+denotes the regression coefficient from \code{x} to \code{y}
+in the first group.
+\item This method can also be used for operators. For example,
+\code{"=~.g2"} denotes all factors loadings in the
+second group.
+}
+
+However, this method is not
+as reliable as using \code{grouplabel} because the numbering
+of groups depends on the order they appear in the data
+set.
 }
 }
 \examples{

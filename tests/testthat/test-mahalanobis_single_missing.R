@@ -22,7 +22,13 @@ fit0_data <- lavInspect(fit0, "data")
 colnames(fit0_data) <- lavNames(fit0)
 head(fit0_data)
 
-em_out <- norm2::emNorm(fit0_data, estimate.worst = FALSE, criterion = 1e-6)
+suppressWarnings(em_out_fit <- lavaan::lavCor(fit0_data,
+                                              missing = "fiml",
+                                              output = "fit"))
+em_out <- list(param = list())
+tmp <- lavaan::lavInspect(em_out_fit, "implied")
+em_out$param$beta <- tmp$mean
+em_out$param$sigma <- tmp$cov
 md_check <- modi::MDmiss(fit0_data,
                           em_out$param$beta,
                           em_out$param$sigma)
