@@ -138,16 +138,18 @@ NULL
 #' @export
 
 index_plot <- function(object,
-                     column = NULL,
-                     plot_title = "Index Plot",
-                     x_label = "Statistic",
-                     cutoff_x = NULL,
-                     largest_x = 1,
-                     point_aes = list(),
-                     vline_aes = list(),
-                     cutoff_line_aes = list(),
-                     case_label_aes = list()
-                     ) {
+                       column = NULL,
+                       plot_title = "Index Plot",
+                       x_label = "Statistic",
+                       cutoff_x_low = NULL,
+                       cutoff_x_high = NULL,
+                       largest_x = 1,
+                       absolute = FALSE,
+                       point_aes = list(),
+                       vline_aes = list(),
+                       cutoff_line_aes = list(),
+                       case_label_aes = list()
+                       ) {
 
   if (is.null(dim(object))) {
       if (!is.vector(object)) {
@@ -165,6 +167,10 @@ index_plot <- function(object,
           stop(sQuote(column), " not found in 'object'.")
         }
       object <- object[, column, drop = TRUE]
+    }
+
+  if (absolute) {
+      object <- abs(object)
     }
 
   point_aes <- utils::modifyList(list(),
@@ -197,28 +203,43 @@ index_plot <- function(object,
   p <- p + do.call(ggplot2::geom_point, point_aes)
   p <- p + ggplot2::labs(title = plot_title)
   p <- p + do.call(ggplot2::geom_segment, vline_aes)
-  p <- p + ggplot2::xlab("Row Number") +
+  p <- p + ggplot2::xlab("Case ID (or Row Number)") +
          ggplot2::ylab(x_label)
 
-  if (is.numeric(cutoff_x)) {
+  if (is.numeric(cutoff_x_low)) {
       cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
                                                 cutoff_line_aes)
       # The following part should never be changed by users.
       cutoff_line_aes <- utils::modifyList(cutoff_line_aes,
-                                    list(yintercept = cutoff_x))
+                                    list(yintercept = cutoff_x_low))
       p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes)
-      c_x_cut <- cutoff_x
+      c_x_cut_low <- cutoff_x_low
     } else {
-      c_x_cut <- Inf
+      c_x_cut_low <- -Inf
     }
+  if (is.numeric(cutoff_x_high)) {
+      cutoff_line_aes <- utils::modifyList(list(linetype = "dashed"),
+                                                cutoff_line_aes)
+      # The following part should never be changed by users.
+      cutoff_line_aes <- utils::modifyList(cutoff_line_aes,
+                                    list(yintercept = cutoff_x_high))
+      p <- p + do.call(ggplot2::geom_hline, cutoff_line_aes)
+      c_x_cut_high <- cutoff_x_high
+    } else {
+      c_x_cut_high <- Inf
+    }
+
+
   if (is.numeric(largest_x) && largest_x >= 1) {
       m_x <- round(largest_x)
-      o_x <- order(dat$x, decreasing = TRUE)
-      m_x_cut <- dat$x[o_x[m_x]]
+      o_x <- order(abs(dat$x), decreasing = TRUE)
+      m_x_cut <- abs(dat$x)[o_x[m_x]]
     } else {
       m_x_cut <- Inf
     }
-  label_x <- (dat$x >= c_x_cut) | (dat$x >= m_x_cut)
+  label_x <- (dat$x >= c_x_cut_high) |
+             (dat$x <= c_x_cut_low) |
+             (abs(dat$x) >= m_x_cut)
 
   case_label_aes <- utils::modifyList(list(position = ggplot2::position_dodge(.5)),
                                   case_label_aes)
