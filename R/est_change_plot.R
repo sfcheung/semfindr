@@ -256,6 +256,10 @@ est_change_plot <- function(change,
       }
     x0$gcd <- NULL
     x0$row_id <- as.integer(seq_len(nrow(change)))
+    x0 <- stats::na.omit(x0)
+    if (nrow(x0) == 0) {
+        stop("No cases have valid values.")
+      }
     p <- ggplot2::ggplot(data = x0, ggplot2::aes(x = .data[["row_id"]],
                                                  y = .data[["change"]]))
     p <- p + do.call(ggplot2::geom_point, point_aes)
@@ -378,6 +382,10 @@ est_change_gcd_plot <- function(change,
     x0 <- est_to_long(change)
     if (!missing(parameters)) {
         x0 <- x0[x0$param %in% parameters, ]
+      }
+    x0 <- stats::na.omit(x0)
+    if (nrow(x0) == 0) {
+        stop("No cases have valid values.")
       }
     p <- ggplot2::ggplot(data = x0,
                 ggplot2::aes(x = .data[[gcd_name]],
