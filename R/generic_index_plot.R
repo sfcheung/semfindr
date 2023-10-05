@@ -188,6 +188,11 @@ index_plot <- function(object,
       object <- object[, column, drop = TRUE]
     }
 
+  object <- object[!is.na(object)]
+  if (length(object) == 0) {
+      stop("No cases have valid values.")
+    }
+
   if (absolute) {
       object <- abs(object)
     }
