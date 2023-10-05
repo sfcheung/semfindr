@@ -1,4 +1,4 @@
-# semfindr 0.1.5.4
+# semfindr 0.1.5.5
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
@@ -16,6 +16,9 @@
   distance when missing data is present.
   The package `norm2` is no longer
   needed nor suggested. (0.1.5.4)
+- Add `index_plot()` for generating
+  an index plot for an arbitrary
+  statistic. (0.1.5.5)
 
 
 # semfindr 0.1.5
