@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -221,7 +221,7 @@ only 100 cases, we do not have to use parallel processing. The model is
 fitted 100 times, each time with one case removed:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 16.4 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 17.4 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <p>Not shown here, but it is possible that a model may fail to converge
 or have inadmissible solutions if removed. This is especially the case
@@ -471,7 +471,7 @@ model chi-squares not significant.</p>
 <p>We can check case influence again:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config_no100</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 13.56 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 14.45 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">inf_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">rerun_config_no100</span><span class="op">)</span></span></code></pre></div>
