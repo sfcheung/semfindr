@@ -1,4 +1,4 @@
-# semfindr 0.1.5.6
+# semfindr 0.1.5.7
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
@@ -21,6 +21,7 @@
   statistic. (0.1.5.5)
 - Make plot functions to work with NAs.
   (0.1.5.6)
+- Update `README.md`. (0.1.5.7)
 
 
 # semfindr 0.1.5

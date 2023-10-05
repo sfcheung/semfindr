@@ -9,7 +9,7 @@
 [![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.5.6, updated on 2023-10-05, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+(Version 0.1.5.7, updated on 2023-10-05, [release history](https://sfcheung.github.io/semfindr/news/index.html))
 
 # semfindr: Finding influential cases in SEM <img src="man/figures/logo.png" align="right" height="150" />
 
@@ -68,9 +68,15 @@ vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
 
 # Installation
 
+The stable version at CRAN can be installed by `install.packages()`:
+
+```r
+install.packages("semfindr")
+```
+
 The latest developmental version can be installed by `remotes::install_github`:
 
-```{r}
+```r
 remotes::install_github("sfcheung/semfindr")
 ```
 
