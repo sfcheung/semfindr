@@ -4,46 +4,55 @@
 #'
 #' @details TBD
 #'
-#' @param influence_out The output from [influence_stat()].
+#' @param object A matrix-like object,
+#' such as the output from
+#' [influence_stat()], [est_change()],
+#' [est_change_raw()], and their
+#' counterparts for the approximate
+#' approach.
 #'
-#' @param cutoff_gcd Cases with generalized Cook's distance or
-#' approximate generalized Cook's distance larger
-#' than this value will be labeled. Default is `NULL`. If `NULL`, no
-#' cutoff line will be drawn.
+#' @param column String. The column
+#' name of the values to be plotted.
 #'
-#' @param cutoff_md Cases with Mahalanobis distance larger than this
-#' value will be labeled. If it is `TRUE`, the (`cutoff_md_qchisq` x
-#' 100)th percentile of the chi-square distribution with the degrees
-#' of freedom equal to the number of variables will be used.  Default
-#' is `FALSE`, no cutoff value.
+#' @param plot_title The title of the
+#' plot. Default is `"Index Plot"`.
 #'
-#' @param cutoff_md_qchisq This value multiplied by 100 is the
-#' percentile to be used for labeling case based on Mahalanobis
-#' distance. Default is .975.
+#' @param x_label The Label for the
+#' vertical axis, for the value of
+#' `column`. Default is `NULL`.
+#' If `NULL`, then the label is
+#' changed to
+#' `"Statistic"` if `absolute` is
+#' `FALSE`, and `"Absolute(Statistics)"`
+#' if `absolute` is `TRUE`.
 #'
-#' @param largest_gcd The number of cases with the largest generalized
-#' Cook's distance or approximate generalized Cook's distance
-#' to be labelled. Default is 1. If not an integer, it
-#' will be rounded to the nearest integer.
+#' @param cutoff_x_low Cases with values
+#' smaller than this value will be labeled.
+#' A cutoff line will be drawn at this
+#' value.
+#' Default is `NULL`. If `NULL`, no
+#' cutoff line will be drawn for this
+#' value.
 #'
-#' @param largest_md  The number of cases with the largest Mahalanobis
-#' distance to be labelled. Default is 1. If not an integer, it will
-#' be rounded to the nearest integer.
+#' @param cutoff_x_high Cases with values
+#' larger than this value will be labeled.
+#' A cutoff line will be drawn at this
+#' value.
+#' Default is `NULL`. If `NULL`, no
+#' cutoff line will be drawn for this
+#' value.
 #'
-#' @param largest_fit_measure  The number of cases with the largest
-#' selected fit measure change in magnitude to be labelled. Default is
-#' 1. If not an integer, it will be rounded to the nearest integer.
+#' @param largest_x The number of cases
+#' with the largest absolute value on
+#' `column``
+#' to be labelled. Default is 1. If not
+#' an integer, it will be rounded to the
+#' nearest integer.
 #'
-#' @param fit_measure The fit measure to be used in a
-#' plot. Use the name in the [lavaan::fitMeasures()] function. No
-#' default value.
-#'
-#' @param cutoff_fit_measure Cases with `fit_measure` larger than
-#' this cutoff in magnitude will be labeled. No default value and
-#' must be specified.
-#'
-#' @param circle_size The size of the largest circle when the size
-#' of a circle is controlled by a statistic.
+#' @param absolute Whether absolute values
+#' will be plotted. Useful when cases
+#' are to be compared on magnitude,
+#' ignoring sign. Default is `FALSE`.
 #'
 #' @param point_aes A named list of
 #' arguments to be passed to
@@ -60,51 +69,27 @@
 #' `list()` and internal default
 #' settings will be used.
 #'
-#' @param hline_aes A named list of
-#' arguments to be passed to
-#' [ggplot2::geom_hline()] to modify how
-#' to draw the horizontal line for zero
-#' case influence. Default is `list()`
-#' and internal default settings will be
-#' used.
-#'
 #' @param cutoff_line_aes A named list
 #' of arguments to be passed to
-#' [ggplot2::geom_vline()] or
 #' [ggplot2::geom_hline()] to modify how
 #' to draw the line for user cutoff
-#' value. Default is `list()`
+#' values. Default is `list()`
 #' and internal default settings will be
 #' used.
-#'
-#' @param cutoff_line_gcd_aes Similar
-#' to `cutoff_line_aes` but control
-#' the line for the cutoff value of
-#' *gCD*.
-#'
-#' @param cutoff_line_fit_measures_aes
-#' Similar
-#' to `cutoff_line_aes` but control
-#' the line for the cutoff value of
-#' the selected fit measure.
-#'
-#' @param cutoff_line_md_aes
-#' Similar
-#' to `cutoff_line_aes` but control
-#' the line for the cutoff value of
-#' the Mahalanobis distance.
 #'
 #' @param case_label_aes A named list of
 #' arguments to be passed to
 #' [ggrepel::geom_label_repel()] to
 #' modify how to draw the labels for
 #' cases marked (based on arguments
-#' such as `cutoff_gcd` or `largest_gcd`).
+#' such as `cutoff_x_low` or `largest_x`).
 #' Default is `list()` and internal
 #' default settings will be used.
 #'
-#' @return A [ggplot2] plot. Plotted by default. If assigned to a variable
-#' or called inside a function, it will not be plotted. Use [plot()] to
+#' @return A [ggplot2] plot. Plotted by
+#' default. If assigned to a variable
+#' or called inside a function, it will
+#' not be plotted. Use [plot()] to
 #' plot it.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
@@ -125,22 +110,16 @@
 #'
 #' # TBD
 #'
-#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
-#'  in structural equation models: Cases and their influence.
-#'  *Multivariate Behavioral Research, 46*(2), 202-228.
-#'  doi:10.1080/00273171.2011.561068
+#' @seealso [influence_stat()], [est_change()],
+#' [est_change_raw()]
 #'
-#' @seealso [influence_stat()].
-#' @name influence_plot
-NULL
-
 #' @importFrom rlang .data
 #' @export
 
 index_plot <- function(object,
                        column = NULL,
                        plot_title = "Index Plot",
-                       x_label = "Statistic",
+                       x_label = NULL,
                        cutoff_x_low = NULL,
                        cutoff_x_high = NULL,
                        largest_x = 1,
@@ -173,6 +152,12 @@ index_plot <- function(object,
       object <- abs(object)
     }
 
+  if (is.null(x_label)) {
+      x_label <- ifelse(absolute,
+                        "Absolute(Statistic)",
+                        "Statistic")
+    }
+
   point_aes <- utils::modifyList(list(),
                                  point_aes)
 
@@ -192,13 +177,6 @@ index_plot <- function(object,
                     x = object,
                     stringsAsFactors = FALSE,
                     check.names = FALSE)
-  # method <- attr(influence_out, "method")
-  # if (method == "approx") {
-  #     dat$gcd <- dat$gcd_approx
-  #     gcd_label <- "Approximate Generalized Cook's Distance"
-  #   } else {
-  #     gcd_label <- "Generalized Cook's Distance"
-  #   }
   p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$x))
   p <- p + do.call(ggplot2::geom_point, point_aes)
   p <- p + ggplot2::labs(title = plot_title)
