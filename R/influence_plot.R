@@ -261,6 +261,10 @@ gcd_plot <- function(influence_out,
     } else {
       gcd_label <- "Generalized Cook's Distance"
     }
+  dat <- dat[!is.na(dat$gcd), ]
+  if (nrow(dat) == 0) {
+      stop("All cases have gCD missing.")
+    }
   p <- ggplot2::ggplot(dat, ggplot2::aes(.data$row_id, .data$gcd))
   p <- p + do.call(ggplot2::geom_point, point_aes)
   p <- p + ggplot2::labs(title = gcd_label)
@@ -432,6 +436,11 @@ gcd_gof_plot <- function(influence_out,
       gcd_label <- "Generalized Cook's Distance"
       change_label <- "Change in Fit Measure"
     }
+  dat <- dat[!is.na(dat$gcd) &
+             !is.na(dat$fm), ]
+  if (nrow(dat) == 0) {
+      stop("No cases have non-missing values.")
+    }
 
   point_aes <- utils::modifyList(list(),
                                  point_aes)
@@ -563,6 +572,12 @@ gcd_gof_md_plot <- function(influence_out,
       gcd_label <- "Generalized Cook's Distance"
       gcd_label_short <- "gCD"
       change_label <- "Change in Fit Measure"
+    }
+  dat <- dat[!is.na(dat$gcd) &
+             !is.na(dat$fm) &
+             !is.na(dat$md), ]
+  if (nrow(dat) == 0) {
+      stop("No cases have valid values.")
     }
 
   point_aes <- utils::modifyList(list(shape = 21,

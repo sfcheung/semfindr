@@ -1,4 +1,4 @@
-# semfindr 0.1.5.5
+# semfindr 0.1.5.6
 
 - Fixed typos in the article on
   multiple-group models. (0.1.5.1)
@@ -19,6 +19,8 @@
 - Add `index_plot()` for generating
   an index plot for an arbitrary
   statistic. (0.1.5.5)
+- Make plot functions to work with NAs.
+  (0.1.5.6)
 
 
 # semfindr 0.1.5
