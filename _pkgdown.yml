@@ -67,6 +67,7 @@ reference:
 - contents:
   - influence_plot
   - est_change_plot
+  - index_plot
 - title: Print Methods
 - contents:
   - print.lavaan_rerun
