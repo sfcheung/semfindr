@@ -57,6 +57,11 @@ reference:
 - contents:
   - fit_measures_change
   - fit_measures_change_approx
+- title: User Statistics
+  desc: >
+    Case influence on any statistics computed by a user functions
+- contents:
+  - user_change_raw
 - title: Extremeness Measures
   desc:  >
     Identifying outliers (which may not be influential)
