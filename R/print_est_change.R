@@ -92,6 +92,7 @@ print.est_change <- function(x,
     est_method <- attr(x, "method")
     est_call <- attr(x, "call")
     est_std <- attr(x, "standardized")
+    is_user <- isTRUE(attr(x, "user_function"))
     call_name <- as.character(est_call[[1]])
     sort_by <- match.arg(sort_by)
     if (is.null(sort_by)) {
@@ -178,6 +179,9 @@ print.est_change <- function(x,
 
     tmp <- ifelse(est_std, "Standardized Parameter Estimates",
                            "Parameter Estimates")
+    if (is_user) {
+        tmp <- "User Function"
+      }
     tmp2 <- switch(est_method,
                    leave_one_out = "",
                    approx = "Approximate ")
