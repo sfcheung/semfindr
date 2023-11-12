@@ -48,10 +48,10 @@
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
 #' @examples
-#' library(lavaan)
 #'
 #' # A path model
 #'
+#' library(lavaan)
 #' dat <- pa_dat
 #' mod <-
 #' "
@@ -61,14 +61,24 @@
 #' a2b := a2 * b
 #' "
 #' # Fit the model
-#' fit <- lavaan::sem(mod, dat)
-#'
-#' # Fit the model n times. Each time with one case is removed.
+#' fit <- sem(mod, dat)
+#' summary(fit)
+#' # Fit the model several times. Each time with one case removed.
 #' # For illustration, do this only for four selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
-#'                           to_rerun = c(3, 5, 7, 8))
+#'                           to_rerun = c(2, 4, 7, 9))
+#' # Get the R-squares
+#' lavInspect(fit, what = "rsquare")
+#' out <- user_change_raw(fit_rerun,
+#'                        user_function = lavInspect,
+#'                        what = "rsquare")
+#' out
 #'
-#' # TODO: Write an example.
+#' # Index plot
+#' p <- index_plot(out,
+#'                 column = "dv",
+#'                 plot_title = "R-square: dv")
+#' p
 #'
 #'
 #' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
