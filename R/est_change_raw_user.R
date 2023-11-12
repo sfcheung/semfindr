@@ -33,6 +33,9 @@
 #' `lavaan`-class object. This function is for computing
 #' user-defined statistics.
 #'
+#' @param ... Optional arguments to be
+#' passed to `user_function`.
+#'
 #' @return An `est_change`-class object, which is
 #' matrix with the number of columns equals to the number of
 #' values returned by `user_function` when computed in one
@@ -76,7 +79,9 @@
 #' @export
 
 user_change_raw <- function(rerun_out,
-                            user_function = NULL) {
+                            user_function = NULL,
+                            ...) {
+  more_args <- list(...)
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
     }
@@ -86,7 +91,8 @@ user_change_raw <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
-  est <- do.call(user_function, list(fit0))
+  est <- do.call(user_function,
+                 c(list(fit0), more_args))
   if (!is.null(dim(est))) {
       stop("The output of 'user_function' needs to be a vector.")
     }
@@ -94,11 +100,13 @@ user_change_raw <- function(rerun_out,
       stop("The output of 'user_function' must be a named vector.")
     }
   out0 <- sapply(reruns,
-                 function(x, user_function, est) {
-                     est - user_function(x)
+                 function(x, user_function, est, more_args) {
+                     est - do.call(user_function,
+                                   c(list(x), more_args))
                    },
                  user_function = user_function,
                  est = est,
+                 more_args = more_args,
                  simplify = FALSE,
                  USE.NAMES = TRUE)
   out <- do.call(rbind, out0)

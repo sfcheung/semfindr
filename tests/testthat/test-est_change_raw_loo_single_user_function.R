@@ -35,20 +35,23 @@ rsq <- function(object) {
   }
 rsq(fit0)
 
-chisq <- function(object) {
-    lavaan::fitMeasures(object, "chisq")
+fm <- function(object, what = "chisq") {
+    lavaan::fitMeasures(object, what)
   }
-chisq(fit0)
+fm(fit0)
+fm(fit0, what = c("chisq", "tli", "cfi"))
 
 est0 <- lavaan::parameterEstimates(fit0, rsquare =  TRUE)
 est0_15 <- lavaan::parameterEstimates(fit0_15, rsquare = TRUE)
 est_change_rerun_all <- user_change_raw(rerun_out, rsq)
-est_change_rerun_all_chisq <- user_change_raw(rerun_out, chisq)
+est_change_rerun_all_chisq <- user_change_raw(rerun_out, fm)
+est_change_rerun_all_fm <- user_change_raw(rerun_out, fm, c("chisq", "tli", "cfi"))
 
 (est0_15$est_all <- est0$est)
 (est0_15$est_cha <- est0_15$est_all - est0_15$est)
 
 (est_015_chisq_cha <- fitMeasures(fit0, "chisq") - fitMeasures(fit0_15, "chisq"))
+(est_015_fm_cha <- fitMeasures(fit0, c("chisq", "tli", "cfi")) - fitMeasures(fit0_15, c("chisq", "tli", "cfi")))
 
 test_that("Compare raw changes for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
@@ -58,6 +61,10 @@ test_that("Compare raw changes for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
         est_015_chisq_cha,
         est_change_rerun_all_chisq[15, ]
+      )
+    expect_equal(ignore_attr = TRUE,
+        est_015_fm_cha,
+        est_change_rerun_all_fm[15, ]
       )
   })
 

@@ -4,7 +4,7 @@
 \alias{user_change_raw}
 \title{Case Influence on User-Defined Statistics}
 \usage{
-user_change_raw(rerun_out, user_function = NULL)
+user_change_raw(rerun_out, user_function = NULL, ...)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
@@ -12,6 +12,9 @@ user_change_raw(rerun_out, user_function = NULL)
 \item{user_function}{A function that accepts a
 \code{lavaan}-class object. This function is for computing
 user-defined statistics.}
+
+\item{...}{Optional arguments to be
+passed to \code{user_function}.}
 }
 \value{
 An \code{est_change}-class object, which is
