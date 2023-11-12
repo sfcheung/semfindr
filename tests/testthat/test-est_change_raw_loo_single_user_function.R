@@ -53,6 +53,10 @@ est_change_rerun_all_fm <- user_change_raw(rerun_out, fm, c("chisq", "tli", "cfi
 (est_015_chisq_cha <- fitMeasures(fit0, "chisq") - fitMeasures(fit0_15, "chisq"))
 (est_015_fm_cha <- fitMeasures(fit0, c("chisq", "tli", "cfi")) - fitMeasures(fit0_15, c("chisq", "tli", "cfi")))
 
+p <- index_plot(est_change_rerun_all,
+                column = "dv_r2",
+                plot_title = "R-square Change: DV")
+
 test_that("Compare raw changes for an arbitrary case", {
     expect_equal(ignore_attr = TRUE,
         est0_15[10:11, "est_cha"],
@@ -66,5 +70,6 @@ test_that("Compare raw changes for an arbitrary case", {
         est_015_fm_cha,
         est_change_rerun_all_fm[15, ]
       )
+    expect_equal(p$data$x,
+                 unname(est_change_rerun_all[, "dv_r2"]))
   })
-
