@@ -212,6 +212,7 @@ lavaan_rerun <- function(fit,
       n <- nrow(lavaan::lavInspect(fit, "data"))
       n_j <- n
     }
+  n_orig <- sum(lavaan::lavInspect(fit, "norig"))
 
   if (is.null(case_id)) {
       case_ids <- lavaan::lavInspect(fit, "case.idx",
@@ -220,10 +221,11 @@ lavaan_rerun <- function(fit,
     } else {
       case_ids <- lavaan::lavInspect(fit, "case.idx",
                                     drop.list.single.group = FALSE)
-      if (length(case_id) != n) {
+      case_ids <- sort(unlist(case_ids, use.names = FALSE))
+      if (length(case_id) != n_orig) {
           stop("The length of case_id is not equal to the number of cases.")
         } else {
-          case_ids <- case_id
+          case_ids <- case_id[case_ids]
         }
     }
 
