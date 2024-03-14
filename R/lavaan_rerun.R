@@ -311,12 +311,15 @@ lavaan_rerun <- function(fit,
       id_to_rerun <- tmp[to_rerun]
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
+  lav_case_idx <- sort(unlist(lavaan::lavInspect(fit, "case.idx",
+                    drop.list.single.group = FALSE),
+                    use.names = FALSE))
   if (rerun_method == "lavaan") {
-      rerun_i <- gen_fct_use_lavaan(fit)
+      rerun_i <- gen_fct_use_lavaan(fit, lav_case_idx = lav_case_idx)
     }
   if (rerun_method == "update") {
       environment(gen_fct_use_update) <- parent.frame()
-      rerun_i <- gen_fct_use_update(fit)
+      rerun_i <- gen_fct_use_update(fit, lav_case_idx = lav_case_idx)
     }
   rerun_test <- suppressWarnings(rerun_i(NULL))
   if (!isTRUE(all.equal(unclass(coef(fit)),
@@ -393,7 +396,8 @@ lavaan_rerun <- function(fit,
   out
 }
 
-gen_fct_use_lavaan <- function(fit) {
+gen_fct_use_lavaan <- function(fit,
+                               lav_case_idx) {
   slot_opt <- fit@Options
   slot_pat <- data.frame(fit@ParTable)
   slot_pat$est <- NULL
@@ -410,7 +414,8 @@ gen_fct_use_lavaan <- function(fit) {
                                     group = gp_var,
                                     slotOptions = slot_opt))
             } else {
-              return(lavaan::lavaan(data = data_full[-i, ],
+              i1 <- match(i, lav_case_idx)
+              return(lavaan::lavaan(data = data_full[-i1, ],
                                     model = slot_pat,
                                     group = gp_var,
                                     slotOptions = slot_opt))
@@ -423,7 +428,8 @@ gen_fct_use_lavaan <- function(fit) {
                                     model = slot_pat,
                                     slotOptions = slot_opt))
             } else {
-              return(lavaan::lavaan(data = data_full[-i, ],
+              i1 <- match(i, lav_case_idx)
+              return(lavaan::lavaan(data = data_full[-i1, ],
                                     model = slot_pat,
                                     slotOptions = slot_opt))
             }
