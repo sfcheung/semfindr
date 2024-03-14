@@ -252,6 +252,11 @@ lavaan_rerun <- function(fit,
           if (!all(to_rerun %in% seq_len(n))) {
               stop("Some elements in to_rerun is not valid row numbers.")
             }
+          if (!all(to_rerun %in% case_ids)) {
+              stop("Some cases in to_rerun is not used in lavaan output. Probably due to listwise deletion.")
+            }
+          to_reun_org <- to_rerun
+          to_rerun <- match(to_rerun, case_ids)
         }
     } else {
       to_rerun <- order(unlist(case_ids, use.names = FALSE))
