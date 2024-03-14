@@ -254,7 +254,7 @@ lavaan_rerun <- function(fit,
             }
         }
     } else {
-      to_rerun <- sort(unlist(case_ids, use.names = FALSE))
+      to_rerun <- order(unlist(case_ids, use.names = FALSE))
     }
 
   if (!missing(md_top)) {

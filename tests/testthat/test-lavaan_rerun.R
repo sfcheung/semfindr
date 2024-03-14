@@ -26,3 +26,10 @@ test_that("Compare parameter estimates of omitting an arbitrary case", {
       )
   })
 
+datm <- dat[1:20, ]
+datm[1, 2] <- datm[2, 3] <- datm[3, 4] <- datm[4, ] <- NA
+fitm <- lavaan::sem(mod, datm)
+
+test_that("Works for missing data", {
+    expect_no_error(lavaan_rerun(fitm))
+  })
