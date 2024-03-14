@@ -64,7 +64,7 @@ head(dat0)
 
 fit0 <- lavaan::cfa(mod, dat0, group = "gp", group.equal = "loadings")
 
-rerun_out <- lavaan_rerun(fit0, parallel = FALSE, to_rerun = c(5, 3, 4, 1))
+rerun_out <- lavaan_rerun(fit0, parallel = FALSE, to_rerun = c(5, 8, 7, 9))
 
 test_that("No exogenous observed variables", {
     expect_warning(
