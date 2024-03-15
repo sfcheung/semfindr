@@ -421,17 +421,21 @@ gen_fct_use_lavaan <- function(fit,
   ngroups <- lavaan::lavInspect(fit, "ngroups")
   if (ngroups > 1) {
       gp_var <- lavaan::lavInspect(fit, "group")
+      gp_label <- lavaan::lavInspect(fit, "group.label")
+      slot_opt$group.label <- gp_label
       out <- function(i = NULL) {
           if (is.null(i)) {
               return(lavaan::lavaan(data = data_full,
                                     model = slot_pat,
                                     group = gp_var,
+                                    group.label = gp_label,
                                     slotOptions = slot_opt))
             } else {
               i1 <- match(i, lav_case_idx)
               return(lavaan::lavaan(data = data_full[-i1, ],
                                     model = slot_pat,
                                     group = gp_var,
+                                    group.label = gp_label,
                                     slotOptions = slot_opt))
             }
         }
