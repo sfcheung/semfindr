@@ -80,6 +80,8 @@ test_that("Check selected", {
     expect_equal(case_id_test[rerun_out$selected], case_id_to_rerun)
   })
 
+# Listwise
+
 dat0 <- dat[1:60, ]
 set.seed(856041)
 dat0$gp <- sample(c("gp2", "gp1"), size = nrow(dat0), replace = TRUE)
