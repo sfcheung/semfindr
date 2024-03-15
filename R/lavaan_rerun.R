@@ -298,7 +298,11 @@ lavaan_rerun <- function(fit,
       fit_resid_md <- unlist(fit_resid_md, use.names = FALSE)
       tmp1 <- lavaan::lavInspect(fit, "case.idx",
                                  drop.list.single.group = FALSE)
-      tmp2 <- unlist(tmp1, use.names = FALSE)
+      tmp2 <- sort(unlist(tmp1, use.names = FALSE))
+      if (ngroups > 1) {
+          tmp <- order(unlist(tmp1, use.names = FALSE))
+          fit_resid_md <- fit_resid_md[tmp]
+        }
       names(fit_resid_md) <- tmp2
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
