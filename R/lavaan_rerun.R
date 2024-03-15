@@ -304,9 +304,16 @@ lavaan_rerun <- function(fit,
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
       fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
-      to_rerun <- case_ids[fit_resid_md_selected]
+      if (!is.null(case_id)) {
+          to_rerun <- case_ids[fit_resid_md_selected]
+        } else {
+          to_rerun <- fit_resid_md_selected
+        }
     }
-
+  # listwise:
+  #  to_rerun:
+  #    no case_id: The positions in the *listwise* dataset
+  #    case_id: The case id to rerun
   if (!is.null(case_id)) {
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
