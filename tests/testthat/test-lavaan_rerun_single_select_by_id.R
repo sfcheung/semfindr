@@ -87,6 +87,8 @@ test_that("Check selected", {
     expect_equal(case_id_test[rerun_out$selected], case_id_to_rerun)
   })
 
+# Listwise
+
 dat <- pa_dat
 
 dat0 <- dat[1:20, ]
