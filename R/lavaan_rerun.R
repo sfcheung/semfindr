@@ -212,6 +212,7 @@ lavaan_rerun <- function(fit,
       n <- nrow(lavaan::lavInspect(fit, "data"))
       n_j <- n
     }
+  n_orig <- sum(lavaan::lavInspect(fit, "norig"))
 
   if (is.null(case_id)) {
       case_ids <- lavaan::lavInspect(fit, "case.idx",
@@ -220,10 +221,11 @@ lavaan_rerun <- function(fit,
     } else {
       case_ids <- lavaan::lavInspect(fit, "case.idx",
                                     drop.list.single.group = FALSE)
-      if (length(case_id) != n) {
+      case_ids <- sort(unlist(case_ids, use.names = FALSE))
+      if (length(case_id) != n_orig) {
           stop("The length of case_id is not equal to the number of cases.")
         } else {
-          case_ids <- case_id
+          case_ids <- case_id[case_ids]
         }
     }
 
@@ -249,12 +251,17 @@ lavaan_rerun <- function(fit,
               stop("Some elements in to_rerun is not in the case_id vectors.")
             }
         } else {
-          if (!all(to_rerun %in% seq_len(n))) {
+          if (!all(to_rerun %in% seq_len(n_orig))) {
               stop("Some elements in to_rerun is not valid row numbers.")
             }
+          if (!all(to_rerun %in% case_ids)) {
+              stop("Some cases in to_rerun is not used in lavaan output. Probably due to listwise deletion.")
+            }
+          to_reun_org <- to_rerun
+          to_rerun <- match(to_rerun, case_ids)
         }
     } else {
-      to_rerun <- sort(unlist(case_ids, use.names = FALSE))
+      to_rerun <- order(unlist(case_ids, use.names = FALSE))
     }
 
   if (!missing(md_top)) {
@@ -291,15 +298,26 @@ lavaan_rerun <- function(fit,
       fit_resid_md <- unlist(fit_resid_md, use.names = FALSE)
       tmp1 <- lavaan::lavInspect(fit, "case.idx",
                                  drop.list.single.group = FALSE)
-      tmp2 <- unlist(tmp1, use.names = FALSE)
+      tmp2 <- sort(unlist(tmp1, use.names = FALSE))
+      if (ngroups > 1) {
+          tmp <- order(unlist(tmp1, use.names = FALSE))
+          fit_resid_md <- fit_resid_md[tmp]
+        }
       names(fit_resid_md) <- tmp2
       fit_resid_md_ordered <- order(fit_resid_md, decreasing = TRUE, na.last = NA)
       fit_resid_md_ordered <- fit_resid_md_ordered[!is.na(fit_resid_md_ordered)]
       fit_resid_md_selected <- fit_resid_md_ordered[seq_len(resid_md_top)]
       fit_resid_md_selected <- fit_resid_md_selected[!is.na(fit_resid_md_selected)]
-      to_rerun <- case_ids[fit_resid_md_selected]
+      if (!is.null(case_id)) {
+          to_rerun <- case_ids[fit_resid_md_selected]
+        } else {
+          to_rerun <- fit_resid_md_selected
+        }
     }
-
+  # listwise:
+  #  to_rerun:
+  #    no case_id: The positions in the *listwise* dataset
+  #    case_id: The case id to rerun
   if (!is.null(case_id)) {
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
@@ -311,12 +329,15 @@ lavaan_rerun <- function(fit,
       id_to_rerun <- tmp[to_rerun]
     }
   fit_total_time <- lavaan::lavInspect(fit, "timing")$total
+  lav_case_idx <- sort(unlist(lavaan::lavInspect(fit, "case.idx",
+                    drop.list.single.group = FALSE),
+                    use.names = FALSE))
   if (rerun_method == "lavaan") {
-      rerun_i <- gen_fct_use_lavaan(fit)
+      rerun_i <- gen_fct_use_lavaan(fit, lav_case_idx = lav_case_idx)
     }
   if (rerun_method == "update") {
       environment(gen_fct_use_update) <- parent.frame()
-      rerun_i <- gen_fct_use_update(fit)
+      rerun_i <- gen_fct_use_update(fit, lav_case_idx = lav_case_idx)
     }
   rerun_test <- suppressWarnings(rerun_i(NULL))
   if (!isTRUE(all.equal(unclass(coef(fit)),
@@ -393,7 +414,8 @@ lavaan_rerun <- function(fit,
   out
 }
 
-gen_fct_use_lavaan <- function(fit) {
+gen_fct_use_lavaan <- function(fit,
+                               lav_case_idx) {
   slot_opt <- fit@Options
   slot_pat <- data.frame(fit@ParTable)
   slot_pat$est <- NULL
@@ -403,16 +425,21 @@ gen_fct_use_lavaan <- function(fit) {
   ngroups <- lavaan::lavInspect(fit, "ngroups")
   if (ngroups > 1) {
       gp_var <- lavaan::lavInspect(fit, "group")
+      gp_label <- lavaan::lavInspect(fit, "group.label")
+      slot_opt$group.label <- gp_label
       out <- function(i = NULL) {
           if (is.null(i)) {
               return(lavaan::lavaan(data = data_full,
                                     model = slot_pat,
                                     group = gp_var,
+                                    group.label = gp_label,
                                     slotOptions = slot_opt))
             } else {
-              return(lavaan::lavaan(data = data_full[-i, ],
+              i1 <- match(i, lav_case_idx)
+              return(lavaan::lavaan(data = data_full[-i1, ],
                                     model = slot_pat,
                                     group = gp_var,
+                                    group.label = gp_label,
                                     slotOptions = slot_opt))
             }
         }
@@ -423,7 +450,8 @@ gen_fct_use_lavaan <- function(fit) {
                                     model = slot_pat,
                                     slotOptions = slot_opt))
             } else {
-              return(lavaan::lavaan(data = data_full[-i, ],
+              i1 <- match(i, lav_case_idx)
+              return(lavaan::lavaan(data = data_full[-i1, ],
                                     model = slot_pat,
                                     slotOptions = slot_opt))
             }

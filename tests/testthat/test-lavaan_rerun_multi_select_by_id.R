@@ -80,3 +80,28 @@ test_that("Check selected", {
     expect_equal(case_id_test[rerun_out$selected], case_id_to_rerun)
   })
 
+# Listwise
+
+dat0 <- dat[1:60, ]
+set.seed(856041)
+dat0$gp <- sample(c("gp2", "gp1"), size = nrow(dat0), replace = TRUE)
+
+dat0[1, 2] <- dat0[2, 3] <- dat0[3, 4] <- dat0[5, 1:4] <- NA
+fit0 <- lavaan::sem(mod, dat0, group = "gp")
+
+set.seed(4345)
+case_id_test <- paste0(sample(letters, nrow(dat0), replace = TRUE),
+                       sample(letters, nrow(dat0), replace = TRUE))
+case_id_to_rerun <- case_id_test[c(6, 4, 7)]
+rerun_out <- lavaan_rerun(fit0, case_id = case_id_test,
+                                to_rerun = case_id_to_rerun, parallel = FALSE)
+id_test <- which(case_id_test %in% case_id_to_rerun)[3]
+fit0_test <- lavaan::sem(mod, dat0[-id_test, ], group = "gp")
+
+rerun_test <- rerun_out$rerun[[case_id_test[id_test]]]
+
+test_that("Compare parameter estimates of omitting an arbitrary case", {
+    expect_equal(ignore_attr = TRUE,
+        parameterEstimates(fit0_test), parameterEstimates(rerun_test)
+      )
+  })

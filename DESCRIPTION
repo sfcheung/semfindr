@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Influential Cases in Structural Equation Modeling
-Version: 0.1.6.1
+Version: 0.1.6.2
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
@@ -25,13 +25,14 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
     testthat (>= 3.0.0),
     parallel,
     knitr,
     rmarkdown,
-    modi
+    modi,
+    MASS
 Imports:
     lavaan,
     ggplot2,

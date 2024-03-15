@@ -2,7 +2,7 @@ library(testthat)
 library(lavaan)
 library(semfindr)
 
-mod <- 
+mod <-
 '
 iv1 ~~ iv2
 m1 ~ iv1 + iv2
@@ -34,6 +34,20 @@ test_that("Check the names of reruns", {
 
 test_that("Check selected", {
     expect_equal(rerun_out$selected, c(1, 3, 9, 15, 50))
+  })
+
+datm <- dat[1:20, ]
+datm[1, 2] <- datm[2, 3] <- datm[3, 4] <- datm[5, ] <- NA
+fitm <- lavaan::sem(mod, datm)
+fitm_7 <- lavaan::sem(mod, datm[-7, ])
+
+rerun_out <- lavaan_rerun(fitm, to_rerun = c(4, 7, 6), parallel = FALSE)
+rerun_7 <- rerun_out$rerun[["7"]]
+
+test_that("Compare parameter estimates of omitting an arbitrary case", {
+    expect_equal(ignore_attr = TRUE,
+        parameterEstimates(fitm_7), parameterEstimates(rerun_7)
+      )
   })
 
 # With case_id
@@ -71,4 +85,29 @@ test_that("Check the names of reruns", {
 
 test_that("Check selected", {
     expect_equal(case_id_test[rerun_out$selected], case_id_to_rerun)
+  })
+
+# Listwise
+
+dat <- pa_dat
+
+dat0 <- dat[1:20, ]
+dat0[1, 2] <- dat0[2, 3] <- dat0[3, 4] <- dat0[5, ] <- NA
+fit0 <- lavaan::sem(mod, dat0)
+
+set.seed(4345)
+case_id_test <- paste0(sample(letters, nrow(dat0), replace = TRUE),
+                       sample(letters, nrow(dat0), replace = TRUE))
+case_id_to_rerun <- case_id_test[c(6, 4, 7)]
+rerun_out <- lavaan_rerun(fit0, case_id = case_id_test,
+                                to_rerun = case_id_to_rerun, parallel = FALSE)
+id_test <- which(case_id_test %in% case_id_to_rerun)[3]
+fit0_test <- lavaan::sem(mod, dat0[-id_test, ])
+
+rerun_test <- rerun_out$rerun[[case_id_test[id_test]]]
+
+test_that("Compare parameter estimates of omitting an arbitrary case", {
+    expect_equal(ignore_attr = TRUE,
+        parameterEstimates(fit0_test), parameterEstimates(rerun_test)
+      )
   })
