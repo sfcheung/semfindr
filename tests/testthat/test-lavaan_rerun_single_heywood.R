@@ -1,3 +1,4 @@
+skip_if_not_installed("MASS")
 library(testthat)
 library(lavaan)
 library(semfindr)

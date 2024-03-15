@@ -31,7 +31,8 @@ Suggests:
     parallel,
     knitr,
     rmarkdown,
-    modi
+    modi,
+    MASS
 Imports:
     lavaan,
     ggplot2,

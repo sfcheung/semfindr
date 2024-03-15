@@ -1,5 +1,6 @@
 skip_on_cran()
 # "Essential but may be machine dependent"
+skip_if_not_installed("MASS")
 
 library(testthat)
 library(lavaan)
