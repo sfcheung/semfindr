@@ -251,7 +251,7 @@ lavaan_rerun <- function(fit,
               stop("Some elements in to_rerun is not in the case_id vectors.")
             }
         } else {
-          if (!all(to_rerun %in% seq_len(n))) {
+          if (!all(to_rerun %in% seq_len(n_orig))) {
               stop("Some elements in to_rerun is not valid row numbers.")
             }
           if (!all(to_rerun %in% case_ids)) {

@@ -70,3 +70,41 @@ test_that("fit_measures_change", {
                  nc_check0)
   })
 
+# With Listwise
+
+datm <- dat[1:30, ]
+datm[1, 2] <- datm[2, 3] <- datm[3, 4] <- datm[5, ] <- NA
+fitm <- lavaan::cfa(mod, datm, control = list(iter.max = 40))
+lavInspect(fitm, "iterations")
+# rerun_out <- lavaan_rerun(fitm, parallel = FALSE)
+
+# This rerun has both runs that failed to converge and runs that failed post.check.
+j <- c(16, 17, 20, 30)
+fit_rerun <- lavaan_rerun(fitm, to_rerun = j, skip_all_checks = TRUE)
+# table(sapply(fit_rerun$rerun, lavInspect, what = "converged"))
+# suppressWarnings(table(sapply(fit_rerun$rerun, lavInspect, what = "post.check")))
+
+tmp <- sapply(j, function(x) suppressWarnings(lavaan::cfa(mod, datm[-x, ], control = list(iter.max = 40))))
+nc_check0 <- sapply(tmp, lavInspect, what = "converged")
+nc_check1 <- sum(nc_check0)
+pc_check0 <- suppressWarnings(sapply(tmp, lavInspect, what = "post.check"))
+pc_check1 <- sum(!pc_check0)
+
+test_that("Convergence", {
+    expect_equal(sum(sapply(fit_rerun$rerun, lavInspect,
+                            what = "converged")),
+                 nc_check1)
+    expect_equal(fit_rerun$converged,
+                 nc_check0,
+                 ignore_attr = TRUE)
+  })
+
+test_that("Warnings", {
+    expect_equal(sum(sapply(fit_rerun$post_check, inherits,
+                            what = "simpleWarning")),
+                 pc_check1)
+    expect_equal(which(sapply(fit_rerun$post_check, inherits,
+                      what = "simpleWarning")),
+                 which(!pc_check0),
+                 ignore_attr = TRUE)
+  })
