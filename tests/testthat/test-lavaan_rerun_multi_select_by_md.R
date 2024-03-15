@@ -44,6 +44,13 @@ test_that("Check selected", {
     expect_equal(rerun_out$selected, md_selected)
   })
 
+# For listwise
+
+fit0_case_ids <- unlist(lavInspect(fit0, "case.idx"), use.names = FALSE)
+test_that("Check case ids", {
+    expect_equal(sort(as.numeric(rownames(md_fit0))),
+                 sort(fit0_case_ids))
+  })
 
 # With Case ID
 
