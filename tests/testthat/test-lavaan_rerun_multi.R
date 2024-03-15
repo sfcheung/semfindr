@@ -33,3 +33,15 @@ test_that("Compare parameter estimates of omitting an arbitrary case", {
       )
   })
 
+datm <- dat0[1:25, ]
+datm[1, 2] <- datm[2, 3] <- datm[3, 4] <- datm[4, 1:4] <- NA
+fitm <- lavaan::sem(mod, datm, group = "gp")
+
+test_that("Works for missing data", {
+    expect_no_error(rerunm_out <- lavaan_rerun(fitm))
+    fitm_10 <- lavaan::sem(mod, datm[-10, ], group = "gp")
+    rerunm_10 <- rerunm_out$rerun[["10"]]
+    expect_equal(ignore_attr = TRUE,
+        parameterEstimates(fitm_10), parameterEstimates(rerunm_10)
+      )
+  })
