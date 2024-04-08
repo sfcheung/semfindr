@@ -1,4 +1,4 @@
-# semfindr 0.1.6.2
+# semfindr 0.1.7
 
 ## Others
 
@@ -6,6 +6,9 @@
   Will check against results generated
   by directly calling `lavaan` functions.
   (0.1.6.1)
+
+- To be ready for newer versions of
+  `lavaan`. (0.1.7)
 
 ## Bug Fixes
 
