@@ -1,4 +1,4 @@
-# semfindr 0.1.7
+# semfindr 0.1.8
 
 ## Others
 
@@ -8,7 +8,7 @@
   (0.1.6.1)
 
 - To be ready for newer versions of
-  `lavaan`. (0.1.7)
+  `lavaan`. (0.1.7 - 0.1.8)
 
 ## Bug Fixes
 
