@@ -1,3 +1,11 @@
+# semfindr 0.1.8.1
+
+## Bug Fixes
+
+- Fixed a bug with `index_plot()` when
+  the extracted column has no names.
+  (0.1.8.1)
+
 # semfindr 0.1.8
 
 ## Others
@@ -7,13 +15,14 @@
   by directly calling `lavaan` functions.
   (0.1.6.1)
 
-- To be ready for newer versions of
-  `lavaan`. (0.1.7 - 0.1.8)
-
 ## Bug Fixes
 
 - Fixed a bug with listwise deletion
   in `lavaan_rerun()`. (0.1.6.2)
+
+- Fixed a bug with `index_plot()` when
+  the extracted column has no names.
+  (0.1.8.1)
 
 # semfindr 0.1.6
 

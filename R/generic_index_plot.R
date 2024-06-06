@@ -185,7 +185,11 @@ index_plot <- function(object,
       if (!(column %in% colnames(object))) {
           stop(sQuote(column), " not found in 'object'.")
         }
+      tmp <- rownames(object)
       object <- object[, column, drop = TRUE]
+      if (is.null(names(object))) {
+          names(object) <- tmp
+        }
     }
 
   object <- object[!is.na(object)]
