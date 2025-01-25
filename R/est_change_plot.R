@@ -24,7 +24,7 @@
 #' use the `*_aes` arguments to nearly
 #' fully customize all the major
 #' elements of the plots, as they would
-#' do for building a [ggplot2] plot.
+#' do for building a `ggplot2` plot.
 #'
 #' @param change The output from
 #' [est_change()], [est_change_raw()],
@@ -136,7 +136,7 @@
 #' `list()` and internal default
 #' settings will be used.
 #'
-#' @return A [ggplot2] plot. Plotted by
+#' @return A `ggplot2` plot. Plotted by
 #' default. If assigned to a variable or
 #' called inside a function, it will not
 #' be plotted. Use [plot()] to plot it.

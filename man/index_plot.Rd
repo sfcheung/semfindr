@@ -112,7 +112,7 @@ Default is \code{list()} and internal
 default settings will be used.}
 }
 \value{
-A \link{ggplot2} plot. Plotted by
+A \code{ggplot2} plot. Plotted by
 default. If assigned to a variable
 or called inside a function, it will
 not be plotted. Use \code{\link[=plot]{plot()}} to

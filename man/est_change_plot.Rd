@@ -148,7 +148,7 @@ integer, it will be rounded to the
 nearest integer.}
 }
 \value{
-A \link{ggplot2} plot. Plotted by
+A \code{ggplot2} plot. Plotted by
 default. If assigned to a variable or
 called inside a function, it will not
 be plotted. Use \code{\link[=plot]{plot()}} to plot it.
@@ -178,7 +178,7 @@ purpose. If so desired, users can
 use the \verb{*_aes} arguments to nearly
 fully customize all the major
 elements of the plots, as they would
-do for building a \link{ggplot2} plot.
+do for building a \code{ggplot2} plot.
 }
 \section{Functions}{
 \itemize{
