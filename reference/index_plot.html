@@ -11,7 +11,7 @@ a column # in a matrix."><meta property="og:image" content="https://sfcheung.git
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,7 +197,7 @@ default settings will be used.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A ggplot2 plot. Plotted by
+    <p>A <code>ggplot2</code> plot. Plotted by
 default. If assigned to a variable
 or called inside a function, it will
 not be plotted. Use <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> to
@@ -290,7 +290,7 @@ magnitude, ignoring the sign.</p>
 <span class="r-in"><span><span class="co"># For illustration, do this only for selected cases.</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.28 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.29 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Get all default influence stats</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span></span>
