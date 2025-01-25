@@ -17,12 +17,12 @@
 #'
 #' @param multiple_group Logical. Whether multiple-group models are
 #' supported. If yes, the check for multiple-groups models will be
-#' skipped. Default is `FALSE`.
+#' skipped. Default is `TRUE`.
 #'
 #' @param equality_constraint Logical. Whether models with
 #' equality constraints are
 #' supported. If yes, the check for equality constraints will be
-#' skipped. Default is `FALSE`.
+#' skipped. Default is `TRUE`.
 #'
 #' @return A single-element vector. If confirmed to be supported, will
 #' return 0. If not confirmed to be support but may still work, return 1.
@@ -55,8 +55,8 @@
 
 approx_check <- function(fit,
                          print_messages = TRUE,
-                         multiple_group = FALSE,
-                         equality_constraint = FALSE) {
+                         multiple_group = TRUE,
+                         equality_constraint = TRUE) {
 
     p_table <- lavaan::parameterTable(fit)
 
@@ -139,8 +139,7 @@ approx_check <- function(fit,
     if (sem_eq_constraints && !equality_constraint) {
           out <- ifelse(out >= 0, -1, out - 1)
           msg <- c(msg,
-                paste("The approximation method does not yet",
-                      "support a model with one or more equality constraints."))
+                paste("A model with one or more equality constraints is not yet supported."))
       }
 
     attr(out, "info") <- msg
