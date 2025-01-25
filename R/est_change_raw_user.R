@@ -36,7 +36,21 @@
 #' @param ... Optional arguments to be
 #' passed to `user_function`.
 #'
-#' @return An `est_change`-class object, which is
+#' @param fit_name If the function does
+#' not accept the `lavaan`-class object
+#' as its first argument, this should be
+#' the name of the argument of
+#' `user_function` for the
+#' `lavaan`-class object. For example,
+#' if the function is of the form `foo(x
+#' = "x1", y = "y2", my_fit = fit)`,
+#' where `fit` should be the `lavaan`-class
+#' object, set `fit_name` to `"my_fit"`
+#' for passing teh `lavaan`-class object
+#' to the function.
+#'
+#'
+#' @return An `est_change`-class object, which is a
 #' matrix with the number of columns equals to the number of
 #' values returned by `user_function` when computed in one
 #' `lavaan`-class object, and the number of rows equals to
@@ -90,7 +104,8 @@
 
 user_change_raw <- function(rerun_out,
                             user_function = NULL,
-                            ...) {
+                            ...,
+                            fit_name = NULL) {
   more_args <- list(...)
   if (missing(rerun_out)) {
       stop("No lavaan_rerun output supplied.")
@@ -101,8 +116,10 @@ user_change_raw <- function(rerun_out,
   case_ids <- names(rerun_out$rerun)
   reruns <- rerun_out$rerun
   fit0   <- rerun_out$fit
+  fit_arg <- list(fit0)
+  names(fit_arg) <- fit_name
   est <- do.call(user_function,
-                 c(list(fit0), more_args))
+                 c(fit_arg, more_args))
   if (!is.null(dim(est))) {
       stop("The output of 'user_function' needs to be a vector.")
     }
@@ -111,11 +128,14 @@ user_change_raw <- function(rerun_out,
   #     stop("The output of 'user_function' must be a named vector.")
   #   }
   out0 <- sapply(reruns,
-                 function(x, user_function, est, more_args) {
+                 function(x, user_function, fit_name, est, more_args) {
+                     fit_arg <- list(x)
+                     names(fit_arg) <- fit_name
                      est - do.call(user_function,
-                                   c(list(x), more_args))
+                                   c(fit_arg, more_args))
                    },
                  user_function = user_function,
+                 fit_name = fit_name,
                  est = est,
                  more_args = more_args,
                  simplify = FALSE,

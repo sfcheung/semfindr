@@ -112,3 +112,28 @@ expect_equal(est_change_rerun_all_unnamed[, 1],
 expect_equal(est_change_rerun_all_unnamed[, 2],
              est_change_rerun_all[, 2])
 })
+
+
+test_that("fit not the first argument", {
+rsq_non_first <- function(y_names = NULL,
+                        dummy_names = NUL,
+                        fit = NULL) {
+    est <- lavaan::parameterEstimates(object = fit,
+                                      rsquare = TRUE,
+                                      se = FALSE)
+    out <- c(m1_r2 = est[(est$lhs == "m1") &
+                      (est$op == "r2"), "est"],
+             dv_r2 = est[(est$lhs == "dv") &
+                      (est$op == "r2"), "est"])
+    return(out)
+  }
+rsq_non_first(y_names = 1:2, fit = fit0)
+est_change_rerun_all_unnamed <- user_change_raw(rerun_out,
+                                                rsq_non_first,
+                                                fit_name = "fit")
+est_change_rerun_all_unnamed
+expect_equal(est_change_rerun_all_unnamed[, 1],
+             est_change_rerun_all[, 1])
+expect_equal(est_change_rerun_all_unnamed[, 2],
+             est_change_rerun_all[, 2])
+})
