@@ -4,7 +4,7 @@
 \alias{user_change_raw}
 \title{Case Influence on User-Defined Statistics}
 \usage{
-user_change_raw(rerun_out, user_function = NULL, ...)
+user_change_raw(rerun_out, user_function = NULL, ..., fit_name = NULL)
 }
 \arguments{
 \item{rerun_out}{The output from \code{\link[=lavaan_rerun]{lavaan_rerun()}}.}
@@ -15,9 +15,21 @@ user-defined statistics.}
 
 \item{...}{Optional arguments to be
 passed to \code{user_function}.}
+
+\item{fit_name}{If the function does
+not accept the \code{lavaan}-class object
+as its first argument, this should be
+the name of the argument of
+\code{user_function} for the
+\code{lavaan}-class object. For example,
+if the function is of the form \code{foo(x = "x1", y = "y2", my_fit = fit)},
+where \code{fit} should be the \code{lavaan}-class
+object, set \code{fit_name} to \code{"my_fit"}
+for passing teh \code{lavaan}-class object
+to the function.}
 }
 \value{
-An \code{est_change}-class object, which is
+An \code{est_change}-class object, which is a
 matrix with the number of columns equals to the number of
 values returned by \code{user_function} when computed in one
 \code{lavaan}-class object, and the number of rows equals to
@@ -50,10 +62,10 @@ If the value of a case is negative, including
 the case decreases a statistic.
 
 The user-defined statistics are computed by a user-supplied
-function, \code{user_function}. It must return a named
+function, \code{user_function}. It must return a
 vector-like object (which can have only one value).
-The output needs to be named, even if it has only one
-value.
+If the vector is not named, names will be created
+as \code{user_1}, \code{user_2}, and so on.
 }
 \examples{
 

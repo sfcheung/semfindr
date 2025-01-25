@@ -37,6 +37,10 @@ navbar:
       - text: "<Multiple-Group Models>"
       - text: Illustration
         href: articles/multiple_group.html
+      - text: -------
+      - text: "<Other Features>"
+      - text: Case Influence on Arbitrary Statistics
+        href: articles/user_function.html
 
 reference:
 - title: Main Functions

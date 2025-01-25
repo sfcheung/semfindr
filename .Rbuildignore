@@ -9,3 +9,4 @@
 ^\.github$
 ^\.devcontainer$
 ^\.lintr$
+^rebuild_vignettes.R$
