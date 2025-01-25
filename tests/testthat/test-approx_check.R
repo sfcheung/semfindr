@@ -36,7 +36,7 @@ test_that("Check against the flags", {
 
 test_that("Check against the flags", {
     expect_true(
-        out_05 == -2
+        out_05 == -1
       )
   })
 

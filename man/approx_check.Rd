@@ -7,8 +7,8 @@
 approx_check(
   fit,
   print_messages = TRUE,
-  multiple_group = FALSE,
-  equality_constraint = FALSE
+  multiple_group = TRUE,
+  equality_constraint = TRUE
 )
 }
 \arguments{
@@ -21,12 +21,12 @@ as an attribute. Default is \code{TRUE}.}
 
 \item{multiple_group}{Logical. Whether multiple-group models are
 supported. If yes, the check for multiple-groups models will be
-skipped. Default is \code{FALSE}.}
+skipped. Default is \code{TRUE}.}
 
 \item{equality_constraint}{Logical. Whether models with
 equality constraints are
 supported. If yes, the check for equality constraints will be
-skipped. Default is \code{FALSE}.}
+skipped. Default is \code{TRUE}.}
 }
 \value{
 A single-element vector. If confirmed to be supported, will

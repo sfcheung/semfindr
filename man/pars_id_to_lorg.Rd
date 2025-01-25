@@ -11,7 +11,7 @@ pars_id_to_lorg(pars_id, pars_source, type = c("free", "all"))
 of \link{pars_id}.}
 
 \item{pars_source}{Can be the output of
-\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}} or \code{\link[lavaan:lavParTable]{lavaan::parameterTable()}},
+\code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}} or \code{\link[lavaan:parTable]{lavaan::parameterTable()}},
 or a named vector of free parameters (e.g., the output
 of \code{\link[=coef]{coef()}} applied to a \code{lavaan}-class object).}
 
@@ -20,7 +20,7 @@ If \code{"free"}, they
 are the position in the vector of free parameters (i.e.,
 the output of of \code{coef()}). If "all", they are the
 row numbers in the parameter table (the output of
-\code{\link[lavaan:lavParTable]{lavaan::parameterTable()}}). If \code{pars_source}
+\code{\link[lavaan:parTable]{lavaan::parameterTable()}}). If \code{pars_source}
 is the output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}, which
 does not indicate whether a parameter is free or fixed,
 this argument will be ignored.}
@@ -28,7 +28,7 @@ this argument will be ignored.}
 \value{
 If \code{pars_source} is the output of
 \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}} or
-\code{\link[lavaan:lavParTable]{lavaan::parameterTable()}}, it returns a subset of
+\code{\link[lavaan:parTable]{lavaan::parameterTable()}}, it returns a subset of
 \code{pars_source}, keeping the rows of selected parameters
 and the columns \code{lhs}, \code{op}, \code{rhs}, and \code{group}. If
 \code{pars_source} is a named vector of free parameters, it
