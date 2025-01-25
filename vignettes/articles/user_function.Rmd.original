@@ -1,0 +1,273 @@
+---
+title: "Sensitivity Analysis: Arbitrary User Function"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig.align: "center"
+    toc: true
+    number_sections: false
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+# Goal
+
+This article illustrates how to
+identify cases that are influential
+on an arbitrary statistics computed
+by any function, using
+the [`semfindr`](https://sfcheung.github.io/semfindr/) package
+.
+
+Readers are assumed to have a basic
+understanding on how to use `lavaan_rerun()`,
+as illustrated in [this article](https://sfcheung.github.io/semfindr/articles/semfindr.html).
+
+# Case Influence on Any Statistic
+
+The function `user_change_raw()` can be
+use to compute case influence measure
+for any statistics as long as it is
+provided a function that:
+
+- accepts a `lavaan` object (e.g., the
+  output of `lavaan::cfa()` or
+  `lavaan::sem()`).
+
+- returns a numeric vector of the
+  statistics. If named, the names will
+  be used. If not, names will be
+  created automatically.
+
+Different scenarios will be illustrated
+below.
+
+# Case 1: Reliability
+
+We first illustrate computing case
+influence on reliability.
+
+The sample dataset `HolzingerSwineford1939`
+from the `lavaan` package will be used
+for illustration.
+
+```{r}
+library(semfindr)
+library(lavaan)
+head(HolzingerSwineford1939)
+```
+
+For illustration, we add an influential
+case:
+
+```{r}
+dat <- HolzingerSwineford1939
+dat[1, c("x1", "x2", "x3")] <- dat[1, c("x1", "x2", "x3")] +
+                               c(-3, +3, 0)
+```
+
+A confirmatory factor analysis model
+is to be fitted to the items `x1`
+to `x9`:
+
+```{r}
+mod <-
+"
+visual =~ x1 + x2 + x3
+textual =~ x4 + x5 + x6
+speed =~ x7 + x8 + x9
+"
+fit <- cfa(model = mod,
+           data = dat)
+```
+
+## Leave-One-Out (LOO) Results
+
+We first do LOO analysis, fitting
+the model *n* times, *n* being the number
+of cases, each time with one case removed:
+
+```{r}
+fit_rerun <- lavaan_rerun(fit)
+```
+
+## Reliability
+
+Suppose we are interested in the
+reliability of the three factors.
+They can be computed by `compRelSEM()`
+from `semTools`:
+
+```{r}
+library(semTools)
+fit_rel <- compRelSEM(fit)
+fit_rel
+```
+
+We can compute the influence of each
+case using `user_change_raw()`:
+
+```{r}
+influence_rel <- user_change_raw(fit_rerun,
+                                 user_function = compRelSEM)
+```
+
+The first argument is the output of
+`lavaan_rerun()`.
+
+The argument `user_function` is the
+argument used to compute the statistics.
+
+No other arguments are needed in this case
+because `compRelSEM()` expects the
+`lavaan` object as the first argument.
+
+The output is an `est_change` object:
+
+```{r}
+influence_rel
+```
+
+The influence is computed by:
+
+- (User statistic with all case) - (User statistic without this case).
+
+Therefore, if the value is positive for
+a case, the statistic, reliability in
+this case, is larger if this case is
+included.
+
+Conversely, if the value is negative
+for a case, the statistic is decreases
+if this case is included.
+
+The function `index_plot()` can be used
+to visualize the influence. For example,
+this is the plot of case influence on
+the reliability of `visual`.
+
+```{r user_fun, echo = FALSE, fig.cap = "Case Influence on Reliability"}
+p <- index_plot(influence_rel,
+                column = "visual",
+                plot_title = "Reliability: Visual")
+p
+```
+
+The output is a `ggplot` object,
+`column` needs to be set to the name
+of the statistic to be plotted.
+Refer to the help page of `index_plot()`
+for other arguments available.
+
+As shown by both the printout and the plot,
+including the first case reduces the
+reliability of `visual` by
+`r formatC(abs(influence_rel[1, "visual"]), digits = 3, format = "f")`.
+
+We can verify this by fitting the model
+and compute the reliability without the
+first case:
+
+```{r}
+fit_no_1 <- cfa(model = mod,
+                data = dat[-1, ])
+fit_rel_no_1 <- compRelSEM(fit_no_1)
+# Without the first case
+fit_rel_no_1
+# Including the first case
+fit_rel
+```
+
+# Case 2: R-Squares
+
+Suppose we use the compute case
+influence on R-squares. This is the sample dataset,
+`sem_dat`, comes with `semfindr`:
+
+```{r}
+head(sem_dat)
+mod <-
+"
+f1 =~  x1 + x2 + x3
+f2 =~  x4 + x5 + x6
+f3 =~  x7 + x8 + x9
+f2 ~ f1
+f3 ~ f2 + f1
+"
+fit <- sem(mod,
+           data = sem_dat)
+```
+
+The R-squares can be retrieved in
+different ways. For example, it
+can be extracted by `lavInspect()`
+from `lavaan`:
+
+```{r}
+lavInspect(fit, what = "rsquare")
+```
+
+Let's do LOO first:
+
+```{r}
+fit_rerun <- lavaan_rerun(fit)
+```
+
+We then call `user_change_raw()` to
+compute case influence:
+
+```{r}
+influence_rsq <- user_change_raw(fit_rerun,
+                                 user_function = lavInspect,
+                                 what = "rsquare")
+```
+
+This example illustrates an advanced
+scenario. The function `lavInspect()`
+requires one more argument, `what`, to
+know that we want the R-squares. Such
+arguments require by `user_function`
+can be passed directly to `user_change_raw()`,
+which will pass them to `user_function`.
+
+This is the output:
+
+```{r}
+influence_rsq
+```
+
+We can use `index_plot()` again. Let's
+plot case influence on the R-square of
+`f3`:
+
+```{r user_fun2, echo = FALSE, fig.cap = "Case Influence on R-Square: f3"}
+p <- index_plot(influence_rsq,
+                column = "f3",
+                plot_title = "R-Square: f3")
+p
+```
+
+The 137th case, if included, decreases
+the R-square of `f3` by about
+`r formatC(abs(influence_rsq[137, "f3"]), digits = 3, format = "f")`,
+as shown in both the printout and the
+index plot.
+
+# Final Remarks
+
+The function `user_change_raw()` can also
+be used for function for which the
+`lavaan`-class object is not the first
+argument. Please refer to the help
+page of `user_change_raw()` on how to
+set this argument.
+
+# Reference
