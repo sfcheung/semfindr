@@ -1,4 +1,4 @@
-# semfindr 0.1.8.2
+# semfindr 0.1.8.4
 
 ## Miscellaneous
 
@@ -6,6 +6,11 @@
   will be stopped if `lavaan_rerun()`
   terminates abnormally.
   (0.1.8.2)
+
+- Updated some default values of
+  `approx_check()` to reflect new
+  features added to other functions.
+  (0.1.8.4)
 
 ## Bug Fixes
 
