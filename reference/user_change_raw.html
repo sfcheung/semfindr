@@ -9,7 +9,7 @@ changes in user-defined statistics for each case if included."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,6 +27,9 @@ changes in user-defined statistics for each case if included."><meta property="o
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>&lt;Multiple-Group Models&gt;</h6></li>
     <li><a class="dropdown-item" href="../articles/multiple_group.html">Illustration</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Other Features&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/user_function.html">Case Influence on Arbitrary Statistics</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -52,7 +55,7 @@ changes in user-defined statistics for each case if included.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">user_change_raw</span><span class="op">(</span><span class="va">rerun_out</span>, user_function <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">user_change_raw</span><span class="op">(</span><span class="va">rerun_out</span>, user_function <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, fit_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,10 +76,24 @@ user-defined statistics.</p></dd>
 <dd><p>Optional arguments to be
 passed to <code>user_function</code>.</p></dd>
 
+
+<dt id="arg-fit-name">fit_name<a class="anchor" aria-label="anchor" href="#arg-fit-name"></a></dt>
+<dd><p>If the function does
+not accept the <code>lavaan</code>-class object
+as its first argument, this should be
+the name of the argument of
+<code>user_function</code> for the
+<code>lavaan</code>-class object. For example,
+if the function is of the form <code>foo(x = "x1", y = "y2", my_fit = fit)</code>,
+where <code>fit</code> should be the <code>lavaan</code>-class
+object, set <code>fit_name</code> to <code>"my_fit"</code>
+for passing teh <code>lavaan</code>-class object
+to the function.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An <code>est_change</code>-class object, which is
+    <p>An <code>est_change</code>-class object, which is a
 matrix with the number of columns equals to the number of
 values returned by <code>user_function</code> when computed in one
 <code>lavaan</code>-class object, and the number of rows equals to
@@ -101,10 +118,10 @@ the case increases a statistic.</p>
 <p>If the value of a case is negative, including
 the case decreases a statistic.</p>
 <p>The user-defined statistics are computed by a user-supplied
-function, <code>user_function</code>. It must return a named
+function, <code>user_function</code>. It must return a
 vector-like object (which can have only one value).
-The output needs to be named, even if it has only one
-value.</p>
+If the vector is not named, names will be created
+as <code>user_1</code>, <code>user_2</code>, and so on.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -177,7 +194,7 @@ doi:10.1080/00273171.2011.561068</p>
 <span class="r-in"><span><span class="co"># For illustration, do this only for four selected cases</span></span></span>
 <span class="r-in"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                          to_rerun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">7</span>, <span class="fl">9</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.14 second(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The expected CPU time is 0.13 second(s).</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Could be faster if run in parallel.</span>
 <span class="r-in"><span><span class="co"># Get the R-squares</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect</a></span><span class="op">(</span><span class="va">fit</span>, what <span class="op">=</span> <span class="st">"rsquare"</span><span class="op">)</span></span></span>
