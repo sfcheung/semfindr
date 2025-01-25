@@ -50,10 +50,10 @@ If the value of a case is negative, including
 the case decreases a statistic.
 
 The user-defined statistics are computed by a user-supplied
-function, \code{user_function}. It must return a named
+function, \code{user_function}. It must return a
 vector-like object (which can have only one value).
-The output needs to be named, even if it has only one
-value.
+If the vector is not named, names will be created
+as \code{user_1}, \code{user_2}, and so on.
 }
 \examples{
 

@@ -22,10 +22,10 @@
 #' the case decreases a statistic.
 #'
 #' The user-defined statistics are computed by a user-supplied
-#' function, `user_function`. It must return a named
+#' function, `user_function`. It must return a
 #' vector-like object (which can have only one value).
-#' The output needs to be named, even if it has only one
-#' value.
+#' If the vector is not named, names will be created
+#' as `user_1`, `user_2`, and so on.
 #'
 #' @param rerun_out The output from [lavaan_rerun()].
 #'
@@ -106,9 +106,10 @@ user_change_raw <- function(rerun_out,
   if (!is.null(dim(est))) {
       stop("The output of 'user_function' needs to be a vector.")
     }
-  if (is.null(names(est))) {
-      stop("The output of 'user_function' must be a named vector.")
-    }
+  # # It now supports unnamed vectors
+  # if (is.null(names(est))) {
+  #     stop("The output of 'user_function' must be a named vector.")
+  #   }
   out0 <- sapply(reruns,
                  function(x, user_function, est, more_args) {
                      est - do.call(user_function,
@@ -120,6 +121,9 @@ user_change_raw <- function(rerun_out,
                  simplify = FALSE,
                  USE.NAMES = TRUE)
   out <- do.call(rbind, out0)
+  if (is.null(colnames(out))) {
+    colnames(out) <- paste0("user_", seq_len(ncol(out)))
+  }
   rownames(out) <- case_ids
 
   attr(out, "call") <- match.call()
