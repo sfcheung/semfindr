@@ -1,4 +1,4 @@
-# semfindr 0.1.8.5
+# semfindr 0.1.8.6
 
 ## Improvement
 
@@ -19,6 +19,9 @@
   `approx_check()` to reflect new
   features added to other functions.
   (0.1.8.4)
+
+- Fixed a few Rd issues on CRAN.
+  (0.l.8.6)
 
 ## Bug Fixes
 
