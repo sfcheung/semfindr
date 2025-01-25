@@ -1,4 +1,11 @@
-# semfindr 0.1.8.1
+# semfindr 0.1.8.2
+
+## Miscellaneous
+
+- Added `on.exit()` such that workers
+  will be stopped if `lavaan_rerun()`
+  terminates abnormally.
+  (0.1.8.2)
 
 ## Bug Fixes
 
@@ -19,10 +26,6 @@
 
 - Fixed a bug with listwise deletion
   in `lavaan_rerun()`. (0.1.6.2)
-
-- Fixed a bug with `index_plot()` when
-  the extracted column has no names.
-  (0.1.8.1)
 
 # semfindr 0.1.6
 

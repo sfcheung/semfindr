@@ -349,6 +349,7 @@ lavaan_rerun <- function(fit,
       pkgs <- .packages()
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
+      on.exit(try(parallel::stopCluster(cl), silent = TRUE))
       time_expected <-  length(id_to_rerun) * fit_total_time[[1]] / length(cl)
       message(paste0("The expected CPU time is ", round(time_expected, 2),
                     " second(s)."))
