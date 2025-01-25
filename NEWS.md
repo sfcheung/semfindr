@@ -1,4 +1,12 @@
-# semfindr 0.1.8.4
+# semfindr 0.1.8.5
+
+## Improvement
+
+- Updated `user_change_raw()` to allow
+  for user functions that return an
+  unnamed vector. Also added a `pkgdown`
+  website article for `user_change_raw()`.
+  (0.1.8.5)
 
 ## Miscellaneous
 

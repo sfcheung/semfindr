@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Influential Cases in Structural Equation Modeling
-Version: 0.1.8.4
+Version: 0.1.8.5
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
