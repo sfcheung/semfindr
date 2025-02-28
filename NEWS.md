@@ -1,4 +1,4 @@
-# semfindr 0.1.8.6
+# semfindr 0.1.8.7
 
 ## Improvement
 
@@ -7,6 +7,11 @@
   unnamed vector. Also added a `pkgdown`
   website article for `user_change_raw()`.
   (0.1.8.5)
+
+- For `lavaan_rerun()`, added the argument
+  `ncores` to make it easier to set
+  the number of CPU cores to use in
+  parallel processing. (0.1.8.7)
 
 ## Miscellaneous
 
@@ -22,6 +27,9 @@
 
 - Fixed a few Rd issues on CRAN.
   (0.l.8.6)
+
+- Print a more conservative estimate
+  of the expected time. (0.1.8.7)
 
 ## Bug Fixes
 
