@@ -92,11 +92,21 @@
 #' Currently, only support `"snow"` type clusters using local CPU
 #' cores. Default is `FALSE`.
 #'
+#' @param ncores The number of CPU cores
+#' to use if parallel processing is
+#' requested. Default is `NULL`, and the
+#' number of cores is determine by
+#' `makeCluster_args`. If set to an
+#' integer, this number will override
+#' the setting (`spec`) in
+#' `makeCluster_args`.
+#'
 #' @param makeCluster_args A named list of arguments to be passed to
 #' [parallel::makeCluster()]. Default is `list(spec =
 #' getOption("cl.cores", 2)))`. If only the number of cores need to
 #' be specified, use `list(spec = x)`, where `x` is the number
-#' of cores to use.
+#' of cores to use. Alternatively, set `ncores` and its
+#' value will be used in `spec`.
 #'
 #' @param rerun_method How fit will be rerun. Default is
 #' `"lavaan"`. An alternative method is `"update"`. For
@@ -170,6 +180,7 @@ lavaan_rerun <- function(fit,
                          allow_inadmissible = FALSE,
                          skip_all_checks = FALSE,
                          parallel = FALSE,
+                         ncores = NULL,
                          makeCluster_args =
                             list(spec = getOption("cl.cores", 2)),
                          rerun_method = c("lavaan", "update")
@@ -345,12 +356,17 @@ lavaan_rerun <- function(fit,
       stop("Something is wrong. The lavaan analysis cannot be rerun.")
     }
 
+  if (parallel && !is.null(ncores)) {
+    makeCluster_args <- utils::modifyList(makeCluster_args,
+                                          list(spec = ncores))
+  }
+
   if (parallel && requireNamespace("parallel", quietly = TRUE)) {
       pkgs <- .packages()
       pkgs <- rev(pkgs)
       cl <- do.call(parallel::makeCluster, makeCluster_args)
       on.exit(try(parallel::stopCluster(cl), silent = TRUE))
-      time_expected <-  length(id_to_rerun) * fit_total_time[[1]] / length(cl)
+      time_expected <-  1.5 * length(id_to_rerun) * fit_total_time[[1]] / length(cl)
       message(paste0("The expected CPU time is ", round(time_expected, 2),
                     " second(s)."))
       utils::flush.console()
@@ -364,7 +380,7 @@ lavaan_rerun <- function(fit,
       parallel::stopCluster(cl)
 
     } else {
-      time_expected <-  length(id_to_rerun) * fit_total_time[[1]]
+      time_expected <-  1.5 * length(id_to_rerun) * fit_total_time[[1]]
       message(paste0("The expected CPU time is ", round(time_expected, 2),
                     " second(s).\n",
                     "Could be faster if run in parallel."))
