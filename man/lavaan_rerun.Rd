@@ -15,6 +15,7 @@ lavaan_rerun(
   parallel = FALSE,
   ncores = NULL,
   makeCluster_args = list(spec = getOption("cl.cores", 2)),
+  progress = TRUE,
   rerun_method = c("lavaan", "update")
 )
 }
@@ -78,6 +79,9 @@ the setting (\code{spec}) in
 be specified, use \code{list(spec = x)}, where \code{x} is the number
 of cores to use. Alternatively, set \code{ncores} and its
 value will be used in \code{spec}.}
+
+\item{progress}{If \code{TRUE}, the default,
+progress will be displayed on screen.}
 
 \item{rerun_method}{How fit will be rerun. Default is
 \code{"lavaan"}. An alternative method is \code{"update"}. For
