@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Sensitivity Analysis: Arbitrary User Function</h1>
             
-            <h4 data-toc-skip class="date">2025-01-25</h4>
+            <h4 data-toc-skip class="date">2025-03-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/master/vignettes/articles/user_function.Rmd" class="external-link"><code>vignettes/articles/user_function.Rmd</code></a></small>
       <div class="d-none name"><code>user_function.Rmd</code></div>
@@ -117,6 +117,8 @@ will be used. If not, names will be created automatically.</p></li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; This is lavaan 0.6-19</span></span>
+<span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">HolzingerSwineford1939</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5        x6</span></span>
 <span><span class="co">#&gt; 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75 1.2857143</span></span>
@@ -156,7 +158,7 @@ will be used. If not, names will be created automatically.</p></li>
 removed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 9.03 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 27.09 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -167,6 +169,11 @@ They can be computed by <code>compRelSEM()</code> from
 <code>semTools</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/simsem/semTools/wiki" class="external-link">semTools</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ###############################################################################</span></span>
+<span><span class="co">#&gt; This is semTools 0.5-6</span></span>
+<span><span class="co">#&gt; All users of R (or SEM) are invited to submit functions or ideas for functions.</span></span>
+<span><span class="co">#&gt; ###############################################################################</span></span>
 <span><span class="va">fit_rel</span> <span class="op">&lt;-</span> <span class="fu">compRelSEM</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">fit_rel</span></span>
 <span><span class="co">#&gt;  visual textual   speed </span></span>
@@ -281,7 +288,7 @@ be extracted by <code><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" c
 <p>Let’s do LOO first:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 10 second(s).</span></span>
+<span><span class="co">#&gt; The expected CPU time is 9 second(s).</span></span>
 <span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>We then call <code><a href="../reference/user_change_raw.html">user_change_raw()</a></code> to compute case
 influence:</p>
