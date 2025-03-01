@@ -13,7 +13,9 @@ lavaan_rerun(
   allow_inadmissible = FALSE,
   skip_all_checks = FALSE,
   parallel = FALSE,
+  ncores = NULL,
   makeCluster_args = list(spec = getOption("cl.cores", 2)),
+  progress = TRUE,
   rerun_method = c("lavaan", "update")
 )
 }
@@ -63,10 +65,23 @@ functions in the \code{parallel} package to rerun the analysis.
 Currently, only support \code{"snow"} type clusters using local CPU
 cores. Default is \code{FALSE}.}
 
+\item{ncores}{The number of CPU cores
+to use if parallel processing is
+requested. Default is \code{NULL}, and the
+number of cores is determine by
+\code{makeCluster_args}. If set to an
+integer, this number will override
+the setting (\code{spec}) in
+\code{makeCluster_args}.}
+
 \item{makeCluster_args}{A named list of arguments to be passed to
 \code{\link[parallel:makeCluster]{parallel::makeCluster()}}. Default is \verb{list(spec = getOption("cl.cores", 2)))}. If only the number of cores need to
 be specified, use \code{list(spec = x)}, where \code{x} is the number
-of cores to use.}
+of cores to use. Alternatively, set \code{ncores} and its
+value will be used in \code{spec}.}
+
+\item{progress}{If \code{TRUE}, the default,
+progress will be displayed on screen.}
 
 \item{rerun_method}{How fit will be rerun. Default is
 \code{"lavaan"}. An alternative method is \code{"update"}. For
