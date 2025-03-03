@@ -1,4 +1,4 @@
-# semfindr 0.1.8.8
+# semfindr 0.1.8.9
 
 ## Improvement
 
@@ -35,6 +35,9 @@
 
 - Print a more conservative estimate
   of the expected time. (0.1.8.7)
+
+- Remove an invalid link in the reference.
+  (0.1.8.9)
 
 ## Bug Fixes
 

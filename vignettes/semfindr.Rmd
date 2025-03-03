@@ -917,7 +917,7 @@ Cook, R. D. (1977). Detection of influential observation in linear regression.
 *Technometrics, 19*(1), 15-18.
 
 Fox J., & Weisberg, S. (2019). *An R companion to applied regression*
-(3rd Edition). Sage. https://socialsciences.mcmaster.ca/jfox/Books/Companion/.
+(3rd Edition). Sage.
 
 Mahalanobis, P. C. (1936). On the generalized distance in statistics.
 *Proceedings of the National Institute of Science of India*, 2, 49-55.
