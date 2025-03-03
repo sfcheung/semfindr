@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Sensitivity Analysis in Multiple-Group Models</h1>
             
-            <h4 data-toc-skip class="date">2025-03-01</h4>
+            <h4 data-toc-skip class="date">2025-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/master/vignettes/articles/multiple_group.Rmd" class="external-link"><code>vignettes/articles/multiple_group.Rmd</code></a></small>
       <div class="d-none name"><code>multiple_group.Rmd</code></div>
@@ -206,7 +206,7 @@ only 100 cases, we do not have to use parallel processing. The model is
 fitted 100 times, each time with one case removed:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 20.55 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 20.1 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <p>Not shown here, but it is possible that a model may fail to converge
 or have inadmissible solutions if removed. This is especially the case
@@ -456,7 +456,7 @@ model chi-squares not significant.</p>
 <p>We can check case influence again:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rerun_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit_config_no100</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## The expected CPU time is 11.73 second(s).</span></span>
+<pre><code><span><span class="co">## The expected CPU time is 11.29 second(s).</span></span>
 <span><span class="co">## Could be faster if run in parallel.</span></span></code></pre>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">inf_config_no100</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">rerun_config_no100</span><span class="op">)</span></span></code></pre></div>
