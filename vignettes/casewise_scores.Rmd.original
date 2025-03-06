@@ -73,7 +73,7 @@ fit_est_change_approx
 
 Here is a comparison between the approximation using `semfindr::est_change_raw_approx()` and `semfindr::est_change_raw()`
 
-```{r compare-est-change}
+```{r compare-est-change, fig.cap = "Compare Changes in Estimates"}
 # From semfindr
 fit_rerun <- lavaan_rerun(fit)
 fit_est_change_raw <- est_change_raw(fit_rerun)
@@ -114,7 +114,7 @@ fit_est_change_approx <- est_change_approx(fit)
 fit_est_change_approx
 ```
 
-```{r compare-approx-gcd}
+```{r compare-approx-gcd, fig.cap = "Compare gCDs"}
 # Compare to exact computation
 fit_est_change <- est_change(fit_rerun)
 # Plot
@@ -166,7 +166,7 @@ c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
 
 Change in $\chi^2$
 
-```{r plot-change-chisq}
+```{r plot-change-chisq, fig.cap = "Compare Changes in Chi-Square"}
 # Exact measure from semfindr
 out <- fit_measures_change(fit_rerun)
 # Plot
@@ -182,7 +182,7 @@ ggplot(chisq_change_df, aes(x = chisq_change, y = chisq_change_approx)) +
 
 Change in RMSEA
 
-```{r plot-change-rmsea}
+```{r plot-change-rmsea, fig.cap = "Compare Changes in RMSEA"}
 # Plot
 rmsea_change_df <- data.frame(
   rmsea_change = out[ , "rmsea"],

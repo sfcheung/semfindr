@@ -123,20 +123,20 @@ fit_influence
 
 ## Generalized Cook's Distance
 
-```{r user_id_gcd_plot_fig}
+```{r user_id_gcd_plot_fig, fig.cap = "gcd_plot() Example"}
 gcd_plot(fit_influence, largest_gcd = 3)
 ```
 
 ## Mahalanobis Distance
 
-```{r user_id_md_plot_fig}
+```{r user_id_md_plot_fig, fig.cap = "md_plot() Example"}
 md_plot(fit_influence,
         largest_md = 3)
 ```
 
 ## Fit Measure vs. Generalized Cook's Distance
 
-```{r user_id_gcd_gof_plot_fig}
+```{r user_id_gcd_gof_plot_fig, fig.cap = "gcd_gof_plot() Example"}
 gcd_gof_plot(fit_influence,
              fit_measure = "rmsea",
              largest_gcd = 3,
@@ -145,7 +145,7 @@ gcd_gof_plot(fit_influence,
 
 ## Bubble Plot
 
-```{r user_id_gcd_gof_md_plot_fig}
+```{r user_id_gcd_gof_md_plot_fig, fig.cap = "gcd_gof_md_plot() Example"}
 gcd_gof_md_plot(fit_influence,
                 fit_measure = "rmsea",
                 largest_gcd = 3,
