@@ -3,7 +3,7 @@
 base_dir <- getwd()
 
 setwd("vignettes/")
-# knitr::knit("vignette_name.Rmd.originaL", output = "vignette_name.Rmd")
+knitr::knit("semfindr.Rmd.original", output = "semfindr.Rmd")
 
 setwd(base_dir)
 

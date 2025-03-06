@@ -1,0 +1,928 @@
+---
+title: "Quick Start"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Quick Start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+# Purpose
+
+The [semfindr](https://sfcheung.github.io/semfindr/) package contains functions for doing structural
+equation modeling (SEM) diagnostics, such as identifying
+influential cases and computing various diagnostic measures.
+This document illustrates how to use `semfindr` to do casewise sensitivity
+analysis: Assessing the influence of a case on parameter estimates
+and model fit measures.
+
+It supports two approaches:
+the leave-one-out approach presented
+by Pek and MacCallum (2011), and the approximate approach
+that approximates the influence of a case without refitting a model.
+It can generate some plots based on similar
+plots available in the `car` package by Fox and Weisberg (2019)
+for casewise sensitivity analysis.
+
+# Leave-One-Out Approach
+
+Under this approach, for a case of concern, the model is fitted
+again without this case, and then results such as parameter
+estimates are compared. This approach is exact but can be
+time consuming because the model needs to be fitted again
+for each case under consideration.
+
+## Workflow
+
+To remove the need to refit the model many times whenever
+a case influence statistic is requested, `semfindr` adopts
+this workflow:
+
+1. Decide cases to examine. All cases will be examined,
+  by default.
+
+2. For each selected case, remove it and refit the model.
+
+3. Store the results.
+
+4. Any case influence statistics can then computed without
+   the need to repeat Step 2.
+
+Users can do as much diagnostic analysis as they
+want without repeating the time consuming refitting step.
+Step 2 can also be conducted without the need to decide
+in advance the influence statistics to compute. Some
+statistics, such as generalized Cook's distance, is a
+function of the parameters selected, and the parameters to
+examine may depend on the results of other statistics
+and so may change during the analysis.
+
+The following sections illustrates how to use the
+major functions.
+
+## Fitting the Target Model
+
+The sample dataset is `pa_dat`, provided in the package,
+with variables
+`iv1`, `iv2`, `m1`, and `dv`, and 100 cases. For
+convenience, we assign `pa_dat` to a new symbol, `dat`.
+
+```{r}
+library(semfindr)
+dat <- pa_dat
+head(dat)
+```
+
+Assume that the target model under examination is a path
+model with two predictors, one mediator, and one outcome
+variable:
+
+```{r}
+mod <-
+"
+m1 ~ iv1 + iv2
+dv ~ m1
+"
+```
+
+We fit the model by `lavaan::sem()`:
+
+```{r}
+library(lavaan)
+fit <- sem(mod, dat)
+```
+
+## Rerun *n* Times (Step 1 to Step 3)
+
+We refit the model 100 times, each time with one case
+removed:
+
+```{r echo = FALSE, include = FALSE}
+# if (file.exists("semfindr_fit_rerun.RDS")) {
+#     fit_rerun <- readRDS("semfindr_fit_rerun.RDS")
+#   } else {
+#     fit_rerun <- lavaan_rerun(fit)
+#     saveRDS(fit_rerun, "semfindr_fit_rerun.RDS")
+#   }
+```
+
+```{r echo = FALSE}
+fit_no1 <- sem(mod, dat[-1, ])
+fit_no43 <- sem(mod, dat[-43, ])
+```
+
+```{r}
+fit_rerun <- lavaan_rerun(fit)
+```
+
+This example takes about 4 to 8 seconds. For larger samples
+or more complicated models, `lavaan_rerun()` supports
+parallel processing by setting `parallel` to `TRUE`.
+
+`lavaan_rerun()` also supports selecting cases using
+the Mahalanobis distance on all variables in the model or on
+the residuals of outcome variables. See the help
+page of `lavaan_rerun()` or
+`vignette("selecting_cases", package = "semfindr")` for details.
+
+If this process is slow, users can save the results by
+`base::saveRDS()` such that users can load it for sensitivity
+analysis later, without the need to repeat these steps in each
+R session.
+
+## Diagnostic Functions
+
+### Standardized Changes in Parameter Estimates
+
+One intuitive way to assess case influence is to compute
+the changes in parameter
+estimates if a case is included, with the changes standardized
+by their standard errors (Pek & MacCallum, 2011, Equation 7):
+
+```{r}
+fit_est_change <- est_change(fit_rerun)
+fit_est_change
+```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). By default,
+the cases are sorted in descending order based on
+generalized Cook's distance (`gcd`, described below),
+and only the first 10 cases are printed.
+
+The standardized change is a measure of *influence* if a case
+is *included*. If the standardized change of a parameter for
+a case is positive, then including this case increases
+the estimate of this parameter.
+
+For example, the standardized change of the path from `iv1`
+to `m1` is `r round(fit_est_change[1, "m1~iv1"], 3)` for the
+first case. The estimates of this path with and without
+the first case are `r round(coef(fit)["m1~iv1"], 3)` and
+`r round(coef(fit_no1)["m1~iv1"], 3)`, respectively. The estimate
+of this path is larger when this case is included than when
+this case is excluded. (Recall that
+`r round(fit_est_change[1, "m1~iv1"], 3)` is the change
+standardized by the standard error of the estimate).
+
+`est_change()` also computes the generalized Cook's
+distance (Cook, 1977; Pek & MacCallum, 2011, Equation 6),
+*gCD* (labelled in lowercase in the output as `gcd`),
+using the parameters examined. *gCD* is
+analogous to Cook's distance in multiple regression. It
+measures the overall influence in the parameters if a case
+is included.
+
+```{r echo = FALSE}
+i <- order(fit_est_change[, "gcd"],
+           decreasing = TRUE)
+i_top5 <- i[1:5]
+round(fit_est_change[i_top5, ], 3)
+i_top5_gcd_overall <- i_top5
+```
+
+Pek and MacCallum recommended computing generalized Cook's
+distance for subset of parameters that researchers would like
+to assess case influence. This can be done by specifying the
+parameters to be included. For
+example, we may compute the changes and the
+*gCD* only for path coefficients, using the argument
+`parameters`:
+
+```{r}
+fit_est_change_paths_only <- est_change(fit_rerun,
+                                        parameters = c("m1 ~ iv1",
+                                                       "m1 ~ iv2",
+                                                       "dv ~ m1"))
+fit_est_change_paths_only
+```
+
+```{r echo = FALSE}
+i <- order(fit_est_change_paths_only[, "gcd"],
+           decreasing = TRUE)
+```
+
+If all paths are to be included, the following call will also work:
+
+```{r eval = FALSE}
+fit_est_change_paths_only <- est_change(fit_rerun,
+                                        parameters = c("~"))
+```
+
+```{r echo = FALSE}
+i_top5_gcd_paths <- i[1:5]
+```
+
+Although the
+`r as.integer(i_top5_gcd_overall[1])`^th^ case has the
+largest *gCD* based on all parameters, the
+`r as.integer(i_top5_gcd_paths[1])`^th^ case has the
+largest *gCD* based on regression paths only. Therefore,
+when examining *gCD*, it is better to compute it only for parameters
+that are theoretically important.
+
+See the help
+page of `est_change()` for further information.
+
+### Raw Changes in Parameter Estimates
+
+The standardized changes in parameter may not be easy
+to interpret. If the original units are interpretable,
+users can compute the *raw* changes, that is, the changes
+in parameter estimates if a case is included, not
+standardized by their standard errors. This can be done
+by `est_change_raw()`:
+
+```{r}
+fit_est_change_raw <- est_change_raw(fit_rerun)
+fit_est_change_raw
+```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). If the
+output was generated `est_change_raw()`, by default,
+each column of parameter is sorted in the descending order
+of the absolute value, with case IDs inserted.
+
+For example, the change of the path from `iv1`
+to `m1` is `r round(fit_est_change_raw[43, "m1~iv1"], 3)`
+for the
+43^rd^ case. The estimate of this path with and without
+the 43^rd^ cases are `r round(coef(fit)["m1~iv1"], 3)` and
+`r round(coef(fit_no43)["m1~iv1"], 3)`, respectively. The
+estimate with the 43^rd^ case included is smaller than the
+estimate with the 43^rd^ case excluded. The raw changes is
+`r round(coef(fit)["m1~iv1"], 3)` -
+`r round(coef(fit_no43)["m1~iv1"], 3)` or
+`r round(fit_est_change_raw[43, "m1~iv1"], 3)`.
+
+If desired, `est_change_raw()` can also compute the changes
+in parameters in the *standardized solution*, by
+setting `standardized` to `TRUE`:
+
+```{r}
+fit_est_change_raw_std <- est_change_raw(fit_rerun,
+                                         standardized = TRUE)
+fit_est_change_raw_std
+```
+
+Note that the variances of `iv1` and `iv2` are necessarily
+equal to one in the standardized solution and so the raw
+changes are equal to zero for all cases.
+
+For example, these are standardized solutions of the full
+sample and the sample with the 43rd case removed:
+
+```{r}
+standardizedSolution(fit, se = FALSE)[1, ]
+standardizedSolution(sem(mod, dat[-43, ]), se = FALSE)[1, ]
+```
+
+The change of the standardized estimate of the path from `iv1`
+to `m1` is `r round(fit_est_change_raw_std[43, "m1~iv1"], 3)`
+for the
+43^rd^ case. The standardized estimates of this path with and
+without
+the 43^rd^ cases are
+`r round(standardizedSolution(fit, se = FALSE)[1, ][, 4], 3)`
+and
+`r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)`,
+respectively. The
+estimate of the standardized coefficient from `iv1` to `m1`
+is smaller than the estimate with the 43^rd^
+case removed. The raw changes of standardized estimate is
+`r round(standardizedSolution(fit, se = FALSE)[1, ][, 4], 3)` -
+`r round(standardizedSolution(fit_no43, se = FALSE)[1, ][, 4], 3)` or
+`r round(fit_est_change_raw_std[43, "m1~iv1"], 3)`.
+
+`est_change_raw()` also supports computing the changes
+for selected parameters:
+
+```{r}
+fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
+                                               standardized = TRUE,
+                                               parameters = c("m1 ~ iv1",
+                                                              "m1 ~ iv2",
+                                                              "dv ~ m1"))
+fit_est_change_raw_std_paths
+```
+
+If all parameters of the same operators are to be included,
+e.g., `"~"` for all regression paths, this form will also work:
+
+```{r eval = FALSE}
+fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
+                                               standardized = TRUE,
+                                               parameters = c("~"))
+```
+
+
+See the help
+page of `est_change_raw()` for further information.
+
+### Mahalanobis Distance
+
+One commonly used measure for identifying outliers is
+Mahalanobis distance (Mahalanobis, 1936; Pek & MacCallum,
+2011, Equation 9). `mahalanobis_rerun()` can be
+used to compute the Mahalanobis distance of each case on
+all the variables used in the target model:
+
+```{r}
+fit_md <- mahalanobis_rerun(fit_rerun)
+fit_md
+```
+
+The output is a matrix-like object of the class "md_semfindr",
+with a print method (`print.md_semfindr()`). By default,
+cases are sorted in descending order of Mahalanobis
+distance.
+
+Note that a case with a large Mahalanobis distance is not
+necessarily an influential case (Pek & MacCallum, 2011).
+Therefore,
+influence measures should be examined to avoid overlooking
+cases that are not extreme but are influential.
+
+See the help
+page of `mahalanobis_rerun()` for further information.
+
+### Changes in Fit Measures
+
+Another intuitive measure of influence is
+the difference in a measure of model fit between the analysis
+with a case included and that with the case excluded. This can
+be done by `fit_measures_change()`, which simply
+gets any fit measures supported by `lavaan::fitMeasures()`
+from the results from `lavaan_rerun`:
+
+```{r}
+fit_mc <- fit_measures_change(fit_rerun,
+            fit_measures = c("chisq", "cfi", "tli", "rmsea"))
+fit_mc
+```
+
+The output is a matrix-like object of the class "fit_measures_change",
+with a print method (`print.fit_measures_change()`). By default,
+only the first 10 cases are printed.
+
+To sort cases by a specific measure, set `sort_by` to the
+column name to be used for sorting cases. By default,
+cases are sorted in descending order of the *absolute* value
+of the selected column.
+
+```{r}
+print(fit_mc, sort_by = "chisq")
+```
+
+The value is computed by $M_\textrm{full sample} - M_\textrm{one case removed}$.
+Therefore, if the value for a case is positive, the measure is
+higher when this case is included than when this case is excluded.
+If the value is negative, the measure
+is smaller when this case is included than when this case is excluded.
+This convention is selected such
+that the interpretation is consistent with that for
+changes in parameter estimates.
+
+For example, the change in CFI for the 43rd case is
+`r round(fit_mc[43, "cfi"], 3)`. Therefore, including the 43rd Case
+yields a CFI smaller than when this case is exclude,
+and the difference is `r abs(round(fit_mc[43, "cfi"], 3))`.
+
+The argument `fit_measures` is passed to `lavaan::fitMeasures()`
+to specify the measures to be computed. The default values are
+`c("chisq", "cfi", "tli", "rmsea")`. Therefore, this argument can be omitted
+if they are the desired measures of fit:
+
+```{r eval = FALSE}
+fit_mc <- fit_measures_change(fit_rerun)
+```
+
+See the help
+page of `fit_measures_change()` for further information.
+
+### An All-In-One-Function
+
+We can also use `influence_stat()` to compute the previous
+measures. It calls `fit_measures_change()`, `est_change()`,
+and `mahalanobis_rerun()` and then merges
+their results into one object:
+
+```{r}
+fit_influence <- influence_stat(fit_rerun)
+fit_influence
+```
+
+The output is a matrix-like object of the class "influence_stat",
+with a print method (`print.influence_stat()`). If printed,
+it will print the results using the methods described above.
+
+One major use of `influence_stat()` is to provide information
+for the diagnostic plots introduced below.
+
+## Diagnostic Plots
+
+`semfindr` provides several functions to generate diagnostic
+plots. All these functions accept an output of
+`influence_stat()`
+and returns a `ggplot2` plot, which can be further customized
+if desired by other `ggplot2` functions.
+
+### Generalized Cook's Distance
+
+To visualize the *gCDs* of cases, we can plot an index plot with cases
+on the horizontal axis and the *gCD* on the vertical axis
+using `gcd_plot()`:
+
+```{r gcd_plot_fig}
+gcd_plot(fit_influence,
+         largest_gcd = 3)
+```
+
+The plot shows that, compared to other cases, the 16th case
+has the largest *gCD* (based on all free parameters).
+
+`largest_gcd` controls the number of cases with the largest
+`gcd` to be labelled. The default is 1.
+
+More options of `gcd_plot()` can be found on its help page.
+
+### Mahalanobis Distance
+
+An index plot can be computed on the
+Mahalanobis distance given by `influence_stat()`:
+
+```{r md_plot_fig}
+md_plot(fit_influence,
+        largest_md = 3)
+```
+
+This plot illustrates that, although the 87th and 99th
+cases are also large on Mahalanobis distance, they are
+not influential cases when assessed by *gCD*.
+
+`largest_m` is used to control how many cases with
+high Mahalanobis distance on all the variables in the
+fitted model will be labelled. The default is 1.
+
+More options for `md_plot()` can be found on its help
+page.
+
+### Change in Fit Measure vs. Generalized Cook's Distance
+
+To examine how *gCD* relates to a selected measure of model
+fit
+(`gof`), `gcd_gof_plot()` can be used:
+
+```{r gcd_gof_plot_fig}
+gcd_gof_plot(fit_influence,
+             fit_measure = "rmsea",
+             largest_gcd = 3,
+             largest_fit_measure = 3)
+```
+
+`largest_gcd` determines the number of cases with largest
+`gcd` to be labelled, and `largest_fit_measure` determines
+the number of cases with largest *absolute* change in
+the selected measure of model fit to be labelled.
+The default is 1 for both arguments.
+
+More options of `gcd_gof_plot()` can be found on its help
+page.
+
+### Bubble Plot
+
+The function `gcd_gof_md_plot()` can be used to plot a
+bubble plot
+of a selected measure of model fit against Mahalanobis distance,
+with the bubble size determined by generalized Cook's distance.
+This plot is similar to the plot by `car::influencePlot()` for
+regression models.
+
+```{r gcd_gof_md_plot_fig}
+gcd_gof_md_plot(fit_influence,
+                fit_measure = "rmsea",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
+`circle_size` controls the size of the largest bubble. Increase
+this number when the size difference is too small between bubbles.
+`largest_gcd`, `largest_fit_measure`, and `largest_md`
+controls the number of cases with highest absolute values
+one the these measures to be labelled. Their default values
+are 1.
+
+More options of `gcd_gof_md_plot()` can be found
+from its help page.
+
+### Index Plot of Standardized or Raw Changes in Parameter Estimates
+
+The function `est_change_plot()` can be used to plot an index
+plot of standardized or raw changes using the output of
+`est_change()` or `est_change_raw()`.
+
+For example, using the output generated by
+`est_change()` above, it
+can generate an index plot for each parameter:
+
+```{r est_chagne_plot_fig, fig.height = 7}
+est_change_plot(fit_est_change,
+                largest_change = 3)
+```
+
+`largest_change` controls the number of cases with the largest
+change to be labelled. The default is 1. The cases to be
+labelled is determined separately for each parameter.
+
+The function also supports plotting the changes only for
+selected parameters, using `parameters`:
+
+```{r est_change_plot_fig_2}
+est_change_plot(fit_est_change,
+                parameters = "~",
+                largest_change = 3)
+```
+
+It can also plot the raw changes. For example:
+
+```{r est_change_plot_fig_3}
+est_change_plot(fit_est_change_raw,
+                parameters = "~",
+                largest_change = 3)
+```
+
+Last, the output of `influence_stat()` can also be
+used. The case influence will be extracted from the
+object. For example, the following call, using
+`fit_influence` instead of `fit_est_change_raw`,
+will generate the same plot.
+
+```{r eval = FALSE}
+est_change_plot(fit_influence,
+                parameters = "~",
+                largest_change = 3)
+```
+
+More options of `est_change_plot()` can be found on its help
+page.
+
+### Standardized Changes Against *gCD*
+
+The function `est_change_gcd_plot()` can be used to plot,
+for each selected parameter, casewise standardized
+changes using the output of `est_change()` against *gCD*.
+
+For example, using the output generated by
+`est_change()` above, it
+can generate an index plot for each parameter:
+
+```{r est_change_gcd_plot_fig, fig.height = 7}
+est_change_gcd_plot(fit_est_change,
+                    largest_gcd = 3)
+```
+
+`largest_gcd` controls the number of cases with the largest
+*gCD* to be labelled. The default is 1.
+
+The function also supports plotting the changes only for
+selected parameters, using `parameters`:
+
+```{r est_change_gcd_plot_fig_2, fig.height = 7}
+est_change_gcd_plot(fit_est_change,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
+It does not support plotting the raw changes against *gCD*
+because *gCD* is not computed by `est_change_raw()`.
+
+Last, the output of `influence_stat()` can also be
+used. The case influence will be extracted from the
+object. For example, the following call, using
+`fit_influence` instead of `fit_est_change`,
+will generate the same plot.
+
+```{r eval = FALSE}
+est_change_gcd_plot(fit_influence,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
+
+More options of `est_change_gcd_plot()` can be found on its help
+page.
+
+# Approximate Approach
+
+The leave-one-out approach is exact because the model is fitted
+twice, with and without the target case. However, this can be
+time consuming for some models and datasets. The `semfindr`
+package also supports the approximate approach that uses
+casewise scores (from `lavaan::lavScores()`) and casewise
+likelihood to approximate the influence of a case *without*
+refitting a model. This approach is not exact but is much
+faster than the leave-one-out approach because the model
+is not fitted again.
+
+This approach
+can be used together with the leave-one-out approach, using
+the approximate approach to identify potentially influential
+cases and then use the leave-one-out approach to compute
+the exact influence.
+
+Most the functions for the leave-one-out approach has their
+approximate approach counterparts. Therefore, only their usage
+will be illustrated here. Please refer to the previous section
+on the meanings of the influence statistics. The major
+difference is, all functions for the approximate approach
+use the output of `lavaan` directly. There is no need to use
+`lavaan_rerun()`.
+
+For the technical details on the approximate approach,
+please refer to the
+vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
+(`vignette("casewise_scores", package = "semfindr")`).
+
+## Diagnostic Functions
+
+### Approximate Standardized Changes in Parameter Estimates
+
+The function `est_change_approx()` can be used to
+compute the approximate standardized change. The first argument
+is the output of `lavaan`:
+
+```{r}
+fit_est_change_approx <- est_change_approx(fit)
+fit_est_change_approx
+```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). By default,
+the cases are sorted in descending order based on
+approximate generalized Cook's distance (`gcd_approx`,
+described below), and only the first 10 cases are printed.
+
+The column `gcd_approx` indicates that the *gCD* is only
+an approximate value.
+
+Like `est_change()`, it also supports computing the
+approximate *gCD* based on selected parameters. For example,
+the following computes the *gCD* based on regression coefficients only:
+
+```{r}
+fit_est_change_approx_paths <- est_change_approx(fit,
+                                                 parameters = "~")
+fit_est_change_approx_paths
+```
+
+See the help
+page of `est_change_approx()` for further information.
+
+### Approximate Raw Changes in Parameter Estimates
+
+The function `est_change_raw_approx()` computes
+the approximate raw changes of parameter estimates, not
+standardized by their standard errors. The first argument
+is the output of `lavaan`:
+
+```{r}
+fit_est_change_raw_approx <- est_change_raw_approx(fit)
+fit_est_change_raw_approx
+```
+
+The output is a matrix-like object of the class "est_change",
+with a print method (`print.est_change()`). If the
+output was generated `est_change_raw_approx()`, by default,
+each column of parameter is sorted in the descending order
+of the absolute value, with case IDs inserted.
+
+Unlike `est_change_raw()`, `est_change_raw_approx()`
+does not support raw changes in the standardized solution.
+
+See the help
+page of `est_change_raw_approx()` for further information.
+
+### Mahalanobis Distance
+
+The function `mahalanobis_rerun()` actually does not
+need the leave-one-out approach. Therefore, it can also be
+used in the approximate approach by setting the first argument
+to the output of `lavaan`:
+
+```{r}
+fit_md <- mahalanobis_rerun(fit)
+fit_md
+```
+
+The results are the same whether the output of `lavaan` or
+`lavaan_reun()` is used.
+
+### Approximate Changes in Fit Measures
+
+The function `fit_measures_change_approx()` computes
+the approximate changes in selected fit measures. The first
+argument is the output of `lavaan`:
+
+```{r}
+fit_mc_approx <- fit_measures_change_approx(fit,
+                   fit_measures = c("chisq", "cfi", "tli", "rmsea"))
+fit_mc_approx
+```
+
+The output is a matrix-like object of the class "fit_measures_change",
+with a print method (`print.fit_measures_change()`). By default,
+only the first 10 cases are printed.
+
+To sort cases by a specific measure, set `sort_by` to the
+column name to be used for sorting cases. By default,
+cases are sorted in descending order of the *absolute* value
+of the selected column.
+
+```{r}
+print(fit_mc_approx, sort_by = "chisq")
+```
+
+These measures are the default values. Therefore, if only these four measures
+are needed, the following will also work:
+
+```{r eval = FALSE}
+fit_mc_approx <- fit_measures_change_approx(fit)
+```
+
+
+See the help
+page of `fit_measures_change_approx()` for further information.
+
+### An All-In-One-Function
+
+The all-in-one function `influence_stat()` can be used
+to compute approximate influence statistics by calling
+`fit_measures_change_approx()` and `est_change_approx()`.
+This can be done simply by using the output of `lavaan` as the
+first argument:
+
+```{r}
+fit_influence_approx <- influence_stat(fit)
+fit_influence_approx
+```
+
+The output is a matrix-like object of the class "influence_stat",
+with a print method (`print.influence_stat()`). If printed,
+it will print the results using the methods described above.
+
+See the help
+page of `influence_stat()` for further information.
+
+## Diagnostic Plots
+
+All the diagnostic plot functions can also be used to visualize
+case influence statistics based of the approximate approach.
+The method used will be determined by the output of
+`influence_stat()`, `est_change_approx()`, and
+`est_change_raw_approx()` and users use them in exactly the same
+way as for the leave-one-out approach. Therefore, only sample
+code is presented below, using the output of `influence_stat()`,
+`est_change_approx()`, and `est_change_raw_approx()`
+based on the approximate approach generated in the previous section.
+
+Note that all the plots noted in the titles and axis labels that
+the statistics are approximate values.
+
+### Approximate Generalized Cook's Distance
+
+```{r gcd_plot_approx_fig}
+gcd_plot(fit_influence_approx,
+         largest_gcd = 3)
+```
+
+### Mahalanobis Distance
+
+```{r md_plot_approx_fig}
+md_plot(fit_influence_approx,
+        largest_md = 3)
+```
+
+This plot is the same for both the leave-one-out approach and the
+approximate approach.
+
+### Approximate Change in Fit Measure vs. Approximate Generalized Cook's Distance
+
+```{r gcd_gof_plot_approx_fig}
+gcd_gof_plot(fit_influence_approx,
+             fit_measure = "rmsea",
+             largest_gcd = 3,
+             largest_fit_measure = 3)
+```
+
+### Bubble Plot
+
+```{r gcd_gof_md_plot_approx_fig}
+gcd_gof_md_plot(fit_influence_approx,
+                fit_measure = "rmsea",
+                largest_gcd = 3,
+                largest_fit_measure = 3,
+                largest_md = 3,
+                circle_size = 15)
+```
+
+### Index Plot of Standardized or Raw Changes in Parameter Estimates
+
+```{r est_change_plot_approx_fig, fig.height = 7}
+est_change_plot(fit_est_change_approx,
+                largest_change = 3)
+```
+
+```{r est_change_plot_approx_fig_2, fig.height = 7}
+est_change_plot(fit_est_change_approx,
+                parameters = "~",
+                largest_change = 3)
+```
+
+```{r est_change_plot_approx_fig_3, fig.height = 7}
+est_change_plot(fit_est_change_raw_approx,
+                parameters = "~",
+                largest_change = 3)
+```
+
+Like the leave-one-out approach, the output
+of `influence_stat()` can also be used.
+For example, replacing `fit_est_change_raw_approx`
+by `fit_influence_approx` will generate the
+same plot:
+
+```{r eval = FALSE}
+est_change_plot(fit_influence_approx,
+                parameters = "~",
+                largest_change = 3)
+```
+
+
+### Standardized Changes Against *gCD*
+
+```{r est_change_gcd_plot_approx_std_fig, fig.height = 7}
+est_change_gcd_plot(fit_est_change_approx,
+                    largest_gcd = 3)
+```
+
+Note `largest_gcd` controls the number of cases with the
+largest *approximated* *gCD* to be labelled. The default is 1.
+
+```{ est_change_gcd_plot_approx_std_fig_2}
+est_change_gcd_plot(fit_est_change_approx,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
+Like the leave-one-out approach, the output
+of `influence_stat()` can also be used.
+For example, replacing `fit_est_change_approx`
+by `fit_influence_approx` will generate the
+same plot:
+
+```{r eval = FALSE}
+est_change_gcd_plot(fit_influence_approx,
+                    parameters = "~",
+                    largest_gcd = 3)
+```
+
+# Final Remarks
+
+The examples above use row numbers to identify cases. If users
+have meaningful case IDs, they can be used to label case (
+see `vignette("user_id", package = "semfindr")`). If users want to refit the model
+only with selected cases removed one-by-one,
+`lavaan_rerun()` supports various methods to
+examine only selected cases (see
+`vignette("selecting_cases", package = "semfindr")`).
+
+Last, all the plot functions return `ggplot` graph objects.
+Users can further modify them to suit their needs. They
+also have `*_aes` arguments that can be used to customize
+the plot generated. Please see their help pages on how
+to use these arguments.
+
+# References
+
+Cook, R. D. (1977). Detection of influential observation in linear regression.
+*Technometrics, 19*(1), 15-18.
+
+Fox J., & Weisberg, S. (2019). *An R companion to applied regression*
+(3rd Edition). Sage.
+
+Mahalanobis, P. C. (1936). On the generalized distance in statistics.
+*Proceedings of the National Institute of Science of India*, 2, 49-55.
+
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
+models: Cases and their influence. *Multivariate Behavioral Research, 46*(2),
+202-228. https://doi.org/10.1080/00273171.2011.561068
