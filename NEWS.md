@@ -1,3 +1,11 @@
+# semfindr 0.1.9.1
+
+## Miscellaneous
+
+- Used precomputed vignettes to reduce
+  the package size and also the speed
+  to build vignettes. (0.1.9.1)
+
 # semfindr 0.1.9
 
 ## Improvement

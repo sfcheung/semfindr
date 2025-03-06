@@ -9,7 +9,7 @@
 [![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.9, updated on 2025-03-04, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+(Version 0.1.9.1, updated on 2025-03-06, [release history](https://sfcheung.github.io/semfindr/news/index.html))
 
 # semfindr: Finding influential cases in SEM <img src="man/figures/logo.png" align="right" height="150" />
 
