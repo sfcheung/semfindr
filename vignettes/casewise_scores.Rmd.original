@@ -1,0 +1,215 @@
+---
+title: "Approximate Case Influence Using Scores and Casewise Likelihood"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Approximate Case Influence Using Scores and Casewise Likelihood}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+This vignette explains the computational shortcut implemented in [semfindr](https://sfcheung.github.io/semfindr/) to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
+
+```{r dat}
+library(semfindr)
+dat <- pa_dat
+```
+
+```{r fit}
+library(lavaan)
+mod <-
+"
+m1 ~ iv1 + iv2
+dv ~ m1
+"
+fit <- sem(mod, dat)
+```
+
+```{r fit_rerun, echo = FALSE}
+# if (file.exists("semfindr_fit_rerun.RDS")) {
+#     fit_rerun <- readRDS("semfindr_fit_rerun.RDS")
+#   } else {
+#     fit_rerun <- lavaan_rerun(fit)
+#     saveRDS(fit_rerun, "semfindr_fit_rerun.RDS")
+#   }
+```
+
+## Using Scores to Approximate Case Influence
+
+`lavaan` provides the handy `lavScores()` function to evaluate
+$$s_i(\theta_m) = \frac{\partial \ell_i(\theta_m)}{\partial \theta_m}$$
+for observation $i$, where $\ell_i(\theta)$ denotes the casewise loglikelihood function and $\theta_m$ is the $m$th model parameter.
+
+For example,
+
+```{r lav-scores-head}
+head(lavScores(fit)[ , 1, drop = FALSE])
+```
+
+indicates the partial derivative of the casewise loglikelihod with respect to the parameter `m1~iv1`. Because the sum of the partial derivatives across all observations is zero at the maximum likelihood estimate with the full sample ($\hat \theta_m$; i.e., the derivative of loglikelihood of the full data is 0), $- s_i(\theta_m)$ can be used as an estimate of the partial derivative of the loglikelihood at $\hat \theta_m$ **for the sample without observation $i$**. This information can be used to approximate the maximum likelihood estimate for $\theta_m$ when case $i$ is dropped, denoted as $\hat \theta_{m(-i)}$
+
+The second-order Taylor series expansion can be used to approximate the parameter vector estimate with an observation deleted, $\hat \theta_{(-i)}$, as in the iterative [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization). Specifically,
+
+$$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
+$$\hat \theta - \hat \theta_{(i)} \approx \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](https://conservancy.umn.edu/handle/11299/37076) (p. 182).
+
+### Comparison
+
+The approximation is implemented in the `est_change_raw_approx()` function:
+
+```{r fit_est_change_approx}
+fit_est_change_approx <- est_change_raw_approx(fit)
+fit_est_change_approx
+```
+
+Here is a comparison between the approximation using `semfindr::est_change_raw_approx()` and `semfindr::est_change_raw()`
+
+```{r compare-est-change}
+# From semfindr
+fit_rerun <- lavaan_rerun(fit)
+fit_est_change_raw <- est_change_raw(fit_rerun)
+# Plot the differences
+library(ggplot2)
+tmp1 <- as.vector(t(as.matrix(fit_est_change_raw)))
+tmp2 <- as.vector(t(as.matrix(fit_est_change_approx)))
+est_change_df <- data.frame(param = rep(colnames(fit_est_change_raw),
+                                        nrow(fit_est_change_raw)),
+                             est_change = tmp1,
+                             est_change_approx = tmp2)
+ggplot(est_change_df, aes(x = est_change, y = est_change_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point(size = 0.8, alpha = 0.5) +
+  facet_wrap(~ param) +
+  coord_fixed()
+```
+
+The results are pretty similar.
+
+### Generalized Cook's distance (*gCD*)
+
+We can use the approximate parameter changes to approximate the *gCD* (see also Tanaka et al., 1991, equation 13, p. 3811):
+
+```{r approx-gcd}
+# Information matrix (Hessian)
+information_fit <- lavInspect(fit, what = "information")
+# Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)
+gcd_approx <- (nobs(fit) - 1) * rowSums(
+  (fit_est_change_approx %*% information_fit) * fit_est_change_approx
+)
+```
+
+This is implemented in the `est_change_approx()` function:
+
+```{r est_change_approx-gcd}
+fit_est_change_approx <- est_change_approx(fit)
+fit_est_change_approx
+```
+
+```{r compare-approx-gcd}
+# Compare to exact computation
+fit_est_change <- est_change(fit_rerun)
+# Plot
+gcd_df <- data.frame(
+  gcd_exact = fit_est_change[ , "gcd"],
+  gcd_approx = fit_est_change_approx[ , "gcd_approx"]
+)
+ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point() +
+  coord_fixed()
+```
+
+The approximation tend to  underestimate the actual *gCD* but the rank ordering is almost identical. This is discussed also in Tanaka et al. (1991), who proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
+
+```{r cor-gcd}
+cor(gcd_df, method = "spearman")
+```
+
+## Approximate Change in Fit
+
+The casewise loglikelihood---the contribution to the likelihood function by an observation---can be computed in `lavaan`, which approximates the change in loglikelihood when an observation is deleted:
+
+```{r lli}
+lli <- lavInspect(fit, what = "loglik.casewise")
+head(lli)
+```
+
+Here, $\ell(\hat \theta)$ will drop `r abs(round(lli[1], 2))` when observation 1 is deleted. This should approximate $\ell(\hat \theta_{(-i)})$ as long as $\hat \theta_{(-i)}$ is not too different from $\hat \theta$. Here's a comparison:
+
+```{r compare-lli}
+# Predicted ll without observation 1
+fit@loglik$loglik - lli[1]
+# Actual ll without observation 1
+fit_no1 <- sem(mod, dat[-1, ])
+fit_no1@loglik$loglik
+```
+
+They are pretty close. To approximate the change in $\chi^2$, as well as other $\chi^2$-based fit indices, we can use the `fit_measures_change_approx()` function:
+
+```{r chisq_i_approx}
+chisq_i_approx <- fit_measures_change_approx(fit)
+# Compare to the actual chisq when dropping observation 1
+c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
+  actual = fitmeasures(fit_no1, "chisq"))
+```
+
+### Comparing exact and approximate changes in fit indices
+
+Change in $\chi^2$
+
+```{r plot-change-chisq}
+# Exact measure from semfindr
+out <- fit_measures_change(fit_rerun)
+# Plot
+chisq_change_df <- data.frame(
+  chisq_change = out[ , "chisq"],
+  chisq_change_approx = chisq_i_approx[ , "chisq"]
+)
+ggplot(chisq_change_df, aes(x = chisq_change, y = chisq_change_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point() +
+  coord_fixed()
+```
+
+Change in RMSEA
+
+```{r plot-change-rmsea}
+# Plot
+rmsea_change_df <- data.frame(
+  rmsea_change = out[ , "rmsea"],
+  rmsea_change_approx = chisq_i_approx[ , "rmsea"]
+)
+ggplot(rmsea_change_df, aes(x = rmsea_change, y = rmsea_change_approx)) +
+  geom_abline(intercept = 0, slope = 1) +
+  geom_point() +
+  coord_fixed()
+```
+
+The values aligned reasonably well along the 45-degree line.
+
+# Limitations
+
+- The approximate approach is tested only for models
+  fitted by maximum likelihood (ML) with normal theory
+  standard errors (the default).
+
+- The approximate approach does not yet support multilevel
+models.
+
+The `lavaan` object will be checked by `approx_check()` to see if it is
+supported. If not, an error will be raised.
+
+# References
+
+Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. https://conservancy.umn.edu/handle/11299/37076
+
+Tanaka, Y., Watadani, S., & Ho Moon, S. (1991). Influence in covariance structure analysis: With an application to confirmatory factor analysis. *Communications in Statistics - Theory and Methods, 20*(12), 3805–3821. https://doi.org/10.1080/03610929108830742
