@@ -672,7 +672,7 @@ gcd_plot(fit_influence,
          largest_gcd = 3)
 ```
 
-![plot of chunk gcd_plot_fig](gcd_plot_fig-1.png)
+![gcd_plot() Example](semfindr_gcd_plot_fig-1.png)
 
 The plot shows that, compared to other cases, the 16th case
 has the largest *gCD* (based on all free parameters).
@@ -693,7 +693,7 @@ md_plot(fit_influence,
         largest_md = 3)
 ```
 
-![plot of chunk md_plot_fig](md_plot_fig-1.png)
+![md_plot() Example](semfindr_md_plot_fig-1.png)
 
 This plot illustrates that, although the 87th and 99th
 cases are also large on Mahalanobis distance, they are
@@ -720,7 +720,7 @@ gcd_gof_plot(fit_influence,
              largest_fit_measure = 3)
 ```
 
-![plot of chunk gcd_gof_plot_fig](gcd_gof_plot_fig-1.png)
+![gcd_gof_plot() Example](semfindr_gcd_gof_plot_fig-1.png)
 
 `largest_gcd` determines the number of cases with largest
 `gcd` to be labelled, and `largest_fit_measure` determines
@@ -750,7 +750,7 @@ gcd_gof_md_plot(fit_influence,
                 circle_size = 15)
 ```
 
-![plot of chunk gcd_gof_md_plot_fig](gcd_gof_md_plot_fig-1.png)
+![gcd_gof_md_plot Example](semfindr_gcd_gof_md_plot_fig-1.png)
 
 `circle_size` controls the size of the largest bubble. Increase
 this number when the size difference is too small between bubbles.
@@ -778,7 +778,7 @@ est_change_plot(fit_est_change,
                 largest_change = 3)
 ```
 
-![plot of chunk est_chagne_plot_fig](est_chagne_plot_fig-1.png)
+![est_change_plot() Example 1](semfindr_est_chagne_plot_fig-1.png)
 
 `largest_change` controls the number of cases with the largest
 change to be labelled. The default is 1. The cases to be
@@ -794,7 +794,7 @@ est_change_plot(fit_est_change,
                 largest_change = 3)
 ```
 
-![plot of chunk est_change_plot_fig_2](est_change_plot_fig_2-1.png)
+![est_change_plot() Example 2](semfindr_est_change_plot_fig_2-1.png)
 
 It can also plot the raw changes. For example:
 
@@ -805,7 +805,7 @@ est_change_plot(fit_est_change_raw,
                 largest_change = 3)
 ```
 
-![plot of chunk est_change_plot_fig_3](est_change_plot_fig_3-1.png)
+![est_change_plot() Example 3](semfindr_est_change_plot_fig_3-1.png)
 
 Last, the output of `influence_stat()` can also be
 used. The case influence will be extracted from the
@@ -839,7 +839,7 @@ est_change_gcd_plot(fit_est_change,
                     largest_gcd = 3)
 ```
 
-![plot of chunk est_change_gcd_plot_fig](est_change_gcd_plot_fig-1.png)
+![est_change_gcd_plot() Example 1](semfindr_est_change_gcd_plot_fig-1.png)
 
 `largest_gcd` controls the number of cases with the largest
 *gCD* to be labelled. The default is 1.
@@ -854,7 +854,7 @@ est_change_gcd_plot(fit_est_change,
                     largest_gcd = 3)
 ```
 
-![plot of chunk est_change_gcd_plot_fig_2](est_change_gcd_plot_fig_2-1.png)
+![est_change_gcd_plot() Example 2](semfindr_est_change_gcd_plot_fig_2-1.png)
 
 It does not support plotting the raw changes against *gCD*
 because *gCD* is not computed by `est_change_raw()`.
@@ -1101,7 +1101,8 @@ of the selected column.
 
 
 ``` r
-print(fit_mc_approx, sort_by = "chisq")
+print(fit_mc_approx,
+      sort_by = "chisq")
 #> 
 #> -- Approximate Case Influence on Fit Measures --
 #> 
@@ -1232,7 +1233,7 @@ gcd_plot(fit_influence_approx,
          largest_gcd = 3)
 ```
 
-![plot of chunk gcd_plot_approx_fig](gcd_plot_approx_fig-1.png)
+![gcd_plot() With Approximate Influence: Example](semfindr_gcd_plot_approx_fig-1.png)
 
 ### Mahalanobis Distance
 
@@ -1242,7 +1243,7 @@ md_plot(fit_influence_approx,
         largest_md = 3)
 ```
 
-![plot of chunk md_plot_approx_fig](md_plot_approx_fig-1.png)
+![md_plot() With Approximate Influence: Example](semfindr_md_plot_approx_fig-1.png)
 
 This plot is the same for both the leave-one-out approach and the
 approximate approach.
@@ -1257,7 +1258,7 @@ gcd_gof_plot(fit_influence_approx,
              largest_fit_measure = 3)
 ```
 
-![plot of chunk gcd_gof_plot_approx_fig](gcd_gof_plot_approx_fig-1.png)
+![gcd_gof_plot() With Approximate Influence: Example](semfindr_gcd_gof_plot_approx_fig-1.png)
 
 ### Bubble Plot
 
@@ -1271,7 +1272,7 @@ gcd_gof_md_plot(fit_influence_approx,
                 circle_size = 15)
 ```
 
-![plot of chunk gcd_gof_md_plot_approx_fig](gcd_gof_md_plot_approx_fig-1.png)
+![gcd_gof_md_plot() With Approximate Influence: Example](semfindr_gcd_gof_md_plot_approx_fig-1.png)
 
 ### Index Plot of Standardized or Raw Changes in Parameter Estimates
 
@@ -1281,7 +1282,7 @@ est_change_plot(fit_est_change_approx,
                 largest_change = 3)
 ```
 
-![plot of chunk est_change_plot_approx_fig](est_change_plot_approx_fig-1.png)
+![est_change_plot() With Approximate Influence: Example 1](semfindr_est_change_plot_approx_fig-1.png)
 
 
 ``` r
@@ -1290,7 +1291,7 @@ est_change_plot(fit_est_change_approx,
                 largest_change = 3)
 ```
 
-![plot of chunk est_change_plot_approx_fig_2](est_change_plot_approx_fig_2-1.png)
+![est_change_plot() With Approximate Influence: Example 2](semfindr_est_change_plot_approx_fig_2-1.png)
 
 
 ``` r
@@ -1299,7 +1300,7 @@ est_change_plot(fit_est_change_raw_approx,
                 largest_change = 3)
 ```
 
-![plot of chunk est_change_plot_approx_fig_3](est_change_plot_approx_fig_3-1.png)
+![est_change_plot() With Approximate Influence: Example 3](semfindr_est_change_plot_approx_fig_3-1.png)
 
 Like the leave-one-out approach, the output
 of `influence_stat()` can also be used.
@@ -1323,16 +1324,19 @@ est_change_gcd_plot(fit_est_change_approx,
                     largest_gcd = 3)
 ```
 
-![plot of chunk est_change_gcd_plot_approx_std_fig](est_change_gcd_plot_approx_std_fig-1.png)
+![est_change_gcd_plot() With Approximate Influence: Example 1](semfindr_est_change_gcd_plot_approx_std_fig-1.png)
 
 Note `largest_gcd` controls the number of cases with the
 largest *approximated* *gCD* to be labelled. The default is 1.
 
-```{ est_change_gcd_plot_approx_std_fig_2}
+
+``` r
 est_change_gcd_plot(fit_est_change_approx,
                     parameters = "~",
                     largest_gcd = 3)
 ```
+
+![est_change_gcd_plot() With Approximate Influence: Example 2](semfindr_est_change_gcd_plot_approx_std_fig_2-1.png)
 
 Like the leave-one-out approach, the output
 of `influence_stat()` can also be used.
