@@ -1,10 +1,14 @@
-# semfindr 0.1.9.1
+# semfindr 0.1.9.2
 
 ## Miscellaneous
 
 - Used precomputed vignettes to reduce
   the package size and also the speed
   to build vignettes. (0.1.9.1)
+
+- `est_change_raw()` will now keep the
+  original order of parameters.
+  (0.1.9.2)
 
 # semfindr 0.1.9
 

@@ -244,7 +244,7 @@ est_change_raw <- function(rerun_out,
                               pars_source = ptable,
                               type = "all")
       tmp3 <- merge(estorg, tmp2)
-      parameters_selected <- tmp3$est_id
+      parameters_selected <- sort(tmp3$est_id)
     } else {
       parameters_selected <- seq_len(length(parameters_names))
     }
