@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Use Case IDs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r, include = FALSE}
@@ -18,6 +20,7 @@ knitr::opts_chunk$set(
 Instead of using row numbers (`case.idx` in the `lavaan` object),
 `lavaan_rerun()` from the
 package [semfindr](https://sfcheung.github.io/semfindr/)
+[@cheung_semfindr_2026]
 supports user supplied case IDs.
 This can make the output more readable.
 
@@ -153,3 +156,5 @@ gcd_gof_md_plot(fit_influence,
                 largest_md = 3,
                 circle_size = 15)
 ```
+
+# References

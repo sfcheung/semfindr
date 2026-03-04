@@ -1,16 +1,18 @@
 ---
 title: "Approximate Case Influence Using Scores and Casewise Likelihood"
-date: "2025-03-06"
+date: "2026-03-04"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Approximate Case Influence Using Scores and Casewise Likelihood}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
 ---
 
 
 
-This vignette explains the computational shortcut implemented in [semfindr](https://sfcheung.github.io/semfindr/) to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
+This vignette explains the computational shortcut implemented in [semfindr](https://sfcheung.github.io/semfindr/) [@cheung_semfindr_2026] to approximate the casewise influence. The approximation is most beneficial when the sample size *N* is large, where the approximation works better and the computational cost for refitting models *N* times is high.
 
 
 ``` r
@@ -57,7 +59,7 @@ The second-order Taylor series expansion can be used to approximate the paramete
 
 $$\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)$$
 $$\hat \theta - \hat \theta_{(i)} \approx \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),$$
-where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of [Tanaka et al. (1991)](https://doi.org/10.1080/03610929108830742) (p. 3807) and is related to the one-step approximation described by [Cook and Weisberg (1982)](https://conservancy.umn.edu/handle/11299/37076) (p. 182).
+where $\nabla \ell_i(\hat \theta)$ is the gradient vector of the casewise loglikelihood with respect to the parameters (i.e., score). The $N / (N - 1)$ term is used to adjust for the decrease in sample size (this adjustment is trivial in large samples). This procedure should be the same as equation (4) of @tanaka_influence_1991 (p. 3807) and is related to the one-step approximation described by [@cook_residuals_1982, p. 182].
 
 ### Comparison
 
@@ -94,7 +96,7 @@ Here is a comparison between the approximation using `semfindr::est_change_raw_a
 ``` r
 # From semfindr
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 1.5 second(s).
+#> The expected CPU time is 39 second(s).
 #> Could be faster if run in parallel.
 fit_est_change_raw <- est_change_raw(fit_rerun)
 # Plot the differences
@@ -118,7 +120,7 @@ The results are pretty similar.
 
 ### Generalized Cook's distance (*gCD*)
 
-We can use the approximate parameter changes to approximate the *gCD* (see also Tanaka et al., 1991, equation 13, p. 3811):
+We can use the approximate parameter changes to approximate the *gCD* [see also @tanaka_influence_1991, equation 13, p. 3811]:
 
 
 ``` r
@@ -174,7 +176,7 @@ ggplot(gcd_df, aes(x = gcd_exact, y = gcd_approx)) +
 
 ![Compare gCDs](compare-approx-gcd-1.png)
 
-The approximation tend to  underestimate the actual *gCD* but the rank ordering is almost identical. This is discussed also in Tanaka et al. (1991), who proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
+The approximation tend to  underestimate the actual *gCD* but the rank ordering is almost identical. This is discussed also in @tanaka_influence_1991, who proposed a correction by applying a one-step approximation after the correction (currently not implemented due to the need to recompute scores with updated parameter values).
 
 
 ``` r
@@ -273,7 +275,3 @@ The `lavaan` object will be checked by `approx_check()` to see if it is
 supported. If not, an error will be raised.
 
 # References
-
-Cook, R. D., & Weisberg, S. (1982). *Residuals and influence in regression.* New York: Chapman and Hall. https://conservancy.umn.edu/handle/11299/37076
-
-Tanaka, Y., Watadani, S., & Ho Moon, S. (1991). Influence in covariance structure analysis: With an application to confirmatory factor analysis. *Communications in Statistics - Theory and Methods, 20*(12), 3805–3821. https://doi.org/10.1080/03610929108830742

@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Quick Start}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r, include = FALSE}
@@ -17,7 +19,9 @@ knitr::opts_chunk$set(
 
 # Purpose
 
-The [semfindr](https://sfcheung.github.io/semfindr/) package contains functions for doing structural
+The [semfindr](https://sfcheung.github.io/semfindr/) package
+[@cheung_semfindr_2026]
+contains functions for doing structural
 equation modeling (SEM) diagnostics, such as identifying
 influential cases and computing various diagnostic measures.
 This document illustrates how to use `semfindr` to do casewise sensitivity
@@ -26,10 +30,11 @@ and model fit measures.
 
 It supports two approaches:
 the leave-one-out approach presented
-by Pek and MacCallum (2011), and the approximate approach
+by @pek_sensitivity_2011, and the
+approximate approach
 that approximates the influence of a case without refitting a model.
 It can generate some plots based on similar
-plots available in the `car` package by Fox and Weisberg (2019)
+plots available in the `car` package by @fox_r_2018
 for casewise sensitivity analysis.
 
 # Leave-One-Out Approach
@@ -347,7 +352,7 @@ cases are sorted in descending order of Mahalanobis
 distance.
 
 Note that a case with a large Mahalanobis distance is not
-necessarily an influential case (Pek & MacCallum, 2011).
+necessarily an influential case [@pek_sensitivity_2011].
 Therefore,
 influence measures should be examined to avoid overlooking
 cases that are not extreme but are influential.
@@ -465,7 +470,7 @@ md_plot(fit_influence,
         largest_md = 3)
 ```
 
-This plot illustrates that, although the 87th and 99th
+This plot illustrates that, although the 87^th^ and 99^th^
 cases are also large on Mahalanobis distance, they are
 not influential cases when assessed by *gCD*.
 
@@ -726,7 +731,7 @@ fit_md
 ```
 
 The results are the same whether the output of `lavaan` or
-`lavaan_reun()` is used.
+`lavaan_rerun()` is used.
 
 ### Approximate Changes in Fit Measures
 
@@ -914,16 +919,3 @@ the plot generated. Please see their help pages on how
 to use these arguments.
 
 # References
-
-Cook, R. D. (1977). Detection of influential observation in linear regression.
-*Technometrics, 19*(1), 15-18.
-
-Fox J., & Weisberg, S. (2019). *An R companion to applied regression*
-(3rd Edition). Sage.
-
-Mahalanobis, P. C. (1936). On the generalized distance in statistics.
-*Proceedings of the National Institute of Science of India*, 2, 49-55.
-
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. *Multivariate Behavioral Research, 46*(2),
-202-228. https://doi.org/10.1080/00273171.2011.561068

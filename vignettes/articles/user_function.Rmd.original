@@ -25,7 +25,7 @@ identify cases that are influential
 on an arbitrary statistics computed
 by any function, using
 the [`semfindr`](https://sfcheung.github.io/semfindr/) package
-.
+[@cheung_semfindr_2026].
 
 Readers are assumed to have a basic
 understanding on how to use `lavaan_rerun()`,
@@ -108,7 +108,8 @@ from `semTools`:
 
 ```{r}
 library(semTools)
-fit_rel <- compRelSEM(fit)
+fit_rel <- compRelSEM(fit,
+                      simplify = TRUE)
 fit_rel
 ```
 
@@ -117,7 +118,8 @@ case using `user_change_raw()`:
 
 ```{r}
 influence_rel <- user_change_raw(fit_rerun,
-                                 user_function = compRelSEM)
+                                 user_function = compRelSEM,
+                                 simplify = TRUE)
 ```
 
 The first argument is the output of
@@ -125,10 +127,18 @@ The first argument is the output of
 
 The argument `user_function` is the
 argument used to compute the statistics.
+NOTE: The output needs to be a numeric vector.
 
 No other arguments are needed in this case
 because `compRelSEM()` expects the
 `lavaan` object as the first argument.
+
+Additional arguments can be passed to
+the user function. For example, since 0.5-8,
+`semTools::compRelSEM()`, the default
+output is a list. Therefore, `simplify = TRUE`
+is added such that the output is simplified
+to a numeric vector, to be used by `user_change_raw()`.
 
 The output is an `est_change` object:
 
@@ -270,4 +280,4 @@ argument. Please refer to the help
 page of `user_change_raw()` on how to
 set this argument.
 
-# Reference
+# References

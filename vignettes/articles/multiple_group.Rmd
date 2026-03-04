@@ -16,7 +16,7 @@ This article illustrates how to
 identify influential cases in a multiple-group model
 using
 the [`semfindr`](https://sfcheung.github.io/semfindr/) package
-.
+[@cheung_semfindr_2026].
 This article assumes
 that readers have learned how to use the main functions
 for single-group models
@@ -364,4 +364,4 @@ because the dataset is artificial. In
 real datasets, please see
 @aguinis_best-practice_2013.
 
-# Reference
+# References
