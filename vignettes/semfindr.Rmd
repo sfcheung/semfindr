@@ -123,7 +123,7 @@ removed:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 18 second(s).
+#> The expected CPU time is 7.5 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -144,7 +144,7 @@ R session.
 
 ## Diagnostic Functions
 
-### Standardized Changes in Parameter Estimates
+### Standardized Changes in Parameter Estimates (DFTHETAS)
 
 One intuitive way to assess case influence is to compute
 the changes in parameter
@@ -182,12 +182,13 @@ the cases are sorted in descending order based on
 generalized Cook's distance (`gcd`, described below),
 and only the first 10 cases are printed.
 
-The standardized change is a measure of *influence* if a case
+The standardized change, *DFTHETAS* (*S* for standardized),
+is a measure of *influence* if a case
 is *included*. If the standardized change of a parameter for
-a case is positive, then including this case increases
+a case is *positive*, then including this case *increases*
 the estimate of this parameter.
 
-For example, the standardized change of the path from `iv1`
+For example, the DFTHETAS of the path from `iv1`
 to `m1` is 0.024 for the
 first case. The estimates of this path with and without
 the first case are 0.215 and
@@ -215,7 +216,7 @@ is included.
 #> 51  0.421 -0.057  0.094  0.089 -0.044 0.200
 ```
 
-Pek and MacCallum recommended computing generalized Cook's
+@pek_sensitivity_2011 recommended computing generalized Cook's
 distance for subset of parameters that researchers would like
 to assess case influence. This can be done by specifying the
 parameters to be included. For
@@ -274,13 +275,14 @@ that are theoretically important.
 See the help
 page of `est_change()` for further information.
 
-### Raw Changes in Parameter Estimates
+### Raw Change in Parameter Estimates (DFTHETA)
 
-The standardized changes in parameter may not be easy
+The standardized change (DFTHETAS) of a parameter may not be easy
 to interpret. If the original units are interpretable,
 users can compute the *raw* changes, that is, the changes
 in parameter estimates if a case is included, not
-standardized by their standard errors. This can be done
+standardized by their standard errors. This change,
+*DFTHETA* (without the *S*), can be computed
 by `est_change_raw()`:
 
 
@@ -314,7 +316,7 @@ output was generated `est_change_raw()`, by default,
 each column of parameter is sorted in the descending order
 of the absolute value, with case IDs inserted.
 
-For example, the change of the path from `iv1`
+For example, the DFTHETA of the path from `iv1`
 to `m1` is -0.043
 for the
 43^rd^ case. The estimate of this path with and without
@@ -327,7 +329,8 @@ estimate with the 43^rd^ case excluded. The raw changes is
 -0.043.
 
 If desired, `est_change_raw()` can also compute the changes
-in parameters in the *standardized solution*, by
+in parameters in the *standardized solution*, *DFZTHETA*
+(*Z* for standardized solution), by
 setting `standardized` to `TRUE`:
 
 
@@ -372,7 +375,7 @@ equal to one in the standardized solution and so the raw
 changes are equal to zero for all cases.
 
 For example, these are standardized solutions of the full
-sample and the sample with the 43rd case removed:
+sample and the sample with the 43^rd^ case removed:
 
 
 ``` r
@@ -384,7 +387,7 @@ standardizedSolution(sem(mod, dat[-43, ]), se = FALSE)[1, ]
 #> 1  m1  ~ iv1    0.21
 ```
 
-The change of the standardized estimate of the path from `iv1`
+The DFZTHETA of the path from `iv1`
 to `m1` is -0.032
 for the
 43^rd^ case. The standardized estimates of this path with and
@@ -484,11 +487,11 @@ with a print method (`print.md_semfindr()`). By default,
 cases are sorted in descending order of Mahalanobis
 distance.
 
-Note that a case with a large Mahalanobis distance is not
+Note that a case with a large Mahalanobis distance is *not*
 necessarily an influential case [@pek_sensitivity_2011].
 Therefore,
 influence measures should be examined to avoid overlooking
-cases that are not extreme but are influential.
+cases that are not extreme *but* are influential.
 
 See the help
 page of `mahalanobis_rerun()` for further information.
@@ -769,7 +772,7 @@ are 1.
 More options of `gcd_gof_md_plot()` can be found
 from its help page.
 
-### Index Plot of Standardized or Raw Changes in Parameter Estimates
+### Index Plot of Standardized Changes (DFTHETASs) or Raw Changes (DFTHETAs) in Parameter Estimates
 
 The function `est_change_plot()` can be used to plot an index
 plot of standardized or raw changes using the output of
@@ -919,7 +922,7 @@ vignette *Approximate Case Influence Using Scores and Casewise Likelihood*
 ### Approximate Standardized Changes in Parameter Estimates
 
 The function `est_change_approx()` can be used to
-compute the approximate standardized change. The first argument
+compute the approximate standardized change (DFTHETAZ). The first argument
 is the output of `lavaan`:
 
 
@@ -992,7 +995,7 @@ page of `est_change_approx()` for further information.
 ### Approximate Raw Changes in Parameter Estimates
 
 The function `est_change_raw_approx()` computes
-the approximate raw changes of parameter estimates, not
+the approximate raw change of a parameter estimate (DFTHETA), not
 standardized by their standard errors. The first argument
 is the output of `lavaan`:
 
