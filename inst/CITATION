@@ -1,0 +1,13 @@
+citHeader("To cite the 'semfindr' package in publications use:")
+
+bibentry(
+  bibtype = "Article",
+	title = "{semfindr}: An R package for identifying influential cases in structural equation modeling.",
+	url = "https://doi.org/10.1080/00273171.2026.2634293",
+	doi = "10.1080/00273171.2026.2634293",
+	language = "en",
+  journal = "Multivariate Behavioral Research",
+	author = c(as.person("S. F. Cheung"),
+             as.person("M. H. C. Lai")),
+	year = "2026",
+)
