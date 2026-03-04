@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_change_raw.R
 \name{est_change_raw}
 \alias{est_change_raw}
-\title{Case Influence on Parameter Estimates}
+\title{Case Influence on Parameter Estimates (DFTHETA)}
 \usage{
 est_change_raw(
   rerun_out,
@@ -26,9 +26,9 @@ If omitted or \code{NULL}, the
 default, changes on all free parameters will be computed.}
 
 \item{standardized}{If \code{TRUE}, the changes in the full standardized
-solution is returned (\code{type} = \code{std.all} in
+solution (\emph{DFZTHETA}s) are returned (\code{type} = \code{std.all} in
 \code{\link[lavaan:standardizedSolution]{lavaan::standardizedSolution()}}). Otherwise, the changes in the
-unstandardized solution are returned. Default is \code{FALSE}.}
+unstandardized solution (\emph{DFTHETA}s) are returned. Default is \code{FALSE}.}
 
 \item{user_defined_label_full}{Logical. If \code{TRUE}, use the full
 labels for user-defined parameters (parameters created by
@@ -58,7 +58,8 @@ case:
 (Estimate with all case) - (Estimate without this case).
 
 The
-change is the raw change, either for the standardized or
+change is the raw change (\emph{DFTHETA}, Cheung & Lai, 2026, Pek & MacCallum, 2011),
+either for the standardized or
 unstandardized solution. The change is \emph{not} divided by standard
 error.
 This is a measure of the influence of a case on the parameter
@@ -71,6 +72,10 @@ If the value of a case is negative, including the case decreases an estimate.
 If the analysis is not admissible or did not converge when a case
 is deleted, \code{NA}s will be returned for this case on the
 differences.
+
+The corresponding changes in the standardized solution
+(e.g., a change in a correlation) is called \emph{DFZTHETA},
+\emph{Z} for standardized.
 
 Supports both single-group and multiple-group models.
 (Support for multiple-group models available in 0.1.4.8 and later version).
@@ -95,9 +100,12 @@ fit <- lavaan::sem(mod, dat)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(3, 5, 7, 8))
+
+# === DFTHETA ===
+
 # Compute the changes in parameter estimates if a case is included
 # vs. if this case is excluded.
-# That is, case influence on parameter estimates.
+# That is, case influence on parameter estimates
 out <- est_change_raw(fit_rerun)
 # Results excluding a case
 out
@@ -118,6 +126,8 @@ out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 # Results excluding a case
 out2
 # Note that only the changes in the selected paths are included.
+
+# === DFZTHETA (Z for standardized) ===
 
 # Use standardized = TRUE to compare the differences in standardized solution
 out2_std <- est_change_raw(fit_rerun,
@@ -151,9 +161,11 @@ fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 # Compute the changes in parameter estimates if a case is included
 # vs. if this case is excluded.
 # That is, case influence on parameter estimates.
+# === DFTHETA ===
 # For free loadings only
 out <- est_change_raw(fit_rerun, parameters = "=~")
 out
+# === DFZTHETA ===
 # For standardized loadings only
 out_std <- est_change_raw(fit_rerun, parameters = "=~",
                           standardized = TRUE)
@@ -180,9 +192,11 @@ fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 # Compute the changes in parameter estimates if a case is included
 # vs. if this case is excluded.
 # That is, case influence on parameter estimates.
+# === DFTHETA ===
 # For structural paths only
 out <- est_change_raw(fit_rerun, parameters = "~")
 out
+# === DFZTHETA ===
 # For standardized paths only
 out_std <- est_change_raw(fit_rerun, parameters = "~",
                           standardized = TRUE)
@@ -191,6 +205,13 @@ out_std
 
 }
 \references{
+Cheung, S. F., & Lai, M. H. C. (2026). \code{semfindr}:
+An R package for identifying influential cases in
+structural equation modeling.
+\emph{Multivariate Behavioral Research}.
+Advance online publication.
+doi:10.1080/00273171.2026.2634293
+
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
 \emph{Multivariate Behavioral Research, 46}(2), 202-228.
