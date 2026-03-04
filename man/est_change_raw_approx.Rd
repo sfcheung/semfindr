@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_change_raw_approx.R
 \name{est_change_raw_approx}
 \alias{est_change_raw_approx}
-\title{Case Influence on Parameter Estimates (Approximate)}
+\title{Case Influence on Parameter Estimates (Approximate DFTHETA)}
 \usage{
 est_change_raw_approx(
   fit,
@@ -63,7 +63,8 @@ case:
 
 (Estimate with all case) - (Estimate without this case).
 
-The change is the approximate raw change. The change is \emph{not} divided by
+The change is the approximate raw change
+(an approximation of DFTHETA). The change is \emph{not} divided by
 the standard error of an estimate (hence "raw" in the function name).
 This is a measure of the influence of a case on the parameter
 estimates if it is included.

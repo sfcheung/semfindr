@@ -10,12 +10,12 @@
 #'
 #' If `rerun_out` is the output of [lavaan_rerun()], it will use the
 #' leave-one-out approach.
-#' Measures are computed by [est_change()] and [fit_measures_change()].
+#' Measures are computed by [est_change()] (for DFTHETAS) and [fit_measures_change()].
 #'
 #' If `rerun_out` is the output of [lavaan::lavaan()] or its wrappers
 #' (e.g., [lavaan::cfa()] or [lavaan::sem()]), it will use the
 #' approximate approach.
-#' Measures are computed by [est_change_approx()] and
+#' Measures are computed by [est_change_approx()] (for approximate DFTHETAS) and
 #' [fit_measures_change_approx()].
 #'
 #' If Mahalanobis distance is requested, it is computed by
@@ -99,9 +99,17 @@
 #' head(out_approx)
 #'
 #' @references
-#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-#' models: Cases and their influence. *Multivariate Behavioral Research,
-#'  46*(2), 202-228. doi:10.1080/00273171.2011.561068
+#' Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+#' An R package for identifying influential cases in
+#' structural equation modeling.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' doi:10.1080/00273171.2026.2634293
+#'
+#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#'  in structural equation models: Cases and their influence.
+#'  *Multivariate Behavioral Research, 46*(2), 202-228.
+#'  doi:10.1080/00273171.2011.561068
 #'
 #' @seealso [fit_measures_change()], [est_change()], and [mahalanobis_rerun()].
 #'

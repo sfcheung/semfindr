@@ -1,4 +1,4 @@
-#' @title Standardized Case Influence on Parameter Estimates (Approximate)
+#' @title Standardized Case Influence on Parameter Estimates (Approximate DFTHETAS)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
 #' approximate standardized changes in selected parameters for each case
@@ -11,7 +11,8 @@
 #' (Estimate with all case) - (Estimate without this case)
 #'
 #' The differences are standardized by dividing
-#' the approximate raw differences by their standard errors. This is a
+#' the approximate raw differences by their standard errors. This is an approximation
+#' of DFTHETAS, the
 #' measure of the standardized influence of a case on the parameter estimates
 #' if it is included.
 #'

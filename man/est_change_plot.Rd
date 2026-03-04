@@ -155,8 +155,10 @@ be plotted. Use \code{\link[=plot]{plot()}} to plot it.
 }
 \description{
 Gets the output of
-functions such as \code{\link[=est_change]{est_change()}} and
-\code{\link[=est_change_approx]{est_change_approx()}} and plots case
+functions such as \code{\link[=est_change]{est_change()}}
+(for DFTHETAS) and
+\code{\link[=est_change_approx]{est_change_approx()}} (for approximate DFTHETAS)
+and plots case
 influence on selected parameters.
 }
 \details{
@@ -234,12 +236,16 @@ est_change_plot(out,
 
 }
 \references{
-Pek, J., & MacCallum, R.
-(2011). Sensitivity analysis in
-structural equation models: Cases
-and their influence. \emph{Multivariate
-Behavioral Research, 46}(2),
-202-228.
+Cheung, S. F., & Lai, M. H. C. (2026). \code{semfindr}:
+An R package for identifying influential cases in
+structural equation modeling.
+\emph{Multivariate Behavioral Research}.
+Advance online publication.
+doi:10.1080/00273171.2026.2634293
+
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+in structural equation models: Cases and their influence.
+\emph{Multivariate Behavioral Research, 46}(2), 202-228.
 doi:10.1080/00273171.2011.561068
 }
 \seealso{

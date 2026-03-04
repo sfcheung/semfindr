@@ -1,4 +1,4 @@
-#' @title Case Influence on Parameter Estimates (Approximate)
+#' @title Case Influence on Parameter Estimates (Approximate DFTHETA)
 #'
 #' @description Gets a [lavaan::lavaan()] output and computes the
 #' approximate changes in selected parameters for each case
@@ -11,7 +11,8 @@
 #'
 #' (Estimate with all case) - (Estimate without this case).
 #'
-#' The change is the approximate raw change. The change is *not* divided by
+#' The change is the approximate raw change
+#' (an approximation of DFTHETA). The change is *not* divided by
 #' the standard error of an estimate (hence "raw" in the function name).
 #' This is a measure of the influence of a case on the parameter
 #' estimates if it is included.

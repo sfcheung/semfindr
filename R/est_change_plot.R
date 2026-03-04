@@ -2,8 +2,10 @@
 #' Parameter Estimates
 #'
 #' @description Gets the output of
-#' functions such as [est_change()] and
-#' [est_change_approx()] and plots case
+#' functions such as [est_change()]
+#' (for DFTHETAS) and
+#' [est_change_approx()] (for approximate DFTHETAS)
+#' and plots case
 #' influence on selected parameters.
 #'
 #' @details The output of
@@ -186,12 +188,17 @@
 #'                 point_aes = list(shape = 5,
 #'                                  color = "red"))
 #'
-#' @references Pek, J., & MacCallum, R.
-#'  (2011). Sensitivity analysis in
-#'  structural equation models: Cases
-#'  and their influence. *Multivariate
-#'  Behavioral Research, 46*(2),
-#'  202-228.
+#' @references
+#' Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+#' An R package for identifying influential cases in
+#' structural equation modeling.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' doi:10.1080/00273171.2026.2634293
+#'
+#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#'  in structural equation models: Cases and their influence.
+#'  *Multivariate Behavioral Research, 46*(2), 202-228.
 #'  doi:10.1080/00273171.2011.561068
 #'
 #' @seealso [est_change()],
