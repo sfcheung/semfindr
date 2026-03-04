@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) \doi{10.1080/00273171.2011.561068} and approximate casewise influence using scores and casewise likelihood.
+Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) \doi{10.1080/00273171.2011.561068} and approximate casewise influence using scores and casewise likelihood. An introduction to the package can be found in Cheung and Lai (2026) \doi{10.1080/00273171.2026.2634293}.
 }
 \seealso{
 Useful links:
