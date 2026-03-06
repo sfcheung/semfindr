@@ -3,7 +3,10 @@
 base_dir <- getwd()
 
 setwd("vignettes/")
-# knitr::knit("vignette_name.Rmd.originaL", output = "vignette_name.Rmd")
+
+knitr::knit("semfindr.Rmd.original", output = "semfindr.Rmd", envir = new.env())
+knitr::knit("casewise_scores.Rmd.original", output = "casewise_scores.Rmd", envir = new.env())
+knitr::knit("user_id.Rmd.original", output = "user_id.Rmd", envir = new.env())
 
 setwd(base_dir)
 
@@ -12,6 +15,7 @@ setwd(base_dir)
 base_dir <- getwd()
 
 setwd("vignettes/articles")
+
 knitr::knit("user_function.Rmd.original", output = "user_function.Rmd")
 
 setwd(base_dir)

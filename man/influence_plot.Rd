@@ -290,6 +290,13 @@ gcd_gof_plot(out, fit_measure = "chisq", largest_gcd = 3,
 
 }
 \references{
+Cheung, S. F., & Lai, M. H. C. (2026). \code{semfindr}:
+An R package for identifying influential cases in
+structural equation modeling.
+\emph{Multivariate Behavioral Research}.
+Advance online publication.
+doi:10.1080/00273171.2026.2634293
+
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
 \emph{Multivariate Behavioral Research, 46}(2), 202-228.

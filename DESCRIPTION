@@ -1,6 +1,6 @@
 Package: semfindr
 Title: Influential Cases in Structural Equation Modeling
-Version: 0.1.9
+Version: 0.2.0
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
@@ -17,7 +17,9 @@ Description: Sensitivity analysis in structural equation modeling using
     influence measures and diagnostic plots. Support leave-one-out casewise
     sensitivity analysis presented by Pek and MacCallum (2011)
     <doi:10.1080/00273171.2011.561068> and approximate casewise influence
-    using scores and casewise likelihood.
+    using scores and casewise likelihood. An introduction to
+    the package can be found in Cheung and Lai (2026)
+    <doi:10.1080/00273171.2026.2634293>.
 URL: https://sfcheung.github.io/semfindr/
 BugReports: https://github.com/sfcheung/semfindr/issues
 Depends: R (>= 4.1.0)
@@ -25,7 +27,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests:
     testthat (>= 3.0.0),
     parallel,

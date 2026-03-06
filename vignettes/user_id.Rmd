@@ -5,33 +5,40 @@ vignette: >
   %\VignetteIndexEntry{Use Case IDs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+
 
 Instead of using row numbers (`case.idx` in the `lavaan` object),
 `lavaan_rerun()` from the
 package [semfindr](https://sfcheung.github.io/semfindr/)
+[@cheung_semfindr_2026]
 supports user supplied case IDs.
 This can make the output more readable.
 
-```{r}
+
+``` r
 library(semfindr)
 dat <- pa_dat
 # Add case id
 dat <- cbind(id = paste0("case", seq_len(nrow(dat))), dat)
 head(dat)
+#>      id          m1         dv        iv1         iv2
+#> 1 case1  0.32067106  1.4587148  0.2055776 -0.42187811
+#> 2 case2  0.15360231 -0.3809220  0.1853543  0.15229953
+#> 3 case3  0.35136439 -0.4886773  0.9151424  1.16670950
+#> 4 case4 -0.56529330 -0.9766142  0.2884440  0.04563409
+#> 5 case5 -1.60657017 -1.0948066 -0.5756171 -0.18184854
+#> 6 case6  0.03143301  0.5859886  0.1420111  0.06286986
 ```
 
 Suppose that the data set has a column of case IDs. A model
 is fitted to this data set using `lavaan::sem()`:
 
-```{r}
+
+``` r
 mod <-
 "
 m1 ~ iv1 + iv2
@@ -48,23 +55,27 @@ removed. Although the `id` column is not stored in
 `lavaan`, it can be supplied through the argument
 `case_id`:
 
-```{r echo = FALSE, include = FALSE}
-if (file.exists("user_id_fit_rerun.RDS")) {
-    fit_rerun <- readRDS("user_id_fit_rerun.RDS")
-  } else {
-    fit_rerun <- lavaan_rerun(fit, case_id = dat$id)
-    saveRDS(fit_rerun, "user_id_fit_rerun.RDS")
-  }
-```
 
-```{r eval = FALSE}
-fit_rerun <- lavaan_rerun(fit, case_id = dat$id)
+
+
+``` r
+fit_rerun <- lavaan_rerun(fit,
+                          case_id = dat$id)
+#> The expected CPU time is 10.5 second(s).
+#> Could be faster if run in parallel.
+#> Error:
+#> ! lavaan->lav_lavdata():  
+#>    data= argument is not a data.frame, but of class 'numeric'
+#> Timing stopped at: 0.03 0 0.03
 ```
 
 The list of reruns now uses `id` as the names:
 
-```{r}
+
+``` r
 head(fit_rerun$rerun[1:3])
+#> Error:
+#> ! object 'fit_rerun' not found
 ```
 
 As shown below, most diagnostic functions will use user
@@ -76,78 +87,122 @@ original data set.
 
 ## Standardized Changes in Estimates
 
-```{r}
+
+``` r
 fit_est_change <- est_change(fit_rerun)
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_est_change
+#> Error:
+#> ! object 'fit_est_change' not found
 ```
-```{r}
+
+``` r
 fit_est_change_paths_only <- est_change(fit_rerun,
                                 parameters = c("m1 ~ iv1",
                                                "m1 ~ iv2",
                                                "dv ~ m1"))
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_est_change_paths_only
+#> Error:
+#> ! object 'fit_est_change_paths_only' not found
 ```
 
 ## Raw Changes in Estimates
 
-```{r}
+
+``` r
 fit_est_change_raw <- est_change_raw(fit_rerun)
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_est_change_raw
+#> Error:
+#> ! object 'fit_est_change_raw' not found
 ```
 
 ## Mahalanobis Distance
 
-```{r}
+
+``` r
 fit_md <- mahalanobis_rerun(fit_rerun)
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_md
+#> Error:
+#> ! object 'fit_md' not found
 ```
 
 ## Changes in Fit Measures
 
-```{r}
+
+``` r
 fit_mc <- fit_measures_change(fit_rerun,
             fit_measures = c("chisq", "cfi", "tli", "rmsea"))
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_mc
+#> Error:
+#> ! object 'fit_mc' not found
 ```
 
 ## All-In-One-Function
 
-```{r}
+
+``` r
 fit_influence <- influence_stat(fit_rerun)
+#> Error:
+#> ! object 'fit_rerun' not found
 fit_influence
+#> Error:
+#> ! object 'fit_influence' not found
 ```
 
 # Diagnostic Plots
 
 ## Generalized Cook's Distance
 
-```{r}
+
+``` r
 gcd_plot(fit_influence, largest_gcd = 3)
+#> Error:
+#> ! object 'fit_influence' not found
 ```
 
 ## Mahalanobis Distance
 
-```{r}
+
+``` r
 md_plot(fit_influence,
         largest_md = 3)
+#> Error:
+#> ! object 'fit_influence' not found
 ```
 
 ## Fit Measure vs. Generalized Cook's Distance
 
-```{r}
+
+``` r
 gcd_gof_plot(fit_influence,
              fit_measure = "rmsea",
              largest_gcd = 3,
              largest_fit_measure = 3)
+#> Error:
+#> ! object 'fit_influence' not found
 ```
 
 ## Bubble Plot
 
-```{r}
+
+``` r
 gcd_gof_md_plot(fit_influence,
                 fit_measure = "rmsea",
                 largest_gcd = 3,
                 largest_fit_measure = 3,
                 largest_md = 3,
                 circle_size = 15)
+#> Error:
+#> ! object 'fit_influence' not found
 ```
+
+# References

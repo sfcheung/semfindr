@@ -1,4 +1,4 @@
-#' @title Case Influence on Parameter Estimates
+#' @title Case Influence on Parameter Estimates (DFTHETA)
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the
 #' changes in selected parameters for each case if included.
@@ -10,7 +10,8 @@
 #' (Estimate with all case) - (Estimate without this case).
 #'
 #' The
-#' change is the raw change, either for the standardized or
+#' change is the raw change (*DFTHETA*, Cheung & Lai, 2026, Pek & MacCallum, 2011),
+#' either for the standardized or
 #' unstandardized solution. The change is *not* divided by standard
 #' error.
 #' This is a measure of the influence of a case on the parameter
@@ -23,6 +24,10 @@
 #' If the analysis is not admissible or did not converge when a case
 #' is deleted, `NA`s will be returned for this case on the
 #' differences.
+#'
+#' The corresponding changes in the standardized solution
+#' (e.g., a change in a correlation) is called *DFZTHETA*,
+#' *Z* for standardized solution.
 #'
 #' Supports both single-group and multiple-group models.
 #' (Support for multiple-group models available in 0.1.4.8 and later version).
@@ -41,9 +46,9 @@
 #' default, changes on all free parameters will be computed.
 #'
 #' @param standardized If `TRUE`, the changes in the full standardized
-#' solution is returned (`type` = `std.all` in
+#' solution (*DFZTHETA*s) are returned (`type` = `std.all` in
 #' [lavaan::standardizedSolution()]). Otherwise, the changes in the
-#' unstandardized solution are returned. Default is `FALSE`.
+#' unstandardized solution (*DFTHETA*s) are returned. Default is `FALSE`.
 #'
 #' @param user_defined_label_full Logical. If `TRUE`, use the full
 #' labels for user-defined parameters (parameters created by
@@ -82,9 +87,12 @@
 #' # For illustration, do this only for four selected cases
 #' fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
 #'                           to_rerun = c(3, 5, 7, 8))
+#'
+#' # === DFTHETA ===
+#'
 #' # Compute the changes in parameter estimates if a case is included
 #' # vs. if this case is excluded.
-#' # That is, case influence on parameter estimates.
+#' # That is, case influence on parameter estimates
 #' out <- est_change_raw(fit_rerun)
 #' # Results excluding a case
 #' out
@@ -105,6 +113,8 @@
 #' # Results excluding a case
 #' out2
 #' # Note that only the changes in the selected paths are included.
+#'
+#' # === DFZTHETA (Z for standardized solution) ===
 #'
 #' # Use standardized = TRUE to compare the differences in standardized solution
 #' out2_std <- est_change_raw(fit_rerun,
@@ -138,9 +148,11 @@
 #' # Compute the changes in parameter estimates if a case is included
 #' # vs. if this case is excluded.
 #' # That is, case influence on parameter estimates.
+#' # === DFTHETA ===
 #' # For free loadings only
 #' out <- est_change_raw(fit_rerun, parameters = "=~")
 #' out
+#' # === DFZTHETA ===
 #' # For standardized loadings only
 #' out_std <- est_change_raw(fit_rerun, parameters = "=~",
 #'                           standardized = TRUE)
@@ -167,16 +179,26 @@
 #' # Compute the changes in parameter estimates if a case is included
 #' # vs. if this case is excluded.
 #' # That is, case influence on parameter estimates.
+#' # === DFTHETA ===
 #' # For structural paths only
 #' out <- est_change_raw(fit_rerun, parameters = "~")
 #' out
+#' # === DFZTHETA ===
 #' # For standardized paths only
 #' out_std <- est_change_raw(fit_rerun, parameters = "~",
 #'                           standardized = TRUE)
 #' out_std
 #'
 #'
-#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#' @references
+#' Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+#' An R package for identifying influential cases in
+#' structural equation modeling.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' doi:10.1080/00273171.2026.2634293
+#'
+#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #'  in structural equation models: Cases and their influence.
 #'  *Multivariate Behavioral Research, 46*(2), 202-228.
 #'  doi:10.1080/00273171.2011.561068
@@ -244,7 +266,7 @@ est_change_raw <- function(rerun_out,
                               pars_source = ptable,
                               type = "all")
       tmp3 <- merge(estorg, tmp2)
-      parameters_selected <- tmp3$est_id
+      parameters_selected <- sort(tmp3$est_id)
     } else {
       parameters_selected <- seq_len(length(parameters_names))
     }

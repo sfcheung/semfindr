@@ -9,13 +9,22 @@
 [![R-CMD-check](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semfindr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.1.9, updated on 2025-03-04, [release history](https://sfcheung.github.io/semfindr/news/index.html))
+(Version 0.2.0, updated on 2026-03-06, [release history](https://sfcheung.github.io/semfindr/news/index.html))
 
 # semfindr: Finding influential cases in SEM <img src="man/figures/logo.png" align="right" height="150" />
 
 A find(e)r of influential cases in structural equation modeling
 based mainly on the sensitivity analysis procedures presented by Pek and
-MacCallum (2011).
+MacCallum (2011). An
+introduction to the package can be found in the following
+article:
+
+Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+An R package for identifying influential cases
+in structural equation modeling.
+*Multivariate Behavioral Research*.
+Advance online publication.
+https://doi.org/10.1080/00273171.2026.2634293
 
 This package supports two approaches: leave-one-out analysis and approximate
 case influence.
@@ -26,7 +35,7 @@ This approach examines the influence of each case by refitting a model with
 this case removed.
 
 Unlike other similar
-packages, the workflow adopted in semfindr separates the leave-one-out
+packages, the workflow adopted in `semfindr` separates the leave-one-out
 analysis (refitting a model with one case removed) from the case influence
 measures.
 
@@ -38,7 +47,7 @@ cases selected based on some criteria
 - Users then compute case influence measures
 using the output of `lavaan_rerun()`.
 
-This approaches avoids unnecessarily refitting the models for each set of
+This approach avoids unnecessarily refitting the models for each set of
 influence measures, and also allows analyzing only probable influential cases
 when the model takes a long time to fit.
 
@@ -50,7 +59,7 @@ such that users can compute case influence measures such as
 - changes in raw or standardized estimates of parameters;
 - changes in fit measures supported by `lavaan::fitMeasures()`.
 
-This package can also be generate plots to visualize
+This package can also generate plots to visualize
 case influence, including a bubble plot similar to that by `car::influencePlot()`
 All plots generated are `ggplot` plots that can be further modified by users.
 More can be found in *Quick Start* (`vignette("semfindr", package = "semfindr")`).
@@ -59,7 +68,7 @@ More can be found in *Quick Start* (`vignette("semfindr", package = "semfindr")`
 
 This approach computes the approximate influence of each case using *casewise*
 *scores* and *casewise* *likelihood*. This method is efficient because it does
-not requires refitting the model for each case. However, it can only approximate
+not require refitting the model for each case. However, it can only approximate
 the influence, unlike the leave-one-out approach, which produce exact influence.
 This approach can be used when the number of cases is very large
 and/or the model takes a long time to fit. Technical details can be found in the
@@ -86,6 +95,13 @@ package and
 Quick Start (`vignette("semfindr", package = "semfindr")`).
 
 # Reference
+
+Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+An R package for identifying influential cases
+in structural equation modeling.
+*Multivariate Behavioral Research*.
+Advance online publication.
+https://doi.org/10.1080/00273171.2026.2634293
 
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
 models: Cases and their influence. *Multivariate Behavioral Research, 46*(2),

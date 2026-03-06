@@ -1,4 +1,4 @@
-#' @title Standardized Case Influence on Parameter Estimates
+#' @title Standardized Case Influence on Parameter Estimates (DFTHETAS)
 #'
 #' @description Gets a [lavaan_rerun()] output and computes the
 #' standardized changes in selected parameters for each case
@@ -12,7 +12,10 @@
 #' The
 #' differences are standardized by dividing the raw differences by
 #' their standard errors (Pek & MacCallum, 2011).
-#' This is a measure of the standardized influence of a case on
+#' This measure, called *DFTHETAS* to differentiate it from
+#' *DFZTHETA* ([est_change_raw()] with `standardized = TRUE`,
+#' see Cheung & Lai, 2026), is a measure of
+#' the standardized influence of a case on
 #' the parameter
 #' estimates if it is included.
 #'
@@ -62,13 +65,22 @@
 #' generalized Cook's
 #' distance. The number of rows equal to the number
 #' of cases. The row names are the case identification values used in
-#' [lavaan_rerun()]. The elements are the standardized difference.
+#' [lavaan_rerun()]. The elements are the standardized differences
+#' (*DFTHETAS*s).
 #' Please see Pek and MacCallum (2011), Equation 7.
 #' A print method is available for user-friendly output.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>.
 #'
-#' @references Pek, J., & MacCallum, R. (2011). Sensitivity analysis
+#' @references
+#' Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`:
+#' An R package for identifying influential cases in
+#' structural equation modeling.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' doi:10.1080/00273171.2026.2634293
+#'
+#' Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 #' in structural equation models: Cases and their influence.
 #' *Multivariate Behavioral Research, 46*(2), 202-228.
 #' doi:10.1080/00273171.2011.561068

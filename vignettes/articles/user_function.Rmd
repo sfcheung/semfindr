@@ -1,6 +1,6 @@
 ---
 title: "Sensitivity Analysis: Arbitrary User Function"
-date: "2025-03-01"
+date: "2026-03-04"
 output:
   html_document:
     fig.align: "center"
@@ -19,7 +19,7 @@ identify cases that are influential
 on an arbitrary statistics computed
 by any function, using
 the [`semfindr`](https://sfcheung.github.io/semfindr/) package
-.
+[@cheung_semfindr_2026].
 
 Readers are assumed to have a basic
 understanding on how to use `lavaan_rerun()`,
@@ -57,8 +57,6 @@ for illustration.
 ``` r
 library(semfindr)
 library(lavaan)
-#> This is lavaan 0.6-19
-#> lavaan is FREE software! Please report any bugs.
 head(HolzingerSwineford1939)
 #>   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5        x6
 #> 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75 1.2857143
@@ -113,6 +111,7 @@ of cases, each time with one case removed:
 fit_rerun <- lavaan_rerun(fit)
 #> The expected CPU time is 27.09 second(s).
 #> Could be faster if run in parallel.
+#> Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.
 ```
 
 ## Reliability
@@ -125,13 +124,45 @@ from `semTools`:
 
 ``` r
 library(semTools)
-#> 
-#> ###############################################################################
-#> This is semTools 0.5-6
-#> All users of R (or SEM) are invited to submit functions or ideas for functions.
-#> ###############################################################################
-fit_rel <- compRelSEM(fit)
+fit_rel <- compRelSEM(fit,
+                      simplify = TRUE)
 fit_rel
+#> 
+#> Information about each composite is provided below, followed by reliability coefficients.
+#> 
+#> ----------visual----------
+#> 
+#> Composite `visual` is composed of observed variables:
+#> 	x1, x2, x3
+#> True-score variance is represented by common factor(s):
+#> 	visual
+#> Total variance of composite `visual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
+#> ----------textual----------
+#> 
+#> Composite `textual` is composed of observed variables:
+#> 	x4, x5, x6
+#> True-score variance is represented by common factor(s):
+#> 	textual
+#> Total variance of composite `textual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
+#> ----------speed----------
+#> 
+#> Composite `speed` is composed of observed variables:
+#> 	x7, x8, x9
+#> True-score variance is represented by common factor(s):
+#> 	speed
+#> Total variance of composite `speed` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
 #>  visual textual   speed 
 #>   0.594   0.885   0.688
 ```
@@ -142,7 +173,8 @@ case using `user_change_raw()`:
 
 ``` r
 influence_rel <- user_change_raw(fit_rerun,
-                                 user_function = compRelSEM)
+                                 user_function = compRelSEM,
+                                 simplify = TRUE)
 ```
 
 The first argument is the output of
@@ -150,10 +182,18 @@ The first argument is the output of
 
 The argument `user_function` is the
 argument used to compute the statistics.
+NOTE: The output needs to be a numeric vector.
 
 No other arguments are needed in this case
 because `compRelSEM()` expects the
 `lavaan` object as the first argument.
+
+Additional arguments can be passed to
+the user function. For example, since 0.5-8,
+`semTools::compRelSEM()`, the default
+output is a list. Therefore, `simplify = TRUE`
+is added such that the output is simplified
+to a numeric vector, to be used by `user_change_raw()`.
 
 The output is an `est_change` object:
 
@@ -223,10 +263,76 @@ fit_no_1 <- cfa(model = mod,
 fit_rel_no_1 <- compRelSEM(fit_no_1)
 # Without the first case
 fit_rel_no_1
-#>  visual textual   speed 
-#>   0.615   0.887   0.685
+#> $visual
+#> 
+#> Composite `visual` is composed of observed variables:
+#> 	x1, x2, x3
+#> True-score variance is represented by common factor(s):
+#> 	visual
+#> Total variance of composite `visual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> [1] 0.615
+#> 
+#> $textual
+#> 
+#> Composite `textual` is composed of observed variables:
+#> 	x4, x5, x6
+#> True-score variance is represented by common factor(s):
+#> 	textual
+#> Total variance of composite `textual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> [1] 0.887
+#> 
+#> $speed
+#> 
+#> Composite `speed` is composed of observed variables:
+#> 	x7, x8, x9
+#> True-score variance is represented by common factor(s):
+#> 	speed
+#> Total variance of composite `speed` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> [1] 0.685
 # Including the first case
 fit_rel
+#> 
+#> Information about each composite is provided below, followed by reliability coefficients.
+#> 
+#> ----------visual----------
+#> 
+#> Composite `visual` is composed of observed variables:
+#> 	x1, x2, x3
+#> True-score variance is represented by common factor(s):
+#> 	visual
+#> Total variance of composite `visual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
+#> ----------textual----------
+#> 
+#> Composite `textual` is composed of observed variables:
+#> 	x4, x5, x6
+#> True-score variance is represented by common factor(s):
+#> 	textual
+#> Total variance of composite `textual` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
+#> ----------speed----------
+#> 
+#> Composite `speed` is composed of observed variables:
+#> 	x7, x8, x9
+#> True-score variance is represented by common factor(s):
+#> 	speed
+#> Total variance of composite `speed` determined from the unrestricted model.
+#> The proportion attributable to "true" scores is its model-based estimate of reliability ("omega"):
+#> 
+#> 
+#> 
 #>  visual textual   speed 
 #>   0.594   0.885   0.688
 ```
@@ -283,8 +389,9 @@ Let's do LOO first:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 9 second(s).
+#> The expected CPU time is 159 second(s).
 #> Could be faster if run in parallel.
+#> Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.
 ```
 
 We then call `user_change_raw()` to
@@ -363,4 +470,4 @@ argument. Please refer to the help
 page of `user_change_raw()` on how to
 set this argument.
 
-# Reference
+# References

@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_change.R
 \name{est_change}
 \alias{est_change}
-\title{Standardized Case Influence on Parameter Estimates}
+\title{Standardized Case Influence on Parameter Estimates (DFTHETAS)}
 \usage{
 est_change(rerun_out, parameters = NULL)
 }
@@ -27,7 +27,8 @@ requested parameters plus one, the last column being the
 generalized Cook's
 distance. The number of rows equal to the number
 of cases. The row names are the case identification values used in
-\code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized difference.
+\code{\link[=lavaan_rerun]{lavaan_rerun()}}. The elements are the standardized differences
+(\emph{DFTHETAS}s).
 Please see Pek and MacCallum (2011), Equation 7.
 A print method is available for user-friendly output.
 }
@@ -45,7 +46,10 @@ the estimates of selected parameters with and without this case:
 The
 differences are standardized by dividing the raw differences by
 their standard errors (Pek & MacCallum, 2011).
-This is a measure of the standardized influence of a case on
+This measure, called \emph{DFTHETAS} to differentiate it from
+\emph{DFZTHETA} (\code{\link[=est_change_raw]{est_change_raw()}} with \code{standardized = TRUE},
+see Cheung & Lai, 2026), is a measure of
+the standardized influence of a case on
 the parameter
 estimates if it is included.
 
@@ -164,6 +168,13 @@ out
 
 }
 \references{
+Cheung, S. F., & Lai, M. H. C. (2026). \code{semfindr}:
+An R package for identifying influential cases in
+structural equation modeling.
+\emph{Multivariate Behavioral Research}.
+Advance online publication.
+doi:10.1080/00273171.2026.2634293
+
 Pek, J., & MacCallum, R. (2011). Sensitivity analysis
 in structural equation models: Cases and their influence.
 \emph{Multivariate Behavioral Research, 46}(2), 202-228.

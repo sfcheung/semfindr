@@ -5,6 +5,8 @@ vignette: >
   %\VignetteIndexEntry{Selecting Cases In lavaan_rerun}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r, include = FALSE}
@@ -16,7 +18,9 @@ knitr::opts_chunk$set(
 
 This vignette illustrates how to select
 cases when calling `lavaan_rerun()` from
-the package [semfindr](https://sfcheung.github.io/semfindr/).
+the package [semfindr](https://sfcheung.github.io/semfindr/)
+[@cheung_semfindr_2026].
+
 
 Instead of refitting the model *n* times, each time
 with each case removed, it is possible to use some criteria
@@ -152,7 +156,7 @@ est_change(rerun_out)
 ```
 
 Note that selecting cases by this method *can* miss some
-influential cases (Pek & MacCallum, 2011). Unlike multiple
+influential cases [@pek_sensitivity_2011]. Unlike multiple
 regression, this distance
 is not a measure of leverage. For a path model, this distance
 used distances from the centroid on *all* observed variables,
@@ -172,8 +176,5 @@ to be explored. For the final model(s),
 all cases are recommended, to serve as a final check on the
 sensitivity of the results to individual cases.
 
-# Reference
+# References
 
-Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural equation
-models: Cases and their influence. *Multivariate Behavioral Research, 46*(2),
-202–228. https://doi.org/10.1080/00273171.2011.561068

@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_change_approx.R
 \name{est_change_approx}
 \alias{est_change_approx}
-\title{Standardized Case Influence on Parameter Estimates (Approximate)}
+\title{Standardized Case Influence on Parameter Estimates (Approximate DFTHETAS)}
 \usage{
 est_change_approx(
   fit,
@@ -66,7 +66,8 @@ with and without this case:
 (Estimate with all case) - (Estimate without this case)
 
 The differences are standardized by dividing
-the approximate raw differences by their standard errors. This is a
+the approximate raw differences by their standard errors. This is an approximation
+of DFTHETAS, the
 measure of the standardized influence of a case on the parameter estimates
 if it is included.
 

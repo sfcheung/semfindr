@@ -1,0 +1,15 @@
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#214e21",
+    "titleBar.inactiveBackground": "#788878",
+    "editor.background": "#142814",
+    "sideBar.background": "#0a2a0a",
+    "activityBar.background": "#123f12",
+    "statusBar.background": "#195019",
+    // "editor.snippetTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetTabstopHighlightBorder": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBorder": "#2d2306"
+
+  }
+}
