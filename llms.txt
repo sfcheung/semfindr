@@ -1,0 +1,233 @@
+# semfindr: Finding influential cases in SEM
+
+(Version 0.2.0, updated on 2026-03-06, [release
+history](https://sfcheung.github.io/semfindr/news/index.html))
+
+A find(e)r of influential cases in structural equation modeling based
+mainly on the sensitivity analysis procedures presented by Pek and
+MacCallum (2011). An introduction to the package can be found in the
+following article:
+
+Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`: An R package for
+identifying influential cases in structural equation modeling.
+*Multivariate Behavioral Research*. Advance online publication.
+<https://doi.org/10.1080/00273171.2026.2634293>
+
+This package supports two approaches: leave-one-out analysis and
+approximate case influence.
+
+## Leave-One-Out Analysis
+
+This approach examines the influence of each case by refitting a model
+with this case removed.
+
+Unlike other similar packages, the workflow adopted in `semfindr`
+separates the leave-one-out analysis (refitting a model with one case
+removed) from the case influence measures.
+
+- Users first do the leave-one-out model fitting for all cases, or cases
+  selected based on some criteria
+  ([`vignette("selecting_cases", package = "semfindr")`](https://sfcheung.github.io/semfindr/articles/selecting_cases.md)),
+  using
+  [`lavaan_rerun()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun.md).
+
+- Users then compute case influence measures using the output of
+  [`lavaan_rerun()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun.md).
+
+This approach avoids unnecessarily refitting the models for each set of
+influence measures, and also allows analyzing only probable influential
+cases when the model takes a long time to fit.
+
+The functions were designed to be flexible such that users can compute
+case influence measures such as
+
+- standardized parameter estimates and generalized Cook’s distance for
+  selected parameters;
+- changes in raw or standardized estimates of parameters;
+- changes in fit measures supported by
+  [`lavaan::fitMeasures()`](https://rdrr.io/pkg/lavaan/man/fitMeasures.html).
+
+This package can also generate plots to visualize case influence,
+including a bubble plot similar to that by `car::influencePlot()` All
+plots generated are `ggplot` plots that can be further modified by
+users. More can be found in *Quick Start*
+([`vignette("semfindr", package = "semfindr")`](https://sfcheung.github.io/semfindr/articles/semfindr.md)).
+
+## Approximate Case Influence
+
+This approach computes the approximate influence of each case using
+*casewise* *scores* and *casewise* *likelihood*. This method is
+efficient because it does not require refitting the model for each case.
+However, it can only approximate the influence, unlike the leave-one-out
+approach, which produce exact influence. This approach can be used when
+the number of cases is very large and/or the model takes a long time to
+fit. Technical details can be found in the vignette *Approximate Case
+Influence Using Scores and Casewise Likelihood*
+([`vignette("casewise_scores", package = "semfindr")`](https://sfcheung.github.io/semfindr/articles/casewise_scores.md)).
+
+# Installation
+
+The stable version at CRAN can be installed by
+[`install.packages()`](https://rdrr.io/r/utils/install.packages.html):
+
+``` r
+install.packages("semfindr")
+```
+
+The latest developmental version can be installed by
+`remotes::install_github`:
+
+``` r
+remotes::install_github("sfcheung/semfindr")
+```
+
+You can learn more about this package at the [Github
+page](https://sfcheung.github.io/semfindr/) of this package and Quick
+Start
+([`vignette("semfindr", package = "semfindr")`](https://sfcheung.github.io/semfindr/articles/semfindr.md)).
+
+# Reference
+
+Cheung, S. F., & Lai, M. H. C. (2026). `semfindr`: An R package for
+identifying influential cases in structural equation modeling.
+*Multivariate Behavioral Research*. Advance online publication.
+<https://doi.org/10.1080/00273171.2026.2634293>
+
+Pek, J., & MacCallum, R. (2011). Sensitivity analysis in structural
+equation models: Cases and their influence. *Multivariate Behavioral
+Research, 46*(2), 202-228.
+<https://doi.org/10.1080/00273171.2011.561068>
+
+# Comments, Suggestions, and Bug Reports
+
+Please post your comments, suggestions, and bug reports as issues at
+[GitHub](https://github.com/sfcheung/semptools/issues), or contact the
+maintainer by email. Thanks in advance for trying out `semfindr`.
+
+# Package index
+
+## Main Functions
+
+- [`lavaan_rerun()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun.md)
+  : Rerun a 'lavaan' Analysis Using the Leaving-One-Out Approach
+- [`influence_stat()`](https://sfcheung.github.io/semfindr/reference/influence_stat.md)
+  : Case Influence Measures
+
+## Parameter Estimates
+
+Case influence on parameter estimates
+
+- [`est_change()`](https://sfcheung.github.io/semfindr/reference/est_change.md)
+  : Standardized Case Influence on Parameter Estimates (DFTHETAS)
+- [`est_change_raw()`](https://sfcheung.github.io/semfindr/reference/est_change_raw.md)
+  : Case Influence on Parameter Estimates (DFTHETA)
+- [`est_change_approx()`](https://sfcheung.github.io/semfindr/reference/est_change_approx.md)
+  : Standardized Case Influence on Parameter Estimates (Approximate
+  DFTHETAS)
+- [`est_change_raw_approx()`](https://sfcheung.github.io/semfindr/reference/est_change_raw_approx.md)
+  : Case Influence on Parameter Estimates (Approximate DFTHETA)
+
+## Fit Measures
+
+Case influence of fit measures
+
+- [`fit_measures_change()`](https://sfcheung.github.io/semfindr/reference/fit_measures_change.md)
+  : Case Influence on Fit Measures
+- [`fit_measures_change_approx()`](https://sfcheung.github.io/semfindr/reference/fit_measures_change_approx.md)
+  : Case Influence on Fit Measures (Approximate)
+
+## User Statistics
+
+Case influence on any statistics computed by a user functions
+
+- [`user_change_raw()`](https://sfcheung.github.io/semfindr/reference/user_change_raw.md)
+  : Case Influence on User-Defined Statistics
+
+## Extremeness Measures
+
+Identifying outliers (which may not be influential)
+
+- [`mahalanobis_predictors()`](https://sfcheung.github.io/semfindr/reference/mahalanobis_predictors.md)
+  : Mahalanobis Distance On Observed Predictors
+- [`mahalanobis_rerun()`](https://sfcheung.github.io/semfindr/reference/mahalanobis_rerun.md)
+  : Mahalanobis Distance on All Observed Variables
+
+## Diagnostic Plots
+
+- [`gcd_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md)
+  [`md_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md)
+  [`gcd_gof_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md)
+  [`gcd_gof_md_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md)
+  : Plots of Influence Measures
+- [`est_change_plot()`](https://sfcheung.github.io/semfindr/reference/est_change_plot.md)
+  [`est_change_gcd_plot()`](https://sfcheung.github.io/semfindr/reference/est_change_plot.md)
+  : Plots of Case Influence on Parameter Estimates
+- [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md)
+  : Index Plot of an Arbitrary Statistic
+
+## Print Methods
+
+- [`print(`*`<lavaan_rerun>`*`)`](https://sfcheung.github.io/semfindr/reference/print.lavaan_rerun.md)
+  : Print Method for 'lavaan_rerun'
+- [`print(`*`<est_change>`*`)`](https://sfcheung.github.io/semfindr/reference/print.est_change.md)
+  : Print an 'est_change' Class Object
+- [`print(`*`<fit_measures_change>`*`)`](https://sfcheung.github.io/semfindr/reference/print.fit_measures_change.md)
+  : Print a 'fit_measures_change' Class Object
+- [`print(`*`<md_semfindr>`*`)`](https://sfcheung.github.io/semfindr/reference/print.md_semfindr.md)
+  : Print a 'md_semfindr' Class Object
+- [`print(`*`<influence_stat>`*`)`](https://sfcheung.github.io/semfindr/reference/print.influence_stat.md)
+  : Print an 'influence_stat' Class Object
+
+## Selecting Parameters
+
+- [`pars_id()`](https://sfcheung.github.io/semfindr/reference/pars_id.md)
+  : Convert Parameter Syntax to Position or Row Numbers in the Parameter
+  Vector or Table
+- [`pars_id_to_lorg()`](https://sfcheung.github.io/semfindr/reference/pars_id_to_lorg.md)
+  : Ids to "lhs-op-rhs-(group)"
+
+## Others
+
+- [`lavaan_rerun_check()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun_check.md)
+  : Compatibility Check for 'lavaan_rerun'
+- [`approx_check()`](https://sfcheung.github.io/semfindr/reference/approx_check.md)
+  : Compatibility Check for the '\_approx' Functions
+- [`implied_scores()`](https://sfcheung.github.io/semfindr/reference/implied_scores.md)
+  : Implied Scores of Observed Outcome Variables
+
+## Datasets
+
+- [`cfa_dat`](https://sfcheung.github.io/semfindr/reference/cfa_dat.md)
+  : Sample Data: A CFA Model
+- [`cfa_dat2`](https://sfcheung.github.io/semfindr/reference/cfa_dat2.md)
+  : Sample Data: A CFA Model with an Influential Case
+- [`cfa_dat_heywood`](https://sfcheung.github.io/semfindr/reference/cfa_dat_heywood.md)
+  : Sample Data: A CFA Model with a Heywood Case
+- [`cfa_dat_mg`](https://sfcheung.github.io/semfindr/reference/cfa_dat_mg.md)
+  : Sample Data: A Multiple-Group CFA Model with an Influential Case
+- [`pa_dat`](https://sfcheung.github.io/semfindr/reference/pa_dat.md) :
+  Sample Data: A Path Model
+- [`pa_dat2`](https://sfcheung.github.io/semfindr/reference/pa_dat2.md)
+  : Sample Data: A Path Model with an Influential Case
+- [`sem_dat`](https://sfcheung.github.io/semfindr/reference/sem_dat.md)
+  : Sample Data: A Latent Variable Structural Model
+- [`sem_dat2`](https://sfcheung.github.io/semfindr/reference/sem_dat2.md)
+  : Sample Data: A Latent Variable Structural Model With an Influential
+  Case
+
+# Articles
+
+### All vignettes
+
+- [Approximate Case Influence Using Scores and Casewise
+  Likelihood](https://sfcheung.github.io/semfindr/articles/casewise_scores.md):
+- [Sensitivity Analysis in Multiple-Group
+  Models](https://sfcheung.github.io/semfindr/articles/multiple_group.md):
+- [Selecting Cases In
+  lavaan_rerun](https://sfcheung.github.io/semfindr/articles/selecting_cases.md):
+- [Quick
+  Start](https://sfcheung.github.io/semfindr/articles/semfindr.md):
+- [Sensitivity Analysis: Arbitrary User
+  Function](https://sfcheung.github.io/semfindr/articles/user_function.md):
+- [Use Case
+  IDs](https://sfcheung.github.io/semfindr/articles/user_id.md):

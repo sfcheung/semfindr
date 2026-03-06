@@ -6,16 +6,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Approximate Case Influence Using Scores and Casewise Likelihood • semfindr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/Chivo_Mono-0.4.9/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Fira_Sans-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/Chivo_Mono-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Approximate Case Influence Using Scores and Casewise Likelihood">
@@ -29,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +75,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Approximate Case Influence Using Scores and Casewise Likelihood</h1>
             
-            <h4 data-toc-skip class="date">2025-03-03</h4>
+            <h4 data-toc-skip class="date">2026-03-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/master/vignettes/casewise_scores.Rmd" class="external-link"><code>vignettes/casewise_scores.Rmd</code></a></small>
       <div class="d-none name"><code>casewise_scores.Rmd</code></div>
@@ -84,35 +83,25 @@
 
     
     
-<p>This vignette explains the computational shortcut implemented in <a href="https://sfcheung.github.io/semfindr/">semfindr</a> to approximate
-the casewise influence. The approximation is most beneficial when the
-sample size <em>N</em> is large, where the approximation works better
-and the computational cost for refitting models <em>N</em> times is
-high.</p>
+<p>This vignette explains the computational shortcut implemented in <a href="https://sfcheung.github.io/semfindr/">semfindr</a> <span class="citation">(Cheung &amp; Lai, 2026)</span> to approximate the
+casewise influence. The approximation is most beneficial when the sample
+size <em>N</em> is large, where the approximation works better and the
+computational cost for refitting models <em>N</em> times is high.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semfindr/">semfindr</a></span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">pa_dat</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-19</span></span>
-<span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
 <span><span class="st">m1 ~ iv1 + iv2</span></span>
 <span><span class="st">dv ~ m1</span></span>
 <span><span class="st">"</span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"semfindr_fit_rerun.RDS"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"semfindr_fit_rerun.RDS"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">fit_rerun</span>, <span class="st">"semfindr_fit_rerun.RDS"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="using-scores-to-approximate-case-influence">Using Scores to Approximate Case Influence<a class="anchor" aria-label="anchor" href="#using-scores-to-approximate-case-influence"></a>
 </h3>
-<p><code>lavaan</code> provides the handy <code><a href="https://rdrr.io/pkg/lavaan/man/estfun.html" class="external-link">lavScores()</a></code>
+<p><code>lavaan</code> provides the handy <code><a href="https://rdrr.io/pkg/lavaan/man/lav_scores.html" class="external-link">lavScores()</a></code>
 function to evaluate
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>∂</mi><msub><mi>θ</mi><mi>m</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">s_i(\theta_m) = \frac{\partial \ell_i(\theta_m)}{\partial \theta_m}</annotation></semantics></math>
 for observation
@@ -125,8 +114,8 @@ is the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>th
 model parameter.</p>
 <p>For example,</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/estfun.html" class="external-link">lavScores</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span> , <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lav_scores.html" class="external-link">lavScores</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span> , <span class="fl">1</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           m1~iv1</span></span>
 <span><span class="co">#&gt; [1,]  0.23975993</span></span>
 <span><span class="co">#&gt; [2,]  0.06630118</span></span>
@@ -165,16 +154,15 @@ parameters (i.e., score). The
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">N / (N - 1)</annotation></semantics></math>
 term is used to adjust for the decrease in sample size (this adjustment
 is trivial in large samples). This procedure should be the same as
-equation (4) of <a href="https://doi.org/10.1080/03610929108830742" class="external-link">Tanaka et
-al. (1991)</a> (p. 3807) and is related to the one-step approximation
-described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="external-link">Cook and Weisberg
-(1982)</a> (p. 182).</p>
+equation (4) of <span class="citation">Tanaka et al. (1991)</span>
+(p. 3807) and is related to the one-step approximation described by
+<span class="citation">(Cook &amp; Weisberg, 1982, p. 182)</span>.</p>
 <div class="section level4">
 <h4 id="comparison">Comparison<a class="anchor" aria-label="anchor" href="#comparison"></a>
 </h4>
 <p>The approximation is implemented in the
 <code><a href="../reference/est_change_raw_approx.html">est_change_raw_approx()</a></code> function:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw_approx.html">est_change_raw_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">fit_est_change_approx</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -199,8 +187,11 @@ described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="ext
 <p>Here is a comparison between the approximation using
 <code><a href="../reference/est_change_raw_approx.html">semfindr::est_change_raw_approx()</a></code> and
 <code><a href="../reference/est_change_raw.html">semfindr::est_change_raw()</a></code></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># From semfindr</span></span>
+<span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co">#&gt; The expected CPU time is 39 second(s).</span></span>
+<span><span class="co">#&gt; Could be faster if run in parallel.</span></span>
 <span><span class="va">fit_est_change_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
 <span><span class="co"># Plot the differences</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -215,15 +206,18 @@ described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="ext
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">param</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="casewise_scores_files/figure-html/compare-est-change-1.png" width="700"></p>
+<div class="float">
+<img src="compare-est-change-1.png" alt="Compare Changes in Estimates"><div class="figcaption">Compare Changes in Estimates</div>
+</div>
 <p>The results are pretty similar.</p>
 </div>
 <div class="section level4">
 <h4 id="generalized-cooks-distance-gcd">Generalized Cook’s distance (<em>gCD</em>)<a class="anchor" aria-label="anchor" href="#generalized-cooks-distance-gcd"></a>
 </h4>
 <p>We can use the approximate parameter changes to approximate the
-<em>gCD</em> (see also Tanaka et al., 1991, equation 13, p. 3811):</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<em>gCD</em> <span class="citation">(see also Tanaka et al., 1991,
+equation 13, p. 3811)</span>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Information matrix (Hessian)</span></span>
 <span><span class="va">information_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect</a></span><span class="op">(</span><span class="va">fit</span>, what <span class="op">=</span> <span class="st">"information"</span><span class="op">)</span></span>
 <span><span class="co"># Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)</span></span>
@@ -232,7 +226,7 @@ described by <a href="https://conservancy.umn.edu/handle/11299/37076" class="ext
 <span><span class="op">)</span></span></code></pre></div>
 <p>This is implemented in the <code><a href="../reference/est_change_approx.html">est_change_approx()</a></code>
 function:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_approx.html">est_change_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="va">fit_est_change_approx</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -254,7 +248,7 @@ function:</p>
 <span><span class="co">#&gt; - Changes are approximate standardized raw changes if a case is included.</span></span>
 <span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
 <span><span class="co">#&gt; - Cases sorted by approximate generalized Cook's distance.</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compare to exact computation</span></span>
 <span><span class="va">fit_est_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
 <span><span class="co"># Plot</span></span>
@@ -266,13 +260,15 @@ function:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="casewise_scores_files/figure-html/compare-approx-gcd-1.png" width="700"></p>
+<div class="float">
+<img src="compare-approx-gcd-1.png" alt="Compare gCDs"><div class="figcaption">Compare gCDs</div>
+</div>
 <p>The approximation tend to underestimate the actual <em>gCD</em> but
-the rank ordering is almost identical. This is discussed also in Tanaka
-et al. (1991), who proposed a correction by applying a one-step
-approximation after the correction (currently not implemented due to the
-need to recompute scores with updated parameter values).</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+the rank ordering is almost identical. This is discussed also in <span class="citation">Tanaka et al. (1991)</span>, who proposed a correction
+by applying a one-step approximation after the correction (currently not
+implemented due to the need to recompute scores with updated parameter
+values).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">gcd_df</span>, method <span class="op">=</span> <span class="st">"spearman"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            gcd_exact gcd_approx</span></span>
 <span><span class="co">#&gt; gcd_exact   1.000000   0.999892</span></span>
@@ -286,7 +282,7 @@ need to recompute scores with updated parameter values).</p>
 function by an observation—can be computed in <code>lavaan</code>, which
 approximates the change in loglikelihood when an observation is
 deleted:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lli</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect</a></span><span class="op">(</span><span class="va">fit</span>, what <span class="op">=</span> <span class="st">"loglik.casewise"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lli</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] -2.776787 -2.034084 -2.154825 -2.248100 -2.793426 -2.049238</span></span></code></pre></div>
@@ -299,7 +295,7 @@ as long as
 is not too different from
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat \theta</annotation></semantics></math>.
 Here’s a comparison:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Predicted ll without observation 1</span></span>
 <span><span class="va">fit</span><span class="op">@</span><span class="va">loglik</span><span class="op">$</span><span class="va">loglik</span> <span class="op">-</span> <span class="va">lli</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [1] -289.8272</span></span>
@@ -313,7 +309,7 @@ as well as other
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math>-based
 fit indices, we can use the <code><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx()</a></code>
 function:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chisq_i_approx</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change_approx.html">fit_measures_change_approx</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co"># Compare to the actual chisq when dropping observation 1</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>predict <span class="op">=</span> <span class="va">chisq_i_approx</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"chisq"</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">fitmeasures</a></span><span class="op">(</span><span class="va">fit</span>, <span class="st">"chisq"</span><span class="op">)</span>,</span>
@@ -325,7 +321,7 @@ function:</p>
 </h4>
 <p>Change in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Exact measure from semfindr</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change.html">fit_measures_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
 <span><span class="co"># Plot</span></span>
@@ -337,9 +333,11 @@ function:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="casewise_scores_files/figure-html/plot-change-chisq-1.png" width="700"></p>
+<div class="float">
+<img src="plot-change-chisq-1.png" alt="Compare Changes in Chi-Square"><div class="figcaption">Compare Changes in Chi-Square</div>
+</div>
 <p>Change in RMSEA</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="va">rmsea_change_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  rmsea_change <span class="op">=</span> <span class="va">out</span><span class="op">[</span> , <span class="st">"rmsea"</span><span class="op">]</span>,</span>
@@ -349,7 +347,9 @@ function:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html" class="external-link">coord_fixed</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="casewise_scores_files/figure-html/plot-change-rmsea-1.png" width="700"></p>
+<div class="float">
+<img src="plot-change-rmsea-1.png" alt="Compare Changes in RMSEA"><div class="figcaption">Compare Changes in RMSEA</div>
+</div>
 <p>The values aligned reasonably well along the 45-degree line.</p>
 </div>
 </div>
@@ -368,14 +368,25 @@ models.</p></li>
 will be raised.</p>
 </div>
 <div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Cook, R. D., &amp; Weisberg, S. (1982). <em>Residuals and influence
-in regression.</em> New York: Chapman and Hall. <a href="https://conservancy.umn.edu/handle/11299/37076" class="external-link uri">https://conservancy.umn.edu/handle/11299/37076</a></p>
-<p>Tanaka, Y., Watadani, S., &amp; Ho Moon, S. (1991). Influence in
-covariance structure analysis: With an application to confirmatory
-factor analysis. <em>Communications in Statistics - Theory and Methods,
-20</em>(12), 3805–3821. <a href="https://doi.org/10.1080/03610929108830742" class="external-link uri">https://doi.org/10.1080/03610929108830742</a></p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-cheung_semfindr_2026" class="csl-entry">
+Cheung, S. F., &amp; Lai, M. H. C. (2026). <span class="nocase">semfindr</span>: <span>An</span> <span>R</span> package
+for identifying influential cases in structural equation modeling.
+<em>Multivariate Behavioral Research</em>. <a href="https://doi.org/10.1080/00273171.2026.2634293" class="external-link">https://doi.org/10.1080/00273171.2026.2634293</a>
+</div>
+<div id="ref-cook_residuals_1982" class="csl-entry">
+Cook, R. D., &amp; Weisberg, S. (1982). <em>Residuals and influence in
+regression</em>. Chapman &amp; Hall.
+</div>
+<div id="ref-tanaka_influence_1991" class="csl-entry">
+Tanaka, Y., Watadani, S., &amp; Ho Moon, S. (1991). Influence in
+covariance structure analysis: <span>With</span> an application to
+confirmatory factor analysis. <em>Communications in Statistics - Theory
+and Methods</em>, <em>20</em>(12), 3805–3821. <a href="https://doi.org/10.1080/03610929108830742" class="external-link">https://doi.org/10.1080/03610929108830742</a>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -388,7 +399,7 @@ factor analysis. <em>Communications in Statistics - Theory and Methods,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

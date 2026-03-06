@@ -6,21 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Influential Cases in Structural Equation Modeling • semfindr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Fira_Sans-0.4.9/font.css" rel="stylesheet">
-<link href="deps/Chivo_Mono-0.4.9/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Fira_Sans-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Chivo_Mono-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Influential Cases in Structural Equation Modeling">
-<meta name="description" content="Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) &lt;doi:10.1080/00273171.2011.561068&gt; and approximate casewise influence using scores and casewise likelihood.">
-<meta property="og:description" content="Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) &lt;doi:10.1080/00273171.2011.561068&gt; and approximate casewise influence using scores and casewise likelihood.">
+<meta name="description" content="Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) &lt;doi:10.1080/00273171.2011.561068&gt; and approximate casewise influence using scores and casewise likelihood. An introduction to the package can be found in Cheung and Lai (2026) &lt;doi:10.1080/00273171.2026.2634293&gt;.">
+<meta property="og:description" content="Sensitivity analysis in structural equation modeling using influence measures and diagnostic plots. Support leave-one-out casewise sensitivity analysis presented by Pek and MacCallum (2011) &lt;doi:10.1080/00273171.2011.561068&gt; and approximate casewise influence using scores and casewise likelihood. An introduction to the package can be found in Cheung and Lai (2026) &lt;doi:10.1080/00273171.2026.2634293&gt;.">
 <meta property="og:image" content="https://sfcheung.github.io/semfindr/logo.png">
 <meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ">
 </head>
@@ -32,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,36 +72,37 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p>(Version 0.1.9, updated on 2025-03-04, <a href="https://sfcheung.github.io/semfindr/news/index.html">release history</a>)</p>
+<p>(Version 0.2.0, updated on 2026-03-06, <a href="https://sfcheung.github.io/semfindr/news/index.html">release history</a>)</p>
 <div class="section level1">
 <div class="page-header">
 <img src="logo.png" class="logo" alt=""><h1 id="semfindr-finding-influential-cases-in-sem-">semfindr: Finding influential cases in SEM <a class="anchor" aria-label="anchor" href="#semfindr-finding-influential-cases-in-sem-"></a>
 </h1>
 </div>
-<p>A find(e)r of influential cases in structural equation modeling based mainly on the sensitivity analysis procedures presented by Pek and MacCallum (2011).</p>
+<p>A find(e)r of influential cases in structural equation modeling based mainly on the sensitivity analysis procedures presented by Pek and MacCallum (2011). An introduction to the package can be found in the following article:</p>
+<p>Cheung, S. F., &amp; Lai, M. H. C. (2026). <code>semfindr</code>: An R package for identifying influential cases in structural equation modeling. <em>Multivariate Behavioral Research</em>. Advance online publication. <a href="https://doi.org/10.1080/00273171.2026.2634293" class="external-link uri">https://doi.org/10.1080/00273171.2026.2634293</a></p>
 <p>This package supports two approaches: leave-one-out analysis and approximate case influence.</p>
 <div class="section level2">
 <h2 id="leave-one-out-analysis">Leave-One-Out Analysis<a class="anchor" aria-label="anchor" href="#leave-one-out-analysis"></a>
 </h2>
 <p>This approach examines the influence of each case by refitting a model with this case removed.</p>
-<p>Unlike other similar packages, the workflow adopted in semfindr separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures.</p>
+<p>Unlike other similar packages, the workflow adopted in <code>semfindr</code> separates the leave-one-out analysis (refitting a model with one case removed) from the case influence measures.</p>
 <ul>
 <li><p>Users first do the leave-one-out model fitting for all cases, or cases selected based on some criteria (<code><a href="articles/selecting_cases.html">vignette("selecting_cases", package = "semfindr")</a></code>), using <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</p></li>
 <li><p>Users then compute case influence measures using the output of <code><a href="reference/lavaan_rerun.html">lavaan_rerun()</a></code>.</p></li>
 </ul>
-<p>This approaches avoids unnecessarily refitting the models for each set of influence measures, and also allows analyzing only probable influential cases when the model takes a long time to fit.</p>
+<p>This approach avoids unnecessarily refitting the models for each set of influence measures, and also allows analyzing only probable influential cases when the model takes a long time to fit.</p>
 <p>The functions were designed to be flexible such that users can compute case influence measures such as</p>
 <ul>
 <li>standardized parameter estimates and generalized Cook’s distance for selected parameters;</li>
 <li>changes in raw or standardized estimates of parameters;</li>
 <li>changes in fit measures supported by <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">lavaan::fitMeasures()</a></code>.</li>
 </ul>
-<p>This package can also be generate plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in <em>Quick Start</em> (<code><a href="articles/semfindr.html">vignette("semfindr", package = "semfindr")</a></code>).</p>
+<p>This package can also generate plots to visualize case influence, including a bubble plot similar to that by <code>car::influencePlot()</code> All plots generated are <code>ggplot</code> plots that can be further modified by users. More can be found in <em>Quick Start</em> (<code><a href="articles/semfindr.html">vignette("semfindr", package = "semfindr")</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="approximate-case-influence">Approximate Case Influence<a class="anchor" aria-label="anchor" href="#approximate-case-influence"></a>
 </h2>
-<p>This approach computes the approximate influence of each case using <em>casewise</em> <em>scores</em> and <em>casewise</em> <em>likelihood</em>. This method is efficient because it does not requires refitting the model for each case. However, it can only approximate the influence, unlike the leave-one-out approach, which produce exact influence. This approach can be used when the number of cases is very large and/or the model takes a long time to fit. Technical details can be found in the vignette <em>Approximate Case Influence Using Scores and Casewise Likelihood</em> (<code><a href="articles/casewise_scores.html">vignette("casewise_scores", package = "semfindr")</a></code>).</p>
+<p>This approach computes the approximate influence of each case using <em>casewise</em> <em>scores</em> and <em>casewise</em> <em>likelihood</em>. This method is efficient because it does not require refitting the model for each case. However, it can only approximate the influence, unlike the leave-one-out approach, which produce exact influence. This approach can be used when the number of cases is very large and/or the model takes a long time to fit. Technical details can be found in the vignette <em>Approximate Case Influence Using Scores and Casewise Likelihood</em> (<code><a href="articles/casewise_scores.html">vignette("casewise_scores", package = "semfindr")</a></code>).</p>
 </div>
 </div>
 <div class="section level1">
@@ -119,6 +119,7 @@
 <div class="section level1">
 <h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h1>
+<p>Cheung, S. F., &amp; Lai, M. H. C. (2026). <code>semfindr</code>: An R package for identifying influential cases in structural equation modeling. <em>Multivariate Behavioral Research</em>. Advance online publication. <a href="https://doi.org/10.1080/00273171.2026.2634293" class="external-link uri">https://doi.org/10.1080/00273171.2026.2634293</a></p>
 <p>Pek, J., &amp; MacCallum, R. (2011). Sensitivity analysis in structural equation models: Cases and their influence. <em>Multivariate Behavioral Research, 46</em>(2), 202-228. <a href="https://doi.org/10.1080/00273171.2011.561068" class="external-link uri">https://doi.org/10.1080/00273171.2011.561068</a></p>
 </div>
 <div class="section level1">
@@ -155,8 +156,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Shu Fai Cheung <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9871-9448" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Mark Hok Chio Lai <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-9196-7406" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Shu Fai Cheung <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9871-9448" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Mark Hok Chio Lai <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-9196-7406" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -183,7 +184,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
