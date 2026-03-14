@@ -75,7 +75,7 @@ differences.
 
 The corresponding changes in the standardized solution
 (e.g., a change in a correlation) is called \emph{DFZTHETA},
-\emph{Z} for standardized.
+\emph{Z} for standardized solution.
 
 Supports both single-group and multiple-group models.
 (Support for multiple-group models available in 0.1.4.8 and later version).
@@ -127,7 +127,7 @@ out2 <- est_change_raw(fit_rerun, c("m1 ~ iv1", "m1 ~ iv2"))
 out2
 # Note that only the changes in the selected paths are included.
 
-# === DFZTHETA (Z for standardized) ===
+# === DFZTHETA (Z for standardized solution) ===
 
 # Use standardized = TRUE to compare the differences in standardized solution
 out2_std <- est_change_raw(fit_rerun,
