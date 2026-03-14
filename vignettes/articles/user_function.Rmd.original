@@ -136,7 +136,8 @@ because `compRelSEM()` expects the
 Additional arguments can be passed to
 the user function. For example, since 0.5-8,
 `semTools::compRelSEM()`, the default
-output is a list. Therefore, `simplify = TRUE`
+output is a list. Therefore, `simplify = TRUE`,
+an argument of `semTools::compRelSEM()`,
 is added such that the output is simplified
 to a numeric vector, to be used by `user_change_raw()`.
 
@@ -164,17 +165,22 @@ to visualize the influence. For example,
 this is the plot of case influence on
 the reliability of `visual`.
 
-```{r user_fun, echo = FALSE, fig.cap = "Case Influence on Reliability"}
+```{r user_fun, fig.cap = "Case Influence on Reliability"}
 p <- index_plot(influence_rel,
                 column = "visual",
                 plot_title = "Reliability: Visual")
 p
 ```
 
-The output is a `ggplot` object,
-`column` needs to be set to the name
-of the statistic to be plotted.
-Refer to the help page of `index_plot()`
+The output is a `ggplot` object.
+The argument `column` is the name
+of the statistic to be plotted, and
+must be name of one of the columns,
+unless the output has only one statistic.
+If the output has only one statistic,
+`column` can be omitted.
+
+Please refer to the help page of `index_plot()`
 for other arguments available.
 
 As shown by both the printout and the plot,
@@ -258,14 +264,14 @@ We can use `index_plot()` again. Let's
 plot case influence on the R-square of
 `f3`:
 
-```{r user_fun2, echo = FALSE, fig.cap = "Case Influence on R-Square: f3"}
+```{r user_fun2, fig.cap = "Case Influence on R-Square: f3"}
 p <- index_plot(influence_rsq,
                 column = "f3",
                 plot_title = "R-Square: f3")
 p
 ```
 
-The 137th case, if included, decreases
+The 137^th^ case, if included, decreases
 the R-square of `f3` by about
 `r formatC(abs(influence_rsq[137, "f3"]), digits = 3, format = "f")`,
 as shown in both the printout and the
