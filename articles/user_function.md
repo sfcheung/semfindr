@@ -84,9 +84,8 @@ number of cases, each time with one case removed:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 27.09 second(s).
+#> The expected CPU time is 13.55 second(s).
 #> Could be faster if run in parallel.
-#> Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.
 ```
 
 ### Reliability
@@ -159,8 +158,9 @@ expects the `lavaan` object as the first argument.
 
 Additional arguments can be passed to the user function. For example,
 since 0.5-8, `semTools::compRelSEM()`, the default output is a list.
-Therefore, `simplify = TRUE` is added such that the output is simplified
-to a numeric vector, to be used by
+Therefore, `simplify = TRUE`, an argument of `semTools::compRelSEM()`,
+is added such that the output is simplified to a numeric vector, to be
+used by
 [`user_change_raw()`](https://sfcheung.github.io/semfindr/reference/user_change_raw.md).
 
 The output is an `est_change` object:
@@ -203,12 +203,23 @@ The function
 can be used to visualize the influence. For example, this is the plot of
 case influence on the reliability of `visual`.
 
+``` r
+p <- index_plot(influence_rel,
+                column = "visual",
+                plot_title = "Reliability: Visual")
+p
+```
+
 ![Case Influence on Reliability](user_fun-1.png)
 
 Case Influence on Reliability
 
-The output is a `ggplot` object, `column` needs to be set to the name of
-the statistic to be plotted. Refer to the help page of
+The output is a `ggplot` object. The argument `column` is the name of
+the statistic to be plotted, and must be name of one of the columns,
+unless the output has only one statistic. If the output has only one
+statistic, `column` can be omitted.
+
+Please refer to the help page of
 [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md)
 for other arguments available.
 
@@ -346,9 +357,8 @@ Let’s do LOO first:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 159 second(s).
+#> The expected CPU time is 9 second(s).
 #> Could be faster if run in parallel.
-#> Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.
 ```
 
 We then call
@@ -408,11 +418,18 @@ We can use
 [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md)
 again. Let’s plot case influence on the R-square of `f3`:
 
+``` r
+p <- index_plot(influence_rsq,
+                column = "f3",
+                plot_title = "R-Square: f3")
+p
+```
+
 ![Case Influence on R-Square: f3](user_fun2-1.png)
 
 Case Influence on R-Square: f3
 
-The 137th case, if included, decreases the R-square of `f3` by about
+The 137^(th) case, if included, decreases the R-square of `f3` by about
 0.044, as shown in both the printout and the index plot.
 
 ## Final Remarks

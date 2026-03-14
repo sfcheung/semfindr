@@ -182,7 +182,7 @@ head(out_approx)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-#> The expected CPU time is 0.24 second(s).
+#> The expected CPU time is 0.23 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in chisq if a case is included
 # vs. if this case is excluded.
@@ -271,7 +271,7 @@ head(out_approx)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:5)
-#> The expected CPU time is 0.34 second(s).
+#> The expected CPU time is 0.32 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in chisq if a case is excluded
 # vs. if this case is included.

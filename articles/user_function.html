@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Sensitivity Analysis: Arbitrary User Function</h1>
             
-            <h4 data-toc-skip class="date">2026-03-04</h4>
+            <h4 data-toc-skip class="date">2026-03-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/semfindr/blob/master/vignettes/articles/user_function.Rmd" class="external-link"><code>vignettes/articles/user_function.Rmd</code></a></small>
       <div class="d-none name"><code>user_function.Rmd</code></div>
@@ -155,9 +155,8 @@ will be used. If not, names will be created automatically.</p></li>
 removed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 27.09 second(s).</span></span>
-<span><span class="co">#&gt; Could be faster if run in parallel.</span></span>
-<span><span class="co">#&gt; Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.</span></span></code></pre></div>
+<span><span class="co">#&gt; The expected CPU time is 13.55 second(s).</span></span>
+<span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="reliability">Reliability<a class="anchor" aria-label="anchor" href="#reliability"></a>
@@ -223,8 +222,9 @@ vector.</p>
 first argument.</p>
 <p>Additional arguments can be passed to the user function. For example,
 since 0.5-8, <code>semTools::compRelSEM()</code>, the default output is
-a list. Therefore, <code>simplify = TRUE</code> is added such that the
-output is simplified to a numeric vector, to be used by
+a list. Therefore, <code>simplify = TRUE</code>, an argument of
+<code>semTools::compRelSEM()</code>, is added such that the output is
+simplified to a numeric vector, to be used by
 <code><a href="../reference/user_change_raw.html">user_change_raw()</a></code>.</p>
 <p>The output is an <code>est_change</code> object:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -260,17 +260,26 @@ decreases if this case is included.</p>
 <p>The function <code><a href="../reference/index_plot.html">index_plot()</a></code> can be used to visualize the
 influence. For example, this is the plot of case influence on the
 reliability of <code>visual</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_plot.html">index_plot</a></span><span class="op">(</span><span class="va">influence_rel</span>,</span>
+<span>                column <span class="op">=</span> <span class="st">"visual"</span>,</span>
+<span>                plot_title <span class="op">=</span> <span class="st">"Reliability: Visual"</span><span class="op">)</span></span>
+<span><span class="va">p</span></span></code></pre></div>
 <div class="float">
 <img src="user_fun-1.png" alt="Case Influence on Reliability"><div class="figcaption">Case Influence on Reliability</div>
 </div>
-<p>The output is a <code>ggplot</code> object, <code>column</code> needs
-to be set to the name of the statistic to be plotted. Refer to the help
-page of <code><a href="../reference/index_plot.html">index_plot()</a></code> for other arguments available.</p>
+<p>The output is a <code>ggplot</code> object. The argument
+<code>column</code> is the name of the statistic to be plotted, and must
+be name of one of the columns, unless the output has only one statistic.
+If the output has only one statistic, <code>column</code> can be
+omitted.</p>
+<p>Please refer to the help page of <code><a href="../reference/index_plot.html">index_plot()</a></code> for other
+arguments available.</p>
 <p>As shown by both the printout and the plot, including the first case
 reduces the reliability of <code>visual</code> by 0.021.</p>
 <p>We can verify this by fitting the model and compute the reliability
 without the first case:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_no_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">mod</span>,</span>
 <span>                data <span class="op">=</span> <span class="va">dat</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>, <span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">fit_rel_no_1</span> <span class="op">&lt;-</span> <span class="fu">compRelSEM</span><span class="op">(</span><span class="va">fit_no_1</span><span class="op">)</span></span>
@@ -356,7 +365,7 @@ without the first case:</p>
 <p>Suppose we use the compute case influence on R-squares. This is the
 sample dataset, <code>sem_dat</code>, comes with
 <code>semfindr</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sem_dat</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           x1          x2         x3         x5         x4          x6</span></span>
 <span><span class="co">#&gt; 1 -3.2135320 -0.09911249 -0.4745297 -2.8185015 -2.3237313 -0.12266637</span></span>
@@ -384,19 +393,18 @@ sample dataset, <code>sem_dat</code>, comes with
 <span>           data <span class="op">=</span> <span class="va">sem_dat</span><span class="op">)</span></span></code></pre></div>
 <p>The R-squares can be retrieved in different ways. For example, it can
 be extracted by <code><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect()</a></code> from <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/lavInspect.html" class="external-link">lavInspect</a></span><span class="op">(</span><span class="va">fit</span>, what <span class="op">=</span> <span class="st">"rsquare"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    x1    x2    x3    x4    x5    x6    x7    x8    x9    f2    f3 </span></span>
 <span><span class="co">#&gt; 0.330 0.166 0.324 0.675 0.425 0.187 0.102 0.315 0.486 0.463 0.596</span></span></code></pre></div>
 <p>Let’s do LOO first:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 159 second(s).</span></span>
-<span><span class="co">#&gt; Could be faster if run in parallel.</span></span>
-<span><span class="co">#&gt; Note: The rerun took more than one minute. Consider saving the output to an external file. E.g., can use saveRDS() to save the object.</span></span></code></pre></div>
+<span><span class="co">#&gt; The expected CPU time is 9 second(s).</span></span>
+<span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>We then call <code><a href="../reference/user_change_raw.html">user_change_raw()</a></code> to compute case
 influence:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">influence_rsq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/user_change_raw.html">user_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
 <span>                                 user_function <span class="op">=</span> <span class="va">lavInspect</span>,</span>
 <span>                                 what <span class="op">=</span> <span class="st">"rsquare"</span><span class="op">)</span></span></code></pre></div>
@@ -407,7 +415,7 @@ to know that we want the R-squares. Such arguments require by
 <code><a href="../reference/user_change_raw.html">user_change_raw()</a></code>, which will pass them to
 <code>user_function</code>.</p>
 <p>This is the output:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">influence_rsq</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -- Case Influence on User Function --</span></span>
@@ -441,10 +449,15 @@ to know that we want the R-squares. Such arguments require by
 <span><span class="co">#&gt; - Cases sorted by the absolute changes for each variable.</span></span></code></pre></div>
 <p>We can use <code><a href="../reference/index_plot.html">index_plot()</a></code> again. Let’s plot case influence
 on the R-square of <code>f3</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/index_plot.html">index_plot</a></span><span class="op">(</span><span class="va">influence_rsq</span>,</span>
+<span>                column <span class="op">=</span> <span class="st">"f3"</span>,</span>
+<span>                plot_title <span class="op">=</span> <span class="st">"R-Square: f3"</span><span class="op">)</span></span>
+<span><span class="va">p</span></span></code></pre></div>
 <div class="float">
 <img src="user_fun2-1.png" alt="Case Influence on R-Square: f3"><div class="figcaption">Case Influence on R-Square: f3</div>
 </div>
-<p>The 137th case, if included, decreases the R-square of
+<p>The 137<sup>th</sup> case, if included, decreases the R-square of
 <code>f3</code> by about 0.044, as shown in both the printout and the
 index plot.</p>
 </div>

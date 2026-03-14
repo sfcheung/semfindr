@@ -1,5 +1,14 @@
 # Changelog
 
+## semfindr 0.2.0.1
+
+### Miscellaneous
+
+- Updated
+  [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md).
+  The argument `column` can now be omitted if the object has only one
+  column (only one user statistic). (0.2.0.1)
+
 ## semfindr 0.2.0
 
 CRAN release: 2026-03-06
