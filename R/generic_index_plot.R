@@ -30,6 +30,8 @@
 #'
 #' @param column String. The column
 #' name of the values to be plotted.
+#' Can be omitted if the object has
+#' only one column.
 #'
 #' @param plot_title The title of the
 #' plot. Default is `"Index Plot"`.
@@ -178,15 +180,21 @@ index_plot <- function(object,
           stop("If 'object' is a vector, it must be named.")
         }
     } else {
-      if (length(column) != 1) {
-          stop("'column' must has a length of 1.")
-        }
-      column <- as.character(column)
-      if (!(column %in% colnames(object))) {
-          stop(sQuote(column), " not found in 'object'.")
-        }
-      tmp <- rownames(object)
-      object <- object[, column, drop = TRUE]
+      if (is.null(column) &&
+          (ncol(object) == 1)) {
+        tmp <- rownames(object)
+        object <- object[, 1, drop = TRUE]
+      } else {
+        if (length(column) != 1) {
+            stop("'column' must has a length of 1.")
+          }
+        column <- as.character(column)
+        if (!(column %in% colnames(object))) {
+            stop(sQuote(column), " not found in 'object'.")
+          }
+        tmp <- rownames(object)
+        object <- object[, column, drop = TRUE]
+      }
       if (is.null(names(object))) {
           names(object) <- tmp
         }

@@ -29,7 +29,9 @@ counterparts for the approximate
 approach.}
 
 \item{column}{String. The column
-name of the values to be plotted.}
+name of the values to be plotted.
+Can be omitted if the object has
+only one column.}
 
 \item{plot_title}{The title of the
 plot. Default is \code{"Index Plot"}.}
