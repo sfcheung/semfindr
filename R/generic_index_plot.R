@@ -30,7 +30,8 @@
 #'
 #' @param column String. The column
 #' name of the values to be plotted.
-#' Can be omitted if the object has
+#' Since Version 0.2.0.1, this
+#' argument can be omitted if the object has
 #' only one column.
 #'
 #' @param plot_title The title of the

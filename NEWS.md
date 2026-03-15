@@ -1,11 +1,11 @@
-# semfindr 0.2.0.1
+# semfindr 0.2.0.2
 
 ## Miscellaneous
 
 - Updated `index_plot()`. The argument
   `column` can now be omitted if the
   object has only one column (only
-  one user statistic). (0.2.0.1)
+  one user statistic). (0.2.0.1, 0.2.0.2)
 
 # semfindr 0.2.0
 
