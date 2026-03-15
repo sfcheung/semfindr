@@ -177,7 +177,8 @@ The argument `column` is the name
 of the statistic to be plotted, and
 must be name of one of the columns,
 unless the output has only one statistic.
-If the output has only one statistic,
+Since Version 0.2.0.1, if the output
+has only one statistic,
 `column` can be omitted.
 
 Please refer to the help page of `index_plot()`
