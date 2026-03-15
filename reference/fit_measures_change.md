@@ -137,7 +137,7 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.47 second(s).
+#> The expected CPU time is 0.46 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in chisq if a case is included
 # vs. if this case is removed.
@@ -224,7 +224,7 @@ fit <- lavaan::sem(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.66 second(s).
+#> The expected CPU time is 0.63 second(s).
 #> Could be faster if run in parallel.
 out <- fit_measures_change(fit_rerun, fit_measures = "chisq")
 head(out)

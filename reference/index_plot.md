@@ -35,8 +35,9 @@ index_plot(
 
 - column:
 
-  String. The column name of the values to be plotted. Can be omitted if
-  the object has only one column.
+  String. The column name of the values to be plotted. Since Version
+  0.2.0.1, this argument can be omitted if the object has only one
+  column.
 
 - plot_title:
 
@@ -206,7 +207,7 @@ summary(fit)
 # For illustration, do this only for selected cases.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.45 second(s).
+#> The expected CPU time is 0.46 second(s).
 #> Could be faster if run in parallel.
 # Get all default influence stats
 out <- influence_stat(fit_rerun)

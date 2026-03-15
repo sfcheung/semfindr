@@ -80,7 +80,7 @@ summary(fit)
 #> 
 # Fit the model n times. Each time with one case removed.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
-#> The expected CPU time is 2.32 second(s).
+#> The expected CPU time is 2.25 second(s).
 #> Could be faster if run in parallel.
 fit_rerun
 #> === lavaan_rerun Output ===

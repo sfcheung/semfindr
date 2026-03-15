@@ -38,6 +38,8 @@ will be used for illustration.
 ``` r
 library(semfindr)
 library(lavaan)
+#> This is lavaan 0.6-21
+#> lavaan is FREE software! Please report any bugs.
 head(HolzingerSwineford1939)
 #>   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5        x6
 #> 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75 1.2857143
@@ -84,7 +86,7 @@ number of cases, each time with one case removed:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 13.55 second(s).
+#> The expected CPU time is 27.09 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -95,6 +97,11 @@ can be computed by `compRelSEM()` from `semTools`:
 
 ``` r
 library(semTools)
+#> 
+#> ###############################################################################
+#> This is semTools 0.5-8
+#> All users of R (or SEM) are invited to submit functions or ideas for functions.
+#> ###############################################################################
 fit_rel <- compRelSEM(fit,
                       simplify = TRUE)
 fit_rel
@@ -216,8 +223,8 @@ Case Influence on Reliability
 
 The output is a `ggplot` object. The argument `column` is the name of
 the statistic to be plotted, and must be name of one of the columns,
-unless the output has only one statistic. If the output has only one
-statistic, `column` can be omitted.
+unless the output has only one statistic. Since Version 0.2.0.1, if the
+output has only one statistic, `column` can be omitted.
 
 Please refer to the help page of
 [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md)
@@ -357,7 +364,7 @@ Let’s do LOO first:
 
 ``` r
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 9 second(s).
+#> The expected CPU time is 15 second(s).
 #> Could be faster if run in parallel.
 ```
 

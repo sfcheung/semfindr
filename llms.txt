@@ -1,6 +1,6 @@
 # semfindr: Finding influential cases in SEM
 
-(Version 0.2.0.1, updated on 2026-03-14, [release
+(Version 0.2.0.2, updated on 2026-03-15, [release
 history](https://sfcheung.github.io/semfindr/news/index.html))
 
 A find(e)r of influential cases in structural equation modeling based

@@ -292,7 +292,7 @@ summary(fit)
 # For illustration, do this only for selected cases.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.46 second(s).
+#> The expected CPU time is 0.48 second(s).
 #> Could be faster if run in parallel.
 # Get all default influence stats
 out <- influence_stat(fit_rerun)
