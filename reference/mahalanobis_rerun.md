@@ -158,7 +158,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.55 second(s).
+#> The expected CPU time is 0.54 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 
@@ -197,7 +197,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.72 second(s).
+#> The expected CPU time is 0.66 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 

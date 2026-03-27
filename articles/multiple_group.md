@@ -456,7 +456,7 @@ We can check case influence again:
 rerun_config_no100 <- lavaan_rerun(fit_config_no100)
 ```
 
-    ## The expected CPU time is 10.4 second(s).
+    ## The expected CPU time is 10.1 second(s).
     ## Could be faster if run in parallel.
 
 ``` r

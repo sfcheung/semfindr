@@ -167,7 +167,7 @@ print(out, sort_by = "chisq", first = 5)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))#'
-#> The expected CPU time is 0.19 second(s).
+#> The expected CPU time is 0.18 second(s).
 #> Could be faster if run in parallel.
 out <- fit_measures_change(fit_rerun)
 out

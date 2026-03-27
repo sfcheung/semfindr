@@ -164,7 +164,7 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 4, 7, 9))
-#> The expected CPU time is 0.23 second(s).
+#> The expected CPU time is 0.22 second(s).
 #> Could be faster if run in parallel.
 # Compute the standardized changes in parameter estimates
 # if a case is included vs. if this case is excluded.
@@ -271,7 +271,7 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.35 second(s).
+#> The expected CPU time is 0.33 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in parameter estimates if a case is included
 # vs. if a case is excluded.

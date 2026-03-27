@@ -57,7 +57,7 @@ selected. This can be done using the argument `to_rerun` of
 ``` r
 rerun_out <- lavaan_rerun(fit,
                           to_rerun = c(1, 4, 15, 18))
-#> The expected CPU time is 0.62 second(s).
+#> The expected CPU time is 0.64 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -101,7 +101,7 @@ rerun_out <- lavaan_rerun(fit,
                                        "case4",
                                        "case15",
                                        "case18"))
-#> The expected CPU time is 0.62 second(s).
+#> The expected CPU time is 0.64 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -157,7 +157,7 @@ This is done using the argument `resid_md_top`. Users specify the top
 rerun_out <- lavaan_rerun(fit,
                           case_id = dat$id,
                           resid_md_top = 5)
-#> The expected CPU time is 0.78 second(s).
+#> The expected CPU time is 0.79 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -208,7 +208,7 @@ selected for refitting a model.
 rerun_out <- lavaan_rerun(fit,
                           case_id = dat$id,
                           md_top = 5)
-#> The expected CPU time is 0.78 second(s).
+#> The expected CPU time is 0.79 second(s).
 #> Could be faster if run in parallel.
 ```
 
