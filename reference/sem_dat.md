@@ -64,7 +64,7 @@ ab := a * b
 "
 fit <- sem(mod, sem_dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 37 iterations
+#> lavaan 0.7-2 ended normally after 37 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -125,4 +125,9 @@ summary(fit)
 #>                    Estimate  Std.Err  z-value  P(>|z|)
 #>     ab                0.230    0.079    2.895    0.004
 #> 
+#> lavaan NOTE:  
+#>    Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+#>    parameters are based on the first-order delta method; for strongly 
+#>    nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+#>    be more accurate.
 ```

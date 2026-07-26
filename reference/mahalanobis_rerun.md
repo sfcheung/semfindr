@@ -83,7 +83,7 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -121,11 +121,16 @@ summary(fit)
 #>     a1b               0.111    0.059    1.880    0.060
 #>     a2b               0.270    0.075    3.581    0.000
 #> 
+#> lavaan NOTE:  
+#>    Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+#>    parameters are based on the first-order delta method; for strongly 
+#>    nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+#>    be more accurate.
 # Fit the model n times. Each time with one case removed.
 # For illustration, do this only for selected cases.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.54 second(s).
+#> The expected CPU time is 0.46 second(s).
 #> Could be faster if run in parallel.
 # Compute the Mahalanobis distance for each case
 out <- mahalanobis_rerun(fit_rerun)
@@ -158,7 +163,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.54 second(s).
+#> The expected CPU time is 0.55 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 
@@ -197,7 +202,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.66 second(s).
+#> The expected CPU time is 0.71 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 

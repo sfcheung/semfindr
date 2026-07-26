@@ -52,7 +52,7 @@ f2 =~  x4 + x5 + x6
 "
 fit <- cfa(mod, cfa_dat2)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 36 iterations
+#> lavaan 0.7-2 ended normally after 36 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

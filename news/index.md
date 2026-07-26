@@ -1,13 +1,18 @@
 # Changelog
 
-## semfindr 0.2.0.2
+## semfindr 0.2.0.4
 
 ### Miscellaneous
 
 - Updated
   [`index_plot()`](https://sfcheung.github.io/semfindr/reference/index_plot.md).
   The argument `column` can now be omitted if the object has only one
-  column (only one user statistic). (0.2.0.1, 0.2.0.2)
+  column (only one user statistic). (0.2.0.1, 0.2.0.3)
+
+- Updated `roxygen2` to 8.0.0 and also updated the documentation.
+  (0.2.0.3)
+
+- Fixed an issue related to the coming `lavaan` 0.7-3. (0.2.0.4)
 
 ## semfindr 0.2.0
 

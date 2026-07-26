@@ -205,7 +205,7 @@ dv ~ m1
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -241,7 +241,7 @@ summary(fit)
 
 # Fit the model n times. Each time with one case removed.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE)
-#> The expected CPU time is 2.48 second(s).
+#> The expected CPU time is 2.63 second(s).
 #> Could be faster if run in parallel.
 
 # Print the output for a brief description of the runs

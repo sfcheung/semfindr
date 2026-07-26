@@ -46,7 +46,7 @@ a2b := a2 * b
 "
 fit <- sem(mod, pa_dat2)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -84,6 +84,11 @@ summary(fit)
 #>     a1b               0.106    0.041    2.597    0.009
 #>     a2b               0.083    0.036    2.309    0.021
 #> 
+#> lavaan NOTE:  
+#>    Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+#>    parameters are based on the first-order delta method; for strongly 
+#>    nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+#>    be more accurate.
 inf_out <- influence_stat(fit)
 gcd_plot(inf_out)
 ```

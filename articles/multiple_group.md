@@ -15,6 +15,7 @@ The sample dataset `cfa_dat_mg` in `semfindr` will be used in this
 illustration:
 
 ``` r
+
 library(semfindr)
 data(cfa_dat_mg)
 head(cfa_dat_mg)
@@ -29,6 +30,7 @@ head(cfa_dat_mg)
     ## 6 -1.2487913 -1.48482257 -0.7739649  0.8942307 -0.03870106  0.0403398 GroupA
 
 ``` r
+
 table(cfa_dat_mg$gp)
 ```
 
@@ -48,6 +50,7 @@ Three confirmatory factor analytic (CFA) models are to be fitted. They
 are all defined by the following model syntax:
 
 ``` r
+
 mod <-
 "
 f1 =~ x1 + x2 + x3
@@ -59,13 +62,15 @@ The first model has no between-group constraints. It tests configural
 invariance.
 
 ``` r
+
 library(lavaan)
 ```
 
-    ## This is lavaan 0.6-21
+    ## This is lavaan 0.7-2
     ## lavaan is FREE software! Please report any bugs.
 
 ``` r
+
 fit_config <- cfa(mod, cfa_dat_mg,
                   group = "gp")
 ```
@@ -74,6 +79,7 @@ The second model tests weak invariance, with factor loadings constrained
 to be equal across groups:
 
 ``` r
+
 fit_weak <- cfa(mod, cfa_dat_mg,
                 group = "gp",
                 group.equal = "loadings")
@@ -83,6 +89,7 @@ The third model tests strong invariance, with factor loadings and item
 intercepts constrained to be equal across groups:
 
 ``` r
+
 fit_strong <- cfa(mod, cfa_dat_mg,
                   group = "gp",
                   group.equal = c("loadings", "intercepts"))
@@ -92,6 +99,7 @@ The three models are compared by
 [`lavaan::lavTestLRT()`](https://rdrr.io/pkg/lavaan/man/lavTestLRT.html):
 
 ``` r
+
 lavTestLRT(fit_config, fit_weak, fit_strong)
 ```
 
@@ -104,6 +112,7 @@ lavTestLRT(fit_config, fit_weak, fit_strong)
     ## fit_strong 24 1866.2 1944.3 34.357      2.453     0       4     0.6531
 
 ``` r
+
 lavTestLRT(fit_config, fit_strong)
 ```
 
@@ -119,6 +128,7 @@ The tests do not reject both strong invariance and weak invariance.
 These are the fit measures of the three models:
 
 ``` r
+
 fm <- c("chisq", "pvalue", "cfi", "tli", "rmsea")
 round(data.frame(configural = fitMeasures(fit_config, fm),
                  weak = fitMeasures(fit_weak, fm),
@@ -153,10 +163,11 @@ cases, we do not have to use parallel processing. The model is fitted
 100 times, each time with one case removed:
 
 ``` r
+
 rerun_config <- lavaan_rerun(fit_config)
 ```
 
-    ## The expected CPU time is 21.3 second(s).
+    ## The expected CPU time is 22.95 second(s).
     ## Could be faster if run in parallel.
 
 Not shown here, but it is possible that a model may fail to converge or
@@ -175,6 +186,7 @@ using the output of
 [`lavaan_rerun()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun.md):
 
 ``` r
+
 inf_config <- influence_stat(rerun_config)
 ```
 
@@ -193,6 +205,7 @@ For multiple-group models, Mahalanobis distance for a case is computed
 using the mean and covariance matrix of the group this case belongs to.
 
 ``` r
+
 print(inf_config,
       what = "mahalanobis",
       first = 5)
@@ -216,6 +229,7 @@ We can visualize the values using
 [`md_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md)
 
 ``` r
+
 md_plot(inf_config,
         largest_md = 3)
 ```
@@ -231,6 +245,7 @@ We then examine case influence on fit measures, sorted by model
 chi-squares:
 
 ``` r
+
 print(inf_config,
       what = "fit_measures",
       first = 5,
@@ -260,6 +275,7 @@ Last, we assess casewise influence on parameter estimates by setting
 by generalized Cook’s distance (Cook, 1977):
 
 ``` r
+
 print(inf_config,
       what = "parameters",
       first = 5)
@@ -308,6 +324,7 @@ We can also visualize the generalized Cook’s distance using
 [`gcd_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md):
 
 ``` r
+
 gcd_plot(inf_config,
          largest_gcd = 3)
 ```
@@ -323,6 +340,7 @@ We can visualize all three aspects in one plot using
 [`gcd_gof_md_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md):
 
 ``` r
+
 gcd_gof_md_plot(inf_config,
                 fit_measure = "chisq",
                 circle_size = 15,
@@ -344,6 +362,7 @@ model, we can use
 on how to select parameters):
 
 ``` r
+
 est_change_group <- est_change(rerun_config,
                                parameters = c("=~.GroupB"))
 print(est_change_group,
@@ -372,6 +391,7 @@ visualized using
 [`gcd_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md):
 
 ``` r
+
 gcd_plot(est_change_group)
 ```
 
@@ -397,6 +417,7 @@ shown here for brevity.
 Let us fit the three models again, without Case 100.
 
 ``` r
+
 cfa_dat_mg_no100 <- cfa_dat_mg[-100, ]
 fit_config_no100 <- cfa(mod, cfa_dat_mg_no100,
                         group = "gp")
@@ -409,6 +430,7 @@ fit_strong_no100 <- cfa(mod, cfa_dat_mg_no100,
 ```
 
 ``` r
+
 lavTestLRT(fit_config_no100, fit_weak_no100, fit_strong_no100)
 ```
 
@@ -421,6 +443,7 @@ lavTestLRT(fit_config_no100, fit_weak_no100, fit_strong_no100)
     ## fit_strong_no100 24 1828.4 1906.3 29.031     2.3739     0       4     0.6673
 
 ``` r
+
 lavTestLRT(fit_config_no100, fit_strong_no100)
 ```
 
@@ -434,6 +457,7 @@ lavTestLRT(fit_config_no100, fit_strong_no100)
 Strong invariance is still not rejected if Case 100 is removed.
 
 ``` r
+
 fm <- c("chisq", "pvalue", "cfi", "tli", "rmsea")
 round(data.frame(configural = fitMeasures(fit_config_no100, fm),
                  weak = fitMeasures(fit_weak_no100, fm),
@@ -453,19 +477,22 @@ chi-squares not significant.
 We can check case influence again:
 
 ``` r
+
 rerun_config_no100 <- lavaan_rerun(fit_config_no100)
 ```
 
-    ## The expected CPU time is 10.1 second(s).
+    ## The expected CPU time is 11.14 second(s).
     ## Could be faster if run in parallel.
 
 ``` r
+
 inf_config_no100 <- influence_stat(rerun_config_no100)
 ```
 
 For brevity, we only examine the plots:
 
 ``` r
+
 md_plot(inf_config_no100,
         largest_md = 3)
 ```
@@ -473,6 +500,7 @@ md_plot(inf_config_no100,
 ![](multiple_group_files/figure-html/unnamed-chunk-22-1.png)
 
 ``` r
+
 gcd_plot(inf_config_no100,
          largest_gcd = 3)
 ```
@@ -480,6 +508,7 @@ gcd_plot(inf_config_no100,
 ![](multiple_group_files/figure-html/unnamed-chunk-23-1.png)
 
 ``` r
+
 gcd_gof_md_plot(inf_config_no100,
                 fit_measure = "chisq",
                 circle_size = 15,

@@ -1,6 +1,6 @@
 # semfindr: Finding influential cases in SEM
 
-(Version 0.2.0.2, updated on 2026-03-15, [release
+(Version 0.2.0.4, updated on 2026-07-26, [release
 history](https://sfcheung.github.io/semfindr/news/index.html))
 
 A find(e)r of influential cases in structural equation modeling based
@@ -71,6 +71,7 @@ The stable version at CRAN can be installed by
 [`install.packages()`](https://rdrr.io/r/utils/install.packages.html):
 
 ``` r
+
 install.packages("semfindr")
 ```
 
@@ -78,6 +79,7 @@ The latest developmental version can be installed by
 `remotes::install_github`:
 
 ``` r
+
 remotes::install_github("sfcheung/semfindr")
 ```
 

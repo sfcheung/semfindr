@@ -40,7 +40,7 @@ A data frame with 100 rows and 6 variables:
 
 ``` r
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-2
 #> lavaan is FREE software! Please report any bugs.
 data(cfa_dat)
 mod <-
@@ -50,7 +50,7 @@ f2 =~  x4 + x5 + x6
 "
 fit <- cfa(mod, cfa_dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 37 iterations
+#> lavaan 0.7-2 ended normally after 37 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

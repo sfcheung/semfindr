@@ -122,7 +122,7 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -160,11 +160,16 @@ summary(fit)
 #>     a1b               0.111    0.059    1.880    0.060
 #>     a2b               0.270    0.075    3.581    0.000
 #> 
+#> lavaan NOTE:  
+#>    Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+#>    parameters are based on the first-order delta method; for strongly 
+#>    nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+#>    be more accurate.
 # Fit the model several times. Each time with one case removed.
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 4, 7, 9))
-#> The expected CPU time is 0.22 second(s).
+#> The expected CPU time is 0.21 second(s).
 #> Could be faster if run in parallel.
 # Compute the standardized changes in parameter estimates
 # if a case is included vs. if this case is excluded.
@@ -231,7 +236,7 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.25 second(s).
+#> The expected CPU time is 0.26 second(s).
 #> Could be faster if run in parallel.
 # Compute the standardized changes in parameter estimates
 # if a case is included vs. if a case is excluded.
@@ -271,7 +276,7 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.33 second(s).
+#> The expected CPU time is 0.35 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in parameter estimates if a case is included
 # vs. if a case is excluded.

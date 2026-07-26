@@ -18,6 +18,7 @@ for further information on the the approximate approach.
 The sample data set `pa_dat` will be used for illustration:
 
 ``` r
+
 library(semfindr)
 dat <- pa_dat
 # Add case id
@@ -35,8 +36,9 @@ head(dat)
 The following model is fitted to the data set:
 
 ``` r
+
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-2
 #> lavaan is FREE software! Please report any bugs.
 mod <-
 "
@@ -55,15 +57,17 @@ selected. This can be done using the argument `to_rerun` of
 [`lavaan_rerun()`](https://sfcheung.github.io/semfindr/reference/lavaan_rerun.md):
 
 ``` r
+
 rerun_out <- lavaan_rerun(fit,
                           to_rerun = c(1, 4, 15, 18))
-#> The expected CPU time is 0.64 second(s).
+#> The expected CPU time is 0.77 second(s).
 #> Could be faster if run in parallel.
 ```
 
 Only four reruns in the output:
 
 ``` r
+
 rerun_out
 #> === lavaan_rerun Output ===
 #> Call:
@@ -95,13 +99,14 @@ If user supplied case IDs are used, then the value of `to_rerun` should
 be a vector of these case IDs:
 
 ``` r
+
 rerun_out <- lavaan_rerun(fit,
                           case_id = dat$id,
                           to_rerun = c("case1",
                                        "case4",
                                        "case15",
                                        "case18"))
-#> The expected CPU time is 0.64 second(s).
+#> The expected CPU time is 0.77 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -109,6 +114,7 @@ Only four reruns in the output. User supplied case IDs are used in the
 output:
 
 ``` r
+
 rerun_out
 #> === lavaan_rerun Output ===
 #> Call:
@@ -154,16 +160,18 @@ This is done using the argument `resid_md_top`. Users specify the top
 *x* cases on this distance to be selected for refitting a model.
 
 ``` r
+
 rerun_out <- lavaan_rerun(fit,
                           case_id = dat$id,
                           resid_md_top = 5)
-#> The expected CPU time is 0.79 second(s).
+#> The expected CPU time is 0.96 second(s).
 #> Could be faster if run in parallel.
 ```
 
 Five cases were selected, as shown below:
 
 ``` r
+
 rerun_out
 #> === lavaan_rerun Output ===
 #> Call:
@@ -205,16 +213,18 @@ computed using all observed variables. This is done using the argument
 selected for refitting a model.
 
 ``` r
+
 rerun_out <- lavaan_rerun(fit,
                           case_id = dat$id,
                           md_top = 5)
-#> The expected CPU time is 0.79 second(s).
+#> The expected CPU time is 0.96 second(s).
 #> Could be faster if run in parallel.
 ```
 
 Five cases were selected, as shown below:
 
 ``` r
+
 rerun_out
 #> === lavaan_rerun Output ===
 #> Call:

@@ -7,11 +7,13 @@ when the sample size *N* is large, where the approximation works better
 and the computational cost for refitting models *N* times is high.
 
 ``` r
+
 library(semfindr)
 dat <- pa_dat
 ```
 
 ``` r
+
 library(lavaan)
 mod <-
 "
@@ -26,13 +28,16 @@ fit <- sem(mod, dat)
 `lavaan` provides the handy
 [`lavScores()`](https://rdrr.io/pkg/lavaan/man/lav_scores.html) function
 to evaluate
-$$s_{i}\left( \theta_{m} \right) = \frac{\partial\ell_{i}\left( \theta_{m} \right)}{\partial\theta_{m}}$$
-for observation $i$, where $\ell_{i}(\theta)$ denotes the casewise
-loglikelihood function and $\theta_{m}$ is the $m$th model parameter.
+``` math
+s_i(\theta_m) = \frac{\partial \ell_i(\theta_m)}{\partial \theta_m}
+```
+for observation $`i`$, where $`\ell_i(\theta)`$ denotes the casewise
+loglikelihood function and $`\theta_m`$ is the $`m`$th model parameter.
 
 For example,
 
 ``` r
+
 head(lavScores(fit)[ , 1, drop = FALSE])
 #>           m1~iv1
 #> [1,]  0.23975993
@@ -46,28 +51,33 @@ head(lavScores(fit)[ , 1, drop = FALSE])
 indicates the partial derivative of the casewise loglikelihod with
 respect to the parameter `m1~iv1`. Because the sum of the partial
 derivatives across all observations is zero at the maximum likelihood
-estimate with the full sample (${\widehat{\theta}}_{m}$; i.e., the
-derivative of loglikelihood of the full data is 0),
-$- s_{i}\left( \theta_{m} \right)$ can be used as an estimate of the
-partial derivative of the loglikelihood at ${\widehat{\theta}}_{m}$**for
-the sample without observation $i$**. This information can be used to
-approximate the maximum likelihood estimate for $\theta_{m}$ when case
-$i$ is dropped, denoted as ${\widehat{\theta}}_{m{( - i)}}$
+estimate with the full sample ($`\hat \theta_m`$; i.e., the derivative
+of loglikelihood of the full data is 0), $`- s_i(\theta_m)`$ can be used
+as an estimate of the partial derivative of the loglikelihood at
+$`\hat \theta_m`$**for the sample without observation $`i`$**. This
+information can be used to approximate the maximum likelihood estimate
+for $`\theta_m`$ when case $`i`$ is dropped, denoted as
+$`\hat \theta_{m(-i)}`$
 
 The second-order Taylor series expansion can be used to approximate the
 parameter vector estimate with an observation deleted,
-${\widehat{\theta}}_{( - i)}$, as in the iterative [Newton’s
+$`\hat \theta_{(-i)}`$, as in the iterative [Newton’s
 method](https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization).
 Specifically,
 
-$${\widehat{\theta}}_{(i)} \approx \widehat{\theta} - \frac{N}{N - 1}V\left( \widehat{\theta} \right)\nabla\ell\left( \widehat{\theta} \right)$$$$\widehat{\theta} - {\widehat{\theta}}_{(i)} \approx \frac{N}{N - 1}V\left( \widehat{\theta} \right)\nabla\ell_{i}\left( \widehat{\theta} \right),$$
-where $\nabla\ell_{i}\left( \widehat{\theta} \right)$ is the gradient
-vector of the casewise loglikelihood with respect to the parameters
-(i.e., score). The $N/(N - 1)$ term is used to adjust for the decrease
-in sample size (this adjustment is trivial in large samples). This
-procedure should be the same as equation (4) of Tanaka et al. (1991)
-(p. 3807) and is related to the one-step approximation described by
-(Cook & Weisberg, 1982, p. 182).
+``` math
+\hat \theta_{(i)} \approx \hat \theta - \frac{N}{N - 1}V(\hat \theta) \nabla \ell(\hat \theta)
+```
+``` math
+\hat \theta - \hat \theta_{(i)} \approx \frac{N}{N - 1}V(\hat \theta) \nabla \ell_i(\hat \theta),
+```
+where $`\nabla \ell_i(\hat \theta)`$ is the gradient vector of the
+casewise loglikelihood with respect to the parameters (i.e., score). The
+$`N / (N - 1)`$ term is used to adjust for the decrease in sample size
+(this adjustment is trivial in large samples). This procedure should be
+the same as equation (4) of Tanaka et al. (1991) (p. 3807) and is
+related to the one-step approximation described by (Cook & Weisberg,
+1982, p. 182).
 
 #### Comparison
 
@@ -76,6 +86,7 @@ The approximation is implemented in the
 function:
 
 ``` r
+
 fit_est_change_approx <- est_change_raw_approx(fit)
 fit_est_change_approx
 #> 
@@ -105,6 +116,7 @@ and
 [`semfindr::est_change_raw()`](https://sfcheung.github.io/semfindr/reference/est_change_raw.md)
 
 ``` r
+
 # From semfindr
 fit_rerun <- lavaan_rerun(fit)
 #> The expected CPU time is 39 second(s).
@@ -137,6 +149,7 @@ We can use the approximate parameter changes to approximate the *gCD*
 (see also Tanaka et al., 1991, equation 13, p. 3811):
 
 ``` r
+
 # Information matrix (Hessian)
 information_fit <- lavInspect(fit, what = "information")
 # Short cut for computing quadratic form (https://stackoverflow.com/questions/27157127/efficient-way-of-calculating-quadratic-forms-avoid-for-loops)
@@ -150,6 +163,7 @@ This is implemented in the
 function:
 
 ``` r
+
 fit_est_change_approx <- est_change_approx(fit)
 fit_est_change_approx
 #> 
@@ -174,6 +188,7 @@ fit_est_change_approx
 ```
 
 ``` r
+
 # Compare to exact computation
 fit_est_change <- est_change(fit_rerun)
 # Plot
@@ -198,6 +213,7 @@ after the correction (currently not implemented due to the need to
 recompute scores with updated parameter values).
 
 ``` r
+
 cor(gcd_df, method = "spearman")
 #>            gcd_exact gcd_approx
 #> gcd_exact   1.000000   0.999892
@@ -211,18 +227,19 @@ by an observation—can be computed in `lavaan`, which approximates the
 change in loglikelihood when an observation is deleted:
 
 ``` r
+
 lli <- lavInspect(fit, what = "loglik.casewise")
 head(lli)
 #> [1] -2.776787 -2.034084 -2.154825 -2.248100 -2.793426 -2.049238
 ```
 
-Here, $\ell\left( \widehat{\theta} \right)$ will drop 2.78 when
-observation 1 is deleted. This should approximate
-$\ell\left( {\widehat{\theta}}_{( - i)} \right)$ as long as
-${\widehat{\theta}}_{( - i)}$ is not too different from
-$\widehat{\theta}$. Here’s a comparison:
+Here, $`\ell(\hat \theta)`$ will drop 2.78 when observation 1 is
+deleted. This should approximate $`\ell(\hat \theta_{(-i)})`$ as long as
+$`\hat \theta_{(-i)}`$ is not too different from $`\hat \theta`$. Here’s
+a comparison:
 
 ``` r
+
 # Predicted ll without observation 1
 fit@loglik$loglik - lli[1]
 #> [1] -289.8272
@@ -232,12 +249,13 @@ fit_no1@loglik$loglik
 #> [1] -289.8156
 ```
 
-They are pretty close. To approximate the change in $\chi^{2}$, as well
-as other $\chi^{2}$-based fit indices, we can use the
+They are pretty close. To approximate the change in $`\chi^2`$, as well
+as other $`\chi^2`$-based fit indices, we can use the
 [`fit_measures_change_approx()`](https://sfcheung.github.io/semfindr/reference/fit_measures_change_approx.md)
 function:
 
 ``` r
+
 chisq_i_approx <- fit_measures_change_approx(fit)
 # Compare to the actual chisq when dropping observation 1
 c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
@@ -248,9 +266,10 @@ c(predict = chisq_i_approx[1, "chisq"] + fitmeasures(fit, "chisq"),
 
 #### Comparing exact and approximate changes in fit indices
 
-Change in $\chi^{2}$
+Change in $`\chi^2`$
 
 ``` r
+
 # Exact measure from semfindr
 out <- fit_measures_change(fit_rerun)
 # Plot
@@ -271,6 +290,7 @@ Compare Changes in Chi-Square
 Change in RMSEA
 
 ``` r
+
 # Plot
 rmsea_change_df <- data.frame(
   rmsea_change = out[ , "rmsea"],

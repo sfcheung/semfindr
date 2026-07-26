@@ -52,6 +52,7 @@ The sample dataset is `pa_dat`, provided in the package, with variables
 `pa_dat` to a new symbol, `dat`.
 
 ``` r
+
 library(semfindr)
 dat <- pa_dat
 head(dat)
@@ -68,6 +69,7 @@ Assume that the target model under examination is a path model with two
 predictors, one mediator, and one outcome variable:
 
 ``` r
+
 mod <-
 "
 m1 ~ iv1 + iv2
@@ -79,6 +81,7 @@ We fit the model by
 [`lavaan::sem()`](https://rdrr.io/pkg/lavaan/man/sem.html):
 
 ``` r
+
 library(lavaan)
 #> This is lavaan 0.6-21
 #> lavaan is FREE software! Please report any bugs.
@@ -90,6 +93,7 @@ fit <- sem(mod, dat)
 We refit the model 100 times, each time with one case removed:
 
 ``` r
+
 fit_rerun <- lavaan_rerun(fit)
 #> The expected CPU time is 7.5 second(s).
 #> Could be faster if run in parallel.
@@ -123,6 +127,7 @@ parameter estimates if a case is included, with the changes standardized
 by their standard errors (Pek & MacCallum, 2011, Equation 7):
 
 ``` r
+
 fit_est_change <- est_change(fit_rerun)
 fit_est_change
 #> 
@@ -186,6 +191,7 @@ For example, we may compute the changes and the *gCD* only for path
 coefficients, using the argument `parameters`:
 
 ``` r
+
 fit_est_change_paths_only <- est_change(fit_rerun,
                                         parameters = c("m1 ~ iv1",
                                                        "m1 ~ iv2",
@@ -215,6 +221,7 @@ fit_est_change_paths_only
 If all paths are to be included, the following call will also work:
 
 ``` r
+
 fit_est_change_paths_only <- est_change(fit_rerun,
                                         parameters = c("~"))
 ```
@@ -238,6 +245,7 @@ is included, not standardized by their standard errors. This change,
 [`est_change_raw()`](https://sfcheung.github.io/semfindr/reference/est_change_raw.md):
 
 ``` r
+
 fit_est_change_raw <- est_change_raw(fit_rerun)
 fit_est_change_raw
 #> 
@@ -282,6 +290,7 @@ solution*, *DFZTHETA* (*Z* for standardized solution), by setting
 `standardized` to `TRUE`:
 
 ``` r
+
 fit_est_change_raw_std <- est_change_raw(fit_rerun,
                                          standardized = TRUE)
 fit_est_change_raw_std
@@ -325,6 +334,7 @@ For example, these are standardized solutions of the full sample and the
 sample with the 43^(rd) case removed:
 
 ``` r
+
 standardizedSolution(fit, se = FALSE)[1, ]
 #>   lhs op rhs est.std
 #> 1  m1  ~ iv1   0.178
@@ -344,6 +354,7 @@ is 0.178 - 0.21 or -0.032.
 also supports computing the changes for selected parameters:
 
 ``` r
+
 fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
                                                standardized = TRUE,
                                                parameters = c("m1 ~ iv1",
@@ -375,6 +386,7 @@ If all parameters of the same operators are to be included, e.g., `"~"`
 for all regression paths, this form will also work:
 
 ``` r
+
 fit_est_change_raw_std_paths <- est_change_raw(fit_rerun,
                                                standardized = TRUE,
                                                parameters = c("~"))
@@ -393,6 +405,7 @@ can be used to compute the Mahalanobis distance of each case on all the
 variables used in the target model:
 
 ``` r
+
 fit_md <- mahalanobis_rerun(fit_rerun)
 fit_md
 #> 
@@ -441,6 +454,7 @@ which simply gets any fit measures supported by
 from the results from `lavaan_rerun`:
 
 ``` r
+
 fit_mc <- fit_measures_change(fit_rerun,
             fit_measures = c("chisq", "cfi", "tli", "rmsea"))
 fit_mc
@@ -473,6 +487,7 @@ be used for sorting cases. By default, cases are sorted in descending
 order of the *absolute* value of the selected column.
 
 ``` r
+
 print(fit_mc, sort_by = "chisq")
 #> 
 #> -- Case Influence on Fit Measures --
@@ -495,7 +510,7 @@ print(fit_mc, sort_by = "chisq")
 ```
 
 The value is computed by
-$M_{\text{full sample}} - M_{\text{one case removed}}$. Therefore, if
+$`M_\textrm{full sample} - M_\textrm{one case removed}`$. Therefore, if
 the value for a case is positive, the measure is higher when this case
 is included than when this case is excluded. If the value is negative,
 the measure is smaller when this case is included than when this case is
@@ -513,6 +528,7 @@ to specify the measures to be computed. The default values are
 omitted if they are the desired measures of fit:
 
 ``` r
+
 fit_mc <- fit_measures_change(fit_rerun)
 ```
 
@@ -532,6 +548,7 @@ and
 and then merges their results into one object:
 
 ``` r
+
 fit_influence <- influence_stat(fit_rerun)
 fit_influence
 #> 
@@ -614,6 +631,7 @@ on the horizontal axis and the *gCD* on the vertical axis using
 [`gcd_plot()`](https://sfcheung.github.io/semfindr/reference/influence_plot.md):
 
 ``` r
+
 gcd_plot(fit_influence,
          largest_gcd = 3)
 ```
@@ -638,6 +656,7 @@ An index plot can be computed on the Mahalanobis distance given by
 [`influence_stat()`](https://sfcheung.github.io/semfindr/reference/influence_stat.md):
 
 ``` r
+
 md_plot(fit_influence,
         largest_md = 3)
 ```
@@ -665,6 +684,7 @@ To examine how *gCD* relates to a selected measure of model fit (`gof`),
 can be used:
 
 ``` r
+
 gcd_gof_plot(fit_influence,
              fit_measure = "rmsea",
              largest_gcd = 3,
@@ -694,6 +714,7 @@ generalized Cook’s distance. This plot is similar to the plot by
 `car::influencePlot()` for regression models.
 
 ``` r
+
 gcd_gof_md_plot(fit_influence,
                 fit_measure = "rmsea",
                 largest_gcd = 3,
@@ -731,6 +752,7 @@ For example, using the output generated by
 above, it can generate an index plot for each parameter:
 
 ``` r
+
 est_change_plot(fit_est_change,
                 largest_change = 3)
 ```
@@ -747,6 +769,7 @@ The function also supports plotting the changes only for selected
 parameters, using `parameters`:
 
 ``` r
+
 est_change_plot(fit_est_change,
                 parameters = "~",
                 largest_change = 3)
@@ -759,6 +782,7 @@ est_change_plot() Example 2
 It can also plot the raw changes. For example:
 
 ``` r
+
 est_change_plot(fit_est_change_raw,
                 parameters = "~",
                 largest_change = 3)
@@ -775,6 +799,7 @@ For example, the following call, using `fit_influence` instead of
 `fit_est_change_raw`, will generate the same plot.
 
 ``` r
+
 est_change_plot(fit_influence,
                 parameters = "~",
                 largest_change = 3)
@@ -798,6 +823,7 @@ For example, using the output generated by
 above, it can generate an index plot for each parameter:
 
 ``` r
+
 est_change_gcd_plot(fit_est_change,
                     largest_gcd = 3)
 ```
@@ -814,6 +840,7 @@ The function also supports plotting the changes only for selected
 parameters, using `parameters`:
 
 ``` r
+
 est_change_gcd_plot(fit_est_change,
                     parameters = "~",
                     largest_gcd = 3)
@@ -835,6 +862,7 @@ For example, the following call, using `fit_influence` instead of
 `fit_est_change`, will generate the same plot.
 
 ``` r
+
 est_change_gcd_plot(fit_influence,
                     parameters = "~",
                     largest_gcd = 3)
@@ -882,6 +910,7 @@ can be used to compute the approximate standardized change (DFTHETAZ).
 The first argument is the output of `lavaan`:
 
 ``` r
+
 fit_est_change_approx <- est_change_approx(fit)
 fit_est_change_approx
 #> 
@@ -922,6 +951,7 @@ parameters. For example, the following computes the *gCD* based on
 regression coefficients only:
 
 ``` r
+
 fit_est_change_approx_paths <- est_change_approx(fit,
                                                  parameters = "~")
 fit_est_change_approx_paths
@@ -959,6 +989,7 @@ not standardized by their standard errors. The first argument is the
 output of `lavaan`:
 
 ``` r
+
 fit_est_change_raw_approx <- est_change_raw_approx(fit)
 fit_est_change_raw_approx
 #> 
@@ -1008,6 +1039,7 @@ also be used in the approximate approach by setting the first argument
 to the output of `lavaan`:
 
 ``` r
+
 fit_md <- mahalanobis_rerun(fit)
 fit_md
 #> 
@@ -1042,6 +1074,7 @@ computes the approximate changes in selected fit measures. The first
 argument is the output of `lavaan`:
 
 ``` r
+
 fit_mc_approx <- fit_measures_change_approx(fit,
                    fit_measures = c("chisq", "cfi", "tli", "rmsea"))
 fit_mc_approx
@@ -1074,6 +1107,7 @@ be used for sorting cases. By default, cases are sorted in descending
 order of the *absolute* value of the selected column.
 
 ``` r
+
 print(fit_mc_approx,
       sort_by = "chisq")
 #> 
@@ -1100,6 +1134,7 @@ These measures are the default values. Therefore, if only these four
 measures are needed, the following will also work:
 
 ``` r
+
 fit_mc_approx <- fit_measures_change_approx(fit)
 ```
 
@@ -1119,6 +1154,7 @@ This can be done simply by using the output of `lavaan` as the first
 argument:
 
 ``` r
+
 fit_influence_approx <- influence_stat(fit)
 fit_influence_approx
 #> 
@@ -1210,6 +1246,7 @@ statistics are approximate values.
 #### Approximate Generalized Cook’s Distance
 
 ``` r
+
 gcd_plot(fit_influence_approx,
          largest_gcd = 3)
 ```
@@ -1222,6 +1259,7 @@ gcd_plot() With Approximate Influence: Example
 #### Mahalanobis Distance
 
 ``` r
+
 md_plot(fit_influence_approx,
         largest_md = 3)
 ```
@@ -1237,6 +1275,7 @@ approximate approach.
 #### Approximate Change in Fit Measure vs. Approximate Generalized Cook’s Distance
 
 ``` r
+
 gcd_gof_plot(fit_influence_approx,
              fit_measure = "rmsea",
              largest_gcd = 3,
@@ -1251,6 +1290,7 @@ gcd_gof_plot() With Approximate Influence: Example
 #### Bubble Plot
 
 ``` r
+
 gcd_gof_md_plot(fit_influence_approx,
                 fit_measure = "rmsea",
                 largest_gcd = 3,
@@ -1267,6 +1307,7 @@ gcd_gof_md_plot() With Approximate Influence: Example
 #### Index Plot of Standardized or Raw Changes in Parameter Estimates
 
 ``` r
+
 est_change_plot(fit_est_change_approx,
                 largest_change = 3)
 ```
@@ -1277,6 +1318,7 @@ est_change_plot(fit_est_change_approx,
 est_change_plot() With Approximate Influence: Example 1
 
 ``` r
+
 est_change_plot(fit_est_change_approx,
                 parameters = "~",
                 largest_change = 3)
@@ -1288,6 +1330,7 @@ est_change_plot(fit_est_change_approx,
 est_change_plot() With Approximate Influence: Example 2
 
 ``` r
+
 est_change_plot(fit_est_change_raw_approx,
                 parameters = "~",
                 largest_change = 3)
@@ -1304,6 +1347,7 @@ can also be used. For example, replacing `fit_est_change_raw_approx` by
 `fit_influence_approx` will generate the same plot:
 
 ``` r
+
 est_change_plot(fit_influence_approx,
                 parameters = "~",
                 largest_change = 3)
@@ -1312,6 +1356,7 @@ est_change_plot(fit_influence_approx,
 #### Standardized Changes Against *gCD*
 
 ``` r
+
 est_change_gcd_plot(fit_est_change_approx,
                     largest_gcd = 3)
 ```
@@ -1325,6 +1370,7 @@ Note `largest_gcd` controls the number of cases with the largest
 *approximated* *gCD* to be labelled. The default is 1.
 
 ``` r
+
 est_change_gcd_plot(fit_est_change_approx,
                     parameters = "~",
                     largest_gcd = 3)
@@ -1341,6 +1387,7 @@ can also be used. For example, replacing `fit_est_change_approx` by
 `fit_influence_approx` will generate the same plot:
 
 ``` r
+
 est_change_gcd_plot(fit_influence_approx,
                     parameters = "~",
                     largest_gcd = 3)

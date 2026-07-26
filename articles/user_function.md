@@ -36,6 +36,7 @@ The sample dataset `HolzingerSwineford1939` from the `lavaan` package
 will be used for illustration.
 
 ``` r
+
 library(semfindr)
 library(lavaan)
 #> This is lavaan 0.6-21
@@ -60,6 +61,7 @@ head(HolzingerSwineford1939)
 For illustration, we add an influential case:
 
 ``` r
+
 dat <- HolzingerSwineford1939
 dat[1, c("x1", "x2", "x3")] <- dat[1, c("x1", "x2", "x3")] +
                                c(-3, +3, 0)
@@ -69,6 +71,7 @@ A confirmatory factor analysis model is to be fitted to the items `x1`
 to `x9`:
 
 ``` r
+
 mod <-
 "
 visual =~ x1 + x2 + x3
@@ -85,6 +88,7 @@ We first do LOO analysis, fitting the model *n* times, *n* being the
 number of cases, each time with one case removed:
 
 ``` r
+
 fit_rerun <- lavaan_rerun(fit)
 #> The expected CPU time is 27.09 second(s).
 #> Could be faster if run in parallel.
@@ -96,6 +100,7 @@ Suppose we are interested in the reliability of the three factors. They
 can be computed by `compRelSEM()` from `semTools`:
 
 ``` r
+
 library(semTools)
 #> 
 #> ###############################################################################
@@ -149,6 +154,7 @@ We can compute the influence of each case using
 [`user_change_raw()`](https://sfcheung.github.io/semfindr/reference/user_change_raw.md):
 
 ``` r
+
 influence_rel <- user_change_raw(fit_rerun,
                                  user_function = compRelSEM,
                                  simplify = TRUE)
@@ -173,6 +179,7 @@ used by
 The output is an `est_change` object:
 
 ``` r
+
 influence_rel
 #> 
 #> -- Case Influence on User Function --
@@ -211,6 +218,7 @@ can be used to visualize the influence. For example, this is the plot of
 case influence on the reliability of `visual`.
 
 ``` r
+
 p <- index_plot(influence_rel,
                 column = "visual",
                 plot_title = "Reliability: Visual")
@@ -237,6 +245,7 @@ We can verify this by fitting the model and compute the reliability
 without the first case:
 
 ``` r
+
 fit_no_1 <- cfa(model = mod,
                 data = dat[-1, ])
 fit_rel_no_1 <- compRelSEM(fit_no_1)
@@ -322,6 +331,7 @@ Suppose we use the compute case influence on R-squares. This is the
 sample dataset, `sem_dat`, comes with `semfindr`:
 
 ``` r
+
 head(sem_dat)
 #>           x1          x2         x3         x5         x4          x6
 #> 1 -3.2135320 -0.09911249 -0.4745297 -2.8185015 -2.3237313 -0.12266637
@@ -355,6 +365,7 @@ extracted by
 `lavaan`:
 
 ``` r
+
 lavInspect(fit, what = "rsquare")
 #>    x1    x2    x3    x4    x5    x6    x7    x8    x9    f2    f3 
 #> 0.330 0.166 0.324 0.675 0.425 0.187 0.102 0.315 0.486 0.463 0.596
@@ -363,6 +374,7 @@ lavInspect(fit, what = "rsquare")
 Let’s do LOO first:
 
 ``` r
+
 fit_rerun <- lavaan_rerun(fit)
 #> The expected CPU time is 15 second(s).
 #> Could be faster if run in parallel.
@@ -373,6 +385,7 @@ We then call
 to compute case influence:
 
 ``` r
+
 influence_rsq <- user_change_raw(fit_rerun,
                                  user_function = lavInspect,
                                  what = "rsquare")
@@ -388,6 +401,7 @@ which will pass them to `user_function`.
 This is the output:
 
 ``` r
+
 influence_rsq
 #> 
 #> -- Case Influence on User Function --
@@ -426,6 +440,7 @@ We can use
 again. Let’s plot case influence on the R-square of `f3`:
 
 ``` r
+
 p <- index_plot(influence_rsq,
                 column = "f3",
                 plot_title = "R-Square: f3")

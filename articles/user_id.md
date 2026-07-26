@@ -7,6 +7,7 @@ from the package [semfindr](https://sfcheung.github.io/semfindr/)
 output more readable.
 
 ``` r
+
 library(semfindr)
 dat <- pa_dat
 # Add case id
@@ -26,6 +27,7 @@ this data set using
 [`lavaan::sem()`](https://rdrr.io/pkg/lavaan/man/sem.html):
 
 ``` r
+
 mod <-
 "
 m1 ~ iv1 + iv2
@@ -42,6 +44,7 @@ the `id` column is not stored in `lavaan`, it can be supplied through
 the argument `case_id`:
 
 ``` r
+
 fit_rerun <- lavaan_rerun(fit,
                           case_id = dat$id)
 #> The expected CPU time is 10.5 second(s).
@@ -55,6 +58,7 @@ fit_rerun <- lavaan_rerun(fit,
 The list of reruns now uses `id` as the names:
 
 ``` r
+
 head(fit_rerun$rerun[1:3])
 #> Error:
 #> ! object 'fit_rerun' not found
@@ -69,6 +73,7 @@ data set.
 ### Standardized Changes in Estimates
 
 ``` r
+
 fit_est_change <- est_change(fit_rerun)
 #> Error:
 #> ! object 'fit_rerun' not found
@@ -78,6 +83,7 @@ fit_est_change
 ```
 
 ``` r
+
 fit_est_change_paths_only <- est_change(fit_rerun,
                                 parameters = c("m1 ~ iv1",
                                                "m1 ~ iv2",
@@ -92,6 +98,7 @@ fit_est_change_paths_only
 ### Raw Changes in Estimates
 
 ``` r
+
 fit_est_change_raw <- est_change_raw(fit_rerun)
 #> Error:
 #> ! object 'fit_rerun' not found
@@ -103,6 +110,7 @@ fit_est_change_raw
 ### Mahalanobis Distance
 
 ``` r
+
 fit_md <- mahalanobis_rerun(fit_rerun)
 #> Error:
 #> ! object 'fit_rerun' not found
@@ -114,6 +122,7 @@ fit_md
 ### Changes in Fit Measures
 
 ``` r
+
 fit_mc <- fit_measures_change(fit_rerun,
             fit_measures = c("chisq", "cfi", "tli", "rmsea"))
 #> Error:
@@ -126,6 +135,7 @@ fit_mc
 ### All-In-One-Function
 
 ``` r
+
 fit_influence <- influence_stat(fit_rerun)
 #> Error:
 #> ! object 'fit_rerun' not found
@@ -139,6 +149,7 @@ fit_influence
 ### Generalized Cook’s Distance
 
 ``` r
+
 gcd_plot(fit_influence, largest_gcd = 3)
 #> Error:
 #> ! object 'fit_influence' not found
@@ -147,6 +158,7 @@ gcd_plot(fit_influence, largest_gcd = 3)
 ### Mahalanobis Distance
 
 ``` r
+
 md_plot(fit_influence,
         largest_md = 3)
 #> Error:
@@ -156,6 +168,7 @@ md_plot(fit_influence,
 ### Fit Measure vs. Generalized Cook’s Distance
 
 ``` r
+
 gcd_gof_plot(fit_influence,
              fit_measure = "rmsea",
              largest_gcd = 3,
@@ -167,6 +180,7 @@ gcd_gof_plot(fit_influence,
 ### Bubble Plot
 
 ``` r
+
 gcd_gof_md_plot(fit_influence,
                 fit_measure = "rmsea",
                 largest_gcd = 3,

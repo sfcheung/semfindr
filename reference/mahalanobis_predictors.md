@@ -92,7 +92,7 @@ a2b := a2 * b
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -130,6 +130,11 @@ summary(fit)
 #>     a1b              -0.056    0.064   -0.873    0.382
 #>     a2b               0.184    0.102    1.803    0.071
 #> 
+#> lavaan NOTE:  
+#>    Standard errors and confidence intervals of the (nonlinear) defined (:=) 
+#>    parameters are based on the first-order delta method; for strongly 
+#>    nonlinear definitions, se.def = "mc" (Monte Carlo) or se = "bootstrap" may 
+#>    be more accurate.
 
 md_predictors <- mahalanobis_predictors(fit)
 md_predictors

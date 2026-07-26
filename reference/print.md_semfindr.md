@@ -58,6 +58,7 @@ This method will print the output with the option to sort the cases.
 ## Examples
 
 ``` r
+
 library(lavaan)
 dat <- pa_dat
 # The model
@@ -69,7 +70,7 @@ dv ~ b * m1
 # Fit the model
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -106,7 +107,7 @@ summary(fit)
 # For illustration, do this only for selected cases.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.45 second(s).
+#> The expected CPU time is 0.46 second(s).
 #> Could be faster if run in parallel.
 # Compute the Mahalanobis distance for each case
 out <- mahalanobis_rerun(fit_rerun)
