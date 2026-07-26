@@ -10,3 +10,4 @@
 ^\.devcontainer$
 ^\.lintr$
 ^rebuild_vignettes.R$
+^revdep$
