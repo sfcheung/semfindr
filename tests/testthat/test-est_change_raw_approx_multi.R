@@ -37,7 +37,10 @@ test_that("Checked against known results", {
 
 set.seed(1314)
 fit_rerun <- lavaan_rerun(fit, to_rerun = 3:5)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 fit_est_change <- est_change_raw(fit_rerun)
+)
 
 test_that("Exact and approximate results are similar", {
     abs_diff <- abs(fit_est_change_approx2[3:5, ] -

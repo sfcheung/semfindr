@@ -29,8 +29,10 @@ rerun_out <- lavaan_rerun(fit0, parallel = FALSE,
                           to_rerun = c(1:15))
 rerun_15 <- rerun_out$rerun[[15]]
 
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
-
+)
 est_change_rerun_test1 <- est_change(rerun_out,
                                 c("~"))
 est_change_rerun_test2 <- est_change(rerun_out,
