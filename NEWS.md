@@ -1,4 +1,4 @@
-# semfindr 0.2.0.3
+# semfindr 0.2.0.4
 
 ## Miscellaneous
 
@@ -10,6 +10,10 @@
 - Updated `roxygen2` to 8.0.0 and also
   updated the documentation.
   (0.2.0.3)
+
+- Fixed an issue related to the coming
+  `lavaan` 0.7-3.
+  (0.2.0.4)
 
 # semfindr 0.2.0
 
