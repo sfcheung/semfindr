@@ -97,7 +97,7 @@ settings will be used.}
 
 \item{hline_aes}{A named list of
 arguments to be passed to
-\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} to modify how
+\code{\link[ggplot2:geom_hline]{ggplot2::geom_hline()}} to modify how
 to draw the horizontal line for zero
 case influence. Default is \code{list()}
 and internal default settings will be
@@ -105,9 +105,9 @@ used.}
 
 \item{cutoff_line_aes}{A named list
 of arguments to be passed to
-\code{\link[ggplot2:geom_abline]{ggplot2::geom_hline()}} in
+\code{\link[ggplot2:geom_hline]{ggplot2::geom_hline()}} in
 \code{\link[=est_change_plot]{est_change_plot()}} or
-\code{\link[ggplot2:geom_abline]{ggplot2::geom_vline()}} in
+\code{\link[ggplot2:geom_vline]{ggplot2::geom_vline()}} in
 \code{\link[=est_change_gcd_plot]{est_change_gcd_plot()}} to modify how
 to draw the line for user cutoff
 value (\code{cutoff_change} or
@@ -117,7 +117,7 @@ used.}
 
 \item{case_label_aes}{A named list of
 arguments to be passed to
-\code{\link[ggrepel:geom_text_repel]{ggrepel::geom_label_repel()}} to
+\code{\link[ggrepel:geom_label_repel]{ggrepel::geom_label_repel()}} to
 modify how to draw the labels for
 cases marked (based on
 \code{cutoff_change}, \code{cutoff_gcd},

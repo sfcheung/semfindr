@@ -48,7 +48,7 @@ the parameters to be included.
 \item \code{lavaan} syntax
 \itemize{
 \item For example, \code{"y ~ x"} denotes the regression coefficient
-regression \code{y} on \code{x}. It uses \code{\link[lavaan:model.syntax]{lavaan::lavaanify()}} to
+regression \code{y} on \code{x}. It uses \code{\link[lavaan:lavaanify]{lavaan::lavaanify()}} to
 parse the syntax strings.
 }
 \item Operator

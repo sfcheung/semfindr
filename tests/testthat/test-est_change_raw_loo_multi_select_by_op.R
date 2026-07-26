@@ -25,37 +25,86 @@ rerun_out <- lavaan_rerun(fit0, parallel = FALSE,
                           to_rerun = c(1:15))
 rerun_15 <- rerun_out$rerun[[15]]
 
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est0_15 <- lavaan::parameterEstimates(fit0_15, standardized = TRUE)
+)
+
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test1 <- est_change_raw(rerun_out,
                                 c("~"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test2 <- est_change_raw(rerun_out,
                                 c("~~"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test3 <- est_change_raw(rerun_out,
                                 c("=~"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test4 <- est_change_raw(rerun_out,
                                 c(":="))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test5 <- est_change_raw(rerun_out,
                                 c(":=", "~~"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test6 <- est_change_raw(rerun_out,
                                 c("f3 ~ f2", ":=", "~~"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_test7 <- est_change_raw(rerun_out,
                                 c("~1"))
+)
 
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test1 <- est_change_raw(rerun_out,
                                 c("~"), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test2 <- est_change_raw(rerun_out,
                                 c("~~"), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test3 <- est_change_raw(rerun_out,
                                 c("=~"), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test4 <- est_change_raw(rerun_out,
                                 c(":="), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test5 <- est_change_raw(rerun_out,
                                 c(":=", "~~"), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test6 <- est_change_raw(rerun_out,
                                 c("f3 ~ f2", ":=", "~~"), standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_std_test7 <- est_change_raw(rerun_out,
                                 c("~1"), standardized = TRUE)
+)
 
 parameters_names <- paste0(est0$lhs, est0$op, est0$rhs)
 parameters_names[est0$group == 2] <- paste0(parameters_names[est0$group == 2], ".g2")

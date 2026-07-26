@@ -59,22 +59,31 @@ test_that("Warnings", {
                  ignore_attr = TRUE)
   })
 
+# 2026-07-26:
+# Should use pc_check0 because
+# influence measures are not computed if post.check failed
 test_that("est_change_raw", {
     tmp <- est_change_raw(fit_rerun)
     expect_equal(complete.cases(tmp),
-                 nc_check0)
+                 pc_check0)
   })
 
+# 2026-07-26:
+# Should use pc_check0 because
+# influence measures are not computed if post.check failed
 test_that("est_change", {
     tmp <- est_change(fit_rerun)
     expect_equal(complete.cases(tmp),
-                 nc_check0)
+                 pc_check0)
   })
 
+# 2026-07-26:
+# Should use pc_check0 because
+# influence measures are not computed if post.check failed
 test_that("fit_measures_change", {
     tmp <- fit_measures_change(fit_rerun, fit_measures = "chisq")
     expect_equal(as.vector(!is.na(tmp)),
-                 nc_check0)
+                 pc_check0)
   })
 
 

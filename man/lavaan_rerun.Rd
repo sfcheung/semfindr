@@ -94,13 +94,13 @@ A \code{lavaan_rerun}-class object, which is a list with the following elements:
 \item \code{rerun}: The \emph{n} \code{lavaan} output objects.
 \item \code{fit}: The original output from \code{lavaan}.
 \item \code{post_check}: A list of length equals to \emph{n}. Each analysis was
-checked by \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the
+checked by \link[lavaan:lavTech]{lavaan::lavTech}\verb{(x, "post.check")}, \code{x} being the
 \code{lavaan} results. The results of this test are stored in this
 list. If the value is \code{TRUE}, the estimation converged and the
 solution is admissible. If not \code{TRUE}, it is a warning message
-issued by \code{\link[lavaan:lavInspect]{lavaan::lavTech()}}.
+issued by \code{\link[lavaan:lavTech]{lavaan::lavTech()}}.
 \item \code{converged}: A vector of length equals to \emph{n}. Each analysis was
-checked by \link[lavaan:lavInspect]{lavaan::lavTech}\verb{(x, "converged")}, \code{x} being the
+checked by \link[lavaan:lavTech]{lavaan::lavTech}\verb{(x, "converged")}, \code{x} being the
 \code{lavaan} results. The results of this test are stored in this
 vector. If the value is \code{TRUE}, the estimation converged. If
 not \code{TRUE}, then the estimation failed to converge if the corresponding
@@ -155,7 +155,7 @@ statistics they want quickly.
 If the analysis took a few minutes to run due to the large number
 of cases or the long processing time in fitting the model, it is
 recommended to save the output to an external file (e.g., by
-\code{\link[base:readRDS]{base::saveRDS()}}).
+\code{\link[base:saveRDS]{base::saveRDS()}}).
 
 Supports both single-group and multiple-group models.
 (Support for multiple-group models available in 0.1.4.8 and later version).
