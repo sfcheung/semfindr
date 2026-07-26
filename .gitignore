@@ -44,3 +44,5 @@ vignettes/articles/Exported*.bib
 .Renviron
 docs
 inst/doc
+
+revdep/

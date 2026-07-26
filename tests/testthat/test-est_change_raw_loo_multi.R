@@ -26,20 +26,44 @@ fit0_15 <- lavaan::sem(mod, dat0[-15, ], group = "gp")
 rerun_out <- lavaan_rerun(fit0, parallel = FALSE, to_rerun = 1:15)
 rerun_15 <- rerun_out$rerun[[15]]
 
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est0 <- lavaan::parameterEstimates(fit0, standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est0_15 <- lavaan::parameterEstimates(fit0_15, standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_all <- est_change_raw(rerun_out)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_all_std <- est_change_raw(rerun_out, standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_all_paths <- est_change_raw(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_all_paths_std <- est_change_raw(rerun_out,
                                 c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"),
                                 standardized = TRUE)
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_user <- est_change_raw(rerun_out,
                                         "a2b")
+)
+# 2026-07-26: Suppress a harmless warning in lavaan 0.7-2
+suppressWarnings(
 est_change_rerun_user_std <- est_change_raw(rerun_out,
                                             "a2b",
                                             standardized = TRUE)
+)
 parameters_names <- gsub(" ", "", c("m1 ~ iv1", " m1 ~ iv2 ", "dv ~    m1"))
 
 (est0_15$est_all <- est0$est)

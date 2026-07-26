@@ -126,9 +126,19 @@ approx_check <- function(fit,
                         "raw data is supported."))
       }
 
+    # 2026-07-26:
+    # - For a change in 0.7-2.3166+,
+    #   fix suggested by Yves,
+    #   modified to ensures that `standard` is one of tests.
     if (!((sem_estimator == "ML") &&
           (sem_se == "standard") &&
-          (sem_test == "standard"))) {
+          all(sem_test %in%
+              c("standard",
+                "browne.residual.nt.model",
+                "browne.residual.adf.model",
+                "browne.residual.nt",
+                "browne.residual.adf")) &&
+          ("standard" %in% sem_test))) {
           out <- ifelse(out >= 0, -1, out - 1)
           msg <- c(msg,
                 paste("The approximation method is tested only for",
