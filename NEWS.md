@@ -1,4 +1,4 @@
-# semfindr 0.2.0.5
+# semfindr 0.2.0.6
 
 ## Miscellaneous
 
@@ -18,6 +18,9 @@
 - Fixed a bug when `case_id` is set but
   `to_rerun` not set.
   (0.2.0.5)
+
+- Rebuilt some vignettes.
+  (0.2.0.6)
 
 # semfindr 0.2.0
 
