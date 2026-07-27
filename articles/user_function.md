@@ -39,8 +39,6 @@ will be used for illustration.
 
 library(semfindr)
 library(lavaan)
-#> This is lavaan 0.6-21
-#> lavaan is FREE software! Please report any bugs.
 head(HolzingerSwineford1939)
 #>   id sex ageyr agemo  school grade       x1   x2    x3       x4   x5        x6
 #> 1  1   1    13     1 Pasteur     7 3.333333 7.75 0.375 2.333333 5.75 1.2857143
@@ -90,7 +88,7 @@ number of cases, each time with one case removed:
 ``` r
 
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 27.09 second(s).
+#> The expected CPU time is 13.55 second(s).
 #> Could be faster if run in parallel.
 ```
 
@@ -104,7 +102,7 @@ can be computed by `compRelSEM()` from `semTools`:
 library(semTools)
 #> 
 #> ###############################################################################
-#> This is semTools 0.5-8
+#> This is semTools 0.5-9
 #> All users of R (or SEM) are invited to submit functions or ideas for functions.
 #> ###############################################################################
 fit_rel <- compRelSEM(fit,
@@ -376,7 +374,7 @@ Let’s do LOO first:
 ``` r
 
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 15 second(s).
+#> The expected CPU time is 9 second(s).
 #> Could be faster if run in parallel.
 ```
 

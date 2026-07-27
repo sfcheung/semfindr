@@ -149,7 +149,7 @@ summary(fit)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 4, 7, 9))
-#> The expected CPU time is 0.19 second(s).
+#> The expected CPU time is 0.2 second(s).
 #> Could be faster if run in parallel.
 # Get the R-squares
 lavInspect(fit, what = "rsquare")

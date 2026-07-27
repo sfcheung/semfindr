@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">semfindr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -120,17 +120,70 @@ Although the <code>id</code> column is not stored in
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_rerun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lavaan_rerun.html">lavaan_rerun</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                          case_id <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The expected CPU time is 10.5 second(s).</span></span>
-<span><span class="co">#&gt; Could be faster if run in parallel.</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! lavaan-&gt;lav_lavdata():  </span></span>
-<span><span class="co">#&gt;    data= argument is not a data.frame, but of class 'numeric'</span></span>
-<span><span class="co">#&gt; Timing stopped at: 0.03 0 0.03</span></span></code></pre></div>
+<span><span class="co">#&gt; The expected CPU time is 1.5 second(s).</span></span>
+<span><span class="co">#&gt; Could be faster if run in parallel.</span></span></code></pre></div>
 <p>The list of reruns now uses <code>id</code> as the names:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">$</span><span class="va">rerun</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; $case1</span></span>
+<span><span class="co">#&gt; lavaan 0.7-2.3166 ended normally after 2 iterations</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                            99</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.557</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.038</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Browne's residual (NT model-based) test             </span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.345</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.042</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $case2</span></span>
+<span><span class="co">#&gt; lavaan 0.7-2.3166 ended normally after 1 iteration</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                            99</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.731</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.035</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Browne's residual (NT model-based) test             </span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.507</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.039</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $case3</span></span>
+<span><span class="co">#&gt; lavaan 0.7-2.3166 ended normally after 1 iteration</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                            99</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                 7.128</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.028</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Browne's residual (NT model-based) test             </span></span>
+<span><span class="co">#&gt;   Test statistic                                 6.878</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.032</span></span></code></pre></div>
 <p>As shown below, most diagnostic functions will use user supplied case
 IDs in their displays, making it easier to locate them in the original
 data set.</p>
@@ -143,43 +196,102 @@ data set.</p>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_est_change</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_est_change' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
+<span><span class="co">#&gt; case16   0.052 -0.038 -0.237 -0.004  0.624 0.450</span></span>
+<span><span class="co">#&gt; case43  -0.403 -0.263 -0.135  0.223  0.120 0.302</span></span>
+<span><span class="co">#&gt; case65   0.152  0.191  0.363  0.076  0.161 0.221</span></span>
+<span><span class="co">#&gt; case85  -0.174  0.216 -0.119  0.335 -0.052 0.208</span></span>
+<span><span class="co">#&gt; case51   0.421 -0.057  0.094  0.089 -0.044 0.200</span></span>
+<span><span class="co">#&gt; case34  -0.314 -0.192 -0.109  0.189  0.030 0.178</span></span>
+<span><span class="co">#&gt; case32  -0.247  0.195 -0.191  0.193  0.001 0.175</span></span>
+<span><span class="co">#&gt; case18  -0.273  0.035  0.101  0.260 -0.046 0.156</span></span>
+<span><span class="co">#&gt; case20  -0.239  0.204 -0.141  0.183 -0.032 0.156</span></span>
+<span><span class="co">#&gt; case100 -0.001 -0.225 -0.069  0.305 -0.056 0.152</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_paths_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change.html">est_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
 <span>                                parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1 ~ iv1"</span>,</span>
 <span>                                               <span class="st">"m1 ~ iv2"</span>,</span>
 <span>                                               <span class="st">"dv ~ m1"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_est_change_paths_only</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_est_change_paths_only' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        m1~iv1 m1~iv2  dv~m1   gcd</span></span>
+<span><span class="co">#&gt; case43 -0.403 -0.263 -0.135 0.238</span></span>
+<span><span class="co">#&gt; case51  0.421 -0.057  0.094 0.190</span></span>
+<span><span class="co">#&gt; case65  0.152  0.191  0.363 0.189</span></span>
+<span><span class="co">#&gt; case34 -0.314 -0.192 -0.109 0.142</span></span>
+<span><span class="co">#&gt; case32 -0.247  0.195 -0.191 0.138</span></span>
+<span><span class="co">#&gt; case20 -0.239  0.204 -0.141 0.121</span></span>
+<span><span class="co">#&gt; case85 -0.174  0.216 -0.119 0.093</span></span>
+<span><span class="co">#&gt; case11  0.010  0.149 -0.257 0.088</span></span>
+<span><span class="co">#&gt; case18 -0.273  0.035  0.101 0.087</span></span>
+<span><span class="co">#&gt; case13  0.274  0.059 -0.068 0.082</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="raw-changes-in-estimates">Raw Changes in Estimates<a class="anchor" aria-label="anchor" href="#raw-changes-in-estimates"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_est_change_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_change_raw.html">est_change_raw</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_est_change_raw</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_est_change_raw' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;        id m1~iv1      id m1~iv2     id  dv~m1      id m1~~m1     id dv~~dv</span></span>
+<span><span class="co">#&gt; 1  case51  0.046  case43 -0.026 case65  0.039  case61  0.043 case16  0.108</span></span>
+<span><span class="co">#&gt; 2  case43 -0.043  case94  0.024 case11 -0.027  case85  0.041  case9  0.051</span></span>
+<span><span class="co">#&gt; 3  case34 -0.033 case100 -0.022 case16 -0.024 case100  0.038 case76  0.050</span></span>
+<span><span class="co">#&gt; 4  case13  0.030  case85  0.021 case32 -0.021  case18  0.032 case25  0.050</span></span>
+<span><span class="co">#&gt; 5  case18 -0.029  case20  0.020 case99  0.020  case42  0.029 case91  0.043</span></span>
+<span><span class="co">#&gt; 6  case32 -0.026  case32  0.019 case79  0.019  case43  0.028 case17  0.039</span></span>
+<span><span class="co">#&gt; 7  case20 -0.025  case65  0.019 case93  0.018  case32  0.024 case65  0.030</span></span>
+<span><span class="co">#&gt; 8  case75  0.021  case34 -0.019 case22  0.017  case34  0.024 case26  0.029</span></span>
+<span><span class="co">#&gt; 9  case42 -0.020  case64 -0.017 case61 -0.017  case20  0.023 case62  0.027</span></span>
+<span><span class="co">#&gt; 10 case68  0.020  case52  0.016 case25 -0.015  case40  0.023 case90  0.024</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by the absolute changes for each variable.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mahalanobis-distance">Mahalanobis Distance<a class="anchor" aria-label="anchor" href="#mahalanobis-distance"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mahalanobis_rerun.html">mahalanobis_rerun</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_md</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_md' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Mahalanobis Distance --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            md</span></span>
+<span><span class="co">#&gt; case16 11.530</span></span>
+<span><span class="co">#&gt; case99 11.312</span></span>
+<span><span class="co">#&gt; case87 11.091</span></span>
+<span><span class="co">#&gt; case43 10.181</span></span>
+<span><span class="co">#&gt; case51  9.869</span></span>
+<span><span class="co">#&gt; case13  8.476</span></span>
+<span><span class="co">#&gt; case91  8.078</span></span>
+<span><span class="co">#&gt; case71  7.757</span></span>
+<span><span class="co">#&gt; case17  7.555</span></span>
+<span><span class="co">#&gt; case68  7.472</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by Mahalanobis distance in decreasing order.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="changes-in-fit-measures">Changes in Fit Measures<a class="anchor" aria-label="anchor" href="#changes-in-fit-measures"></a>
@@ -187,22 +299,85 @@ data set.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_measures_change.html">fit_measures_change</a></span><span class="op">(</span><span class="va">fit_rerun</span>,</span>
 <span>            fit_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chisq"</span>, <span class="st">"cfi"</span>, <span class="st">"tli"</span>, <span class="st">"rmsea"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_mc</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_mc' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Fit Measures --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         chisq    cfi    tli  rmsea</span></span>
+<span><span class="co">#&gt; case1   0.154 -0.002 -0.005  0.002</span></span>
+<span><span class="co">#&gt; case2  -0.019  0.001  0.003 -0.001</span></span>
+<span><span class="co">#&gt; case3  -0.417  0.008  0.021 -0.007</span></span>
+<span><span class="co">#&gt; case4  -0.154  0.004  0.009 -0.003</span></span>
+<span><span class="co">#&gt; case5   0.097  0.000  0.001  0.001</span></span>
+<span><span class="co">#&gt; case6   0.116 -0.001 -0.003  0.001</span></span>
+<span><span class="co">#&gt; case7  -0.631  0.014  0.034 -0.011</span></span>
+<span><span class="co">#&gt; case8   0.120  0.002  0.005  0.001</span></span>
+<span><span class="co">#&gt; case9   0.524 -0.012 -0.030  0.008</span></span>
+<span><span class="co">#&gt; case10  0.697 -0.013 -0.033  0.011</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="all-in-one-function">All-In-One-Function<a class="anchor" aria-label="anchor" href="#all-in-one-function"></a>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_influence</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/influence_stat.html">influence_stat</a></span><span class="op">(</span><span class="va">fit_rerun</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_rerun' not found</span></span>
 <span><span class="va">fit_influence</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_influence' not found</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Standardized Case Influence on Parameter Estimates --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         m1~iv1 m1~iv2  dv~m1 m1~~m1 dv~~dv   gcd</span></span>
+<span><span class="co">#&gt; case16   0.052 -0.038 -0.237 -0.004  0.624 0.450</span></span>
+<span><span class="co">#&gt; case43  -0.403 -0.263 -0.135  0.223  0.120 0.302</span></span>
+<span><span class="co">#&gt; case65   0.152  0.191  0.363  0.076  0.161 0.221</span></span>
+<span><span class="co">#&gt; case85  -0.174  0.216 -0.119  0.335 -0.052 0.208</span></span>
+<span><span class="co">#&gt; case51   0.421 -0.057  0.094  0.089 -0.044 0.200</span></span>
+<span><span class="co">#&gt; case34  -0.314 -0.192 -0.109  0.189  0.030 0.178</span></span>
+<span><span class="co">#&gt; case32  -0.247  0.195 -0.191  0.193  0.001 0.175</span></span>
+<span><span class="co">#&gt; case18  -0.273  0.035  0.101  0.260 -0.046 0.156</span></span>
+<span><span class="co">#&gt; case20  -0.239  0.204 -0.141  0.183 -0.032 0.156</span></span>
+<span><span class="co">#&gt; case100 -0.001 -0.225 -0.069  0.305 -0.056 0.152</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Changes are standardized raw changes if a case is included.</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by generalized Cook's distance.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Case Influence on Fit Measures --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;         chisq    cfi  rmsea    tli</span></span>
+<span><span class="co">#&gt; case1   0.154 -0.002  0.002 -0.005</span></span>
+<span><span class="co">#&gt; case2  -0.019  0.001 -0.001  0.003</span></span>
+<span><span class="co">#&gt; case3  -0.417  0.008 -0.007  0.021</span></span>
+<span><span class="co">#&gt; case4  -0.154  0.004 -0.003  0.009</span></span>
+<span><span class="co">#&gt; case5   0.097  0.000  0.001  0.001</span></span>
+<span><span class="co">#&gt; case6   0.116 -0.001  0.001 -0.003</span></span>
+<span><span class="co">#&gt; case7  -0.631  0.014 -0.011  0.034</span></span>
+<span><span class="co">#&gt; case8   0.120  0.002  0.001  0.005</span></span>
+<span><span class="co">#&gt; case9   0.524 -0.012  0.008 -0.030</span></span>
+<span><span class="co">#&gt; case10  0.697 -0.013  0.011 -0.033</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Mahalanobis Distance --</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            md</span></span>
+<span><span class="co">#&gt; case16 11.530</span></span>
+<span><span class="co">#&gt; case99 11.312</span></span>
+<span><span class="co">#&gt; case87 11.091</span></span>
+<span><span class="co">#&gt; case43 10.181</span></span>
+<span><span class="co">#&gt; case51  9.869</span></span>
+<span><span class="co">#&gt; case13  8.476</span></span>
+<span><span class="co">#&gt; case91  8.078</span></span>
+<span><span class="co">#&gt; case71  7.757</span></span>
+<span><span class="co">#&gt; case17  7.555</span></span>
+<span><span class="co">#&gt; case68  7.472</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note:</span></span>
+<span><span class="co">#&gt; - Only the first 10 case(s) is/are displayed. Set 'first' to NULL to display all cases.</span></span>
+<span><span class="co">#&gt; - Cases sorted by Mahalanobis distance in decreasing order.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -212,18 +387,20 @@ data set.</p>
 <h3 id="generalized-cooks-distance">Generalized Cook’s Distance<a class="anchor" aria-label="anchor" href="#generalized-cooks-distance"></a>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>, largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_influence' not found</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>, largest_gcd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="user_id_gcd_plot_fig-1.png" alt="gcd_plot() Example"><div class="figcaption">gcd_plot() Example</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="mahalanobis-distance-1">Mahalanobis Distance<a class="anchor" aria-label="anchor" href="#mahalanobis-distance-1"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">md_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,</span>
-<span>        largest_md <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_influence' not found</span></span></code></pre></div>
+<span>        largest_md <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="user_id_md_plot_fig-1.png" alt="md_plot() Example"><div class="figcaption">md_plot() Example</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="fit-measure-vs--generalized-cooks-distance">Fit Measure vs. Generalized Cook’s Distance<a class="anchor" aria-label="anchor" href="#fit-measure-vs--generalized-cooks-distance"></a>
@@ -232,9 +409,10 @@ data set.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/influence_plot.html">gcd_gof_plot</a></span><span class="op">(</span><span class="va">fit_influence</span>,</span>
 <span>             fit_measure <span class="op">=</span> <span class="st">"rmsea"</span>,</span>
 <span>             largest_gcd <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>             largest_fit_measure <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_influence' not found</span></span></code></pre></div>
+<span>             largest_fit_measure <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="user_id_gcd_gof_plot_fig-1.png" alt="gcd_gof_plot() Example"><div class="figcaption">gcd_gof_plot() Example</div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="bubble-plot">Bubble Plot<a class="anchor" aria-label="anchor" href="#bubble-plot"></a>
@@ -245,9 +423,10 @@ data set.</p>
 <span>                largest_gcd <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                largest_fit_measure <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                largest_md <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                circle_size <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error:</span></span>
-<span><span class="co">#&gt; ! object 'fit_influence' not found</span></span></code></pre></div>
+<span>                circle_size <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="user_id_gcd_gof_md_plot_fig-1.png" alt="gcd_gof_md_plot() Example"><div class="figcaption">gcd_gof_md_plot() Example</div>
+</div>
 </div>
 </div>
 <div class="section level2">

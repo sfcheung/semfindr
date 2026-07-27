@@ -83,8 +83,6 @@ We fit the model by
 ``` r
 
 library(lavaan)
-#> This is lavaan 0.6-21
-#> lavaan is FREE software! Please report any bugs.
 fit <- sem(mod, dat)
 ```
 
@@ -95,7 +93,7 @@ We refit the model 100 times, each time with one case removed:
 ``` r
 
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 7.5 second(s).
+#> The expected CPU time is 4.5 second(s).
 #> Could be faster if run in parallel.
 ```
 

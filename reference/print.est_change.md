@@ -197,7 +197,7 @@ print(out, first = 3)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.19 second(s).
+#> The expected CPU time is 0.2 second(s).
 #> Could be faster if run in parallel.
 est_change(fit_rerun)
 #> 

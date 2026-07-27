@@ -119,7 +119,7 @@ and
 
 # From semfindr
 fit_rerun <- lavaan_rerun(fit)
-#> The expected CPU time is 39 second(s).
+#> The expected CPU time is 4.5 second(s).
 #> Could be faster if run in parallel.
 fit_est_change_raw <- est_change_raw(fit_rerun)
 # Plot the differences
