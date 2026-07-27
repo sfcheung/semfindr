@@ -128,7 +128,7 @@ fit <- lavaan::sem(mod, dat)
 # For illustration, do this only for four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(3, 5, 7, 8))
-#> The expected CPU time is 0.2 second(s).
+#> The expected CPU time is 0.19 second(s).
 #> Could be faster if run in parallel.
 
 # === DFTHETA ===
@@ -244,7 +244,7 @@ fit <- lavaan::cfa(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.25 second(s).
+#> The expected CPU time is 0.34 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in parameter estimates if a case is included
 # vs. if this case is excluded.
@@ -303,7 +303,7 @@ fit <- lavaan::sem(mod, dat)
 # Examine four selected cases
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = c(2, 3, 5, 7))
-#> The expected CPU time is 0.28 second(s).
+#> The expected CPU time is 0.38 second(s).
 #> Could be faster if run in parallel.
 # Compute the changes in parameter estimates if a case is included
 # vs. if this case is excluded.

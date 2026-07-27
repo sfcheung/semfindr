@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/sfcheung/semfindr/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/sfcheung/semfindr/blob/v0.2.1/inst/CITATION)
 
 Cheung SF, Lai MHC (2026). “semfindr: An R package for identifying
 influential cases in structural equation modeling.” *Multivariate

@@ -130,7 +130,7 @@ summary(fit)
 # For illustration, do this only for selected cases.
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.48 second(s).
+#> The expected CPU time is 0.47 second(s).
 #> Could be faster if run in parallel.
 # Compute the Mahalanobis distance for each case
 out <- mahalanobis_rerun(fit_rerun)
@@ -163,7 +163,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.6 second(s).
+#> The expected CPU time is 0.86 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 
@@ -202,7 +202,7 @@ fit <- lavaan::cfa(mod, dat)
 
 fit_rerun <- lavaan_rerun(fit, parallel = FALSE,
                           to_rerun = 1:10)
-#> The expected CPU time is 0.77 second(s).
+#> The expected CPU time is 1.2 second(s).
 #> Could be faster if run in parallel.
 mahalanobis_rerun(fit_rerun)
 #> 

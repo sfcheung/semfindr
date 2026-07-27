@@ -167,7 +167,7 @@ cases, we do not have to use parallel processing. The model is fitted
 rerun_config <- lavaan_rerun(fit_config)
 ```
 
-    ## The expected CPU time is 22.65 second(s).
+    ## The expected CPU time is 33.45 second(s).
     ## Could be faster if run in parallel.
 
 Not shown here, but it is possible that a model may fail to converge or
@@ -481,7 +481,7 @@ We can check case influence again:
 rerun_config_no100 <- lavaan_rerun(fit_config_no100)
 ```
 
-    ## The expected CPU time is 12.18 second(s).
+    ## The expected CPU time is 17.52 second(s).
     ## Could be faster if run in parallel.
 
 ``` r
