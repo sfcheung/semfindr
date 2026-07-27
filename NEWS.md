@@ -1,4 +1,4 @@
-# semfindr 0.2.0.6
+# semfindr 0.2.1
 
 ## Miscellaneous
 
