@@ -1,4 +1,4 @@
-# semfindr 0.2.0.4
+# semfindr 0.2.1
 
 ## Miscellaneous
 
@@ -14,6 +14,13 @@
 - Fixed an issue related to the coming
   `lavaan` 0.7-3.
   (0.2.0.4)
+
+- Fixed a bug when `case_id` is set but
+  `to_rerun` not set.
+  (0.2.0.5)
+
+- Rebuilt some vignettes.
+  (0.2.0.6)
 
 # semfindr 0.2.0
 

@@ -230,10 +230,12 @@ lavaan_rerun <- function(fit,
   n_orig <- sum(lavaan::lavInspect(fit, "norig"))
 
   if (is.null(case_id)) {
+      # ==== No user case_id ====
       case_ids <- lavaan::lavInspect(fit, "case.idx",
                                      drop.list.single.group = FALSE)
       case_ids <- sort(unlist(case_ids, use.names = FALSE))
     } else {
+      # ==== User case_id supplied ====
       case_ids <- lavaan::lavInspect(fit, "case.idx",
                                     drop.list.single.group = FALSE)
       case_ids <- sort(unlist(case_ids, use.names = FALSE))
@@ -262,10 +264,12 @@ lavaan_rerun <- function(fit,
 
   if (!missing(to_rerun)) {
       if (!is.null(case_id)) {
+          # ==== User case_id supplied ====
           if (!all(to_rerun %in% case_id)) {
               stop("Some elements in to_rerun is not in the case_id vectors.")
             }
         } else {
+          # ==== No user case_id ====
           if (!all(to_rerun %in% seq_len(n_orig))) {
               stop("Some elements in to_rerun is not valid row numbers.")
             }
@@ -276,7 +280,13 @@ lavaan_rerun <- function(fit,
           to_rerun <- match(to_rerun, case_ids)
         }
     } else {
-      to_rerun <- order(unlist(case_ids, use.names = FALSE))
+      if (!is.null(case_id)) {
+        # ==== User case_id supplied ====
+        to_rerun <- case_ids
+      } else {
+        # ==== No user case_id ====
+        to_rerun <- order(unlist(case_ids, use.names = FALSE))
+      }
     }
 
   if (!missing(md_top)) {
@@ -334,9 +344,11 @@ lavaan_rerun <- function(fit,
   #    no case_id: The positions in the *listwise* dataset
   #    case_id: The case id to rerun
   if (!is.null(case_id)) {
+      # ==== User case_id supplied ====
       case_ids <- to_rerun
       id_to_rerun <- match(to_rerun, case_id)
     } else {
+      # ==== No user case_id ====
       case_ids <- case_ids[to_rerun]
       tmp <- sort(unlist(lavaan::lavInspect(fit, "case.idx",
                     drop.list.single.group = FALSE),
